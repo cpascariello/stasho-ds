@@ -44,11 +44,25 @@ src/
 └── styles/
     └── tokens.css        # Three-layer token system (OKLCH scales)
 docs/
-├── plans/                # Design + implementation plans
-├── ARCHITECTURE.md
-├── DECISIONS.md
-└── BACKLOG.md
+├── DESIGN-SYSTEM.md      # Token & component reference (agent-optimized)
+├── ARCHITECTURE.md       # Technical patterns (this file)
+├── DECISIONS.md          # Decision log with rationale
+├── BACKLOG.md            # Deferred work and ideas
+└── plans/                # Design + implementation plans
 ```
+
+---
+
+## Import Alias
+
+All source imports use the `@ac/*` prefix, resolved to `./src/*`.
+
+| Configured in | Mechanism |
+|---------------|-----------|
+| `tsconfig.json` | `paths: { "@ac/*": ["./src/*"] }` |
+| `vitest.config.ts` | `resolve.alias: { "@ac": "./src" }` |
+
+**CSS imports are the exception** — PostCSS does not resolve tsconfig aliases, so `@import` paths in `.css` files must be relative (see Decision #5).
 
 ---
 
@@ -102,3 +116,12 @@ docs/
 2. Add dark value to `.theme-dark` block
 3. Add Tailwind mapping in `@theme inline` block (e.g., `--color-new-token: var(--new-token)`)
 4. Use as Tailwind class: `bg-new-token`, `text-new-token`, etc.
+
+### Adding a New Component
+
+1. Create `src/components/<name>/<name>.tsx` (or `src/components/ui/<name>.tsx` for primitives)
+2. Use CVA for variants, `cn()` for class merging, `forwardRef` for DOM access
+3. Colocate tests as `<name>.test.tsx` in the same directory
+4. Export from the component file directly — no barrel `index.ts` files
+5. Add a showcase section in the relevant tab under `src/components/tabs/`
+6. Document usage in `docs/DESIGN-SYSTEM.md` § Components
