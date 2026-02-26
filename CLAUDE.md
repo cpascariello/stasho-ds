@@ -64,16 +64,18 @@ When the conversation drifts from the stated task:
 - Branch naming: `feature/[plan-name]`
 
 **Before merging:** Update ALL docs before squash merging to main.
+- `docs/DESIGN-SYSTEM.md` -- add/update tokens, components, hooks, or patterns
 - `docs/ARCHITECTURE.md` -- add/update patterns for any new architectural decisions, new files, or changed structure
 - `CLAUDE.md` -- update the Current Features list if user-facing behavior changed
 - `docs/DECISIONS.md` -- log any key decisions made during the feature
 - `docs/BACKLOG.md` -- move completed items to Completed section, add any deferred ideas
 
 **Checklist before merge:**
-1. ARCHITECTURE.md updated?
-2. CLAUDE.md features updated?
-3. DECISIONS.md has implementation decisions?
-4. BACKLOG.md item moved to Completed?
+1. DESIGN-SYSTEM.md updated with new tokens/components?
+2. ARCHITECTURE.md updated?
+3. CLAUDE.md features updated?
+4. DECISIONS.md has implementation decisions?
+5. BACKLOG.md item moved to Completed?
 
 **During development:** Track intent, not metrics.
 
@@ -142,6 +144,7 @@ The final plan task should be:
 ```
 ### Task N: Update docs
 
+- [ ] DESIGN-SYSTEM.md — new tokens, components, hooks, or patterns
 - [ ] ARCHITECTURE.md — new patterns, new files, or changed structure
 - [ ] DECISIONS.md — design decisions made during this feature
 - [ ] BACKLOG.md — completed items moved, deferred ideas added
