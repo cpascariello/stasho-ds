@@ -1,6 +1,8 @@
 # Button Component Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED SUB-SKILLS:
+> - Use superpowers:executing-plans to implement this plan task-by-task.
+> - Use superpowers:dispatching-parallel-agents for independent tasks (e.g., Tasks 3+6, Tasks 5+7 can run in parallel via isolated worktrees).
 
 **Goal:** Build the first reusable component (Button) with OKLCH color scales, CVA variants, and preview app integration.
 
