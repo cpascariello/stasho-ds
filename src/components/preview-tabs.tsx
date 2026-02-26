@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ColorsTab } from "@ac/components/tabs/colors-tab";
 
 const TABS = ["Colors", "Typography", "Spacing", "Effects", "Icons"] as const;
 type Tab = (typeof TABS)[number];
@@ -34,7 +35,7 @@ export function PreviewTabs() {
 function TabContent({ tab }: { tab: Tab }) {
   switch (tab) {
     case "Colors":
-      return <ColorsPlaceholder />;
+      return <ColorsTab />;
     case "Typography":
       return <TypographyPlaceholder />;
     case "Spacing":
@@ -46,9 +47,6 @@ function TabContent({ tab }: { tab: Tab }) {
   }
 }
 
-function ColorsPlaceholder() {
-  return <p className="text-muted-foreground">Colors tab — next task</p>;
-}
 function TypographyPlaceholder() {
   return <p className="text-muted-foreground">Typography tab — next task</p>;
 }
