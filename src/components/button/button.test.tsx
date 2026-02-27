@@ -13,7 +13,7 @@ describe("Button", () => {
       render(<Button>Default</Button>);
       const button = screen.getByRole("button");
       expect(button.className).toContain("bg-primary-600");
-      expect(button.className).toContain("h-9");
+      expect(button.className).toContain("py-2");
     });
   });
 
@@ -54,17 +54,17 @@ describe("Button", () => {
   describe("sizes", () => {
     it("applies xs size", () => {
       render(<Button size="xs">XS</Button>);
-      expect(screen.getByRole("button").className).toContain("h-7");
+      expect(screen.getByRole("button").className).toContain("py-1");
     });
 
     it("applies sm size", () => {
       render(<Button size="sm">SM</Button>);
-      expect(screen.getByRole("button").className).toContain("h-8");
+      expect(screen.getByRole("button").className).toContain("py-1.5");
     });
 
     it("applies lg size", () => {
       render(<Button size="lg">LG</Button>);
-      expect(screen.getByRole("button").className).toContain("h-10");
+      expect(screen.getByRole("button").className).toContain("py-2.5");
     });
   });
 

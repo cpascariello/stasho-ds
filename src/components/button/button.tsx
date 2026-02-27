@@ -66,10 +66,10 @@ const buttonVariants = cva(
         ].join(" "),
       },
       size: {
-        xs: "h-7 px-4 text-sm gap-1",
-        sm: "h-8 px-5 text-base gap-1.5",
-        md: "h-9 px-6 text-base gap-2",
-        lg: "h-10 px-8 text-lg gap-2",
+        xs: "py-1 px-4 text-sm gap-1",
+        sm: "py-1.5 px-5 text-base gap-1.5",
+        md: "py-2 px-6 text-base gap-2",
+        lg: "py-2.5 px-8 text-lg gap-2",
       },
     },
     defaultVariants: {

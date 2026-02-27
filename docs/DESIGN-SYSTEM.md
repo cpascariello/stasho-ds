@@ -400,10 +400,10 @@ import { Button } from "@ac/components/button/button";
 #### Sizes
 
 ```tsx
-<Button size="xs">Extra Small</Button>  {/* h-7, text-sm */}
-<Button size="sm">Small</Button>        {/* h-8, text-base */}
-<Button size="md">Medium</Button>       {/* h-9, text-base (default) */}
-<Button size="lg">Large</Button>        {/* h-10, text-lg */}
+<Button size="xs">Extra Small</Button>  {/* py-1, text-sm */}
+<Button size="sm">Small</Button>        {/* py-1.5, text-base */}
+<Button size="md">Medium</Button>       {/* py-2, text-base (default) */}
+<Button size="lg">Large</Button>        {/* py-2.5, text-lg */}
 ```
 
 #### Icons
