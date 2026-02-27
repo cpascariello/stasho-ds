@@ -131,7 +131,7 @@ Skills (superpowers) are tools, not separate processes. Use them naturally:
 Brainstorming, planning, and implementation happen across separate sessions:
 
 1. **Brainstorm + Plan (current session):** Explore design, write the plan to `docs/plans/`. This session ends after the plan is written.
-2. **Implement (new session):** Start a fresh session, say "sync up", then execute the plan using `executing-plans` or `subagent-driven-development`. The plan file on disk is the handoff artifact — no brainstorm context carries over.
+2. **Implement (new session):** Start a fresh session, say "sync up", then execute the plan using `executing-plans`, `subagent-driven-development`, or `dispatching-parallel-agents` (for larger plans with independent tasks). The plan file on disk is the handoff artifact — no brainstorm context carries over.
 
 Why: brainstorm sessions accumulate rejected ideas, design exploration, and back-and-forth that wastes context window during implementation. A clean session starts with only what matters: the plan + project docs.
 
