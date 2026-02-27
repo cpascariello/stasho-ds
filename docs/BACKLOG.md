@@ -27,12 +27,6 @@ Ideas and scope creep captured for later consideration.
 **Description:** Build remaining UI components (cards, modals, selects, etc.) using the token system. Button, Input, Textarea, and FormField are complete.
 **Priority:** High
 
-### 2026-02-26 — Gradient button variants
-
-**Source:** Discussed during button styling session
-**Description:** Add gradient fill variants using `--gradient-main` (primary) and `--gradient-lime` (secondary) tokens.
-**Priority:** Low
-
 ### 2026-02-26 — Button icon animations
 
 **Source:** Deferred from button component design
@@ -57,5 +51,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-02-26 — Button component (CVA variants, OKLCH color scales, TDD)
 - [x] 2026-02-27 — Input, Textarea, FormField components (CVA, accessibility, TDD)
 - [x] 2026-02-27 — Monorepo + preview restructure (pnpm workspaces, sidebar + routes)
+- [x] 2026-02-27 — Gradient button variants (primary=gradient-main, secondary=gradient-lime, outline=gradient border)
 
 </details>

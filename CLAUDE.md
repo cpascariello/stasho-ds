@@ -196,7 +196,7 @@ docs/plans/                   # Design and implementation plans
 - Three-layer token system (OKLCH color scales 50–950, semantic tokens, Tailwind mapping)
 - OKLCH color scales for primary, accent, success, warning, error, neutral
 - Light/dark theme switching via `.theme-dark` class with `@custom-variant dark`
-- Button component with 6 variants, 4 sizes, CVA architecture
+- Button component with 6 variants, 4 sizes, CVA architecture (primary/secondary use gradient fills, outline uses gradient border)
 - Spinner component for loading states
 - cn() utility (clsx + tailwind-merge)
 - Input component with 2 sizes, error/disabled states

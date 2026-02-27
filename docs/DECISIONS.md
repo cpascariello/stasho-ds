@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #26 — 2026-02-27
+
+**Context:** Primary button dark mode — the dark end of `gradient-main` (`#141421`) is identical to the dark mode background, making the left edge of the button invisible. Tried various border stops (400–950) but none felt right. Initially overrode `--gradient-main` directly in `.theme-dark`, but this violated the three-layer architecture (Layer 1 values should not be theme-dependent).
+**Decision:** Promote `--gradient-main` to a semantic token. Raw variants `--gradient-main-base` and `--gradient-main-dark` live in Layer 1 (`@theme`). Semantic alias `--gradient-main` lives in Layer 2 (`:root`/`.theme-dark`) and swaps per theme. No border needed — the gradient itself provides edge definition. Added `background-origin: border-box` to `.gradient-fill-*` classes to prevent artifacts at rounded corners with `border-transparent`.
+**Rationale:** Follows the same promotion pattern as colors (`--color-primary-600` → `--primary`). `#1C1C32` is subtle — just enough lift from the dark mode background to define button edges. The `background-origin` fix prevents a mismatch between where the gradient is calculated (padding-box default) and where it paints (border-box). Added a "Promote Layer 1 to Layer 2" rule to ARCHITECTURE.md to catch this pattern proactively.
+
+## Decision #24 — 2026-02-27
+
+**Context:** Button variants (primary, secondary, outline) needed restyling to match Aleph Cloud brand identity.
+**Decision:** Primary uses `gradient-fill-main` (dark→purple gradient), secondary uses `gradient-fill-lime` (lime→pale yellow), outline inherits the old secondary's `border-gradient-main` treatment. All three use `disabled:opacity-50` instead of per-property disabled states.
+**Rationale:** The signature gradients are the core brand identity. Primary = authoritative dark-to-purple, secondary = bold lime accent, outline = gradient border for tertiary actions. Semi-transparent overlay hover states avoid maintaining separate gradient definitions per state. `disabled:opacity-50` works correctly with gradient backgrounds where individual property opacity would be impossible. Supersedes Decision #14 (gradient variants deferred).
+
 ## Decision #23 — 2026-02-27
 
 **Context:** Preview app sidebar scrolls with page content instead of staying fixed.

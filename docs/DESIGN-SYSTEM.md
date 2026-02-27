@@ -164,7 +164,7 @@ Available as CSS custom properties. Use via `style` attribute.
 
 | Name | CSS variable | Colors | Use for |
 |------|-------------|--------|---------|
-| `main` | `var(--gradient-main)` | `#141421` → `#5100CD` | Primary gradient, hero sections |
+| `main` | `var(--gradient-main)` | `#141421` → `#5100CD` (light) / `#1C1C32` → `#5100CD` (dark) | Primary gradient, hero sections. Theme-aware — promoted to semantic layer. |
 | `lime` | `var(--gradient-lime)` | `#D6FF00` → `#F5F7DB` | Accent gradient, CTAs |
 | `success` | `var(--gradient-success)` | `#36D846` → `#63E570` | Success states |
 | `warning` | `var(--gradient-warning)` | `#FFE814` → `#FBAE18` | Warning states |
@@ -182,6 +182,25 @@ CSS `border-color` doesn't support gradients. These classes (defined in `tokens.
 ```tsx
 {/* Just apply the class — hover/active fills are built in */}
 <button className="border-gradient-main border-3 rounded-full">
+  Outline Action
+</button>
+```
+
+### Gradient Fill Utilities
+
+CSS classes for gradient backgrounds with interactive hover/active states. Hover uses a semi-transparent overlay to lighten or darken the gradient without defining new color stops.
+
+| Class | Gradient | Hover | Active |
+|-------|----------|-------|--------|
+| `gradient-fill-main` | `--gradient-main` | White overlay (lighten) | Black overlay (darken) |
+| `gradient-fill-lime` | `--gradient-lime` | Black overlay (subtle darken) | Black overlay (darken) |
+
+```tsx
+{/* Gradient fills with built-in hover/active states */}
+<button className="gradient-fill-main text-white px-6 py-3 rounded-full">
+  Primary Action
+</button>
+<button className="gradient-fill-lime text-neutral-950 px-6 py-3 rounded-full">
   Secondary Action
 </button>
 ```
@@ -386,9 +405,9 @@ import { Button } from "@aleph-front/ds/button";
 #### Variants
 
 ```tsx
-<Button variant="primary">Primary</Button>     {/* solid primary-600, white text, lighter border */}
-<Button variant="secondary">Secondary</Button> {/* solid primary-100, primary text */}
-<Button variant="outline">Outline</Button>     {/* transparent, neutral border */}
+<Button variant="primary">Primary</Button>     {/* gradient-main fill, white text, no border */}
+<Button variant="secondary">Secondary</Button> {/* gradient-lime fill, black text, black border */}
+<Button variant="outline">Outline</Button>     {/* gradient-main border, primary-100 fill */}
 <Button variant="text">Text</Button>           {/* transparent, no visible border */}
 <Button variant="destructive">Delete</Button>  {/* 20% error fill, dark text (light in dark mode) */}
 <Button variant="warning">Careful</Button>     {/* 20% warning fill, dark text (light in dark mode) */}

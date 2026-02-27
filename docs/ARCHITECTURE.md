@@ -128,6 +128,22 @@ Semantic token names must not duplicate a Tailwind utility prefix. When a token 
 
 **Example:** The border color token is named `edge`, not `border`, giving `border-edge` instead of `border-border`.
 
+### Promote Layer 1 Values to Layer 2 When Theme-Dependent
+
+Layer 1 (`@theme`) holds raw brand values that are the same in all themes. If a brand value needs to change between light and dark mode, it must be promoted to a semantic token in Layer 2.
+
+**Pre-flight check before using any brand token in a component:**
+1. Will this value look correct on *both* light and dark backgrounds?
+2. Does the value contain colors that match or blend into a theme's background?
+
+If either answer is "no," promote the token:
+1. Keep the raw value(s) in `@theme` with descriptive suffixes (`-base`, `-dark`)
+2. Create a semantic alias in `:root` → `var(--<name>-base)`
+3. Override in `.theme-dark` → `var(--<name>-dark)`
+4. Consumers reference the semantic name (no suffix)
+
+**Example:** `--gradient-main` has a dark end (`#141421`) that matches the dark mode background. Promoted: `--gradient-main-base` and `--gradient-main-dark` in Layer 1, `--gradient-main` in Layer 2 swaps per theme.
+
 ---
 
 ## Patterns
@@ -140,7 +156,7 @@ Semantic token names must not duplicate a Tailwind utility prefix. When a token 
 
 **Key files:** `packages/ds/src/styles/tokens.css`
 
-**Notes:** `@theme inline` tells Tailwind to resolve at runtime (not compile time), enabling theme switching.
+**Notes:** `@theme inline` tells Tailwind to resolve at runtime (not compile time), enabling theme switching. Any Layer 1 value that needs to change per theme (e.g., `--gradient-main`) must be promoted to Layer 2 — see the "Promote Layer 1 Values to Layer 2" rule above.
 
 ### Theme Switching
 
@@ -178,8 +194,9 @@ Semantic token names must not duplicate a Tailwind utility prefix. When a token 
 2. **Second choice: plain CSS class in `tokens.css`** — if the effect requires multiple CSS properties working together (e.g., `background-clip` + `background` + `border-color`), extract to a CSS class with interactive states baked in.
 3. **Never: custom classes in `globals.css`** — `globals.css` is for Tailwind imports, content sources, variant registrations, and base element styles only.
 
-**Example:** `border-gradient-main` uses the background-clip trick for gradient borders with rounded corners. Each state has the full `background` declaration referencing color scale tokens.
+**Examples:**
 
+`border-gradient-main` — gradient borders via `background-clip` trick:
 ```css
 .border-gradient-main {
   border-color: transparent;
@@ -191,9 +208,21 @@ Semantic token names must not duplicate a Tailwind utility prefix. When a token 
 .border-gradient-main:active { /* same with primary-300 */ }
 ```
 
+`gradient-fill-main` / `gradient-fill-lime` — gradient fills with overlay-based hover states:
+```css
+.gradient-fill-main { background: var(--gradient-main); }
+.gradient-fill-main:hover {
+  background:
+    linear-gradient(oklch(1 0 0 / 0.1), oklch(1 0 0 / 0.1)),
+    var(--gradient-main);
+}
+```
+
+The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` over the base gradient. This avoids maintaining separate hover gradient definitions — just tune the overlay opacity.
+
 ```tsx
 /* Component just applies the class — interactive states are built in */
-"border-gradient-main text-primary-700",
+"gradient-fill-main text-white border-transparent",
 ```
 
 ### Fixed Sidebar Layout
@@ -271,6 +300,15 @@ Design system components are visual by nature — most of their code maps props 
 3. Add `:hover` and `:active` selectors with the appropriate fill color stops
 4. In components, apply the class name — no hover overrides needed
 5. Document in `docs/DESIGN-SYSTEM.md` § Gradient Border Utilities
+
+### Adding a Gradient Fill Class
+
+1. Add `.gradient-fill-<name>` in `packages/ds/src/styles/tokens.css` after the existing gradient fill classes
+2. Set `background: var(--gradient-<name>)`
+3. Add `:hover` with a semi-transparent overlay: `linear-gradient(oklch(... / opacity), oklch(... / opacity)), var(--gradient-<name>)`. Use white overlay to lighten dark gradients, black overlay to darken light gradients.
+4. Add `:active` with a stronger overlay opacity
+5. In components, apply the class name — hover/active states are built in
+6. Document in `docs/DESIGN-SYSTEM.md` § Gradient Fill Utilities
 
 ### Adding a New Component
 

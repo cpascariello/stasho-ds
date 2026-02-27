@@ -23,25 +23,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-primary-600 text-white border-primary-400",
-          "hover:bg-primary-700 hover:border-primary-500",
-          "active:bg-primary-800 active:border-primary-500",
-          "disabled:bg-primary-600/50 disabled:text-white/50 disabled:border-primary-400/50",
+          "gradient-fill-main text-white border-transparent",
+          "disabled:opacity-50",
         ].join(" "),
         secondary: [
+          "gradient-fill-lime text-neutral-950 border-neutral-950",
+          "disabled:opacity-50",
+        ].join(" "),
+        outline: [
           "border-gradient-main text-primary-700",
           "hover:text-primary-800",
           "active:text-primary-800",
           "disabled:opacity-50",
-        ].join(" "),
-        outline: [
-          "bg-transparent text-neutral-950 border-neutral-950",
-          "dark:text-neutral-50 dark:border-neutral-50",
-          "hover:bg-primary-100 dark:hover:bg-primary-800",
-          "active:bg-primary-200 dark:active:bg-primary-700",
-          "disabled:bg-transparent disabled:text-neutral-950/50",
-          "disabled:border-neutral-950/50",
-          "dark:disabled:text-neutral-50/50 dark:disabled:border-neutral-50/50",
         ].join(" "),
         text: [
           "bg-transparent text-primary-600 dark:text-primary-300 border-transparent",
