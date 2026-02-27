@@ -446,6 +446,60 @@ import { buttonVariants } from "@ac/components/button/button";
 </a>
 ```
 
+### Input
+
+Styled text input with CVA sizing and error state.
+
+```tsx
+import { Input } from "@ac/components/input/input";
+
+<Input size="md" placeholder="Enter text" />
+<Input size="sm" placeholder="Small" />
+<Input error placeholder="Invalid" />
+<Input disabled placeholder="Disabled" />
+```
+
+**Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
+
+**Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
+
+**Focus ring:** Flush `ring-3` in `primary-200`, animated via `box-shadow` transition. No offset.
+
+### Textarea
+
+Multi-line text input. Same API as Input, `rounded-2xl`, vertical resize.
+
+```tsx
+import { Textarea } from "@ac/components/textarea/textarea";
+
+<Textarea placeholder="Enter message" />
+<Textarea size="sm" rows={6} />
+<Textarea error placeholder="Invalid" />
+```
+
+**Defaults:** `rows={4}`, `resize-y`, `size="md"`
+
+### FormField
+
+Layout wrapper that wires label, helper text, and error message to a child input with proper accessibility attributes.
+
+```tsx
+import { FormField } from "@ac/components/form-field/form-field";
+import { Input } from "@ac/components/input/input";
+
+<FormField label="Email" required helperText="We'll never share it">
+  <Input type="email" placeholder="you@example.com" />
+</FormField>
+
+<FormField label="Email" required error="Invalid email">
+  <Input type="email" error />
+</FormField>
+```
+
+**Props:** `label` (required), `required`, `helperText`, `error`, `className`
+
+**Accessibility:** Auto-generates `id`, wires `htmlFor`, `aria-describedby`, and `role="alert"` on errors.
+
 ### Spinner
 
 Animated loading indicator. Used internally by Button but available standalone.
@@ -478,7 +532,7 @@ Run `pnpm dev` and visit http://localhost:3000. Six tabs:
 
 | Tab | Content |
 |-----|---------|
-| Components | Button showcase: all variants, sizes, icons, loading, disabled, asChild |
+| Components | Button showcase, Input sizes/states, Textarea, FormField with label/error/helper |
 | Colors | OKLCH color scales (50–950), semantic tokens (theme-aware), borders |
 | Typography | Heading scale (Header–H7), body styles, font family specimens |
 | Spacing | Tailwind spacing scale, breakpoints table, border radius samples |

@@ -21,10 +21,10 @@ Ideas and scope creep captured for later consideration.
 **Description:** Add 4 SVG logo variants (icon-only light/dark, icon+wordlogo light/dark).
 **Priority:** Medium
 
-### 2026-02-26 — Component library (continued)
+### 2026-02-27 — Component library (continued)
 
 **Source:** Design doc
-**Description:** Build remaining UI components (inputs, cards, modals, etc.) using the token system. Button component is complete.
+**Description:** Build remaining UI components (cards, modals, selects, etc.) using the token system. Button, Input, Textarea, and FormField are complete.
 **Priority:** High
 
 ### 2026-02-26 — Gradient button variants
@@ -55,5 +55,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-02-26 — Typekit font integration (kit ID: `acb7qvn`)
 - [x] 2026-02-26 — Global CLAUDE.md: bundler moduleResolution for Next.js
 - [x] 2026-02-26 — Button component (CVA variants, OKLCH color scales, TDD)
+- [x] 2026-02-27 — Input, Textarea, FormField components (CVA, accessibility, TDD)
 
 </details>

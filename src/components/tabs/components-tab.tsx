@@ -1,4 +1,7 @@
 import { Button } from "@ac/components/button/button";
+import { FormField } from "@ac/components/form-field/form-field";
+import { Input } from "@ac/components/input/input";
+import { Textarea } from "@ac/components/textarea/textarea";
 
 const variants = [
   "primary",
@@ -107,6 +110,42 @@ export function ComponentsTab() {
           <Button asChild variant="text">
             <a href="#demo">Text Link</a>
           </Button>
+        </div>
+      </Section>
+
+      <Section title="Input Sizes">
+        <div className="grid gap-4 max-w-md">
+          <Input size="sm" placeholder="Small input" aria-label="Small input" />
+          <Input size="md" placeholder="Medium input" aria-label="Medium input" />
+        </div>
+      </Section>
+
+      <Section title="Input States">
+        <div className="grid gap-4 max-w-md">
+          <Input placeholder="Default" aria-label="Default" />
+          <Input error placeholder="Error state" aria-label="Error" />
+          <Input disabled placeholder="Disabled" aria-label="Disabled" />
+        </div>
+      </Section>
+
+      <Section title="Textarea">
+        <div className="grid gap-4 max-w-md">
+          <Textarea placeholder="Default textarea" aria-label="Default textarea" />
+          <Textarea error placeholder="Error textarea" aria-label="Error textarea" />
+        </div>
+      </Section>
+
+      <Section title="Form Fields">
+        <div className="grid gap-6 max-w-md">
+          <FormField label="Username" helperText="Choose a unique username">
+            <Input placeholder="aleph_user" />
+          </FormField>
+          <FormField label="Email" required error="Please enter a valid email">
+            <Input type="email" placeholder="you@example.com" error />
+          </FormField>
+          <FormField label="Bio" helperText="Tell us about yourself">
+            <Textarea placeholder="I build on Aleph Cloud..." />
+          </FormField>
         </div>
       </Section>
     </div>

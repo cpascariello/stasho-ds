@@ -28,6 +28,15 @@ src/
 │   ├── button/
 │   │   ├── button.tsx    # Button component (CVA variants)
 │   │   └── button.test.tsx  # Behavior + accessibility tests
+│   ├── input/
+│   │   ├── input.tsx       # Input component (CVA variants)
+│   │   └── input.test.tsx  # Behavior + accessibility tests
+│   ├── textarea/
+│   │   ├── textarea.tsx       # Textarea component (CVA variants)
+│   │   └── textarea.test.tsx
+│   ├── form-field/
+│   │   ├── form-field.tsx  # FormField layout wrapper (useId + cloneElement)
+│   │   └── form-field.test.tsx
 │   ├── ui/
 │   │   └── spinner.tsx   # Animated loading spinner
 │   ├── preview-tabs.tsx  # Tab navigation

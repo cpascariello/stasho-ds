@@ -199,5 +199,8 @@ docs/plans/           # Design and implementation plans
 - Button component with 6 variants, 4 sizes, CVA architecture
 - Spinner component for loading states
 - cn() utility (clsx + tailwind-merge)
+- Input component with 2 sizes, error/disabled states
+- Textarea component with rows default, vertical resize, error/disabled states
+- FormField wrapper with label, required asterisk, helper text, error message, auto-wired accessibility
 - Preview app with 6 tabs (Components, Colors, Typography, Spacing, Effects, Icons)
 - Static export for deployment
