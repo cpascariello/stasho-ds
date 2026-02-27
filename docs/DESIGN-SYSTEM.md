@@ -596,9 +596,11 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 </FormField>
 ```
 
-**Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (sm/md), `className`. Forwards ref to `<button>`.
+**Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `sm` (16px) · `md` (20px, default)
+**Sizes:** `xs` (16px, rounded 4px) · `sm` (24px, rounded-md 6px) · `md` (28px, rounded-md 6px, default)
+
+**Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM.
 
 **Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
 
@@ -625,9 +627,11 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 
 **RadioGroup props:** `value`, `defaultValue`, `onValueChange`, `disabled`, `className`. Forwards ref to `<div>`.
 
-**RadioGroupItem props:** `value`, `disabled`, `size` (sm/md), `className`. Forwards ref to `<button>`.
+**RadioGroupItem props:** `value`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `sm` (16px) · `md` (20px, default)
+**Sizes:** `xs` (16px) · `sm` (24px) · `md` (28px, default)
+
+**Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
 
 ### Switch
 
@@ -647,11 +651,11 @@ import { Switch } from "@aleph-front/ds/switch";
 </FormField>
 ```
 
-**Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `size` (sm/md), `className`. Forwards ref to `<button>`.
+**Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `sm` (32x18px track, 12px thumb) · `md` (40x22px track, 16px thumb, default)
+**Sizes:** `xs` (36×20px track, 12px thumb) · `sm` (48×26px track, 18px thumb) · `md` (60×32px track, 24px thumb, default)
 
-**Visuals:** Pill track, sliding white thumb with `transition-transform`. Off = `bg-muted border-edge`, on = `bg-primary`.
+**Visuals:** Pill track, sliding white thumb with `transition-transform`, 2px gap from track edges. Off = `bg-muted border-edge`, on = `bg-primary`.
 
 ### Select
 

@@ -28,6 +28,10 @@ export default function RadioGroupPage() {
         <DemoSection title="Sizes">
           <div className="flex gap-12">
             <RadioGroup defaultValue="a">
+              <RadioGroupItem value="a" size="xs" />
+              <RadioGroupItem value="b" size="xs" />
+            </RadioGroup>
+            <RadioGroup defaultValue="a">
               <RadioGroupItem value="a" size="sm" />
               <RadioGroupItem value="b" size="sm" />
             </RadioGroup>

@@ -18,6 +18,13 @@ Each entry includes:
 
 ---
 
+## Decision #28 — 2026-02-27
+
+**Context:** Checkbox, RadioGroup, and Switch components had smaller dimensions (sm=16px, md=20px) than front-core and only 2 size tiers. Indicators had no entry animation. All form fields used `border-2` (2px) borders.
+**Decision:** Align with front-core proportions: 3 size tiers (xs=16px, sm=24px, md=28px), 65% indicator proportion, per-size border-radius on checkbox. Add clip-path reveal animations using Radix `forceMount` + CSS `clip-path` transitions. Switch track/thumb sizes scaled proportionally with 2px edge gap. Standardize all form field borders to `border-3` (3px) across Checkbox, RadioGroup, Switch, Input, Textarea, and Select.
+**Rationale:** `forceMount` keeps the Indicator in the DOM regardless of checked state, enabling pure CSS animation via `data-state` attribute changes. Clip-path `circle()` transitions create a smooth reveal: bottom-left origin for checkbox (follows check stroke direction), centered for radio (symmetrical dot). No JS animation library needed. Switch already had `transition-transform` on thumb, so only sizing changes were needed. The 3px border gives form fields more visual weight and definition, matching the error state border width that was already 3px.
+**Alternatives considered:** CSS `scale` animation (doesn't reveal progressively), JS-driven animation (unnecessary complexity when CSS can drive it via Radix data attributes). Full `bg-primary` fill on radio (too heavy — a 65% centered dot is clearer).
+
 ## Decision #27 — 2026-02-27
 
 **Context:** Building form components (Checkbox, RadioGroup, Switch, Select) that need rich accessibility — keyboard navigation, focus management, ARIA attributes, state management.

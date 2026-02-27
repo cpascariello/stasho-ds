@@ -26,6 +26,7 @@ export default function SwitchPage() {
 
         <DemoSection title="Sizes">
           <div className="flex items-center gap-6">
+            <Switch size="xs" defaultChecked />
             <Switch size="sm" defaultChecked />
             <Switch size="md" defaultChecked />
           </div>

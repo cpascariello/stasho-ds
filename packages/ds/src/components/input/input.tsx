@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 const inputVariants = cva(
   [
     "w-full font-sans text-foreground bg-card",
-    "border-2 border-edge rounded-full",
+    "border-3 border-edge rounded-full",
     "placeholder:text-muted-foreground",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",

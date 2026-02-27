@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 const textareaVariants = cva(
   [
     "w-full font-sans text-foreground bg-card",
-    "border-2 border-edge rounded-2xl",
+    "border-3 border-edge rounded-2xl",
     "placeholder:text-muted-foreground",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",

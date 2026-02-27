@@ -61,4 +61,9 @@ describe("Switch", () => {
     render(<Switch className="custom-class" />);
     expect(screen.getByRole("switch")).toHaveClass("custom-class");
   });
+
+  it("renders with xs size prop", () => {
+    render(<Switch size="xs" />);
+    expect(screen.getByRole("switch")).toBeDefined();
+  });
 });

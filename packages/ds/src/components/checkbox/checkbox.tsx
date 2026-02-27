@@ -6,7 +6,7 @@ import { cn } from "@ac/lib/cn";
 const checkboxVariants = cva(
   [
     "peer shrink-0 bg-card",
-    "border-2 border-edge rounded-md",
+    "border-3 border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",
     "focus-visible:ring-primary-500",
@@ -18,8 +18,9 @@ const checkboxVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-4",
-        md: "size-5",
+        xs: "size-4 rounded",
+        sm: "size-6 rounded-md",
+        md: "size-7 rounded-md",
       },
     },
     defaultVariants: {
@@ -49,7 +50,15 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         aria-invalid={error || undefined}
         {...rest}
       >
-        <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+        <CheckboxPrimitive.Indicator
+          forceMount
+          className={cn(
+            "flex size-full items-center justify-center text-current",
+            "[clip-path:circle(0%_at_0%_75%)]",
+            "data-[state=checked]:[clip-path:circle(100%_at_50%_50%)]",
+            "transition-[clip-path] duration-200 ease-in-out",
+          )}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -58,7 +67,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             strokeWidth={3}
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="size-3/4"
+            className="size-[65%]"
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>

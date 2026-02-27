@@ -59,4 +59,9 @@ describe("Checkbox", () => {
     render(<Checkbox className="custom-class" />);
     expect(screen.getByRole("checkbox")).toHaveClass("custom-class");
   });
+
+  it("renders with xs size prop", () => {
+    render(<Checkbox size="xs" />);
+    expect(screen.getByRole("checkbox")).toBeDefined();
+  });
 });

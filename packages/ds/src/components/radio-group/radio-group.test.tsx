@@ -81,4 +81,13 @@ describe("RadioGroup", () => {
     );
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
+
+  it("renders with xs size prop", () => {
+    render(
+      <RadioGroup>
+        <RadioGroupItem value="a" size="xs" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio")).toBeDefined();
+  });
 });

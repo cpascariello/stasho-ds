@@ -6,7 +6,7 @@ import { cn } from "@ac/lib/cn";
 const radioItemVariants = cva(
   [
     "peer shrink-0 rounded-full bg-card",
-    "border-2 border-edge",
+    "border-3 border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",
     "focus-visible:ring-primary-500",
@@ -17,8 +17,9 @@ const radioItemVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-4",
-        md: "size-5",
+        xs: "size-4",
+        sm: "size-6",
+        md: "size-7",
       },
     },
     defaultVariants: {
@@ -30,7 +31,7 @@ const radioItemVariants = cva(
 type RadioGroupProps = ComponentPropsWithoutRef<
   typeof RadioGroupPrimitive.Root
 > & {
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
 };
 
 const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
@@ -60,8 +61,16 @@ const RadioGroupItem = forwardRef<HTMLButtonElement, RadioGroupItemProps>(
         className={cn(radioItemVariants({ size }), className)}
         {...rest}
       >
-        <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-          <span className="block size-1/2 rounded-full bg-primary" />
+        <RadioGroupPrimitive.Indicator
+          forceMount
+          className={cn(
+            "flex size-full items-center justify-center",
+            "[clip-path:circle(0%_at_50%_50%)]",
+            "data-[state=checked]:[clip-path:circle(100%_at_50%_50%)]",
+            "transition-[clip-path] duration-200 ease-in-out",
+          )}
+        >
+          <span className="block size-[65%] rounded-full bg-primary" />
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
     );

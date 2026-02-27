@@ -302,6 +302,29 @@ const Checkbox = forwardRef<HTMLButtonElement, Props>(
 - `error` prop adds `aria-invalid` for accessibility and error border styling
 - Select uses a flat `options` prop wrapping Radix's compound children pattern
 
+### Radix forceMount + Clip-Path Animation
+
+**Context:** Radix UI unmounts Indicator children when unchecked, making CSS transitions impossible. Need smooth reveal animations for check marks and radio dots.
+
+**Approach:** Pass `forceMount` to `<Indicator>` so it stays in the DOM regardless of state. Radix still sets `data-state="checked"|"unchecked"` on force-mounted indicators, enabling pure CSS animation via `clip-path` transitions:
+
+```tsx
+<CheckboxPrimitive.Indicator
+  forceMount
+  className={cn(
+    "[clip-path:circle(0%_at_0%_75%)]",
+    "data-[state=checked]:[clip-path:circle(100%_at_50%_50%)]",
+    "transition-[clip-path] duration-200 ease-in-out",
+  )}
+>
+```
+
+**Key insight:** The `circle()` origin matters — checkbox uses bottom-left (`0% 75%`) to follow the check stroke direction; radio uses center (`50% 50%`) for the symmetrical dot.
+
+**Key files:** `packages/ds/src/components/checkbox/checkbox.tsx`, `packages/ds/src/components/radio-group/radio-group.tsx`
+
+**Notes:** This pattern eliminates any need for JS animation libraries. The `data-state` attribute is the contract between Radix and CSS — no React state or refs needed for the animation itself.
+
 ### Test Environment for Radix Components
 
 **Context:** Radix Select uses DOM APIs not available in jsdom (PointerEvent, ResizeObserver, DOMRect, scrollIntoView).
