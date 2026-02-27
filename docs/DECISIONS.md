@@ -18,6 +18,13 @@ Each entry includes:
 
 ---
 
+## Decision #15 — 2026-02-27
+
+**Context:** Secondary button needs a gradient border (`--gradient-main`), but CSS `border-color` doesn't accept gradients. The background-clip trick requires multiple CSS properties working together.
+**Decision:** Use Tailwind 4's `@utility` in `tokens.css` for complex CSS effects that can't be expressed as plain Tailwind utilities. Expose a CSS variable (`--bg-fill`) for per-state customization. Never add component-level utility classes to `globals.css`.
+**Rationale:** `@utility` is part of Tailwind's utility layer — same specificity, variant support (`hover:`, `dark:`), IDE autocomplete. Colocating the utility in `tokens.css` next to the gradient tokens it consumes keeps the system coherent. `globals.css` stays clean (imports, variant registrations, base element styles only).
+**Alternatives considered:** Inline arbitrary values in CVA (works but unreadable), custom CSS class in globals.css (works but sits outside the token system)
+
 ## Decision #14 — 2026-02-26
 
 **Context:** Gradient fill variants for primary/secondary buttons

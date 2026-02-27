@@ -21,14 +21,14 @@ describe("Button", () => {
     it("applies secondary variant classes", () => {
       render(<Button variant="secondary">Secondary</Button>);
       const button = screen.getByRole("button");
-      expect(button.className).toContain("bg-primary-100");
+      expect(button.className).toContain("border-gradient-main");
       expect(button.className).toContain("text-primary-700");
     });
 
     it("applies outline variant classes", () => {
       render(<Button variant="outline">Outline</Button>);
       const button = screen.getByRole("button");
-      expect(button.className).toContain("border-neutral-400");
+      expect(button.className).toContain("border-neutral-950");
     });
 
     it("applies text variant classes", () => {

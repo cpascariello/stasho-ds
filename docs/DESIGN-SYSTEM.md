@@ -172,6 +172,25 @@ Available as CSS custom properties. Use via `style` attribute.
 | `error` | `var(--gradient-error)` | `#FFAC89` → `#DE3668` | Error states |
 | `info` | `var(--gradient-info)` | `#C8ADF0` → `#5100CD` | Info states |
 
+### Gradient Border Utilities
+
+CSS `border-color` doesn't support gradients. These `@utility` classes (defined in `tokens.css`) use the background-clip trick to render gradient borders with rounded corners.
+
+| Utility class | Gradient | Default fill |
+|--------------|----------|-------------|
+| `border-gradient-main` | `--gradient-main` | `primary-100` |
+
+Override the fill color per state with the `--bg-fill` CSS variable:
+
+```tsx
+{/* Button with gradient border, fill changes on hover/active */}
+<button className="border-gradient-main border-3 rounded-full
+                   hover:[--bg-fill:var(--color-primary-200)]
+                   active:[--bg-fill:var(--color-primary-300)]">
+  Secondary Action
+</button>
+```
+
 ### Usage Examples
 
 ```tsx

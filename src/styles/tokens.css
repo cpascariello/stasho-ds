@@ -154,3 +154,14 @@
   --color-border: var(--border);
   --color-border-hover: var(--border-hover);
 }
+
+/* ──────────────────────────────────────────────
+   Utilities: gradient border effects
+   ────────────────────────────────────────────── */
+@utility border-gradient-main {
+  --bg-fill: var(--color-primary-100);
+  border-color: transparent;
+  background:
+    linear-gradient(var(--bg-fill), var(--bg-fill)) padding-box,
+    var(--gradient-main) border-box;
+}
