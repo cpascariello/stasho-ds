@@ -20,7 +20,7 @@ export default function SkeletonPage() {
         </div>
       </DemoSection>
       <DemoSection title="Card Loading State">
-        <div className="rounded-2xl border border-edge bg-card p-6 space-y-4 max-w-sm">
+        <div className="rounded-2xl border border-edge bg-surface p-6 space-y-4 max-w-sm">
           <Skeleton className="h-5 w-24" />
           <Skeleton className="h-10 w-full" />
           <div className="flex gap-3">

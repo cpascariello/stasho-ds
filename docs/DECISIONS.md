@@ -18,6 +18,19 @@ Each entry includes:
 
 ---
 
+## Decision #43 — 2026-03-01
+
+**Context:** Shadow scale had inconsistent geometry — `brand-sm` used 4px blur while `brand` and `brand-lg` shared 24px blur with only opacity difference. Adding `shadow-brand-xs` for subtle form field shadows made the scale naming confusing (xs had bigger blur than sm).
+**Decision:** Remove `brand-xs`. Adjust `brand` to 10% opacity (was 15%) for subtler default. Adjust `brand-lg` to 48px blur / 25% opacity (was 24px / 45%) for a proper size progression. Keep `brand-sm` at 4px/15% for tight elements.
+**Rationale:** The scale now progresses in both blur radius (4 → 24 → 48) and opacity (15% → 10% → 25%). `sm` is intentionally high-opacity-low-blur for sharp, grounded shadows on small elements. The unprefixed `brand` step follows Tailwind naming convention (base step has no modifier). Form fields use `shadow-brand` at 10% — subtle enough without needing a separate token.
+
+## Decision #42 — 2026-03-01
+
+**Context:** The `--card` / `--card-foreground` semantic tokens were used by 6 components (Card, Input, Textarea, Select, Checkbox, RadioGroup) — functioning as a general "elevated surface" token, not a card-specific one. Light mode value was pure white (`#ffffff`), disconnected from the purple-tinted brand.
+**Decision:** Rename `--card` to `--surface`, `--card-foreground` to `--surface-foreground`. Change light mode value from `#ffffff` to `var(--color-primary-50)` (faint purple tint). Dark mode value unchanged (`base-900`).
+**Rationale:** Role-based naming (`surface`) is self-documenting when the next component needs the same color. Component-based naming (`card`) requires tribal knowledge that "card actually means any elevated surface." The `primary-50` light value ties surfaces to the brand palette — borders (`border-edge`) provide visual separation from the page background (`#F9F4FF`), which is close in lightness.
+**Alternatives considered:** Keeping `--card` (shadcn convention, widely understood but misleading), adding `--surface` as an alias (violates "replace, don't deprecate"), using raw scale color without semantic token (6 components would each need `bg-white dark:bg-base-900`).
+
 ## Decision #41 — 2026-03-01
 
 **Context:** TypeScript `exactOptionalPropertyTypes: true` prevents passing `(() => void) | undefined` to an optional prop typed as `onClick?: () => void`. The mobile drawer passes `onLinkClick` (which may be undefined) to NavLink's `onClick` prop.

@@ -96,8 +96,8 @@
 
   /* Shadows */
   --shadow-brand-sm: 0px 4px 4px oklch(0.372 0.254 285.48 / 0.15);
-  --shadow-brand: 0px 4px 24px oklch(0.372 0.254 285.48 / 0.15);
-  --shadow-brand-lg: 0px 4px 24px oklch(0.372 0.254 285.48 / 0.45);
+  --shadow-brand: 0px 4px 24px oklch(0.372 0.254 285.48 / 0.1);
+  --shadow-brand-lg: 0px 4px 48px oklch(0.372 0.254 285.48 / 0.25);
 
   /* Fonts */
   --font-heading: "rigid-square", ui-sans-serif, system-ui, sans-serif;
@@ -117,8 +117,8 @@
   --accent-foreground: #141421;
   --muted: var(--color-primary-100);
   --muted-foreground: var(--color-neutral-500);
-  --card: #ffffff;
-  --card-foreground: #141421;
+  --surface: var(--color-primary-50);
+  --surface-foreground: #141421;
   --edge: var(--color-primary-200);
   --edge-hover: var(--color-primary-300);
 
@@ -139,8 +139,8 @@
   --accent-foreground: #141421;
   --muted: var(--color-base-900);
   --muted-foreground: var(--color-neutral-400);
-  --card: var(--color-base-900);
-  --card-foreground: #F9F4FF;
+  --surface: var(--color-base-900);
+  --surface-foreground: #F9F4FF;
   --edge: var(--color-base-800);
   --edge-hover: var(--color-base-700);
 
@@ -159,8 +159,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
   --color-edge: var(--edge);
   --color-edge-hover: var(--edge-hover);
 }

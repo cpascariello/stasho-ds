@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 
 const checkboxVariants = cva(
   [
-    "peer shrink-0 bg-card",
+    "peer shrink-0 bg-surface",
     "border-3 border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",

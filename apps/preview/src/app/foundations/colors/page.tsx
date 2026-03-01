@@ -147,9 +147,9 @@ export default function ColorsPage() {
             textClass: "text-muted-foreground",
           },
           {
-            label: "card",
-            colorClass: "bg-card border border-edge",
-            textClass: "text-card-foreground",
+            label: "surface",
+            colorClass: "bg-surface border border-edge",
+            textClass: "text-surface-foreground",
           },
         ]}
       />

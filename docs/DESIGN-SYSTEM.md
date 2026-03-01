@@ -137,8 +137,8 @@ Swap automatically between light and dark themes.
 | `accent-foreground` | `text-accent-foreground` | `#141421` | `#141421` | Text on accent backgrounds |
 | `muted` | `bg-muted` | primary-100 | base-900 | Subdued backgrounds |
 | `muted-foreground` | `text-muted-foreground` | neutral-500 | neutral-400 | Subdued text, labels |
-| `card` | `bg-card` | `#ffffff` | base-900 | Card/panel backgrounds |
-| `card-foreground` | `text-card-foreground` | `#141421` | `#F9F4FF` | Card text |
+| `surface` | `bg-surface` | primary-50 | base-900 | Elevated/interactive surface backgrounds (cards, form fields) |
+| `surface-foreground` | `text-surface-foreground` | `#141421` | `#F9F4FF` | Text on elevated surfaces |
 | `edge` | `border-edge` | primary-200 | base-800 | Borders, dividers |
 | `edge-hover` | `border-edge-hover` | primary-300 | base-700 | Hover state borders |
 
@@ -154,7 +154,7 @@ Swap automatically between light and dark themes.
 <div className="bg-primary-600/20 text-primary-700 p-4 rounded">20% opacity</div>
 
 {/* Semantic colors — theme-aware */}
-<div className="bg-card text-card-foreground rounded-lg border border-edge p-6">
+<div className="bg-surface text-surface-foreground rounded-lg border border-edge p-6">
   <h3 className="text-foreground font-bold">Title</h3>
   <p className="text-muted-foreground">Description text</p>
 </div>
@@ -297,30 +297,30 @@ Available as Tailwind utility classes.
 
 | Name | Tailwind class | Value | Use for |
 |------|---------------|-------|---------|
-| `brand-sm` | `shadow-brand-sm` | `0px 4px 4px` (15% brand) | Subtle elevation |
-| `brand` | `shadow-brand` | `0px 4px 24px` (15% brand) | Default cards, buttons |
-| `brand-lg` | `shadow-brand-lg` | `0px 4px 24px` (45% brand) | Emphasized elements, modals |
+| `brand-sm` | `shadow-brand-sm` | `0px 4px 4px` (15% brand) | Tight elements (tooltips, hover accents) |
+| `brand` | `shadow-brand` | `0px 4px 24px` (10% brand) | Default surface shadow (form fields, dropdowns) |
+| `brand-lg` | `shadow-brand-lg` | `0px 4px 48px` (25% brand) | Emphasized elements, modals |
 
 ### Usage Examples
 
 ```tsx
 {/* Card with subtle shadow */}
-<div className="bg-card rounded-lg p-6 shadow-brand-sm">
+<div className="bg-surface rounded-lg p-6 shadow-brand-sm">
   Subtle card
 </div>
 
 {/* Elevated card */}
-<div className="bg-card rounded-lg p-6 shadow-brand">
+<div className="bg-surface rounded-lg p-6 shadow-brand">
   Default elevation
 </div>
 
 {/* Modal or hero element */}
-<div className="bg-card rounded-lg p-8 shadow-brand-lg">
+<div className="bg-surface rounded-lg p-8 shadow-brand-lg">
   High emphasis
 </div>
 
 {/* Interactive shadow on hover */}
-<div className="bg-card rounded-lg p-6 shadow-brand-sm hover:shadow-brand transition-shadow">
+<div className="bg-surface rounded-lg p-6 shadow-brand-sm hover:shadow-brand transition-shadow">
   Hover for more shadow
 </div>
 ```
@@ -405,7 +405,7 @@ Size tokens for consistent icon sizing. No icon library included yet.
 ### Composing a Card
 
 ```tsx
-<div className="bg-card text-card-foreground rounded-lg border border-edge
+<div className="bg-surface text-surface-foreground rounded-lg border border-edge
                 shadow-brand-sm hover:shadow-brand p-6"
      style={{ transitionDuration: "var(--duration-fast)" }}>
   <h3 className="font-heading text-xl font-extrabold italic mb-2">
@@ -692,7 +692,7 @@ import { Select } from "@aleph-front/ds/select";
 
 **Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
 
-**Dropdown:** `rounded-2xl`, `bg-card`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
 
 ### Badge
 
@@ -738,7 +738,7 @@ import { Card } from "@aleph-front/ds/card";
 #### Variants
 
 ```tsx
-<Card variant="default">Bordered card</Card>  {/* bg-card, border-edge, rounded-xl */}
+<Card variant="default">Bordered card</Card>  {/* bg-surface, border-edge, rounded-xl */}
 <Card variant="noise">Grain texture</Card>    {/* purple grain SVG overlay */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```

@@ -33,8 +33,8 @@ export default function EffectsPage() {
           <h3 className="text-lg font-bold mb-4">Shadows</h3>
           <div className="grid gap-6 md:grid-cols-3">
             {SHADOWS.map(({ name, class: cls }) => (
-              <div key={name} className={`rounded-lg bg-card p-6 ${cls}`}>
-                <p className="text-sm font-medium text-card-foreground">
+              <div key={name} className={`rounded-lg bg-surface p-6 ${cls}`}>
+                <p className="text-sm font-medium text-surface-foreground">
                   {name}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">

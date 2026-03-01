@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 
 const radioItemVariants = cva(
   [
-    "peer shrink-0 rounded-full bg-card",
+    "peer shrink-0 rounded-full bg-surface",
     "border-3 border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none focus-visible:ring-3",
