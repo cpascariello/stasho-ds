@@ -199,12 +199,12 @@ docs/plans/                   # Design and implementation plans
 - Button component with 6 variants, 4 sizes, CVA architecture (primary/secondary use gradient fills, outline uses gradient border)
 - Spinner component for loading states
 - cn() utility (clsx + tailwind-merge)
-- Input component with 2 sizes, error/disabled states
-- Textarea component with rows default, vertical resize, error/disabled states
+- Input component with 2 sizes, shadow-brand (borderless), error/disabled states
+- Textarea component with rows default, shadow-brand (borderless), vertical resize, error/disabled states
 - Checkbox component (Radix UI) with 3 sizes (xs/sm/md), error/disabled states, clip-path reveal animation
 - RadioGroup component (Radix UI) with 3 sizes (xs/sm/md), group/item-level disabled, clip-path reveal animation
 - Switch component (Radix UI) with 3 sizes (xs/sm/md), animated sliding thumb, disabled state
-- Select component (Radix UI) with flat options prop, 2 sizes, error/disabled, portal dropdown
+- Select component (Radix UI) with flat options prop, 2 sizes, shadow-brand (borderless), error/disabled, portal dropdown
 - FormField wrapper with label, required asterisk, helper text, error message, auto-wired accessibility
 - Badge component with 5 semantic variants (default/success/warning/error/info), 2 sizes
 - StatusDot component with 5 health status variants (healthy/degraded/error/offline/unknown), pulse animation on healthy, 2 sizes

@@ -539,13 +539,15 @@ import { Input } from "@aleph-front/ds/input";
 
 **Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
 
-**Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
+**Visuals:** Borderless with `shadow-brand` (purple-tinted shadow). `rounded-full` pill shape.
+
+**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
 
 **Focus ring:** Flush `ring-3` in `primary-500`, animated via `box-shadow` transition. No offset.
 
 ### Textarea
 
-Multi-line text input. Same API as Input, `rounded-2xl`, vertical resize.
+Multi-line text input. Same API as Input, `rounded-2xl`, `shadow-brand`, vertical resize.
 
 ```tsx
 import { Textarea } from "@aleph-front/ds/textarea";
@@ -686,7 +688,9 @@ import { Select } from "@aleph-front/ds/select";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
+**Visuals:** Borderless with `shadow-brand`, matching Input/Textarea. `rounded-full` pill shape.
+
+**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
 
 **Dropdown:** `rounded-2xl`, `bg-card`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
 

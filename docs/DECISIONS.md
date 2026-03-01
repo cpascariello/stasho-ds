@@ -18,6 +18,13 @@ Each entry includes:
 
 ---
 
+## Decision #32 — 2026-03-01
+
+**Context:** Form fields (Input, Textarea, Select trigger) used `border-3 border-edge` with `hover:border-edge-hover`. Testing a softer, more branded look.
+**Decision:** Replace borders with `shadow-brand` (borderless fields with purple-tinted shadow). Error state still applies `border-3 border-error-400` for clear visual distinction.
+**Rationale:** The brand shadow uses the primary purple hue at 15% opacity, tying form fields to the brand identity in a way neutral borders couldn't. Removes the hover border state — the shadow provides enough definition without needing a hover transition. Error state intentionally re-introduces the border because shadows alone don't communicate "error" clearly enough.
+**Alternatives considered:** `shadow-brand-sm` (too subtle), `shadow-brand-lg` (too dramatic for resting state), keeping border + adding shadow (redundant visual weight).
+
 ## Decision #31 — 2026-03-01
 
 **Context:** Skeleton component needs to show loading placeholders for text lines, input fields, avatars, table rows, etc. — all with different dimensions.
