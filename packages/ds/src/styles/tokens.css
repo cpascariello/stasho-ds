@@ -218,3 +218,36 @@
     linear-gradient(oklch(0 0 0 / 0.12), oklch(0 0 0 / 0.12)) border-box,
     var(--gradient-lime) border-box;
 }
+
+/* ── Card Noise (fx-grain) ─────────────────────────────── */
+
+.card-noise {
+  position: relative;
+  isolation: isolate;
+  background-image: radial-gradient(
+    50% 50%,
+    var(--color-primary-100) 0%,
+    oklch(from var(--color-primary-100) l c h / 0.57) 100%
+  );
+}
+
+.theme-dark .card-noise {
+  background-image: radial-gradient(
+    50% 50%,
+    var(--color-primary-950) 0%,
+    oklch(from var(--color-primary-950) l c h / 0.57) 100%
+  );
+}
+
+.card-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4yNSIgdHlwZT0iZnJhY3RhbE5vaXNlIiBudW1PY3RhdmVzPSIzIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMSAwIDAgMCAwIDAgMCAwIDAgMCAwLjgwIDAgMCAwIDEwIC03LjI1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIi8+PC9zdmc+");
+  background-size: 400px 400px;
+  background-repeat: repeat;
+  opacity: 0.3;
+  pointer-events: none;
+}

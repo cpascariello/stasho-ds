@@ -539,7 +539,7 @@ import { Input } from "@aleph-front/ds/input";
 
 **Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
 
-**Visuals:** Borderless with `shadow-brand` (purple-tinted shadow). `rounded-full` pill shape.
+**Visuals:** Borderless with `shadow-brand` (purple-tinted shadow). `rounded-full` pill shape. Dark mode uses `bg-base-800` for a slightly elevated fill.
 
 **Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
 
@@ -547,7 +547,7 @@ import { Input } from "@aleph-front/ds/input";
 
 ### Textarea
 
-Multi-line text input. Same API as Input, `rounded-2xl`, `shadow-brand`, vertical resize.
+Multi-line text input. Same API as Input, `rounded-2xl`, `shadow-brand`, vertical resize. Dark mode uses `bg-base-800`.
 
 ```tsx
 import { Textarea } from "@aleph-front/ds/textarea";
@@ -688,7 +688,7 @@ import { Select } from "@aleph-front/ds/select";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Borderless with `shadow-brand`, matching Input/Textarea. `rounded-full` pill shape.
+**Visuals:** Borderless with `shadow-brand`, matching Input/Textarea. `rounded-full` pill shape. Dark mode uses `bg-base-800`.
 
 **Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
 
@@ -696,7 +696,7 @@ import { Select } from "@aleph-front/ds/select";
 
 ### Badge
 
-Semantic label for status, counts, and categories. Pill shape with color variants.
+Semantic label for status, counts, and categories. Subtle rounded corners (`rounded`, 4px) with color variants.
 
 ```tsx
 import { Badge } from "@aleph-front/ds/badge";
@@ -739,6 +739,7 @@ import { Card } from "@aleph-front/ds/card";
 
 ```tsx
 <Card variant="default">Bordered card</Card>  {/* bg-card, border-edge, rounded-xl */}
+<Card variant="noise">Grain texture</Card>    {/* purple grain SVG overlay */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```
 
@@ -864,7 +865,7 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 <TooltipContent side="left" />
 ```
 
-**Styling:** `bg-neutral-900 text-white text-sm rounded-lg px-3 py-1.5 shadow-brand-sm` with Radix animation attributes.
+**Styling:** `bg-neutral-900 text-white text-sm rounded-lg px-3 py-1.5 shadow-brand-sm` with Radix animation attributes. Dark mode uses `bg-base-700` for contrast against the dark page background.
 
 ### Skeleton
 

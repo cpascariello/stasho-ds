@@ -18,6 +18,24 @@ Each entry includes:
 
 ---
 
+## Decision #35 — 2026-03-01
+
+**Context:** Form fields (Input, Textarea, Select) use `bg-card` which resolves to `base-900` in dark mode — nearly the same lightness as the page background.
+**Decision:** Add `dark:bg-base-800` to form field components for a slightly elevated fill in dark mode.
+**Rationale:** `base-800` (lightness 0.28) vs `base-900` (lightness 0.22) gives form fields a subtle visual lift without a dramatic contrast shift. Component-level override rather than changing the `--card` semantic token, which would affect all cards.
+
+## Decision #34 — 2026-03-01
+
+**Context:** Badge component used `rounded-full` (pill shape).
+**Decision:** Change to `rounded` (4px border radius) for subtler, more rectangular badges.
+**Rationale:** Pill badges feel like tags/chips. Squared-off badges with subtle rounding better suit status labels and category markers in dashboard layouts.
+
+## Decision #33 — 2026-03-01
+
+**Context:** Tooltip uses hardcoded `bg-neutral-900` (lightness 0.21). In dark mode, the page background is `#141421` (~lightness 0.15), making the tooltip nearly invisible.
+**Decision:** Add `dark:bg-base-700` to tooltip content. The `base-700` token (lightness 0.34) provides visible contrast against the dark background.
+**Rationale:** Component-level `dark:` override rather than a semantic token because tooltips intentionally use an inverted color scheme (dark on light, light on dark would be a different design choice). The `base` scale is purpose-built for dark surface elevation.
+
 ## Decision #32 — 2026-03-01
 
 **Context:** Form fields (Input, Textarea, Select trigger) used `border-3 border-edge` with `hover:border-edge-hover`. Testing a softer, more branded look.

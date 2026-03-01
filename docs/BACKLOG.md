@@ -57,6 +57,12 @@ Ideas and scope creep captured for later consideration.
 **Description:** Publish `@aleph-front/ds` to npm. Monorepo structure is in place — needs tsup build step for compiled dist.
 **Priority:** Medium
 
+### 2026-03-01 — FX grain backgrounds (card-noise + variants)
+
+**Source:** Reverse-engineered from Aleph Cloud console (`fx-grain-*` classes)
+**Description:** The `card-noise` CSS class and Card `noise` variant are implemented in `tokens.css` and `card.tsx` but not shown in the preview app. Uses SVG `feTurbulence` + `feColorMatrix` alpha thresholding to create scattered purple dots. Dissect the grain effect to create multiple selectable background textures/variants (different frequencies, colors, opacities). Consider extracting the grain as a standalone CSS utility independent of Card.
+**Priority:** Medium
+
 ---
 
 ## Completed / Rejected
