@@ -67,7 +67,7 @@ const RadioGroupItem = forwardRef<HTMLButtonElement, RadioGroupItemProps>(
             "flex size-full items-center justify-center",
             "[clip-path:circle(0%_at_50%_50%)]",
             "data-[state=checked]:[clip-path:circle(100%_at_50%_50%)]",
-            "transition-[clip-path] duration-200 ease-in-out",
+            "transition-[clip-path] duration-200 ease-in-out motion-reduce:transition-none",
           )}
         >
           <span className="block size-[65%] rounded-full bg-primary" />

@@ -32,7 +32,7 @@ const switchVariants = cva(
 const thumbVariants = cva(
   [
     "pointer-events-none block rounded-full bg-white",
-    "shadow-sm transition-transform",
+    "shadow-sm transition-transform motion-reduce:transition-none",
     "data-[state=unchecked]:translate-x-0.5",
   ].join(" "),
   {

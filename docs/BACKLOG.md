@@ -15,6 +15,24 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-03-01 — Theme persistence across page reloads
+
+**Source:** Identified during accessibility audit
+**Description:** Theme selection resets on page reload. Persist to `localStorage` and apply before first paint (inline `<script>` in `<head>`) to avoid flash of wrong theme.
+**Priority:** Medium
+
+### 2026-03-01 — Font loading strategy
+
+**Source:** Identified during accessibility audit
+**Description:** External font loading (Typekit, Google Fonts) blocks render and has no fallback strategy. Consider `font-display: swap`, preconnect hints, or self-hosting critical fonts.
+**Priority:** Low
+
+### 2026-03-01 — Form control base class deduplication
+
+**Source:** Identified during accessibility audit
+**Description:** Input, Textarea, and Select share identical base styles (shadow-brand, focus ring, error border, dark mode bg). Extract shared form control base classes to reduce duplication.
+**Priority:** Low
+
 ### 2026-02-26 — Logo variants
 
 **Source:** Design doc
@@ -79,5 +97,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-02-27 — Form components: Checkbox, RadioGroup, Switch, Select (Radix UI wrappers)
 - [x] 2026-02-27 — Select dropdown animation classes are dead (removed, no phantom features)
 - [x] 2026-03-01 — Dashboard components: Badge, StatusDot, Card, Skeleton, Table, Tooltip
+- [x] 2026-03-01 — Accessibility audit & hardening (StatusDot a11y, FormField error injection, Table keyboard nav, motion-reduce support, responsive mobile layout)
 
 </details>

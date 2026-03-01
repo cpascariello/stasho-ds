@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -61,11 +61,20 @@ const LINK_ACTIVE =
 const LINK_IDLE =
   "text-muted-foreground hover:text-foreground hover:bg-muted";
 
-function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
+function NavLink({
+  item,
+  pathname,
+  onClick,
+}: {
+  item: NavItem;
+  pathname: string;
+  onClick?: () => void | undefined;
+}) {
   return (
     <Link
       href={item.href}
-      className={`block rounded-md px-2 py-1.5 text-sm transition-colors ${
+      onClick={onClick}
+      className={`block rounded-md px-3 py-2 text-sm transition-colors ${
         pathname === item.href ? LINK_ACTIVE : LINK_IDLE
       }`}
       style={{ transitionDuration: "var(--duration-fast)" }}
@@ -78,9 +87,11 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
 function CollapsibleGroup({
   group,
   pathname,
+  onLinkClick,
 }: {
   group: NavGroup;
   pathname: string;
+  onLinkClick?: () => void | undefined;
 }) {
   const hasActiveChild = group.items.some((i) => pathname === i.href);
   const [open, setOpen] = useState(hasActiveChild);
@@ -90,7 +101,7 @@ function CollapsibleGroup({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${
+        className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${
           hasActiveChild
             ? "text-primary-700 dark:text-primary-200 font-medium"
             : LINK_IDLE
@@ -99,12 +110,13 @@ function CollapsibleGroup({
       >
         {group.group}
         <svg
-          className={`size-3.5 transition-transform ${open ? "rotate-90" : ""}`}
+          className={`size-3.5 transition-transform motion-reduce:transition-none ${open ? "rotate-90" : ""}`}
           style={{ transitionDuration: "var(--duration-fast)" }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
           strokeWidth={2.5}
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -117,7 +129,11 @@ function CollapsibleGroup({
         <ul className="mt-0.5 ml-3 space-y-0.5 border-l border-edge pl-2">
           {group.items.map((item) => (
             <li key={item.href}>
-              <NavLink item={item} pathname={pathname} />
+              <NavLink
+                item={item}
+                pathname={pathname}
+                {...(onLinkClick ? { onClick: onLinkClick } : {})}
+              />
             </li>
           ))}
         </ul>
@@ -126,16 +142,20 @@ function CollapsibleGroup({
   );
 }
 
-export function Sidebar() {
+function NavContent({
+  onLinkClick,
+}: {
+  onLinkClick?: () => void | undefined;
+}) {
   const pathname = usePathname();
 
   return (
-    <nav className="w-60 shrink-0 border-r border-edge overflow-y-auto py-6 px-4">
+    <>
       {NAV.map((entry) => {
         if (isSection(entry)) {
           return (
             <div key={entry.section} className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 px-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 px-3">
                 {entry.section}
               </p>
               <ul className="space-y-0.5">
@@ -146,12 +166,17 @@ export function Sidebar() {
                         key={item.group}
                         group={item}
                         pathname={pathname}
+                        {...(onLinkClick ? { onLinkClick } : {})}
                       />
                     );
                   }
                   return (
                     <li key={item.href}>
-                      <NavLink item={item} pathname={pathname} />
+                      <NavLink
+                        item={item}
+                        pathname={pathname}
+                        {...(onLinkClick ? { onClick: onLinkClick } : {})}
+                      />
                     </li>
                   );
                 })}
@@ -163,7 +188,8 @@ export function Sidebar() {
           <Link
             key={entry.href}
             href={entry.href}
-            className={`block rounded-md px-2 py-1.5 text-sm mb-4 transition-colors ${
+            {...(onLinkClick ? { onClick: onLinkClick } : {})}
+            className={`block rounded-md px-3 py-2 text-sm mb-4 transition-colors ${
               pathname === entry.href ? LINK_ACTIVE : LINK_IDLE
             }`}
             style={{ transitionDuration: "var(--duration-fast)" }}
@@ -172,6 +198,127 @@ export function Sidebar() {
           </Link>
         );
       })}
+    </>
+  );
+}
+
+/* ── Desktop sidebar (lg+) ────────────────────── */
+
+function DesktopSidebar() {
+  return (
+    <nav
+      aria-label="Design system"
+      className="hidden lg:block w-60 shrink-0 border-r border-edge overflow-y-auto py-6 px-4"
+    >
+      <NavContent />
     </nav>
+  );
+}
+
+/* ── Mobile drawer (below lg) ─────────────────── */
+
+function MobileDrawer({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
+
+  return (
+    <div
+      className={`fixed inset-0 z-40 lg:hidden ${open ? "" : "pointer-events-none"}`}
+      aria-hidden={!open}
+    >
+      {/* Backdrop */}
+      <div
+        className={`absolute inset-0 bg-foreground/30 transition-opacity ${
+          open ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ transitionDuration: "var(--duration-normal)" }}
+        onClick={onClose}
+      />
+      {/* Drawer panel */}
+      <nav
+        aria-label="Design system"
+        className={`absolute inset-y-0 left-0 w-72 bg-background border-r border-edge
+                    overflow-y-auto py-6 px-4 shadow-brand-lg
+                    transition-transform motion-reduce:transition-none ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ transitionDuration: "var(--duration-normal)" }}
+      >
+        <NavContent onLinkClick={onClose} />
+      </nav>
+    </div>
+  );
+}
+
+/* ── Hamburger button (below lg) ──────────────── */
+
+function MenuButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="lg:hidden flex items-center justify-center size-10 -ml-2 rounded-md
+                 text-foreground hover:bg-muted transition-colors"
+      style={{ transitionDuration: "var(--duration-fast)" }}
+      aria-label="Open navigation menu"
+    >
+      <svg
+        className="size-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+  );
+}
+
+/* ── Exported shell ────────────────────────────── */
+
+export function SidebarShell({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+
+  return (
+    <>
+      <MobileDrawer open={drawerOpen} onClose={closeDrawer} />
+      <div className="flex flex-1 overflow-hidden">
+        <DesktopSidebar />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* Mobile header with menu button — visible below lg */}
+          <div className="flex items-center gap-3 px-4 py-2 lg:hidden border-b border-edge">
+            <MenuButton onClick={() => setDrawerOpen(true)} />
+          </div>
+          <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8">
+            <div className="mx-auto max-w-4xl">
+              {children}
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
   );
 }

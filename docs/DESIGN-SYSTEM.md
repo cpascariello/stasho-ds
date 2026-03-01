@@ -578,7 +578,7 @@ import { Input } from "@aleph-front/ds/input";
 
 **Props:** `label` (required), `required`, `helperText`, `error`, `className`
 
-**Accessibility:** Auto-generates `id`, wires `htmlFor`, `aria-describedby`, and `role="alert"` on errors.
+**Accessibility:** Auto-generates `id`, wires `htmlFor`, `aria-describedby`, and `role="alert"` on errors. When `error` is present, auto-injects `error={true}` and `aria-invalid={true}` into the child input via `cloneElement` — no need to pass `error` to both FormField and Input.
 
 ### Checkbox
 
@@ -763,7 +763,7 @@ Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
 
 ### StatusDot
 
-Small colored circle indicating health status. Used inline with text labels in tables and lists.
+Small colored circle indicating health status. Used inline with text labels in tables and lists. Accessible by default — includes `role="status"` and auto-derived `aria-label` from the status prop.
 
 ```tsx
 import { StatusDot } from "@aleph-front/ds/status-dot";
@@ -786,7 +786,7 @@ import { StatusDot } from "@aleph-front/ds/status-dot";
 <StatusDot status="healthy" size="md" />  {/* 12px (size-3, default) */}
 ```
 
-Always include `aria-label` for accessibility:
+**Accessibility:** Built-in `role="status"` and auto-derived `aria-label` (e.g., `status="healthy"` → `aria-label="Healthy"`). Override with a custom label when more context is needed:
 
 ```tsx
 <StatusDot status="healthy" aria-label="Node is healthy" />
@@ -794,7 +794,7 @@ Always include `aria-label` for accessibility:
 
 ### Table
 
-Generic typed table with sortable columns, alternating rows, hover highlight, and row click.
+Generic typed table with sortable columns, alternating rows, hover highlight, row click, keyboard accessibility, and empty state.
 
 ```tsx
 import { Table, type Column } from "@aleph-front/ds/table";
@@ -826,10 +826,15 @@ const columns: Column<Node>[] = [
   data={nodes}
   keyExtractor={(r) => r.id}
   onRowClick={(row) => setSelected(row)}
+  emptyState="No nodes found"
 />
 ```
 
 **Visual style:** Alternating rows (`even:bg-muted/30`), hover highlight (`hover:bg-muted/50`), clickable rows with `cursor-pointer`. Header row `bg-muted/50 text-muted-foreground text-sm font-semibold uppercase tracking-wide`.
+
+**Keyboard accessibility:** Sortable headers are focusable (`tabIndex={0}`) and respond to Enter/Space. Clickable rows are focusable and respond to Enter. Headers include `aria-sort` (`ascending`/`descending`/`none`).
+
+**Empty state:** Pass `emptyState` (ReactNode) to render a centered message spanning all columns when `data` is empty.
 
 ### Tooltip
 
@@ -879,7 +884,7 @@ import { Skeleton } from "@aleph-front/ds/ui/skeleton";
 <Skeleton className="size-12 rounded-full" /> {/* Avatar */}
 ```
 
-Uses `animate-pulse bg-muted rounded-md`. Hidden from accessibility tree via `aria-hidden="true"`.
+Uses `animate-pulse bg-muted rounded-md`. Hidden from accessibility tree via `aria-hidden="true"`. Respects `prefers-reduced-motion` via `motion-reduce:animate-none`.
 
 ### Spinner
 
@@ -934,4 +939,10 @@ Run `pnpm dev` and visit http://localhost:3000. Sidebar navigation with route-pe
 | `/components/status-dot` | Statuses, sizes, inline usage |
 | `/components/tooltip` | Basic, sides, truncated hash example |
 
-Theme switcher in the sticky header toggles light/dark.
+Theme switcher in the sticky header toggles light/dark. Responsive layout with mobile drawer navigation (below `lg` breakpoint) and fixed desktop sidebar (`lg+`).
+
+### Motion Sensitivity
+
+All animated components respect `prefers-reduced-motion: reduce` via Tailwind's `motion-reduce:` variant:
+- **Continuous animations** (pulse, spin): Disabled entirely with `motion-reduce:animate-none` (Skeleton, Spinner, StatusDot healthy pulse)
+- **One-shot transitions** (clip-path, transform): Disabled with `motion-reduce:transition-none` (Checkbox, RadioGroup, Switch, Tooltip, Table sort chevron)

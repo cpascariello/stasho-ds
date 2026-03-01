@@ -205,12 +205,13 @@ docs/plans/                   # Design and implementation plans
 - RadioGroup component (Radix UI) with 3 sizes (xs/sm/md), group/item-level disabled, clip-path reveal animation
 - Switch component (Radix UI) with 3 sizes (xs/sm/md), animated sliding thumb, disabled state
 - Select component (Radix UI) with flat options prop, 2 sizes, shadow-brand (borderless), error/disabled, portal dropdown
-- FormField wrapper with label, required asterisk, helper text, error message, auto-wired accessibility
+- FormField wrapper with label, required asterisk, helper text, error message, auto-wired accessibility, auto-injects error/aria-invalid into child
 - Badge component with 5 semantic variants (default/success/warning/error/info), 2 sizes, rounded corners
-- StatusDot component with 5 health status variants (healthy/degraded/error/offline/unknown), pulse animation on healthy, 2 sizes
+- StatusDot component with 5 health status variants (healthy/degraded/error/offline/unknown), pulse animation on healthy, 2 sizes, built-in role="status" and auto aria-label
 - Card component with 3 variants (default/noise/ghost), 3 padding sizes, optional title prop
 - Skeleton loading placeholder with consumer-driven sizing via className
-- Table component with generic typing, sortable columns, alternating rows, hover, row click
+- Table component with generic typing, sortable columns, keyboard-accessible sorting (Enter/Space), aria-sort, alternating rows, hover, row click (keyboard Enter), emptyState prop
 - Tooltip component wrapping Radix UI with DS styling, dark mode contrast fix (composable API: Provider, Root, Trigger, Content)
-- Preview app with sidebar navigation and route-per-page (20 pages)
+- All animated components respect prefers-reduced-motion via motion-reduce: variants
+- Preview app with responsive sidebar navigation (desktop fixed + mobile drawer) and route-per-page (20 pages)
 - Static export for deployment

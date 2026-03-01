@@ -56,7 +56,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             "flex size-full items-center justify-center text-current",
             "[clip-path:circle(0%_at_0%_75%)]",
             "data-[state=checked]:[clip-path:circle(100%_at_50%_50%)]",
-            "transition-[clip-path] duration-200 ease-in-out",
+            "transition-[clip-path] duration-200 ease-in-out motion-reduce:transition-none",
           )}
         >
           <svg

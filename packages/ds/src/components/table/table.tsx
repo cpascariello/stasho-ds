@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { cn } from "@ac/lib/cn";
 
 type SortDirection = "asc" | "desc";
@@ -19,6 +19,7 @@ type TableProps<T> = {
   data: T[];
   keyExtractor: (row: T) => string;
   onRowClick?: (row: T) => void;
+  emptyState?: ReactNode;
   className?: string;
 };
 
@@ -30,7 +31,7 @@ function ChevronIcon({
   return (
     <svg
       className={cn(
-        "ml-1 inline size-3 transition-transform",
+        "ml-1 inline size-3 transition-transform motion-reduce:transition-none",
         direction === "desc" && "rotate-180",
         direction === null && "opacity-0",
       )}
@@ -38,10 +39,20 @@ function ChevronIcon({
       viewBox="0 0 24 24"
       stroke="currentColor"
       strokeWidth={2.5}
+      aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
     </svg>
   );
+}
+
+function ariaSortValue(
+  colIndex: number,
+  sortCol: number | null,
+  sortDir: SortDirection,
+): "ascending" | "descending" | "none" {
+  if (colIndex !== sortCol) return "none";
+  return sortDir === "asc" ? "ascending" : "descending";
 }
 
 export function Table<T>({
@@ -49,6 +60,7 @@ export function Table<T>({
   data,
   keyExtractor,
   onRowClick,
+  emptyState,
   className,
 }: TableProps<T>) {
   const [sortCol, setSortCol] = useState<number | null>(null);
@@ -60,6 +72,23 @@ export function Table<T>({
     } else {
       setSortCol(colIndex);
       setSortDir("asc");
+    }
+  }
+
+  function handleHeaderKeyDown(
+    e: KeyboardEvent,
+    colIndex: number,
+  ) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleSort(colIndex);
+    }
+  }
+
+  function handleRowKeyDown(e: KeyboardEvent, row: T) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onRowClick?.(row);
     }
   }
 
@@ -98,7 +127,18 @@ export function Table<T>({
                   col.sortable && "cursor-pointer select-none",
                 )}
                 style={col.width ? { width: col.width } : undefined}
+                tabIndex={col.sortable ? 0 : undefined}
+                aria-sort={
+                  col.sortable
+                    ? ariaSortValue(i, sortCol, sortDir)
+                    : undefined
+                }
                 onClick={col.sortable ? () => handleSort(i) : undefined}
+                onKeyDown={
+                  col.sortable
+                    ? (e) => handleHeaderKeyDown(e, i)
+                    : undefined
+                }
               >
                 {col.header}
                 {col.sortable && (
@@ -111,31 +151,48 @@ export function Table<T>({
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((row) => (
-            <tr
-              key={keyExtractor(row)}
-              className={cn(
-                "border-b border-edge transition-colors",
-                "even:bg-muted/30",
-                "hover:bg-muted/50",
-                onRowClick && "cursor-pointer",
-              )}
-              style={{ transitionDuration: "var(--duration-fast)" }}
-              onClick={onRowClick ? () => onRowClick(row) : undefined}
-            >
-              {columns.map((col) => (
-                <td
-                  key={col.header}
-                  className={cn(
-                    "px-4 py-3 text-sm",
-                    alignClass[col.align ?? "left"],
-                  )}
-                >
-                  {col.accessor(row)}
-                </td>
-              ))}
+          {sortedData.length === 0 && emptyState ? (
+            <tr>
+              <td
+                colSpan={columns.length}
+                className="px-4 py-8 text-center text-sm text-muted-foreground"
+              >
+                {emptyState}
+              </td>
             </tr>
-          ))}
+          ) : (
+            sortedData.map((row) => (
+              <tr
+                key={keyExtractor(row)}
+                className={cn(
+                  "border-b border-edge transition-colors",
+                  "even:bg-muted/30",
+                  "hover:bg-muted/50",
+                  onRowClick && "cursor-pointer",
+                )}
+                style={{ transitionDuration: "var(--duration-fast)" }}
+                tabIndex={onRowClick ? 0 : undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                onKeyDown={
+                  onRowClick
+                    ? (e) => handleRowKeyDown(e, row)
+                    : undefined
+                }
+              >
+                {columns.map((col) => (
+                  <td
+                    key={col.header}
+                    className={cn(
+                      "px-4 py-3 text-sm",
+                      alignClass[col.align ?? "left"],
+                    )}
+                  >
+                    {col.accessor(row)}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

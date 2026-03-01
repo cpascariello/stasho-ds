@@ -29,10 +29,13 @@ function FormField({
   const messageId = `${id}-message`;
   const hasMessage = Boolean(error ?? helperText);
 
+  const hasError = Boolean(error);
+
   const child = isValidElement(children)
     ? cloneElement(children as ReactElement<Record<string, unknown>>, {
         id: inputId,
         ...(hasMessage ? { "aria-describedby": messageId } : {}),
+        ...(hasError ? { error: true, "aria-invalid": true } : {}),
       })
     : children;
 

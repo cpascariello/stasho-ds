@@ -264,15 +264,33 @@ The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` 
 "gradient-fill-main text-white border-transparent",
 ```
 
-### Fixed Sidebar Layout
+### Responsive Sidebar Layout (SidebarShell)
 
-**Context:** Preview app needs a sidebar that stays in place while only the main content scrolls.
+**Context:** Preview app needs a sidebar that stays in place while only the main content scrolls, and works on mobile devices.
 
-**Approach:** The outer layout wrapper uses `h-screen flex-col` to lock to viewport height. Below the header, a `flex flex-1 overflow-hidden` container holds the sidebar and main. Both panels handle their own `overflow-y-auto`. The sidebar stays put because its container doesn't grow — only `<main>` scrolls.
+**Approach:** `SidebarShell` is a client component that owns the mobile drawer state and renders both layouts:
+- **Desktop (`lg+`):** Fixed sidebar (`hidden lg:block w-60`) with independent scroll. The outer layout wrapper uses `h-screen flex-col` to lock to viewport height. Below the header, a `flex flex-1 overflow-hidden` container holds sidebar and main.
+- **Mobile (`<lg`):** Slide-in drawer (`fixed inset-0 z-40`) with backdrop overlay, `translate-x` transition, and Escape key close. Touch targets bumped to `py-2 px-3` for 44px minimum. A hamburger menu button in a sub-header triggers the drawer.
+
+`SidebarShell` wraps `{children}` (the page content) so the layout component stays a server component — no client-side state leaks into the root layout.
 
 **Key files:** `apps/preview/src/app/layout.tsx`, `apps/preview/src/components/sidebar.tsx`
 
 **Why not `sticky`?** `sticky` positions relative to the scroll container, but the parent flex container grows with content — so there's nothing to stick against. The fixed-height container pattern avoids this entirely.
+
+**Collapsible nav groups:** The sidebar supports `NavGroup` entries (e.g., "Forms") with a chevron toggle. Groups auto-expand when the active route is within their children.
+
+### Motion-Reduce Support
+
+**Context:** Users with vestibular disorders or motion sensitivity need a way to disable animations. `prefers-reduced-motion: reduce` is the OS-level signal.
+
+**Approach:** All animated components use Tailwind's `motion-reduce:` variant to disable motion:
+- **Continuous animations** (`animate-pulse`, `animate-spin`): `motion-reduce:animate-none` stops the animation entirely.
+- **One-shot transitions** (`transition-[clip-path]`, `transition-transform`): `motion-reduce:transition-none` makes state changes instant.
+
+**Key files:** `skeleton.tsx`, `spinner.tsx`, `status-dot.tsx` (continuous); `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx` (one-shot)
+
+**Rule:** Every new component with animation must include the appropriate `motion-reduce:` variant. Continuous animations use `animate-none`; transitions use `transition-none`.
 
 ### Tailwind 4 Dynamic Class Names
 

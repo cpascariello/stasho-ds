@@ -18,6 +18,45 @@ Each entry includes:
 
 ---
 
+## Decision #41 — 2026-03-01
+
+**Context:** TypeScript `exactOptionalPropertyTypes: true` prevents passing `(() => void) | undefined` to an optional prop typed as `onClick?: () => void`. The mobile drawer passes `onLinkClick` (which may be undefined) to NavLink's `onClick` prop.
+**Decision:** Use conditional spread pattern: `{...(onLinkClick ? { onClick: onLinkClick } : {})}`. The truthy branch narrows to non-undefined; the empty object skips the prop entirely.
+**Rationale:** This is the idiomatic TypeScript pattern for strict optional properties. Changing the prop type to `() => void | undefined` doesn't fix it because the outer union `T | undefined` is the issue, not the function return type. The conditional spread is zero-cost at runtime and fully type-safe.
+
+## Decision #40 — 2026-03-01
+
+**Context:** Preview app sidebar was desktop-only — unusable on mobile. Need responsive navigation without prop-drilling state through server component boundaries.
+**Decision:** Create `SidebarShell` client component that owns drawer state and renders both desktop sidebar and mobile drawer. Layout passes `{children}` through it. Mobile gets a hamburger button in a sub-header, a slide-in drawer with backdrop, and Escape key close.
+**Rationale:** SidebarShell encapsulates all client-side state (open/close) in one component, keeping the root layout as a server component. The drawer uses CSS transitions (`translate-x` + opacity backdrop) for smooth motion. Touch targets bumped to 44px minimum. Nav links auto-close the drawer on click.
+**Alternatives considered:** CSS-only drawer with checkbox hack (no Escape key support, no click-outside), separate mobile nav component in layout (requires lifting state into a client layout wrapper).
+
+## Decision #39 — 2026-03-01
+
+**Context:** Audit found that animated components (Skeleton, Spinner, StatusDot, Checkbox, RadioGroup, Switch, Tooltip) don't respect `prefers-reduced-motion: reduce`.
+**Decision:** Add `motion-reduce:animate-none` to continuous animations (pulse, spin) and `motion-reduce:transition-none` to one-shot transitions (clip-path, transform) across all animated components.
+**Rationale:** Tailwind's `motion-reduce:` variant maps to `@media (prefers-reduced-motion: reduce)`, which is the standard OS-level signal for motion sensitivity. Two categories: continuous animations should stop entirely; one-shot transitions should become instant. This is a structural rule — every new animated component must include the appropriate variant.
+
+## Decision #38 — 2026-03-01
+
+**Context:** Audit found Table component lacked keyboard accessibility — sortable headers and clickable rows were mouse-only.
+**Decision:** Add `tabIndex={0}` to sortable headers and clickable rows. Headers respond to Enter/Space for sort cycling. Rows respond to Enter for click. Add `aria-sort` attribute (`ascending`/`descending`/`none`) to sortable headers. Add `emptyState` prop for empty data.
+**Rationale:** Keyboard-only users couldn't sort columns or click rows. `aria-sort` communicates sort state to screen readers. The `emptyState` prop prevents empty tables from rendering nothing — consumers provide context like "No data found" that spans all columns.
+**Alternatives considered:** Using `<button>` inside `<th>` (adds nesting complexity, breaks semantic table structure), `role="button"` on `<th>` (non-standard).
+
+## Decision #37 — 2026-03-01
+
+**Context:** When FormField has an `error` message, consumers must manually pass `error={true}` to both FormField and the child input. Easy to forget the child prop.
+**Decision:** FormField auto-injects `error={true}` and `aria-invalid={true}` into the child input via `cloneElement` when FormField's `error` prop is present.
+**Rationale:** The FormField already knows whether there's an error — duplicating this in the child is redundant and error-prone. `cloneElement` merges props onto the existing child without wrapping it in an extra element. The `aria-invalid` injection ensures screen readers announce the error state even if the child component doesn't handle `error` prop styling.
+
+## Decision #36 — 2026-03-01
+
+**Context:** Audit found StatusDot was invisible to screen readers — a purely visual indicator with no semantic meaning.
+**Decision:** Add built-in `role="status"` and auto-derived `aria-label` from the status prop (e.g., `status="healthy"` → `aria-label="Healthy"`). Consumers can override with a custom `aria-label` via spread props.
+**Rationale:** Status indicators are meaningless without text equivalents. Auto-deriving the label from the prop avoids forcing every consumer to remember `aria-label`. The `role="status"` creates a live region so screen readers announce changes. Consumer override is still possible because `{...rest}` spreads after the default `aria-label`.
+**Alternatives considered:** Requiring consumers to always pass `aria-label` (easy to forget, audit showed this was the common case).
+
 ## Decision #35 — 2026-03-01
 
 **Context:** Form fields (Input, Textarea, Select) use `bg-card` which resolves to `base-900` in dark mode — nearly the same lightness as the page background.

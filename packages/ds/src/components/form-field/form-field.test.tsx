@@ -75,6 +75,28 @@ describe("FormField", () => {
     expect(screen.queryByText("*")).toBeNull();
   });
 
+  it("injects aria-invalid on child when error is present", () => {
+    render(
+      <FormField label="Email" error="Invalid">
+        <input />
+      </FormField>,
+    );
+    expect(screen.getByRole("textbox").getAttribute("aria-invalid")).toBe(
+      "true",
+    );
+  });
+
+  it("does not inject aria-invalid when no error", () => {
+    render(
+      <FormField label="Email">
+        <input />
+      </FormField>,
+    );
+    expect(
+      screen.getByRole("textbox").getAttribute("aria-invalid"),
+    ).toBeNull();
+  });
+
   it("merges custom className on wrapper", () => {
     const { container } = render(
       <FormField label="Email" className="custom-wrapper">
