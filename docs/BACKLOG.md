@@ -98,5 +98,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-02-27 — Select dropdown animation classes are dead (removed, no phantom features)
 - [x] 2026-03-01 — Dashboard components: Badge, StatusDot, Card, Skeleton, Table, Tooltip
 - [x] 2026-03-01 — Accessibility audit & hardening (StatusDot a11y, FormField error injection, Table keyboard nav, motion-reduce support, responsive mobile layout)
+- [x] 2026-03-02 — Align color token naming with Tailwind conventions (`destructive` → `error` alias)
 
 </details>
