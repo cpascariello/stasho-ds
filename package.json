@@ -11,5 +11,5 @@
     "typecheck": "pnpm -r typecheck",
     "check": "pnpm -r check"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
