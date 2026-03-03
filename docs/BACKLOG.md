@@ -39,12 +39,16 @@ Ideas and scope creep captured for later consideration.
 **Description:** Add 4 SVG logo variants (icon-only light/dark, icon+wordlogo light/dark).
 **Priority:** Medium
 
+### 2026-03-03 — Multi-select dropdown with checkboxes
+
+**Source:** Identified during form components brainstorming
+**Description:** Dropdown component where users can select multiple items from a list, each shown with a checkbox. Selected items shown as dismissible tags/chips in the trigger. Could build on cmdk (same as Combobox) with multi-selection state.
+**Priority:** Medium
+
 ### 2026-02-27 — Form components (remaining)
 
 **Source:** Identified while reviewing component coverage
-**Description:** Build remaining form components using the token system and CVA architecture. Checkbox, RadioGroup, Switch, and Select are done. Remaining:
-- Combobox / Autocomplete — searchable select with filtering
-- Slider — range input with min/max/step
+**Description:** Build remaining form components using the token system and CVA architecture. Checkbox, RadioGroup, Switch, Select, Combobox, and Slider are done (or in progress). Remaining:
 - File Upload — drag-and-drop or click-to-upload area
 - Number Input / Stepper — numeric input with +/- buttons
 **Priority:** Medium
