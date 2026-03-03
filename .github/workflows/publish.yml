@@ -1,8 +1,8 @@
 name: Publish to npm
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
 
 permissions:
   id-token: write
@@ -24,20 +24,6 @@ jobs:
 
       - run: npm ci
 
-      - name: Extract and validate version
-        id: version
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          VERSION="${TAG#v}"
-          if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$'; then
-            echo "::error::Invalid semver tag: $TAG"
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Patch package version
-        run: npm version "${{ steps.version.outputs.version }}" --no-git-tag-version
-        working-directory: packages/ds
 
       - name: Run checks
         run: npm run check -w @aleph-front/ds
