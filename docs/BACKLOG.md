@@ -97,5 +97,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-03-04 — Base color scale expansion (merged base into neutral at H:280, full 50-950 ramp)
 - [x] 2026-03-05 — Multi-select dropdown with checkboxes (cmdk + Radix Popover, tags with overflow, clear-all)
 - [x] 2026-03-06 — Phosphor Icons integration (replaced inline SVGs, added to DS as dependency, preview showcase)
+- [x] 2026-03-06 — CopyableText component (middle-ellipsis truncation, clip-path circle reveal, optional external link)
 
 </details>
