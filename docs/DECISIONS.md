@@ -18,6 +18,12 @@ Each entry includes:
 
 ---
 
+## Decision #63 — 2026-03-10
+
+**Context:** Pagination active page number was invisible in dark mode. `PAGE_BUTTON` applies `dark:text-primary-400` and `PAGE_ACTIVE` applies `text-white` without a dark variant. In dark mode, the dark-prefixed rule wins — rendering primary-400 text on a primary-600 background.
+**Decision:** Add explicit `dark:text-white` to `PAGE_ACTIVE` so the dark variant override matches.
+**Rationale:** Tailwind's dark variant (`dark:text-primary-400`) is more specific than a non-prefixed utility (`text-white`) when both are composed via `cn()`. The dark variant must be explicitly overridden at the same specificity level. This is a general pattern when composing base + active class constants — any dark variant in the base needs a matching dark variant in the override.
+
 ## Decision #62 — 2026-03-10
 
 **Context:** Pagination next/prev buttons shifted position when navigating because `buildPageRange` returned variable-length arrays. Clicking next in the middle also caused a flicker as DOM nodes were reordered.
