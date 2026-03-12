@@ -107,13 +107,32 @@ Never interrupt based on file count or commit count.
 On "sync up" or "catch me up":
 
 1. Read `docs/DECISIONS.md`, `docs/BACKLOG.md`, `docs/ARCHITECTURE.md`
-2. Check git status (branch, uncommitted changes, unpushed commits)
-3. Check recent git log for context
-4. Summarize:
-   - Last decision logged
-   - Open backlog items
-   - Any blockers
-   - Git status
+2. Check for pending plans — list `docs/superpowers/plans/` and read the most recent file. If a plan exists that hasn't been fully implemented, surface it in the summary.
+3. Check git status and recent git log — use **separate parallel Bash calls** (not chained with `&&`), so each matches `Bash(git status*)` / `Bash(git log*)` allow rules and avoids permission prompts
+4. Present the summary as a structured table, not prose paragraphs:
+
+```
+## Sync Up
+
+| Area | Status |
+|------|--------|
+| **Branch** | `main` — clean / 2 uncommitted files |
+| **Last commit** | `abc1234` — Short commit message |
+| **Last decision** | #N — Summary of decision |
+| **Pending plan** | None / `2026-03-12-badge-redesign.md` — Brief summary |
+| **Blockers** | None / description |
+
+### Open Backlog
+
+| Priority | Items |
+|----------|-------|
+| **High** | Item 1, Item 2 |
+| **Medium** | Item 3, Item 4 |
+| **Low** | Item 5 |
+
+Ready to go — what are we working on?
+```
+
 5. State readiness
 
 ---
@@ -125,7 +144,8 @@ On "sync up" or "catch me up":
 | `docs/DECISIONS.md` | Decision log with rationale |
 | `docs/BACKLOG.md` | Parking lot for scope creep and deferred ideas |
 | `docs/ARCHITECTURE.md` | Technical patterns, component structure, and recipes |
-| `docs/plans/` | Design and implementation plans (read-only reference) |
+| `docs/superpowers/specs/` | Design specs from brainstorming sessions (read-only reference) |
+| `docs/superpowers/plans/` | Implementation plans from planning sessions (read-only reference) |
 
 ---
 
@@ -143,7 +163,7 @@ Skills (superpowers) are tools, not separate processes. Use them naturally:
 
 Brainstorming, planning, and implementation happen across separate sessions:
 
-1. **Brainstorm + Plan (current session):** Explore design, write the plan to `docs/plans/`. This session ends after the plan is written.
+1. **Brainstorm + Plan (current session):** Explore design, write the spec to `docs/superpowers/specs/` and the plan to `docs/superpowers/plans/`. This session ends after the plan is written.
 2. **Implement (new session):** Start a fresh session, say "sync up", then execute the plan using `executing-plans` or `subagent-driven-development`. The plan file on disk is the handoff artifact — no brainstorm context carries over.
 
 Why: brainstorm sessions accumulate rejected ideas, design exploration, and back-and-forth that wastes context window during implementation. A clean session starts with only what matters: the plan + project docs.
