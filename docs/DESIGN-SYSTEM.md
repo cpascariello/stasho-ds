@@ -825,7 +825,7 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 
 **Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px, rounded 4px) · `sm` (24px, rounded-md 6px) · `md` (28px, rounded-md 6px, default)
+**Sizes:** `xs` (16px, rounded 4px) · `sm` (20px, rounded-md 6px) · `md` (24px, rounded-md 6px, default)
 
 **Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM.
 
@@ -856,7 +856,7 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 
 **RadioGroupItem props:** `value`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px) · `sm` (24px) · `md` (28px, default)
+**Sizes:** `xs` (16px) · `sm` (20px) · `md` (24px, default)
 
 **Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
 
@@ -982,7 +982,7 @@ import { Card } from "@aleph-front/ds/card";
 #### Variants
 
 ```tsx
-<Card variant="default">Bordered card</Card>  {/* bg-surface, border-edge, rounded-xl */}
+<Card variant="default">Bordered card</Card>  {/* bg-surface, border-edge, rounded-md */}
 <Card variant="noise">Grain texture</Card>    {/* purple grain SVG overlay */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```
@@ -1007,7 +1007,7 @@ Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
 
 ### CopyableText
 
-Truncated text display with copy-to-clipboard and optional external link. Designed for hashes, wallet addresses, API keys, and other long strings that need to be copiable but not fully visible. Uses a clip-path circle-reveal micro-animation on copy with spring easing.
+Truncated text display with copy-to-clipboard and optional external link. Designed for hashes, wallet addresses, API keys, and other long strings that need to be copiable but not fully visible. Uses a stroke-draw micro-animation on copy (Copy fades out, SVG checkmark draws its stroke via `stroke-dashoffset`).
 
 ```tsx
 import { CopyableText } from "@aleph-front/ds/copyable-text";
