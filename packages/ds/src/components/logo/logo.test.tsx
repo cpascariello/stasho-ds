@@ -23,8 +23,8 @@ describe("Logo", () => {
   });
 
   it("forwards aria-label", () => {
-    render(<Logo aria-label="Aleph Cloud" />);
-    expect(screen.getByLabelText("Aleph Cloud")).toBeTruthy();
+    render(<Logo aria-label="stasho" />);
+    expect(screen.getByLabelText("stasho")).toBeTruthy();
   });
 });
 
@@ -49,7 +49,7 @@ describe("LogoFull", () => {
   });
 
   it("forwards aria-label", () => {
-    render(<LogoFull aria-label="Aleph Cloud" />);
-    expect(screen.getByLabelText("Aleph Cloud")).toBeTruthy();
+    render(<LogoFull aria-label="stasho" />);
+    expect(screen.getByLabelText("stasho")).toBeTruthy();
   });
 });
