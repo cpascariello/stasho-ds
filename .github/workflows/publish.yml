@@ -8,7 +8,7 @@ permissions: {}
 
 jobs:
   publish:
-    name: Publish @aleph-front/ds
+    name: Publish @stasho/ds
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
@@ -46,7 +46,7 @@ jobs:
         working-directory: packages/ds
 
       - name: Run checks
-        run: npm run check -w @aleph-front/ds
+        run: npm run check -w @stasho/ds
 
       - name: Publish
         run: npm publish
