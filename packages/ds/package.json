@@ -1,8 +1,13 @@
 {
-  "name": "@aleph-front/ds",
-  "version": "0.0.0",
+  "name": "@stasho/ds",
+  "version": "0.1.0",
+  "description": "stasho design system",
   "type": "module",
   "license": "MIT",
+  "homepage": "https://github.com/cpascariello/stasho-ds#readme",
+  "bugs": {
+    "url": "https://github.com/cpascariello/stasho-ds/issues"
+  },
   "files": [
     "src/",
     "!src/**/*.test.tsx",
@@ -13,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aleph-im/aleph-cloud-ds.git",
+    "url": "git+https://github.com/cpascariello/stasho-ds.git",
     "directory": "packages/ds"
   },
   "exports": {
