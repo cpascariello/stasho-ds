@@ -189,9 +189,9 @@ Copy this checklist verbatim into every plan. Do not paraphrase or summarize —
 
 ---
 
-## Project: Aleph Cloud Design System
+## Project: stasho design system
 
-Tokens-only design system for Aleph Cloud, with a Next.js preview app to visualize brand colors, semantic tokens, typography, gradients, shadows, and transitions.
+Tokens-only design system, with a Next.js preview app to visualize brand colors, semantic tokens, typography, gradients, shadows, and transitions.
 
 ### Tech Stack
 
@@ -227,7 +227,7 @@ docs/plans/                   # Design and implementation plans
 
 ### Current Features
 
-- npm workspaces monorepo with source-level subpath exports (`@aleph-front/ds/*`)
+- npm workspaces monorepo with source-level subpath exports (`@stasho/ds/*`)
 - Three-layer token system (OKLCH color scales 50–950, semantic tokens incl. `--surface` for elevated backgrounds, Tailwind mapping)
 - OKLCH color scales for primary, accent, success, warning, error, neutral (unified brand-tinted scale at H:280)
 - Light/dark theme switching via `.theme-dark` class with `@custom-variant dark`
@@ -265,4 +265,4 @@ docs/plans/                   # Design and implementation plans
 - Preview app with responsive sidebar navigation (desktop fixed + mobile drawer) and route-per-page (32 pages)
 - Static export for deployment
 - CI workflow (GitHub Actions): lint + typecheck + test + build on PRs and main pushes
-- Publish workflow: triggered by GitHub Release, patches version from git tag, publishes `@aleph-front/ds` to npm as raw TypeScript source
+- Publish workflow: triggered by GitHub Release, patches version from git tag, publishes `@stasho/ds` to npm as raw TypeScript source

@@ -1,8 +1,8 @@
-# Aleph Cloud Design System
+# stasho design system
 
-Tokens-first design system for [Aleph Cloud](https://aleph.im), built with Tailwind CSS 4, OKLCH color scales, and CSS custom properties. Ships as a component library (`@aleph-front/ds`) with a Next.js preview app for visual reference.
+Tokens-first design system, built with Tailwind CSS 4, OKLCH color scales, and CSS custom properties. Ships as a component library (`@stasho/ds`) with a Next.js preview app for visual reference.
 
-**Status:** Published on npm as [`@aleph-front/ds`](https://www.npmjs.com/package/@aleph-front/ds).
+**Status:** Published on npm as [`@stasho/ds`](https://www.npmjs.com/package/@stasho/ds).
 
 ## Prerequisites
 
@@ -31,8 +31,8 @@ npm run check     # lint + typecheck + test
 ## Project Structure
 
 ```
-packages/ds/          # @aleph-front/ds — tokens + components
-apps/preview/         # @aleph-front/preview — Next.js preview app
+packages/ds/          # @stasho/ds — tokens + components
+apps/preview/         # @stasho/preview — Next.js preview app
 docs/                 # Architecture, decisions, design system docs
 ```
 
@@ -41,10 +41,10 @@ docs/                 # Architecture, decisions, design system docs
 The design system uses source-level subpath exports:
 
 ```tsx
-import { Button } from "@aleph-front/ds/button";
-import { Spinner } from "@aleph-front/ds/ui/spinner";
-import { cn } from "@aleph-front/ds/lib/cn";
-import "@aleph-front/ds/styles/tokens.css";
+import { Button } from "@stasho/ds/button";
+import { Spinner } from "@stasho/ds/ui/spinner";
+import { cn } from "@stasho/ds/lib/cn";
+import "@stasho/ds/styles/tokens.css";
 ```
 
 Within each workspace, internal imports use the `@ac/*` alias which resolves to `./src/*`.
@@ -65,18 +65,18 @@ npm link
 From your other project, link it:
 
 ```bash
-npm link @aleph-front/ds
+npm link @stasho/ds
 ```
 
 ### 2. Configure your bundler
 
-Since `@aleph-front/ds` ships source files, your bundler needs to transpile it.
+Since `@stasho/ds` ships source files, your bundler needs to transpile it.
 
 **Next.js** — add to `next.config.ts`:
 
 ```ts
 const nextConfig = {
-  transpilePackages: ["@aleph-front/ds"],
+  transpilePackages: ["@stasho/ds"],
 };
 ```
 
@@ -84,7 +84,7 @@ const nextConfig = {
 
 ```ts
 export default defineConfig({
-  ssr: { noExternal: ["@aleph-front/ds"] },
+  ssr: { noExternal: ["@stasho/ds"] },
 });
 ```
 
@@ -93,13 +93,13 @@ export default defineConfig({
 Import the design tokens in your app's global CSS or layout:
 
 ```css
-@import "@aleph-front/ds/styles/tokens.css";
+@import "@stasho/ds/styles/tokens.css";
 ```
 
 Or in a layout file:
 
 ```tsx
-import "@aleph-front/ds/styles/tokens.css";
+import "@stasho/ds/styles/tokens.css";
 ```
 
 ### 4. Tailwind CSS
@@ -108,7 +108,7 @@ If your project uses Tailwind, add the DS source to your content paths so Tailwi
 
 ```css
 @import "tailwindcss";
-@source "../../node_modules/@aleph-front/ds/src/**/*.tsx";
+@source "../../node_modules/@stasho/ds/src/**/*.tsx";
 ```
 
 ## Documentation
