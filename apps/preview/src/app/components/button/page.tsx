@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@aleph-front/ds/button";
+import { Button } from "@stasho/ds/button";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

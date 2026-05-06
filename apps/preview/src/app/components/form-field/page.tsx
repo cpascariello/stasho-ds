@@ -1,8 +1,8 @@
 "use client";
 
-import { FormField } from "@aleph-front/ds/form-field";
-import { Input } from "@aleph-front/ds/input";
-import { Textarea } from "@aleph-front/ds/textarea";
+import { FormField } from "@stasho/ds/form-field";
+import { Input } from "@stasho/ds/input";
+import { Textarea } from "@stasho/ds/textarea";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 
@@ -30,7 +30,7 @@ export default function FormFieldPage() {
       <DemoSection title="With Textarea">
         <div className="grid gap-6 max-w-md">
           <FormField label="Bio" helperText="Tell us about yourself">
-            <Textarea placeholder="I build on Aleph Cloud..." />
+            <Textarea placeholder="I build on stasho..." />
           </FormField>
         </div>
       </DemoSection>

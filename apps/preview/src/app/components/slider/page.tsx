@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Slider } from "@aleph-front/ds/slider";
-import { FormField } from "@aleph-front/ds/form-field";
+import { Slider } from "@stasho/ds/slider";
+import { FormField } from "@stasho/ds/form-field";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

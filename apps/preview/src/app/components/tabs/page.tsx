@@ -5,8 +5,8 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@aleph-front/ds/tabs";
-import { Badge } from "@aleph-front/ds/badge";
+} from "@stasho/ds/tabs";
+import { Badge } from "@stasho/ds/badge";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

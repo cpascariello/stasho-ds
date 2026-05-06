@@ -2,7 +2,7 @@
 
 import { Fragment, useState } from "react";
 import { Check } from "@phosphor-icons/react";
-import { Button } from "@aleph-front/ds/button";
+import { Button } from "@stasho/ds/button";
 import {
   Stepper,
   StepperConnector,
@@ -11,7 +11,7 @@ import {
   StepperItem,
   StepperLabel,
   StepperList,
-} from "@aleph-front/ds/stepper";
+} from "@stasho/ds/stepper";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

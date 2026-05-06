@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Pagination } from "@aleph-front/ds/pagination";
+import { Pagination } from "@stasho/ds/pagination";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

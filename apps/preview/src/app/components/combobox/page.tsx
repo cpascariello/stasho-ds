@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Combobox } from "@aleph-front/ds/combobox";
-import { FormField } from "@aleph-front/ds/form-field";
+import { Combobox } from "@stasho/ds/combobox";
+import { FormField } from "@stasho/ds/form-field";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

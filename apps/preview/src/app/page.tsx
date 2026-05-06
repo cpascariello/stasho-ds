@@ -2,27 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Logo } from "@aleph-front/ds/logo";
-import { Button } from "@aleph-front/ds/button";
-import { Card } from "@aleph-front/ds/card";
-import { Badge } from "@aleph-front/ds/badge";
-import { StatusDot } from "@aleph-front/ds/status-dot";
-import { Alert } from "@aleph-front/ds/alert";
-import { Table, type Column } from "@aleph-front/ds/table";
+import { Logo } from "@stasho/ds/logo";
+import { Button } from "@stasho/ds/button";
+import { Card } from "@stasho/ds/card";
+import { Badge } from "@stasho/ds/badge";
+import { StatusDot } from "@stasho/ds/status-dot";
+import { Alert } from "@stasho/ds/alert";
+import { Table, type Column } from "@stasho/ds/table";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "@aleph-front/ds/tabs";
-import { Input } from "@aleph-front/ds/input";
-import { Select } from "@aleph-front/ds/select";
-import { Switch } from "@aleph-front/ds/switch";
-import { Slider } from "@aleph-front/ds/slider";
-import { Checkbox } from "@aleph-front/ds/checkbox";
-import { FormField } from "@aleph-front/ds/form-field";
-import { CopyableText } from "@aleph-front/ds/copyable-text";
-import { Pagination } from "@aleph-front/ds/pagination";
+} from "@stasho/ds/tabs";
+import { Input } from "@stasho/ds/input";
+import { Select } from "@stasho/ds/select";
+import { Switch } from "@stasho/ds/switch";
+import { Slider } from "@stasho/ds/slider";
+import { Checkbox } from "@stasho/ds/checkbox";
+import { FormField } from "@stasho/ds/form-field";
+import { CopyableText } from "@stasho/ds/copyable-text";
+import { Pagination } from "@stasho/ds/pagination";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -30,7 +30,7 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
   BreadcrumbPage,
-} from "@aleph-front/ds/breadcrumb";
+} from "@stasho/ds/breadcrumb";
 
 /* ── Mock data ────────────────────────────────── */
 
@@ -250,7 +250,7 @@ export default function OverviewPage() {
           </Badge>
         </div>
         <h1 className="font-heading text-2xl sm:text-3xl font-extrabold italic text-white mb-2">
-          Aleph Cloud Design System
+          stasho Design System
         </h1>
         <p className="text-white/70 max-w-md text-sm sm:text-base">
           Tokens-first design system with OKLCH color scales,

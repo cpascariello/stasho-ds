@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@preview/components/page-header";
-import { Logo, LogoFull } from "@aleph-front/ds/logo";
+import { Logo, LogoFull } from "@stasho/ds/logo";
 
 const SIZES = [
   { label: "xs", className: "size-6" },
@@ -23,7 +23,7 @@ export default function LogoPage() {
     <div>
       <PageHeader
         title="Logo"
-        description="Aleph Cloud brand mark and full logo. Uses currentColor — adapts to any text color or theme."
+        description="stasho brand mark and full logo. Uses currentColor — adapts to any text color or theme."
       />
       <div className="space-y-12">
         {/* Icon mark */}
@@ -49,7 +49,7 @@ export default function LogoPage() {
         <section>
           <h3 className="text-lg font-bold mb-2">Full Logo</h3>
           <p className="text-sm text-muted-foreground mb-6">
-            Icon mark + &quot;Aleph Cloud&quot; wordmark. Set the height and use{" "}
+            Icon mark + &quot;stasho&quot; wordmark. Set the height and use{" "}
             <code>w-auto</code> for the correct aspect ratio.
           </p>
           <div className="space-y-6">
@@ -100,13 +100,13 @@ export default function LogoPage() {
               <span className="text-primary-400">import</span>
               {" { Logo, LogoFull } "}
               <span className="text-primary-400">from</span>
-              {' "@aleph-front/ds/logo"'}
+              {' "@stasho/ds/logo"'}
             </p>
             <p className="mt-3">
-              {'<Logo className="size-10" aria-label="Aleph Cloud" />'}
+              {'<Logo className="size-10" aria-label="stasho" />'}
             </p>
             <p>
-              {'<LogoFull className="h-8 w-auto" aria-label="Aleph Cloud" />'}
+              {'<LogoFull className="h-8 w-auto" aria-label="stasho" />'}
             </p>
           </div>
         </section>

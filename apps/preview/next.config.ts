@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const config: NextConfig = {
   output: "export",
-  transpilePackages: ["@aleph-front/ds"],
+  transpilePackages: ["@stasho/ds"],
   turbopack: {
     root: "../..",
   },

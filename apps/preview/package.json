@@ -1,5 +1,5 @@
 {
-  "name": "@aleph-front/preview",
+  "name": "@stasho/preview",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "check": "npm run lint && npm run typecheck"
   },
   "dependencies": {
-    "@aleph-front/ds": "*",
+    "@stasho/ds": "*",
     "@phosphor-icons/react": "2.1.10",
     "next": "16.1.6",
     "react": "19.2.4",

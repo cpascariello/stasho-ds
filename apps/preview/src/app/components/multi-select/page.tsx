@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MultiSelect } from "@aleph-front/ds/multi-select";
-import { FormField } from "@aleph-front/ds/form-field";
+import { MultiSelect } from "@stasho/ds/multi-select";
+import { FormField } from "@stasho/ds/form-field";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

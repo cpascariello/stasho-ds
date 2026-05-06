@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
   ProgressBar,
   ProgressBarDescription,
-} from "@aleph-front/ds/progress-bar";
+} from "@stasho/ds/progress-bar";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

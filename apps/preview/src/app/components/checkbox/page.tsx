@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox } from "@aleph-front/ds/checkbox";
-import { FormField } from "@aleph-front/ds/form-field";
+import { Checkbox } from "@stasho/ds/checkbox";
+import { FormField } from "@stasho/ds/form-field";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

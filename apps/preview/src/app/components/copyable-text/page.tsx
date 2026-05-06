@@ -1,6 +1,6 @@
 "use client";
 
-import { CopyableText } from "@aleph-front/ds/copyable-text";
+import { CopyableText } from "@stasho/ds/copyable-text";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 

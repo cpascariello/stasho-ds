@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@aleph-front/ds/badge";
+import { Badge } from "@stasho/ds/badge";
 import {
   CheckCircle,
   Warning,

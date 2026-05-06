@@ -4,8 +4,8 @@ import { ThemeSwitcher } from "@preview/components/theme-switcher";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aleph Cloud Design System",
-  description: "Token preview for @aleph-front/ds",
+  title: "stasho Design System",
+  description: "Token preview for @stasho/ds",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
                              bg-background/80 backdrop-blur-sm px-4 py-3 sm:px-6 sm:py-4
                              border-b border-edge">
             <h1 className="text-xl sm:text-2xl font-heading font-extrabold italic">
-              Aleph Cloud DS
+              stasho DS
             </h1>
             <ThemeSwitcher />
           </header>

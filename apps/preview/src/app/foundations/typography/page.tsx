@@ -44,7 +44,7 @@ export default function TypographyPage() {
                 Body -- Titillium Web 400, 16px, 1.6 line-height
               </p>
               <p className="font-sans text-base leading-relaxed">
-                The quick brown fox jumps over the lazy dog. Aleph Cloud provides
+                The quick brown fox jumps over the lazy dog. stasho provides
                 decentralized computing, storage, and networking.
               </p>
             </div>
