@@ -179,9 +179,9 @@ describe("Badge", () => {
       expect(cls).toContain("uppercase");
     });
 
-    it("applies rounded-md", () => {
+    it("applies rounded-none", () => {
       const { container } = render(<Badge>Label</Badge>);
-      expect(container.firstElementChild?.className).toContain("rounded-md");
+      expect(container.firstElementChild?.className).toContain("rounded-none");
     });
   });
 
