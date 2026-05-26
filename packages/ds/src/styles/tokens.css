@@ -2,70 +2,70 @@
    Layer 1: Color Scales, Gradients, Shadows, Fonts
    ────────────────────────────────────────────── */
 @theme {
-  /* Primary (brand purple, H: 285.48) — 600 = brand #5100CD */
-  --color-primary-50: oklch(0.96 0.02 301.63);
-  --color-primary-100: oklch(0.93 0.040 285.48);
-  --color-primary-200: oklch(0.87 0.080 285.48);
-  --color-primary-300: oklch(0.77 0.140 285.48);
-  --color-primary-400: oklch(0.64 0.210 285.48);
-  --color-primary-500: oklch(0.50 0.254 285.48);
-  --color-primary-600: oklch(0.372 0.254 285.48);
-  --color-primary-700: oklch(0.31 0.224 285.48);
-  --color-primary-800: oklch(0.25 0.174 285.48);
-  --color-primary-900: oklch(0.20 0.114 285.48);
-  --color-primary-950: oklch(0.15 0.064 285.48);
+  /* Primary (Abyssal deep purple, H: 270) — 800 = brand #2A0563 */
+  --color-primary-50: oklch(0.97 0.015 270);
+  --color-primary-100: oklch(0.93 0.030 270);
+  --color-primary-200: oklch(0.86 0.060 270);
+  --color-primary-300: oklch(0.75 0.110 270);
+  --color-primary-400: oklch(0.60 0.165 270);
+  --color-primary-500: oklch(0.45 0.200 270);
+  --color-primary-600: oklch(0.35 0.200 270);
+  --color-primary-700: oklch(0.30 0.190 270);
+  --color-primary-800: oklch(0.27 0.180 270);
+  --color-primary-900: oklch(0.20 0.140 270);
+  --color-primary-950: oklch(0.14 0.090 270);
 
-  /* Accent (brand lime, H: 121.30) — 300 = brand #D4FF00 */
-  --color-accent-50: oklch(0.98 0.030 121.30);
-  --color-accent-100: oklch(0.96 0.100 121.30);
-  --color-accent-200: oklch(0.94 0.180 121.30);
-  --color-accent-300: oklch(0.929 0.228 121.30);
-  --color-accent-400: oklch(0.82 0.200 121.30);
-  --color-accent-500: oklch(0.72 0.175 121.30);
-  --color-accent-600: oklch(0.62 0.150 121.30);
-  --color-accent-700: oklch(0.52 0.120 121.30);
-  --color-accent-800: oklch(0.42 0.085 121.30);
-  --color-accent-900: oklch(0.32 0.055 121.30);
-  --color-accent-950: oklch(0.22 0.030 121.30);
+  /* Accent (Abyssal bright cyan, H: 215) — 300 = brand #00E1FA */
+  --color-accent-50: oklch(0.98 0.020 215);
+  --color-accent-100: oklch(0.95 0.040 215);
+  --color-accent-200: oklch(0.92 0.070 215);
+  --color-accent-300: oklch(0.85 0.130 215);
+  --color-accent-400: oklch(0.77 0.140 215);
+  --color-accent-500: oklch(0.67 0.140 215);
+  --color-accent-600: oklch(0.55 0.130 215);
+  --color-accent-700: oklch(0.45 0.115 215);
+  --color-accent-800: oklch(0.35 0.095 215);
+  --color-accent-900: oklch(0.25 0.075 215);
+  --color-accent-950: oklch(0.16 0.050 215);
 
-  /* Success (green, H: 145) — 500 = #36D846 */
-  --color-success-50: oklch(0.98 0.020 145);
-  --color-success-100: oklch(0.94 0.050 145);
-  --color-success-200: oklch(0.88 0.100 145);
-  --color-success-300: oklch(0.81 0.160 145);
-  --color-success-400: oklch(0.76 0.200 145);
-  --color-success-500: oklch(0.72 0.230 145);
-  --color-success-600: oklch(0.60 0.200 145);
-  --color-success-700: oklch(0.50 0.170 145);
-  --color-success-800: oklch(0.40 0.130 145);
-  --color-success-900: oklch(0.30 0.085 145);
-  --color-success-950: oklch(0.20 0.045 145);
+  /* Success (cool teal-green, H: 160) — 400 = brand #2BD58E */
+  --color-success-50: oklch(0.98 0.020 160);
+  --color-success-100: oklch(0.95 0.045 160);
+  --color-success-200: oklch(0.90 0.085 160);
+  --color-success-300: oklch(0.84 0.125 160);
+  --color-success-400: oklch(0.78 0.155 160);
+  --color-success-500: oklch(0.68 0.150 160);
+  --color-success-600: oklch(0.55 0.135 160);
+  --color-success-700: oklch(0.45 0.115 160);
+  --color-success-800: oklch(0.35 0.090 160);
+  --color-success-900: oklch(0.25 0.065 160);
+  --color-success-950: oklch(0.16 0.040 160);
 
-  /* Warning (amber, H: 75) — 500 = #FBAE18 */
-  --color-warning-50: oklch(0.98 0.020 75);
-  --color-warning-100: oklch(0.95 0.050 75);
-  --color-warning-200: oklch(0.90 0.100 75);
-  --color-warning-300: oklch(0.86 0.140 75);
-  --color-warning-400: oklch(0.83 0.165 75);
-  --color-warning-500: oklch(0.80 0.180 75);
-  --color-warning-600: oklch(0.70 0.165 75);
-  --color-warning-700: oklch(0.60 0.140 75);
-  --color-warning-800: oklch(0.48 0.110 75);
-  --color-warning-900: oklch(0.35 0.075 75);
-  --color-warning-950: oklch(0.24 0.045 75);
+  /* Warning (Radix Amber-9, H: 87) — 400 = brand #ffc53d */
+  --color-warning-50: oklch(0.98 0.020 87);
+  --color-warning-100: oklch(0.95 0.050 87);
+  --color-warning-200: oklch(0.90 0.100 87);
+  --color-warning-300: oklch(0.87 0.140 87);
+  --color-warning-400: oklch(0.84 0.160 87);
+  --color-warning-500: oklch(0.78 0.165 87);
+  --color-warning-600: oklch(0.68 0.155 87);
+  --color-warning-700: oklch(0.58 0.135 87);
+  --color-warning-800: oklch(0.46 0.105 87);
+  --color-warning-900: oklch(0.34 0.075 87);
+  --color-warning-950: oklch(0.23 0.045 87);
 
-  /* Error (red, H: 12) — 600 = #DE3668 */
-  --color-error-50: oklch(0.98 0.010 12);
-  --color-error-100: oklch(0.93 0.040 12);
-  --color-error-200: oklch(0.87 0.080 12);
-  --color-error-300: oklch(0.79 0.130 12);
-  --color-error-400: oklch(0.70 0.170 12);
-  --color-error-500: oklch(0.63 0.200 12);
-  --color-error-600: oklch(0.57 0.200 12);
-  --color-error-700: oklch(0.48 0.175 12);
-  --color-error-800: oklch(0.39 0.140 12);
-  --color-error-900: oklch(0.30 0.095 12);
-  --color-error-950: oklch(0.20 0.055 12);
+  /* Error (blood-orange, H: 25) — 500 = brand #FF3D00 */
+  --color-error-50: oklch(0.97 0.025 25);
+  --color-error-100: oklch(0.93 0.055 25);
+  --color-error-200: oklch(0.86 0.110 25);
+  --color-error-300: oklch(0.78 0.170 25);
+  --color-error-400: oklch(0.71 0.220 25);
+  --color-error-500: oklch(0.64 0.245 25);
+  --color-error-600: oklch(0.56 0.225 25);
+  --color-error-700: oklch(0.47 0.190 25);
+  --color-error-800: oklch(0.38 0.150 25);
+  --color-error-900: oklch(0.28 0.110 25);
+  --color-error-950: oklch(0.18 0.070 25);
 
   /* Destructive (alias → error, for shadcn/Tailwind convention compatibility) */
   --color-destructive-50: var(--color-error-50);
@@ -80,23 +80,24 @@
   --color-destructive-900: var(--color-error-900);
   --color-destructive-950: var(--color-error-950);
 
-  /* Neutral (gray with slight purple tint, H: 265) */
-  --color-neutral-50: oklch(0.98 0.003 265);
-  --color-neutral-100: oklch(0.94 0.006 265);
-  --color-neutral-200: oklch(0.90 0.008 265);
-  --color-neutral-300: oklch(0.83 0.012 265);
-  --color-neutral-400: oklch(0.71 0.015 265);
-  --color-neutral-500: oklch(0.55 0.015 265);
-  --color-neutral-600: oklch(0.45 0.014 265);
-  --color-neutral-700: oklch(0.37 0.012 265);
-  --color-neutral-800: oklch(0.29 0.010 265);
-  --color-neutral-900: oklch(0.21 0.008 265);
-  --color-neutral-950: oklch(0.14 0.005 265);
+  /* Neutral (cool gray with subtle indigo tint, H: 273) */
+  --color-neutral-50: oklch(0.98 0.003 273);
+  --color-neutral-100: oklch(0.94 0.006 273);
+  --color-neutral-200: oklch(0.90 0.008 273);
+  --color-neutral-300: oklch(0.83 0.012 273);
+  --color-neutral-400: oklch(0.71 0.015 273);
+  --color-neutral-500: oklch(0.55 0.015 273);
+  --color-neutral-600: oklch(0.45 0.014 273);
+  --color-neutral-700: oklch(0.37 0.012 273);
+  --color-neutral-800: oklch(0.29 0.010 273);
+  --color-neutral-900: oklch(0.21 0.008 273);
+  --color-neutral-950: oklch(0.14 0.005 273);
 
-  /* Base (dark indigo, H: 280) — tone-sur-tone dark surface palette */
-  --color-base-900: oklch(0.22 0.025 280);
-  --color-base-800: oklch(0.28 0.030 280);
-  --color-base-700: oklch(0.34 0.034 280);
+  /* Base (Observatory Mono dark surface ladder, H: 273) */
+  --color-base-700: oklch(0.21 0.005 273);  /* #161718 raised (popovers) */
+  --color-base-800: oklch(0.18 0.004 273);  /* #101111 elevated (modals) */
+  --color-base-900: oklch(0.16 0.003 273);  /* #0d0d0d surface (panels)  */
+  --color-base-950: oklch(0.10 0.002 273);  /* #07080a void / background */
 
   /* Gradients */
   --gradient-main-base: linear-gradient(90deg, #141421 8.24%, #5100CD 71.81%);
