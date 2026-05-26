@@ -802,10 +802,10 @@ When `iconLeft` is provided on a filled variant, it replaces the LED and inherit
 #### Loading and Disabled
 
 ```tsx
-<Button loading>Saving…</Button>          {/* LED pulses; no spinner element; aria-busy */}
+<Button loading>Saving…</Button>          {/* Dual-dot chase; no spinner element; aria-busy */}
 <Button loading iconLeft={<PlusIcon />}>
   Saving…
-</Button>                                  {/* Icon pulses instead of LED */}
+</Button>                                  {/* iconLeft is suppressed during load; chase replaces it */}
 <Button disabled>Unavailable</Button>      {/* Chassis flattens; LED dims to muted gray */}
 ```
 
