@@ -118,7 +118,7 @@ Never interrupt based on file count or commit count.
 
 On "sync up" or "catch me up":
 
-1. Read `docs/DECISIONS.md`, `docs/BACKLOG.md`, `docs/ARCHITECTURE.md`
+1. Read `docs/DECISIONS.md`, `docs/BACKLOG.md`, `docs/ARCHITECTURE.md`, `docs/SKIN-PRINCIPLES.md`
 2. Check for pending plans — list `docs/superpowers/plans/` and read the most recent file. If a plan exists that hasn't been fully implemented, surface it in the summary.
 3. Check git status and recent git log — use **separate parallel Bash calls** (not chained with `&&`), so each matches `Bash(git status*)` / `Bash(git log*)` allow rules and avoids permission prompts
 4. Present the summary as a structured table, not prose paragraphs:
@@ -155,6 +155,7 @@ Ready to go — what are we working on?
 |------|---------|
 | `docs/DESIGN-SYSTEM.md` | Consumer-facing: what to use, how to use it (props, variants, examples) |
 | `docs/ARCHITECTURE.md` | Maintainer-facing: how it works internally (patterns, hooks, workarounds) |
+| `docs/SKIN-PRINCIPLES.md` | Skin identity + rules — north star for designing/restyling components in the active skin |
 | `docs/DECISIONS.md` | Decision log with rationale |
 | `docs/BACKLOG.md` | Parking lot for scope creep and deferred ideas |
 | `docs/superpowers/specs/` | Design specs from brainstorming sessions (read-only reference) |

@@ -1,0 +1,217 @@
+# Abyssal Void · Skin Principles
+
+The principles that make Abyssal Void feel like Abyssal Void. Use this when designing or restyling any component — it's the north star for decisions the existing skin spec doesn't explicitly cover.
+
+For full rationale behind any rule, follow the linked decision (`#N` in `docs/DECISIONS.md`). For consumer-facing component docs, see `docs/DESIGN-SYSTEM.md`. For implementation patterns and internals, see `docs/ARCHITECTURE.md`.
+
+---
+
+## 1 · Identity
+
+### What it is
+
+- **Aesthetic:** dark, scientific, abstract. The system feels like a control surface for something serious — research equipment, deep-sea probes, spacecraft consoles.
+- **Mental model:** the user is operating an instrument panel. Components are switches, gauges, readouts, indicators — not friendly stickers or marketing cards.
+- **Energy:** voltage / signal. Cyan `#00E1FA` is the system's constant pulse — the indicator that something is live, active, listening. Semantic colors are alarms (blood-orange = abort, amber = caution, teal-green = nominal).
+- **Geometry:** committed and brutalist, but restrained. Sharp 0px corners on functional surfaces. No decoration. No noise. No grain. Mass comes from saturation, not from texture.
+- **Voice:** spare and factual. Sentence case in UI, uppercase in telemetry. No exclamation points, no emoji, no marketing adjectives.
+
+### What it isn't
+
+- **Not friendly** — no soft curves, no pastel palette, no smiling iconography.
+- **Not consumer** — not aimed at "delight"; aimed at clarity for someone who knows what they're doing.
+- **Not gradient-heavy** — gradients exist (primary chassis, semantic halos) but are functional, not decorative. No "rainbow" or "vibrant" backgrounds.
+- **Not rounded** — pill buttons, bubble cards, and rounded inputs read as a different system entirely.
+- **Not textured** — no grain, no noise, no patterned fills. Decoration is rejected entirely (`fx-grain` was removed for this reason — Decision #79).
+- **Not headline-driven** — buttons are pressable hardware controls, not page headers. Avoid heading-weight typography on interactive elements.
+
+---
+
+## 2 · Color
+
+### Same-hex rule
+**Rule:** Accent tokens (`--primary`, `--accent`, `--success`, `--warn`, `--error`) hold the same hex value in `:root` and `.theme-dark`.
+**Why:** Saturated colors at mid-to-low lightness read identically across modes (Radix / Geist convention). Drift between dark and light variants creates a system that feels like two skins glued together.
+**How:** Only surface/background/foreground tokens differ between modes. Never create `--primary-dark` / `--primary-light` siblings. If accent contrast against light surfaces is an AA risk for body text, use the existing primary scale (`text-primary-700 dark:text-primary-300`), not a different hex.
+**Source:** Decisions #77, #78.
+
+### Semantic color mapping
+**Rule:** Each accent has one job. Don't redirect them.
+
+| Token | Role |
+|---|---|
+| `--primary` `#0040FF` | The brand action. The thing the user came to do. |
+| `--accent` `#00E1FA` | "This is live / active / listening." The signal pulse. Used as LED, focus ring, link, and outline border. |
+| `--error` `#FF3D00` | Destructive / abort / down. The one heat note in an otherwise cold palette. |
+| `--warn` `#ffc53d` | Caution. Pending consequences. |
+| `--success` `#2BD58E` | Confirm / complete / nominal. |
+
+**How:** Don't use `--success` for "selected" or `--accent` for "warning". The role mapping is what makes the palette legible at a glance.
+**Source:** Decisions #78, #79.
+
+### No decorative texture
+**Rule:** No grain, noise, patterns, or texture fills on any surface.
+**Why:** The skin's depth comes from gradient + halo + bevel — visual mass from light, not from material. Texture conflicts with that vocabulary and pulls the system toward "designed object" instead of "control instrument".
+**How:** If a surface feels flat, reach for a halo, bevel, or hairline border. Never reach for grain.
+**Source:** Decision #79 (fx-grain removal).
+
+### Surface ladder
+**Rule:** Dark mode uses the Observatory Mono ladder: `#07080a → #0d0d0d → #101111 → #161718`. Light mode uses faintly violet-tinted off-white at hue 270.
+**Why:** A neutral ladder reads tonally empty against the saturated accents; the warm-violet floor (`#07`) gives surfaces presence without competing with brand colors. Light mode's hue 270 ties surfaces to the brand even when the actual primary is removed from the background.
+**How:** Use semantic tokens (`--background`, `--surface`, `--muted`) — don't pull scale colors directly for surfaces. New elevations get a new semantic token, not an arbitrary OKLCH value.
+**Source:** Decisions #77, #78.
+
+### Hairline borders
+**Rule:** Borders use `rgba(255,255,255,0.08)` (or the `--edge` token), 1px width, never accent-tinted.
+**Why:** Accent-tinted chrome dilutes accents as content signals. A cyan-bordered card competes with a cyan-LED button for the user's "this is live" eye.
+**How:** All chrome is white-at-low-opacity (or the `--edge` token). Accents only appear where they carry meaning — LED, focus ring, link text, active indicators.
+**Source:** Decision #78.
+
+---
+
+## 3 · Typography
+
+### Three voices, never mixed at the same role
+
+| Face | Role | Case |
+|---|---|---|
+| **Anybody** | Headings (page titles, section headers) | Title or sentence case |
+| **Inter** | Body, interactive labels, captions | Sentence case |
+| **Departure Mono** | Telemetry, micro-labels, ALL CAPS chrome, mono data | Uppercase preferred |
+
+**Rule:** A given role uses one face. Don't mix Anybody and Inter for headings; don't mix Inter and Departure Mono for buttons.
+**Why:** Each face carries a register. Mixing them muddles the voice. Anybody is editorial-industrial; Inter is operational; Departure is instrument-readout. Stay in lane.
+**Source:** Decisions #77, #78.
+
+### Sentence case for UI
+**Rule:** Buttons, inputs, menu items, links, and body labels are sentence case. Never `text-transform: uppercase` on Inter.
+**Why:** Uppercase tracked Inter reads as a heading or banner — not as a pressable control. The brutalist character comes from geometry (0px, hard halos), not from caps.
+**How:** Respect the consumer's string verbatim. If you find yourself wanting CAPS for emphasis, you probably want Departure Mono instead.
+**Source:** Button redesign spec (`docs/superpowers/specs/2026-05-26-button-redesign-design.md`).
+
+### Uppercase belongs to Departure Mono
+**Rule:** Where uppercase is correct (telemetry labels, axis ticks, status chips, system chrome), use Departure Mono.
+**Why:** Departure Mono's pixel-CRT proportions match the "probe readout" role. Uppercase Inter trying to do the same job ends up reading as marketing copy.
+
+### Line-height: 1 for compact controls
+**Rule:** Buttons, chips, badges, and any control where a glyph (LED, icon) must vertically center against text use `line-height: 1`.
+**Why:** Inter's default 1.5 line-height creates a line-box taller than cap-height, leaving a small glyph (4–6px LED, 11–13px icon) floating relative to lowercase x-height.
+**How:** Apply `line-height: 1` on the control + wrap the label in a flex span so vertical centering operates against the actual text bounds, not the inflated line-box.
+
+---
+
+## 4 · Geometry
+
+### 0/0/2/4 radius vocabulary
+**Rule:** Sharp by default. Cards earn 2px. Modals earn 4px. Anything more is wrong for this skin.
+
+| Element | Radius |
+|---|---|
+| Buttons, inputs, selects, chips, dropdowns, toasts | `0` |
+| Cards | `2px` |
+| Modals, dialogs | `4px` |
+
+**Why:** The 0/0/2/4 ladder pushes the brutalist character at every interactive surface, and reserves rounding for the few elements where it carries meaning (cards as physical objects, modals as floating overlays).
+**Source:** Decision #78.
+
+### `full` is for round-by-design only
+**Rule:** `rounded-full` is reserved for elements where roundness is the semantic, not decoration:
+
+- StatusDot (a dot IS round)
+- Slider thumb / Switch thumb (a control puck IS round)
+- ProgressBar track (the rounded ends are a graph convention)
+- MultiSelect tag chips (tags carry "soft / removable" semantics)
+- Stepper indicators (a step ring IS round)
+- Tabs pill variant (segmented control is pill-shaped by convention)
+
+**Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible.
+**How:** Adding a new element to this list requires a decision in `docs/DECISIONS.md`.
+
+### Hairline borders, never thick
+**Rule:** 1px borders. No `border-2`, no `border-3`.
+**Why:** Thick borders read as styling, not structure. The skin's mass comes from saturation and halo, not from chrome.
+
+### No accent-tinted chrome
+**Rule:** Borders, dividers, separators are white-at-low-opacity, never accent-colored.
+(See Color § Hairline borders for the full rule.)
+
+---
+
+## 5 · Motion
+
+### Cyan is the moving signal
+**Rule:** The cyan `--accent` is the system's animation budget. It pulses, glows, slides, and intensifies. Other colors hold still.
+**Why:** A moving cyan reads as "live / active / loading / focused" — the same eye-attractor across all interactive states. If destructive red or warning amber also moved, the system would have three competing "look here" signals.
+**How:** Loading pulses the LED. Focus is a cyan ring. Active states intensify cyan halos. Hover brightens cyan glows. Other colors transition position/opacity but don't independently animate.
+
+### Bevels for hardware feel
+**Rule:** Interactive chassis (buttons, switches, sliders) use inset top-highlight + inset bottom-shadow to read as a physical, lit object.
+**Why:** A flat-fill button reads as a clickable area. A beveled button reads as a control. This is the difference between "the screen contains a button" and "the screen contains an instrument".
+**How:** Pair `inset 0 1px 0 [highlight]` + `inset 0 -1px 0 [shadow]` on filled variants. Use cyan-tinted highlight (`rgba(0,225,250,0.4)`) on primary; white-tinted (`rgba(255,255,255,0.3)`) on saturated semantic chassis.
+
+### Active states depress
+**Rule:** Pressed/active controls invert the bevel (dark top, light bottom) AND shift `translate-y-[1px]`.
+**Why:** Two cues for "pressed" — visual (bevel inversion) and positional (downward nudge) — together read as a real physical press. One cue alone is ambiguous.
+
+### `prefers-reduced-motion` is mandatory
+**Rule:** Every animated component respects `prefers-reduced-motion: reduce`. Continuous animations stop; transitions become instant.
+**Why:** Motion is a system signal here, and accessibility law for users with vestibular sensitivities.
+**How:** Tailwind `motion-reduce:animate-none` on continuous loops; `motion-reduce:transition-none` on one-shot transitions. No JS-driven motion that bypasses the media query.
+**Source:** Decision #39.
+
+### Short ease curves, no bounce
+**Rule:** Transitions are 80–200ms with `ease` or `ease-out`. No spring bounces, no overshoot, no elastic.
+**Why:** Bounce is friendly. Friendly is rejected (see Identity § What it isn't).
+
+---
+
+## 6 · Component patterns
+
+These are the patterns we've discovered while building components for this skin. New components should follow them by default; departures require a decision entry.
+
+### LED-as-signature for filled interactive controls
+**Rule:** Filled controls (buttons, primary selects, action chips) carry a small glowing LED dot or glowing icon in the leading slot.
+**Why:** The LED is the brand's primary visual signature in this skin. It says "this is an active hardware control" in a way no other element can.
+**How:** Cyan LED on primary/secondary chassis. Variant-specific LED on saturated semantic chassis (white on destructive, dark on warning/success). When `iconLeft` is provided, it replaces the LED and inherits the LED's color + glow.
+**Source:** Button redesign spec.
+
+### Hover intensifies, doesn't repaint
+**Rule:** Hover brightens the existing chassis gradient and grows the LED/halo glow. It does NOT shift the chassis to a different color.
+**Why:** Repainting on hover reads as "different state". Intensifying on hover reads as "same state, but the system noticed you". The instrument metaphor is "the indicator gets brighter when you reach for it", not "the indicator changes color when you reach for it".
+
+### Loading pulses, never spins
+**Rule:** Loading state animates the existing LED (or icon-as-LED) with a glow/opacity pulse. No spinner swap.
+**Why:** A separate spinner element breaks the "the LED is the signal" thesis — suddenly there's a different moving thing. The LED already exists, already signals "live"; the loading state is just "the signal is now pulsing".
+**How:** `@keyframes` that cycles glow box-shadow from `0 0 4px` to `0 0 14px + 0 0 24px halo` over ~1.1s. The label can be appended with "…" if helpful.
+**Source:** Button redesign spec.
+
+### Saturated semantic chassis = solid + outer halo
+**Rule:** Destructive, warning, success chassis are solid saturated brand colors. Add an outer halo (`0 0 24px [variant-color]/0.5`) to deliver "electric" energy without making the chassis bigger.
+**Why:** A gradient on a saturated color reads muddy. A solid color on a saturated chassis reads flat. A solid color with an outer halo reads as glowing-hot — exactly the affect those states want.
+**Source:** Button redesign spec (option C from `semantic-brighter.html`).
+
+### Filled chassis = bevel + cyan LED (no halo)
+**Rule:** Primary and secondary chassis use bevel + cyan LED. They do NOT carry an outer halo.
+**Why:** If primary glowed, every screen would be drowned in cyan halos. The halo is reserved for the saturated semantic chassis where it doubles as the "alarm light is on" signal.
+**Source:** Button redesign spec.
+
+### Quiet variants are quiet
+**Rule:** Outline and ghost variants drop both the halo AND the LED glow (outline keeps a dim disc, ghost has nothing). No glow, no halo, no chassis.
+**Why:** Quiet variants are for lower-emphasis actions. Giving them any glow puts them on the same visual plane as filled controls and breaks the hierarchy.
+
+### Disabled flattens
+**Rule:** Disabled chassis collapse to neutral dark gray, LED dims to ~25% opacity with no glow, label drops to muted white. `cursor: not-allowed`.
+**Why:** The disabled state should look semantically broken — no light, no signal, no temperature. If you can squint and still see a primary-blue chassis, the disabled state is wrong.
+
+---
+
+## 7 · Adding to these principles
+
+When designing a new component:
+
+1. Read this doc.
+2. If you find a rule that doesn't fit your component, **don't quietly deviate** — log a `docs/DECISIONS.md` entry explaining the exception and link it from the rule.
+3. If you discover a new pattern that should generalize (e.g., a third quiet treatment, a different motion signal), propose it as an addition to the relevant section here. Add the new rule + rationale + source decision.
+4. Treat this doc as living. It gets richer as components get redesigned.
+
+The principles travel with the skin. If a future skin replaces Abyssal Void, this file is replaced wholesale — not edited piecemeal — because the next skin's principles emerge from its own identity, not from layered amendments to this one.
