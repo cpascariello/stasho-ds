@@ -9,7 +9,7 @@ const triggerVariants = cva(
   [
     "inline-flex items-center gap-1.5",
     "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-2xl",
+    "border-0 rounded-none",
     "focus-visible:outline-none focus-visible:ring-3",
     "focus-visible:ring-primary-500",
     "aria-disabled:opacity-50 aria-disabled:pointer-events-none",
@@ -224,7 +224,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
           <Popover.Content
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
-              "overflow-hidden rounded-2xl",
+              "overflow-hidden rounded-none",
               "bg-surface border border-edge shadow-brand",
             )}
             sideOffset={4}
@@ -260,7 +260,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       onSelect={() => toggle(option.value)}
                       className={cn(
                         "relative flex items-center gap-2",
-                        "rounded-xl px-3 py-2",
+                        "rounded-none px-3 py-2",
                         "text-sm text-foreground",
                         "cursor-pointer select-none",
                         "outline-none",
