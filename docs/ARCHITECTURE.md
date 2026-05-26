@@ -582,6 +582,20 @@ Copy button uses a two-layer stack:
 
 Hover state uses `bg-foreground/10` for visibility in both light and dark themes.
 
+### Button
+
+The Button is the only DS component that renders a brand "signature" element — the cyan LED dot — that isn't part of the consumer-provided content.
+
+**LED render logic.** The LED `<span data-led>` renders at rest when `!iconLeft && variant !== 'ghost'`. When iconLeft is provided on a non-ghost variant, iconLeft takes the LED's leading slot (with the variant's resting glow filter on filled variants). When the variant is `ghost`, no LED renders even without an icon — ghost is the quiet escape hatch. During loading, none of this matters — the chase replaces whatever was in the leading slot (see "Loading animation" below).
+
+**Loading animation.** When `loading={true}` and the variant is not `ghost`, the leading slot renders `<span data-led-chase>` containing two dots that animate in anti-phase via `animate-button-chase-a` and `animate-button-chase-b` (keyframes in `tokens.css`). The chase displaces both the static LED and any consumer-provided iconLeft for the duration of the loading state. The two dots share the variant's existing LED color mapping (cyan / white / dark per variant). `prefers-reduced-motion: reduce` parks both dots at opacity 1 so the loading state stays visible without motion. On the `ghost` variant, no chase renders — `aria-busy` and `cursor-wait` are the only loading signals.
+
+**Focus ring uses outline, not box-shadow.** Variant chassis use stacked `box-shadow` for the bevel (inset highlights + drop shadow + halo for semantic variants). A focus ring drawn via `box-shadow` would replace the bevel during focus. Using native `outline` keeps the two visual channels separate — the bevel persists when focused, and the cyan outline sits at 2px offset around the chassis.
+
+**Disabled visual flatten.** Every variant's `disabled:` classes collapse the chassis to `bg-neutral-900` with a faint inset bevel, regardless of the variant's resting chassis color. The LED dims via `opacity` inheritance and stops glowing because its `bg-` color is also overridden through `disabled:text-white/30`. This unifies disabled state — a disabled destructive button reads the same as a disabled primary, which is the correct semantics (both are inert).
+
+**`asChild` limitation.** When `asChild` is true, the rendered element is the consumer's child via `cloneElement`. The LED and icon content are NOT carried over — `asChild` exists for "link styled as button", not "rich content button". Consumers who need a link with an LED should compose `buttonVariants({...})` manually onto their link element and add the LED span themselves.
+
 ---
 
 ## Testing Philosophy

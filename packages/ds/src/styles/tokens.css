@@ -352,3 +352,26 @@
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.15); }
 }
+
+/* ── Button dual-dot chase (loading state) ───── */
+
+@keyframes button-chase-a {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+
+@keyframes button-chase-b {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+.animate-button-chase-a { animation: button-chase-a 0.9s ease-in-out infinite; }
+.animate-button-chase-b { animation: button-chase-b 0.9s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-button-chase-a,
+  .animate-button-chase-b {
+    animation: none;
+    opacity: 1;
+  }
+}

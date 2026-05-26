@@ -148,7 +148,7 @@ const PROJECT_COLUMNS: Column<Project>[] = [
   {
     header: "Actions",
     accessor: () => (
-      <Button variant="text" size="xs">
+      <Button variant="ghost" size="xs">
         View
       </Button>
     ),

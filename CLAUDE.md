@@ -247,8 +247,8 @@ docs/plans/                   # Design and implementation plans
 - Radius vocabulary 0/0/2/4 — `full` reserved for StatusDot, Slider, ProgressBar tracks, Switch thumb, MultiSelect chips, Stepper indicators, Tabs pill variant
 - Typography: Anybody (headings), Inter (body), Departure Mono (telemetry/labels — self-hosted)
 - Light/dark theme switching via `.theme-dark` class with `@custom-variant dark`
-- Button component with 6 variants, 4 sizes, CVA architecture, square corners (primary uses gradient-fill-main, secondary uses gradient-fill-accent, outline uses gradient border)
-- Spinner component for loading states
+- Button component with 7 variants (primary, secondary, destructive, warning, success, outline, ghost), 3 sizes (xs/sm/md), CVA architecture, instrument-panel chassis with cyan LED signature, iconLeft inherits LED glow at rest, loading state runs a two-dot chase (chase displaces iconLeft) via `animate-button-chase-a` / `animate-button-chase-b` keyframes, focus uses native `outline-accent`
+- Spinner component for loading states (still exported standalone — Button no longer uses it internally)
 - cn() utility (clsx + tailwind-merge)
 - Input component with 2 sizes, borderless flat fill, error/disabled states
 - Textarea component with rows default, borderless flat fill, vertical resize, error/disabled states
