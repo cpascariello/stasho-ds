@@ -20,7 +20,7 @@ Audit verdict per component (current state):
 
 | Component | Current | Violation |
 |---|---|---|
-| Alert title | `font-heading font-extrabold italic text-xs uppercase` | Anybody on a label |
+| Alert variant label | `font-heading font-extrabold italic text-xs uppercase` (always-shown status word: "WARNING", "ERROR") | Anybody on a status chip |
 | Badge | `font-heading font-extrabold italic uppercase` | Anybody on a chip |
 | Breadcrumb | `font-heading font-extrabold italic uppercase text-xs` | Anybody on nav links |
 | Pagination | `font-heading font-bold text-lg` | Anybody on numeric controls |
@@ -39,8 +39,7 @@ Button was redesigned in Decisions #80–#82 with Inter sentence case. This chun
 
 | Component | Treatment |
 |---|---|
-| **Alert title** | `font-sans font-semibold text-sm leading-tight` (Inter Semibold 14px, sentence case, no italic). Replaces 12px Anybody UC italic — type goes up one step because Inter at 12px Semibold reads too thin for a banner title. |
-| **Breadcrumb** items | `font-sans font-medium text-sm` (Inter Medium 14px, sentence case). Up one step from 12px Anybody UC italic — same reason as Alert. |
+| **Breadcrumb** items | `font-sans font-medium text-sm` (Inter Medium 14px, sentence case). Up one step from 12px Anybody UC italic. |
 | **Tabs** trigger (variant=underline, size=md) | `font-sans font-semibold text-sm` (Inter Semibold 14px). Down one step from current 18px Anybody Bold — `text-lg` was tab-as-page-heading scale, `text-sm` is tab-as-control scale. |
 | **Tabs** trigger (variant=underline, size=sm) | `font-sans font-semibold text-sm` (Inter Semibold 14px — same as md). Today's value, font swap only. |
 | **Tabs** trigger (variant=pill, size=md) | `font-sans font-semibold text-sm` (font swap only — size unchanged) |
@@ -53,6 +52,7 @@ Why Inter sentence case here: each label IS a sentence or phrase the user reads 
 
 | Component | Treatment |
 |---|---|
+| **Alert variant label** | `font-mono uppercase tracking-wider text-[11px] leading-normal pb-1` (Departure Mono 11px UC, tracking 0.05em). The always-shown status word (`<span>{label}</span>` populated by Alert from variant). Sits at the top of the alert, in the variant color. User-provided `title` prop and body are out of scope (already font-sans). |
 | **Badge** (size=md) | `font-mono uppercase tracking-wider text-xs` (Departure Mono 12px UC, tracking 0.05em). Size unchanged from today, font + tracking swap. |
 | **Badge** (size=sm) | `font-mono uppercase tracking-wider text-[10px]` (Departure Mono 10px UC). Size unchanged, font + tracking swap. |
 | **Badge** | `text-transform: uppercase` forced via CSS class regardless of consumer string |
@@ -77,7 +77,8 @@ Tracking uses Tailwind named utilities (`tracking-wider` = 0.05em, `tracking-wid
 
 Explicitly NOT changed in this chunk:
 
-- **Alert message body** — already `font-sans font-italic text-xs`. Italic stays here (it carries a "supporting / secondary" voice register and reads fine on Inter at small sizes — the italic-on-label problem doesn't apply to running prose).
+- **Alert user-provided `title` prop** — already `font-sans font-bold text-sm text-foreground`. Inter Bold 14px sentence case is correct and stays.
+- **Alert message body** (children) — already `font-sans italic text-xs`. Italic stays here (it carries a "supporting / secondary" voice register and reads fine on Inter at small sizes — the italic-on-label problem doesn't apply to running prose).
 - **Table body cells** — already `font-sans` sentence case (only headers change).
 - **Tabs content panel** — no typography changes (consumers control their own children).
 - **FormField labels** — already `font-sans` Medium sentence case.
@@ -119,7 +120,7 @@ Each row below identifies the exact line and the class swap. Active-state colors
 
 | File:line | Remove | Add |
 |---|---|---|
-| `alert/alert.tsx:54` (title CVA base) | `font-heading font-extrabold italic text-xs uppercase leading-normal pb-1` | `font-sans font-semibold text-sm leading-tight pb-1` |
+| `alert/alert.tsx:54` (`labelVariants` CVA base — the variant label span, NOT the user-provided title prop) | `font-heading font-extrabold italic text-xs uppercase leading-normal pb-1` | `font-mono uppercase tracking-wider text-[11px] leading-normal pb-1` |
 | `badge/badge.tsx:8` (CVA base) | `font-heading font-extrabold italic uppercase` | `font-mono uppercase tracking-wider` |
 | `badge/badge.tsx:25` (size=sm) | `px-3 py-0.5 text-[10px]` | unchanged — `text-[10px]` stays |
 | `badge/badge.tsx:26` (size=md) | `px-4 py-1 text-xs` | unchanged — `text-xs` stays |
