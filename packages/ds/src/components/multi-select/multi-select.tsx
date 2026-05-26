@@ -143,7 +143,10 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
               "cursor-pointer",
               error &&
                 "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
-              !hasSelection && "text-muted-foreground",
+              !hasSelection &&
+                (disabled
+                  ? "text-muted-foreground/50"
+                  : "text-muted-foreground"),
               className,
             )}
             {...rest}

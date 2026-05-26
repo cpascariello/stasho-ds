@@ -19,6 +19,7 @@ const triggerVariants = cva(
     "disabled:cursor-not-allowed",
     "transition-colors",
     "data-[placeholder]:text-muted-foreground",
+    "disabled:data-[placeholder]:text-muted-foreground/50",
   ].join(" "),
   {
     variants: {

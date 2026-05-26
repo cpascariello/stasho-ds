@@ -889,7 +889,7 @@ import { Textarea } from "@aleph-front/ds/textarea";
 
 **Defaults:** `rows={4}`, `resize-y`, `size="md"`
 
-**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-none`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error`. Disabled sinks one step on the surface ladder with `cursor-not-allowed`.
+**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-none`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error` and keeps it through hover and focus (`hover:border-error focus-visible:border-error`). Disabled chassis sinks one step (`bg-muted` light, `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, placeholder to `text-muted-foreground/50`, cursor to `not-allowed`.
 
 ### FormField
 

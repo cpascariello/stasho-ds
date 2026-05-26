@@ -89,7 +89,8 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
             triggerVariants({ size }),
             error &&
               "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
-            !selectedLabel && "text-muted-foreground",
+            !selectedLabel &&
+              (disabled ? "text-muted-foreground/50" : "text-muted-foreground"),
             className,
           )}
           {...rest}
