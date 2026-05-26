@@ -93,6 +93,18 @@ Ideas and scope creep captured for later consideration.
 **Description:** Add hover/focus animations to button icons (e.g., arrow slide on hover, plus rotate on focus).
 **Priority:** Low
 
+### 2026-05-26 — Adopt Grilli Type for headings
+
+**Source:** Carried over from Decision #77 / #78
+**Description:** Replace Anybody (Google Fonts) with a Grilli Type face for headings once budget is approved. Anybody is the free placeholder that matches the industrial brief; Grilli would be the paid upgrade.
+**Priority:** Low
+
+### 2026-05-26 — Contrast-aware accent text utility
+
+**Source:** Identified while writing Abyssal Void docs
+**Description:** Switch accent-colored body text from raw `text-accent` to a contrast-aware scale step (`text-accent-700 dark:text-accent-300`) once a real cyan-text moment lands in a consumer app. The same-hex rule is right for fills/borders/indicators; inline body text needs a darker step on light surfaces for AA contrast.
+**Priority:** Low
+
 ---
 
 ## Completed / Rejected
@@ -134,5 +146,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-01 — Table sort-icon alignment fix on right-aligned headers (inline-flex + flex-row-reverse, no width shift on toggle)
 - [x] 2026-05-02 — Table controlled-sort props (`sortColumn`/`sortDirection`/`onSortChange`) so externally paginated tables can sort the full dataset rather than only the current page
 - [x] 2026-05-04 — Tabs `maxVisible` prop (count-based cap on visible tab count, stricter-wins composition with `overflow="collapse"`)
+- [x] 2026-05-26 — Abyssal Void skin (deep purple + cyan + teal + amber + blood-orange, same-hex rule, 0/0/2/4 radius, Anybody/Inter/Departure Mono)
 
 </details>

@@ -184,34 +184,59 @@ Use as Tailwind classes. Semantic tokens resolve to different values per theme.
 
 Full OKLCH 50–950 scales. Each scale has 11 stops, available as Tailwind classes like `bg-primary-600`, `text-error-500`, etc. Supports `/opacity` modifier: `bg-primary-600/50`.
 
+Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--accent`, `--success`, `--warn`, `--error`) resolve to the **same hex** in both light and dark mode (Radix step-9 convention). Scale steps remain available for tinted backgrounds, hover states, and contrast-aware inline text.
+
 | Scale | Hue | Anchor | Use for |
 |-------|-----|--------|---------|
-| `primary` | 285.48 (purple) | 600 = brand #5100CD | Brand identity, primary actions |
-| `accent` | 121.30 (lime) | 300 = brand #D4FF00 | Accents, highlights, CTAs |
-| `success` | 145 (green) | 500 = #36D846 | Success states |
-| `warning` | 75 (amber) | 500 = #FBAE18 | Warning states |
-| `error` | 12 (red) | 600 = #DE3668 | Error states |
+| `primary` | 270 (deep purple) | 800 = brand `#2A0563` | Brand identity, primary actions |
+| `accent` | 215 (cyan) | 300 = brand `#00E1FA` | Accents, highlights, CTAs |
+| `success` | 160 (teal-green) | 400 = brand `#2BD58E` | Success states |
+| `warning` | 87 (amber) | 400 = brand `#ffc53d` | Warning states |
+| `error` | 25 (blood-orange) | 500 = brand `#FF3D00` | Error / destructive states |
 | `destructive` | (alias → `error`) | — | Convenience alias for shadcn/Tailwind convention |
-| `neutral` | 280 (brand indigo tint) | — | Borders, backgrounds, text, dark surfaces |
+| `neutral` | 273 (cool indigo tint) | — | Borders, backgrounds, text |
+
+**Light-mode contrast pattern.** Inline body text rendered in an accent color uses the standard "darker step for light, lighter step for dark" pattern: `text-{color}-500 dark:text-{color}-300`. The same-hex rule applies only to *fills, borders, and indicators* — not to text on light surfaces, which needs a darker scale step for AA contrast.
 
 ### Semantic Colors
 
-Swap automatically between light and dark themes.
+Accents (`primary`/`accent`/`success`/`warn`/`error`) resolve to the **same hex** in both modes. Surfaces (`background`/`foreground`/`muted`/`surface`/`edge`) still swap per theme.
 
 | Token | Tailwind class | Light | Dark | Use for |
 |-------|---------------|-------|------|---------|
-| `background` | `bg-background` | `#F9F4FF` | `#141421` | Page background |
-| `foreground` | `text-foreground` | `#141421` | `#F9F4FF` | Primary text |
-| `primary` | `bg-primary`, `text-primary` | primary-600 | primary-400 | Interactive elements |
+| `background` | `bg-background` | `oklch(0.99 0.005 270)` | `#07080a` | Page background |
+| `foreground` | `text-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Primary text |
+| `primary` | `bg-primary`, `text-primary` | `#2A0563` | `#2A0563` | Interactive elements |
 | `primary-foreground` | `text-primary-foreground` | `#ffffff` | `#ffffff` | Text on primary backgrounds |
-| `accent` | `bg-accent`, `text-accent` | accent-300 | accent-300 | Highlights, emphasis |
-| `accent-foreground` | `text-accent-foreground` | `#141421` | `#141421` | Text on accent backgrounds |
-| `muted` | `bg-muted` | primary-100 | neutral-900 | Subdued backgrounds |
-| `muted-foreground` | `text-muted-foreground` | neutral-500 | neutral-400 | Subdued text, labels |
-| `surface` | `bg-surface` | primary-50 | neutral-900 | Elevated/interactive surface backgrounds (cards, form fields) |
-| `surface-foreground` | `text-surface-foreground` | `#141421` | `#F9F4FF` | Text on elevated surfaces |
-| `edge` | `border-edge` | primary-200 | neutral-800 | Borders, dividers |
-| `edge-hover` | `border-edge-hover` | primary-300 | neutral-700 | Hover state borders |
+| `accent` | `bg-accent`, `text-accent` | `#00E1FA` | `#00E1FA` | Highlights, emphasis |
+| `accent-foreground` | `text-accent-foreground` | `#001014` | `#001014` | Text on accent backgrounds |
+| `success` | `bg-success`, `text-success` | `#2BD58E` | `#2BD58E` | Success indicators |
+| `success-foreground` | `text-success-foreground` | `#00130a` | `#00130a` | Text on success backgrounds |
+| `warn` | `bg-warn`, `text-warn` | `#ffc53d` | `#ffc53d` | Warning indicators |
+| `warn-foreground` | `text-warn-foreground` | `#1a1100` | `#1a1100` | Text on warn backgrounds |
+| `error` | `bg-error`, `text-error` | `#FF3D00` | `#FF3D00` | Error / destructive indicators |
+| `error-foreground` | `text-error-foreground` | `#ffffff` | `#ffffff` | Text on error backgrounds |
+| `muted` | `bg-muted` | `oklch(0.94 0.009 270)` | base-800 | Subdued backgrounds |
+| `muted-foreground` | `text-muted-foreground` | `oklch(0.55 0.014 270)` | `oklch(0.62 0.012 273)` | Subdued text, labels |
+| `surface` | `bg-surface` | `oklch(0.94 0.009 270)` | base-900 (`#0d0d0d`) | Elevated surfaces (cards, form fields) |
+| `surface-foreground` | `text-surface-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Text on elevated surfaces |
+| `edge` | `border-edge` | `oklch(0.87 0.013 270)` | `rgba(255,255,255,0.08)` | Borders, dividers |
+| `edge-hover` | `border-edge-hover` | `oklch(0.80 0.015 270)` | `rgba(255,255,255,0.14)` | Hover state borders |
+
+### Surface Ladders
+
+**Dark (Observatory Mono):** four-step ladder from void to raised, all neutral grays with hue 273:
+
+| Token | Hex | Role |
+|-------|-----|------|
+| `--background` | `#07080a` | Page void |
+| `--color-base-900` | `#0d0d0d` | Surface (panels, cards) |
+| `--color-base-800` | `#101111` | Elevated (modals, muted) |
+| `--color-base-700` | `#161718` | Raised (popovers) |
+
+Borders in dark mode are white-low-opacity hairlines: `rgba(255,255,255,0.08)` resting, `rgba(255,255,255,0.14)` hover. Accents are **never** used in chrome.
+
+**Light:** off-white ladder with a faint hue-270 violet tint, `oklch(0.99 0.005 270) → oklch(0.94 0.009 270) → oklch(0.87 0.013 270)`.
 
 ### Usage Examples
 
@@ -237,13 +262,20 @@ Swap automatically between light and dark themes.
 
 | Tailwind class | Font | Source | Use for |
 |----------------|------|--------|---------|
-| `font-heading` | rigid-square | Adobe Typekit (`acb7qvn`) | Headings, hero text |
-| `font-sans` | Titillium Web | Google Fonts | Body text |
-| `font-mono` | Source Code Pro | Google Fonts | Code blocks |
+| `font-heading` | Anybody | Google Fonts | Headings — weight 900, uppercase, tracking `-0.02em` |
+| `font-sans` | Inter | Google Fonts | Body text |
+| `font-mono` | Departure Mono | Self-hosted (departuremono.com) | Telemetry, code, labels |
+
+### Consumer Font Loading
+
+The DS ships **token references only** — it never bundles font binaries. Consumers load the fonts themselves:
+
+- **Anybody** + **Inter** — load via Google Fonts in your app's `<head>`.
+- **Departure Mono** — self-host. Copy the woff2 from `apps/preview/public/fonts/DepartureMono.woff2` (or download from [departuremono.com](https://departuremono.com)) and declare a single `@font-face` rule in your global stylesheet pointing at `/fonts/DepartureMono.woff2`.
 
 ### Heading Scale
 
-All headings use `font-heading`, weight 800, italic.
+All headings use `font-heading` (Anybody) at weight 900, uppercase, with tighter tracking (`-0.02em`).
 
 | Style | Size | Tailwind equivalent |
 |-------|------|-------------------|
@@ -269,25 +301,40 @@ All headings use `font-heading`, weight 800, italic.
 
 ```tsx
 {/* Page heading */}
-<h1 className="font-heading text-[4.5rem] font-extrabold italic">
-  Aleph Cloud
+<h1 className="font-heading text-[4.5rem] font-black uppercase tracking-[-0.02em]">
+  Abyssal Void
 </h1>
 
 {/* Section heading */}
-<h2 className="font-heading text-[2rem] font-extrabold italic">
+<h2 className="font-heading text-[2rem] font-black uppercase tracking-[-0.02em]">
   Features
 </h2>
 
 {/* Body text */}
 <p className="font-sans text-base leading-relaxed">
-  Decentralized computing for everyone.
+  Deep-sea probe telemetry, brought to the surface.
 </p>
 
-{/* Code block */}
-<pre className="font-mono text-base leading-relaxed bg-muted p-4 rounded-lg">
-  const node = await aleph.create({ channel: "main" });
+{/* Telemetry / mono content */}
+<pre className="font-mono text-base leading-relaxed bg-muted p-4">
+  STATUS: NOMINAL · DEPTH: -4200m · TEMP: 2.1°C
 </pre>
 ```
+
+---
+
+## Radius
+
+Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` reserved for elements that are round by design.
+
+| Tailwind class | CSS variable | Value | Use for |
+|----------------|--------------|-------|---------|
+| `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, dropdowns, badges, alerts |
+| `rounded-[2px]` | — | `2px` | Cards |
+| `rounded-[4px]` | — | `4px` | Modals (Dialog) |
+| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, Switch thumb, MultiSelect tag chips, Stepper indicators, Tabs pill variant |
+
+Because both `--radius-sm` and `--radius-md` resolve to `0`, the 2px and 4px exceptions use literal arbitrary values (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — keeping the scale honest.
 
 ---
 
@@ -297,13 +344,13 @@ Available as CSS custom properties. Use via `style` attribute.
 
 | Name | CSS variable | Colors | Use for |
 |------|-------------|--------|---------|
-| `main` | `var(--gradient-main)` | `#141421` → `#5100CD` (light) / `#1C1C32` → `#5100CD` (dark) | Primary gradient, hero sections. Theme-aware — promoted to semantic layer. |
-| `lime` | `var(--gradient-lime)` | `#D6FF00` → `#F5F7DB` | Accent gradient, CTAs |
-| `success` | `var(--gradient-success)` | `#36D846` → `#63E570` | Success states |
-| `warning` | `var(--gradient-warning)` | `#FFE814` → `#FBAE18` | Warning states |
-| `error` | `var(--gradient-error)` | `#FFAC89` → `#DE3668` | Error states |
+| `main` | `var(--gradient-main)` | `#1A0440` → `#2A0563` (light) / `#0a0312` → `#2A0563` (dark) | Primary gradient. Theme-aware — promoted to semantic layer. |
+| `accent` | `var(--gradient-accent)` | `#00B8D4` → `#00E1FA` | Secondary button fill, accent CTAs |
+| `success` | `var(--gradient-success)` | `#2BD58E` → `#5DDFAB` | Success states |
+| `warning` | `var(--gradient-warning)` | `#FFE14D` → `#FFC53D` | Warning states |
+| `error` | `var(--gradient-error)` | `#FF6A3D` → `#FF3D00` | Error states |
 | `destructive` | `var(--gradient-destructive)` | (alias → `error`) | Convenience alias |
-| `info` | `var(--gradient-info)` | `#C8ADF0` → `#5100CD` | Info states |
+| `info` | `var(--gradient-info)` | `#00E1FA` → `#2A0563` | Info states |
 
 ### Gradient Border Utilities
 
@@ -327,7 +374,7 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 | Class | Gradient | Hover | Active |
 |-------|----------|-------|--------|
 | `gradient-fill-main` | `--gradient-main` | White overlay (lighten) | Black overlay (darken) |
-| `gradient-fill-lime` | `--gradient-lime` | Black overlay (subtle darken) | Black overlay (darken) |
+| `gradient-fill-accent` | `--gradient-accent` | Black overlay (subtle darken) | Black overlay (darken) |
 | `gradient-fill-success` | `--gradient-success` | — | — |
 | `gradient-fill-warning` | `--gradient-warning` | — | — |
 | `gradient-fill-error` | `--gradient-error` | — | — |
@@ -335,10 +382,10 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 
 ```tsx
 {/* Gradient fills with built-in hover/active states */}
-<button className="gradient-fill-main text-white px-6 py-3 rounded-full">
+<button className="gradient-fill-main text-white px-6 py-3">
   Primary Action
 </button>
-<button className="gradient-fill-lime text-neutral-950 px-6 py-3 rounded-full">
+<button className="gradient-fill-accent text-accent-foreground px-6 py-3">
   Secondary Action
 </button>
 ```
@@ -375,10 +422,10 @@ CSS utility classes that apply a radial gradient background with an SVG `feTurbu
   <h1 className="font-heading text-4xl font-extrabold italic">Welcome</h1>
 </div>
 
-{/* CTA button with lime gradient */}
+{/* CTA button with accent gradient */}
 <button
-  style={{ background: "var(--gradient-lime)" }}
-  className="text-black px-6 py-3 rounded-md font-bold"
+  style={{ background: "var(--gradient-accent)" }}
+  className="text-accent-foreground px-6 py-3 font-bold"
 >
   Get Started
 </button>
@@ -596,15 +643,15 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
 ```tsx
 <section style={{ background: "var(--gradient-main)" }} className="py-24 px-6">
   <div className="mx-auto max-w-5xl">
-    <h1 className="font-heading text-[4.5rem] font-extrabold italic text-white">
-      Aleph Cloud
+    <h1 className="font-heading text-[4.5rem] font-black uppercase tracking-[-0.02em] text-white">
+      Abyssal Void
     </h1>
     <p className="font-sans text-xl text-white/80 mt-4 max-w-2xl leading-relaxed">
-      Decentralized computing, storage, and networking.
+      Deep-sea probe telemetry, brought to the surface.
     </p>
     <button
-      style={{ background: "var(--gradient-lime)" }}
-      className="mt-8 text-black px-8 py-3 rounded-md font-bold text-lg shadow-brand-lg"
+      style={{ background: "var(--gradient-accent)" }}
+      className="mt-8 text-accent-foreground px-8 py-3 font-bold text-lg shadow-brand-lg"
     >
       Get Started
     </button>
@@ -743,13 +790,13 @@ CVA-based button with 6 variants, 4 sizes, icon slots, loading/disabled states, 
 import { Button } from "@aleph-front/ds/button";
 ```
 
-**Visual style:** Pill shape (`rounded-full`), 3px border, `font-heading` at weight 700.
+**Visual style:** Square corners (`rounded-none`), 3px border, `font-heading` at weight 700.
 
 #### Variants
 
 ```tsx
 <Button variant="primary">Primary</Button>     {/* gradient-main fill, white text, no border */}
-<Button variant="secondary">Secondary</Button> {/* gradient-lime fill, black text, black border */}
+<Button variant="secondary">Secondary</Button> {/* gradient-fill-accent fill, accent-foreground text */}
 <Button variant="outline">Outline</Button>     {/* gradient-main border, primary-100 fill */}
 <Button variant="text">Text</Button>           {/* transparent, no visible border */}
 <Button variant="destructive">Delete</Button>  {/* 20% error fill, dark text (light in dark mode) */}

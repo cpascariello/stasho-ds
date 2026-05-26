@@ -229,9 +229,12 @@ docs/plans/                   # Design and implementation plans
 
 - npm workspaces monorepo with source-level subpath exports (`@stasho/ds/*`)
 - Three-layer token system (OKLCH color scales 50–950, semantic tokens incl. `--surface` for elevated backgrounds, Tailwind mapping)
-- OKLCH color scales for primary, accent, success, warning, error, neutral (unified brand-tinted scale at H:280)
+- Abyssal Void skin: deep purple `#2A0563` primary + cyan `#00E1FA` accent + teal-green `#2BD58E` success + amber `#ffc53d` warn + blood-orange `#FF3D00` error, same hex in both modes (Radix step-9 convention)
+- Observatory Mono dark surface ladder (`#07080a → #161718`), faintly violet-tinted off-white light ladder (hue 270)
+- Radius vocabulary 0/0/2/4 — `full` reserved for StatusDot, Slider, ProgressBar tracks, Switch thumb, MultiSelect chips, Stepper indicators, Tabs pill variant
+- Typography: Anybody (headings), Inter (body), Departure Mono (telemetry/labels — self-hosted)
 - Light/dark theme switching via `.theme-dark` class with `@custom-variant dark`
-- Button component with 6 variants, 4 sizes, CVA architecture (primary/secondary use gradient fills, outline uses gradient border)
+- Button component with 6 variants, 4 sizes, CVA architecture, square corners (primary uses gradient-fill-main, secondary uses gradient-fill-accent, outline uses gradient border)
 - Spinner component for loading states
 - cn() utility (clsx + tailwind-merge)
 - Input component with 2 sizes, borderless flat fill, error/disabled states

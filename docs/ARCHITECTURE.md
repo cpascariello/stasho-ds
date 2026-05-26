@@ -214,11 +214,20 @@ If either answer is "no," promote the token:
 
 **Example:** `--gradient-main` has a dark end (`#141421`) that matches the dark mode background. Promoted: `--gradient-main-base` and `--gradient-main-dark` in Layer 1, `--gradient-main` in Layer 2 swaps per theme.
 
-### Card Corner Radius as Surface Default
+### Surface Radius Vocabulary
 
-All elevated surface components (Dialog, dropdowns, popovers, future overlays) must use `rounded-md` — the same corner radius as the Card component. This ensures visual consistency across all "floating panel" surfaces.
+Floating-panel surfaces follow the radius vocabulary: Card uses `rounded-[2px]`, Dialog uses `rounded-[4px]`, and dropdowns/popovers (Select, Combobox, MultiSelect) use `rounded-none` — matching their square triggers. Within a single composition, surface radii should match what the trigger or container in front of them uses.
 
-**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-md", ...)`
+**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-[2px]", ...)`, `packages/ds/src/components/dialog/dialog.tsx` (`rounded-[4px]`).
+
+### Font Loading Boundary
+
+The DS package **never bundles font binaries**. `tokens.css` declares `--font-heading`, `--font-sans`, `--font-mono` as token references only. Consumers are responsible for loading the actual font files:
+
+- **Anybody** (`--font-heading`) and **Inter** (`--font-sans`) — load via Google Fonts in the consumer app's `<head>`.
+- **Departure Mono** (`--font-mono`) — self-host. The preview app keeps a reference copy at `apps/preview/public/fonts/DepartureMono.woff2` and declares `@font-face` in `apps/preview/src/app/globals.css`. Consumer apps copy that woff2 (or re-download from departuremono.com) and add their own `@font-face` rule.
+
+This keeps the published `@stasho/ds` payload small, avoids licensing ambiguity, and lets each consumer choose its own loading strategy (preload hints, `font-display`, swap behavior). Reference: Decision #78.
 
 ### Ecosystem Aliases for Color Tokens
 
@@ -246,6 +255,12 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 **Key files:** `packages/ds/src/styles/tokens.css`
 
 **Notes:** `@theme inline` tells Tailwind to resolve at runtime (not compile time), enabling theme switching. Any Layer 1 value that needs to change per theme (e.g., `--gradient-main`) must be promoted to Layer 2 — see the "Promote Layer 1 Values to Layer 2" rule above.
+
+**Same-hex semantic accent rule (Layer 2).** `--primary`, `--accent`, `--success`, `--warn`, and `--error` are written as hex literals — not Layer 1 scale references — in both `:root` and `.theme-dark`, and the value is identical in both blocks. This is the Radix/Geist step-9 convention: saturated brand colors don't drift between modes because they're literally the same value. The Layer 1 scales (`--color-primary-*` etc.) stay available for tinted backgrounds, hover states, and contrast-aware inline text. Theme-swappable tokens (`--background`, `--foreground`, `--muted`, `--surface`, `--edge`, `--edge-hover`) keep their per-theme variants.
+
+**Layer 3 bridge entries for semantic accents.** `@theme inline` now surfaces `--color-success`, `--color-warn`, `--color-error` (plus `-foreground` pairs) alongside the existing `--color-primary` / `--color-accent`. Consumers get `bg-success`, `text-warn`, `border-error`, etc. as first-class Tailwind utilities — no inline `style={{ color: 'var(--success)' }}` required.
+
+**Radius scale (Layer 1).** The radius vocabulary is `0 / 0 / 2 / 4`. `--radius-sm` and `--radius-md` are both literally `0`, `--radius-lg` is `2px`, `--radius-xl` is `4px`. When a small non-zero radius is needed (Card 2px, Dialog 4px), use a literal arbitrary value (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — this keeps the scale honest. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements (StatusDot, Slider thumb, ProgressBar tracks, Switch thumb, MultiSelect tag chips, Stepper indicators, Tabs pill variant).
 
 ### Theme Switching
 
@@ -307,7 +322,7 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 .border-gradient-main:active { /* same with primary-300 */ }
 ```
 
-`gradient-fill-main` / `gradient-fill-lime` — gradient fills with overlay-based hover states:
+`gradient-fill-main` / `gradient-fill-accent` — gradient fills with overlay-based hover states:
 ```css
 .gradient-fill-main { background: var(--gradient-main) border-box; }
 .gradient-fill-main:hover {
