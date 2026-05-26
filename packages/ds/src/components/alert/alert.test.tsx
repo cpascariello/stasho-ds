@@ -13,7 +13,7 @@ describe("Alert", () => {
     expect(screen.getByText("Something happened")).toBeTruthy();
   });
 
-  it("renders the variant label in uppercase", () => {
+  it("renders the variant label", () => {
     render(<Alert variant="error">Message</Alert>);
     expect(screen.getByText("Error")).toBeTruthy();
   });

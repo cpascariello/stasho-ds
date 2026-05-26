@@ -51,7 +51,7 @@ const alertVariants = cva(
 );
 
 const labelVariants = cva(
-  "font-heading font-extrabold italic text-xs uppercase leading-normal pb-1",
+  "font-mono uppercase tracking-wider text-[11px] leading-normal pb-1",
   {
     variants: {
       variant: {
