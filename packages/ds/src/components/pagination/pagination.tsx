@@ -92,7 +92,7 @@ const NAV_DISABLED = "opacity-50 pointer-events-none";
 const PAGE_BUTTON = [
   "inline-flex items-center justify-center",
   "size-8 rounded-none",
-  "font-heading font-bold text-lg",
+  "font-mono text-sm",
   "text-primary-600 dark:text-primary-400",
   "hover:bg-primary-100 dark:hover:bg-primary-200/10",
   "transition-colors cursor-pointer",
@@ -164,7 +164,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           item === "ellipsis" ? (
             <span
               key={i}
-              className="inline-flex items-center justify-center size-8 font-heading font-bold text-lg text-primary-600 dark:text-primary-400 select-none"
+              className="inline-flex items-center justify-center size-8 font-mono text-sm text-primary-600 dark:text-primary-400 select-none"
               aria-hidden="true"
             >
               {"\u2026"}
