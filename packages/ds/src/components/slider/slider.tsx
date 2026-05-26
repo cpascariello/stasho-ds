@@ -113,7 +113,7 @@ const Slider = forwardRef<
                 className={cn(
                   "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
                   "rounded-none bg-surface border border-edge px-2 py-1",
-                  "text-xs text-white whitespace-nowrap pointer-events-none",
+                  "text-xs text-foreground whitespace-nowrap pointer-events-none",
                 )}
               >
                 {val}
