@@ -100,7 +100,7 @@ function InteractiveStepper() {
           {step === DEPLOY_STEPS.length - 1 ? "Deploy" : "Next"}
         </Button>
         {step === DEPLOY_STEPS.length && (
-          <Button variant="text" size="sm" onClick={() => setStep(0)}>
+          <Button variant="ghost" size="sm" onClick={() => setStep(0)}>
             Reset
           </Button>
         )}
