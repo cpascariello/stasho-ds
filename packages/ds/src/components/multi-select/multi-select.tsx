@@ -8,12 +8,17 @@ import { cn } from "@ac/lib/cn";
 const triggerVariants = cva(
   [
     "inline-flex items-center gap-1.5",
-    "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-none",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "aria-disabled:opacity-50 aria-disabled:pointer-events-none",
-    "ring-0 transition-colors",
+    "w-full font-sans text-foreground",
+    "bg-background dark:bg-surface",
+    "border border-edge rounded-none",
+    "hover:border-edge-hover",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "aria-disabled:bg-muted dark:aria-disabled:bg-background",
+    "aria-disabled:border-edge/50",
+    "aria-disabled:text-foreground/30",
+    "aria-disabled:cursor-not-allowed",
+    "transition-colors",
   ].join(" "),
   {
     variants: {
@@ -137,7 +142,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
               triggerVariants({ size }),
               "cursor-pointer",
               error &&
-                "border-3 border-error-400 hover:border-error-500",
+                "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
               !hasSelection && "text-muted-foreground",
               className,
             )}
