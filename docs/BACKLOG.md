@@ -141,6 +141,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-02 — Table controlled-sort props (`sortColumn`/`sortDirection`/`onSortChange`) so externally paginated tables can sort the full dataset rather than only the current page
 - [x] 2026-05-04 — Tabs `maxVisible` prop (count-based cap on visible tab count, stricter-wins composition with `overflow="collapse"`)
 - [x] 2026-05-26 — Abyssal Void skin (deep purple + cyan + teal + amber + blood-orange, same-hex rule, 0/0/2/4 radius, Anybody/Inter/Departure Mono)
-- [x] 2026-05-26 — Button redesign as instrument-panel control (LED signature, 7 variants, 3 sizes, sentence case Inter, loading via LED pulse)
+- [x] 2026-05-26 — Button redesign as instrument-panel control (LED signature, 7 variants, 3 sizes, sentence case Inter, loading via dual-dot chase)
 
 </details>
