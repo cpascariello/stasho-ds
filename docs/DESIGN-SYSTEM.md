@@ -11,7 +11,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@aleph-front/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@aleph-front/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@aleph-front/ds/breadcrumb` |
-| [Button](#button) | Action trigger with 6 variants, 4 sizes, gradient fills | `@aleph-front/ds/button` |
+| [Button](#button) | Action trigger with 7 variants, 3 sizes, cyan LED signature | `@stasho/ds/button` |
 | [Card](#card) | Content container with 2 variants (default/ghost) | `@aleph-front/ds/card` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@aleph-front/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@aleph-front/ds/combobox` |
@@ -759,68 +759,75 @@ import {
 
 ### Button
 
-CVA-based button with 6 variants, 4 sizes, icon slots, loading/disabled states, and `asChild` polymorphism.
+CVA-based instrument-panel button with 7 variants, 3 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
 
 ```tsx
-import { Button } from "@aleph-front/ds/button";
+import { Button } from "@stasho/ds/button";
 ```
 
-**Visual style:** Square corners (`rounded-none`), 3px border, `font-heading` at weight 700.
+**Visual style:** Square corners (`rounded-none`), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) add an outer halo for "electric" energy.
 
 #### Variants
 
 ```tsx
-<Button variant="primary">Primary</Button>     {/* gradient-main fill, white text, no border */}
-<Button variant="secondary">Secondary</Button> {/* gradient-fill-accent fill, accent-foreground text */}
-<Button variant="outline">Outline</Button>     {/* gradient-main border, primary-100 fill */}
-<Button variant="text">Text</Button>           {/* transparent, no visible border */}
-<Button variant="destructive">Delete</Button>  {/* 20% error fill, dark text (light in dark mode) */}
-<Button variant="warning">Careful</Button>     {/* 20% warning fill, dark text (light in dark mode) */}
+<Button variant="primary">Deploy instance</Button>      {/* Deep-blue chassis, cyan LED */}
+<Button variant="secondary">Configure</Button>          {/* Neutral chassis, cyan LED */}
+<Button variant="destructive">Delete</Button>           {/* Blood-orange chassis, white LED, halo */}
+<Button variant="warning">Force restart</Button>        {/* Amber chassis, dark LED, halo */}
+<Button variant="success">Confirm</Button>              {/* Teal-green chassis, dark LED, halo */}
+<Button variant="outline">Learn more</Button>           {/* Transparent, cyan border + cyan text */}
+<Button variant="ghost">Cancel</Button>                 {/* Pure label, no chassis, no LED */}
 ```
 
 #### Sizes
 
 ```tsx
-<Button size="xs">Extra Small</Button>  {/* py-1, text-sm */}
-<Button size="sm">Small</Button>        {/* py-1.5, text-base */}
-<Button size="md">Medium</Button>       {/* py-2, text-base (default) */}
-<Button size="lg">Large</Button>        {/* py-2.5, text-lg */}
+<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,  text-[11px] */}
+<Button size="sm">Small</Button>         {/* py-[7px] px-3.5, text-xs */}
+<Button size="md">Medium</Button>        {/* py-[9px] px-[18px], text-[13px] — default */}
 ```
 
 #### Icons
 
+When `iconLeft` is provided on a filled variant, it replaces the LED and inherits the LED's color + glow filter. `iconRight` is always rendered in the variant's foreground color with no glow.
+
 ```tsx
-<Button iconLeft={<PlusIcon />}>Add Item</Button>
-<Button iconRight={<ArrowIcon />}>Next</Button>
-<Button iconLeft={<PlusIcon />} iconRight={<ArrowIcon />}>Both</Button>
+<Button iconLeft={<PlusIcon />}>Add item</Button>           {/* Cyan-glowing icon */}
+<Button iconRight={<ArrowIcon />}>Next</Button>              {/* White arrow */}
+<Button iconLeft={<PlusIcon />} iconRight={<ArrowIcon />}>
+  Both
+</Button>
 ```
 
 #### Loading and Disabled
 
 ```tsx
-<Button loading>Saving...</Button>   {/* Shows spinner, hides icons, aria-busy */}
-<Button disabled>Unavailable</Button> {/* 50% opacity, pointer-events-none */}
+<Button loading>Saving…</Button>          {/* LED pulses; no spinner element; aria-busy */}
+<Button loading iconLeft={<PlusIcon />}>
+  Saving…
+</Button>                                  {/* Icon pulses instead of LED */}
+<Button disabled>Unavailable</Button>      {/* Chassis flattens; LED dims to muted gray */}
 ```
 
 #### As Link (asChild)
 
-Renders button styles on a child element instead of `<button>`:
-
 ```tsx
 <Button asChild variant="primary">
-  <a href="/dashboard">Go to Dashboard</a>
+  <a href="/dashboard">Go to dashboard</a>
 </Button>
 
 {/* Works with Next.js Link */}
-<Button asChild variant="text">
+<Button asChild variant="ghost">
   <Link href="/settings">Settings</Link>
 </Button>
 ```
 
-#### Custom Composition with buttonVariants
+Note: when `asChild` is true, the LED/icon content is not rendered — `asChild` is for "link styled as button", not for "rich content button".
+
+#### Custom composition with buttonVariants
 
 ```tsx
-import { buttonVariants } from "@aleph-front/ds/button";
+import { buttonVariants } from "@stasho/ds/button";
 
 <a href="/docs" className={buttonVariants({ variant: "outline", size: "sm" })}>
   Documentation
