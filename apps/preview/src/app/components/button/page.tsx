@@ -80,20 +80,6 @@ export default function ButtonPage() {
           ))}
         </div>
       </DemoSection>
-      <DemoSection title="Loading with iconLeft">
-        <div className="flex flex-wrap items-center gap-3">
-          {variants.map((v) => (
-            <Button
-              key={v}
-              variant={v}
-              loading
-              iconLeft={<PlaceholderIcon label="Add" />}
-            >
-              {v.charAt(0).toUpperCase() + v.slice(1)}
-            </Button>
-          ))}
-        </div>
-      </DemoSection>
       <DemoSection title="Disabled">
         <div className="flex flex-wrap items-center gap-3">
           {variants.map((v) => (
