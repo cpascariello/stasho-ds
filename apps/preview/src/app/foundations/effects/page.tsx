@@ -8,7 +8,7 @@ const SHADOWS = [
 
 const GRADIENTS = [
   { name: "main", var: "var(--gradient-main)" },
-  { name: "lime", var: "var(--gradient-lime)" },
+  { name: "accent", var: "var(--gradient-accent)" },
   { name: "success", var: "var(--gradient-success)" },
   { name: "warning", var: "var(--gradient-warning)" },
   { name: "error", var: "var(--gradient-error)" },
