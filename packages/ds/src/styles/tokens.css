@@ -115,9 +115,15 @@
   --shadow-brand-lg: 0px 4px 48px oklch(0.27 0.180 270 / 0.30);
 
   /* Fonts */
-  --font-heading: "rigid-square", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Titillium Web", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Source Code Pro", ui-monospace, monospace;
+  --font-heading: "Anybody", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Departure Mono", ui-monospace, monospace;
+
+  /* Radius vocabulary (Abyssal Void — 0/0/2/4, full reserved for round-by-design) */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 2px;
+  --radius-xl: 4px;
 }
 
 /* ──────────────────────────────────────────────
