@@ -47,14 +47,14 @@ function FormField({
       >
         {label}
         {required && (
-          <span className="text-error-600 ml-0.5" aria-hidden="true">
+          <span className="text-error ml-0.5" aria-hidden="true">
             *
           </span>
         )}
       </label>
       {child}
       {error ? (
-        <p id={messageId} role="alert" className="text-xs text-error-600">
+        <p id={messageId} role="alert" className="text-xs text-error">
           {error}
         </p>
       ) : helperText ? (
