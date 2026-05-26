@@ -582,6 +582,20 @@ Copy button uses a two-layer stack:
 
 Hover state uses `bg-foreground/10` for visibility in both light and dark themes.
 
+### Button
+
+The Button is the only DS component that renders a brand "signature" element — the cyan LED dot — that isn't part of the consumer-provided content.
+
+**LED render logic.** The LED `<span data-led>` renders when `!iconLeft && variant !== 'ghost'`. When iconLeft is provided on a non-ghost variant, the icon takes the LED's leading slot and its wrapper inherits the LED's color + drop-shadow filter (so the glyph "becomes" the LED). When the variant is `ghost`, no LED renders even without an icon — ghost is the quiet escape hatch.
+
+**Loading animation.** The `animate-button-led` class is applied to either the LED span or the iconLeft wrapper depending on which is present. The keyframe `button-led-pulse` (in `tokens.css`) uses `currentColor` for the box-shadow so the same animation works whether the lit element is cyan (primary/secondary/outline), white (destructive), or dark (warning/success). `prefers-reduced-motion: reduce` cancels the animation.
+
+**Focus ring uses outline, not box-shadow.** Variant chassis use stacked `box-shadow` for the bevel (inset highlights + drop shadow + halo for semantic variants). A focus ring drawn via `box-shadow` would replace the bevel during focus. Using native `outline` keeps the two visual channels separate — the bevel persists when focused, and the cyan outline sits at 2px offset around the chassis.
+
+**Disabled visual flatten.** Every variant's `disabled:` classes collapse the chassis to `bg-neutral-900` with a faint inset bevel, regardless of the variant's resting chassis color. The LED dims via `opacity` inheritance and stops glowing because its `bg-` color is also overridden through `disabled:text-white/30`. This unifies disabled state — a disabled destructive button reads the same as a disabled primary, which is the correct semantics (both are inert).
+
+**`asChild` limitation.** When `asChild` is true, the rendered element is the consumer's child via `cloneElement`. The LED and icon content are NOT carried over — `asChild` exists for "link styled as button", not "rich content button". Consumers who need a link with an LED should compose `buttonVariants({...})` manually onto their link element and add the LED span themselves.
+
 ---
 
 ## Testing Philosophy
