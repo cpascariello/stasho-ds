@@ -259,18 +259,18 @@
     var(--gradient-main) border-box;
 }
 
-.gradient-fill-lime {
-  background: var(--gradient-lime) border-box;
+.gradient-fill-accent {
+  background: var(--gradient-accent) border-box;
 }
-.gradient-fill-lime:hover {
+.gradient-fill-accent:hover {
   background:
     linear-gradient(oklch(0 0 0 / 0.06), oklch(0 0 0 / 0.06)) border-box,
-    var(--gradient-lime) border-box;
+    var(--gradient-accent) border-box;
 }
-.gradient-fill-lime:active {
+.gradient-fill-accent:active {
   background:
     linear-gradient(oklch(0 0 0 / 0.12), oklch(0 0 0 / 0.12)) border-box,
-    var(--gradient-lime) border-box;
+    var(--gradient-accent) border-box;
 }
 
 .gradient-fill-success {
