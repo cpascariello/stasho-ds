@@ -23,34 +23,28 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          // light (base): brand-blue chassis at primary-400/500
+          // unified brand-blue chassis (both modes)
           "bg-[linear-gradient(180deg,var(--color-primary-400)_0%,var(--color-primary-500)_100%)]",
           "[box-shadow:inset_0_1px_0_rgba(0,225,250,0.55),inset_0_-1px_0_rgba(0,0,0,0.35)]",
-          "hover:bg-[linear-gradient(180deg,var(--color-primary-300)_0%,var(--color-primary-400)_100%)]",
-          "hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_20px_rgba(0,64,255,0.35)]",
+          // hover: chassis static, bevel highlight intensifies, halo appears (color matches chassis-500)
+          "hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.35)]",
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.75)]",
           "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
           "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
-          // dark (overrides — current shipped behavior)
-          "dark:bg-[linear-gradient(180deg,var(--color-primary-900)_0%,var(--color-primary-950)_100%)]",
-          "dark:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.4),inset_0_-1px_0_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.05)]",
-          "dark:hover:bg-[linear-gradient(180deg,var(--color-primary-700)_0%,var(--color-primary-900)_100%)]",
-          "dark:hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.6),inset_0_-1px_0_rgba(0,0,0,0.6),0_0_20px_rgba(0,64,255,0.4)]",
-          "dark:disabled:bg-neutral-900 dark:disabled:bg-none dark:disabled:text-white/30",
-          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         secondary: [
           // light (base): raised light chassis, dark text, hairline edge
           "bg-[linear-gradient(180deg,var(--background)_0%,var(--surface)_100%)] text-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10)]",
-          "hover:bg-[linear-gradient(180deg,var(--surface)_0%,var(--background)_100%)]",
-          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(0,0,0,0.14),inset_0_0_0_1px_var(--edge-hover)]",
+          // hover: chassis static, dark/neutral halo extends chassis outward
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10),0_0_24px_rgba(20,15,40,0.18)]",
           "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
           "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
           // dark (overrides — current shipped behavior)
           "dark:bg-neutral-900 dark:bg-none dark:text-white",
           "dark:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
-          "dark:hover:bg-neutral-800 dark:hover:bg-none",
-          "dark:hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+          // dark hover: chassis static, white halo extends chassis outward
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4),0_0_32px_rgba(255,255,255,0.2)]",
           "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
           "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
