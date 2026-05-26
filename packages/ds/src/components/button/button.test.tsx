@@ -17,7 +17,7 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Click me" })).toBeTruthy();
   });
 
-  describe("LED indicator", () => {
+  describe("LED indicator (resting state)", () => {
     it.each(filledLedVariants)("renders LED on %s variant by default", (variant) => {
       render(<Button variant={variant}>Action</Button>);
       const button = screen.getByRole("button");
@@ -66,26 +66,42 @@ describe("Button", () => {
     });
   });
 
-  describe("loading", () => {
-    it("pulses the LED when loading without iconLeft", () => {
+  describe("loading (dual-dot chase)", () => {
+    it("renders the chase with exactly 2 dots on non-ghost variants", () => {
       render(<Button loading>Loading</Button>);
       const button = screen.getByRole("button");
-      const led = button.querySelector("[data-led]");
-      expect(led).toBeTruthy();
-      expect(led?.className).toContain("animate-button-led");
+      const chase = button.querySelector("[data-led-chase]");
+      expect(chase).toBeTruthy();
+      expect(chase?.children.length).toBe(2);
+      expect(chase?.children[0]?.className).toContain("animate-button-chase-a");
+      expect(chase?.children[1]?.className).toContain("animate-button-chase-b");
     });
 
-    it("pulses the iconLeft wrapper when loading with iconLeft", () => {
+    it("renders the chase even when iconLeft is provided (icon is hidden)", () => {
       render(
         <Button loading iconLeft={<svg data-testid="left-icon" />}>
           Loading
         </Button>,
       );
       const button = screen.getByRole("button");
-      const iconWrapper = button.querySelector("[data-led-icon]");
-      expect(iconWrapper).toBeTruthy();
-      expect(iconWrapper?.className).toContain("animate-button-led");
-      expect(screen.getByTestId("left-icon")).toBeTruthy();
+      expect(button.querySelector("[data-led-chase]")).toBeTruthy();
+      expect(screen.queryByTestId("left-icon")).toBeNull();
+    });
+
+    it("does NOT render the chase on ghost variant", () => {
+      render(
+        <Button variant="ghost" loading>
+          Cancel
+        </Button>,
+      );
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led-chase]")).toBeNull();
+    });
+
+    it("does NOT render data-led sentinel when loading", () => {
+      render(<Button loading>Loading</Button>);
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led]")).toBeNull();
     });
 
     it("does NOT render a separate spinner element when loading", () => {
@@ -96,6 +112,15 @@ describe("Button", () => {
 
     it("sets aria-busy when loading", () => {
       render(<Button loading>Loading</Button>);
+      expect(screen.getByRole("button").getAttribute("aria-busy")).toBe("true");
+    });
+
+    it("sets aria-busy on ghost when loading", () => {
+      render(
+        <Button variant="ghost" loading>
+          Cancel
+        </Button>,
+      );
       expect(screen.getByRole("button").getAttribute("aria-busy")).toBe("true");
     });
 
