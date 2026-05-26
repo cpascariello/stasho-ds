@@ -139,7 +139,7 @@ const ledColorClass: Record<Variant, string> = {
   destructive: "bg-white text-white [box-shadow:0_0_8px_currentColor]",
   warning: "bg-warn-foreground text-warn-foreground",
   success: "bg-success-foreground text-success-foreground",
-  outline: "bg-primary/50 text-primary dark:bg-accent/50 dark:text-accent",
+  outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
   // ghost: LED is never rendered for ghost, so this entry is a sentinel.
   ghost: "",
 };
