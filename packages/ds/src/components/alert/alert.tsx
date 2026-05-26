@@ -30,7 +30,7 @@ const VARIANT_BG_CLASS: Record<AlertVariant, string> = {
 
 const alertVariants = cva(
   [
-    "relative overflow-hidden rounded-sm border",
+    "relative overflow-hidden rounded-none border",
     "px-3 py-2",
     "transition-all duration-200",
     "motion-reduce:transition-none",
