@@ -27,7 +27,7 @@ const BreadcrumbList = forwardRef<
     ref={ref}
     className={cn(
       "flex flex-wrap items-center gap-1",
-      "font-heading font-extrabold italic uppercase text-xs",
+      "font-sans font-medium text-sm",
       className,
     )}
     {...rest}

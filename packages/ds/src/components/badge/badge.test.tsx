@@ -172,11 +172,20 @@ describe("Badge", () => {
   });
 
   describe("base styles", () => {
-    it("applies heading font and uppercase", () => {
+    it("applies mono font and uppercase", () => {
       const { container } = render(<Badge>Label</Badge>);
       const cls = container.firstElementChild?.className ?? "";
-      expect(cls).toContain("font-heading");
+      expect(cls).toContain("font-mono");
       expect(cls).toContain("uppercase");
+      expect(cls).toContain("tracking-wider");
+    });
+
+    it("preserves consumer string case in DOM (CSS uppercases the rendered text only)", () => {
+      const { container } = render(<Badge>active</Badge>);
+      // DOM text content stays lowercase — CSS text-transform: uppercase
+      // changes rendering, not DOM. This contract matters for assertions
+      // using getByText("active") in consumer test suites.
+      expect(container.firstElementChild?.textContent).toBe("active");
     });
 
     it("applies rounded-none", () => {

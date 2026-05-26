@@ -201,7 +201,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
           aria-label="More tabs"
           className={cn(
             "inline-flex items-center justify-center shrink-0",
-            "font-heading font-bold",
+            "font-sans font-semibold",
             hasActiveHidden && isPill
               ? "text-white"
               : hasActiveHidden
@@ -219,7 +219,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 )
               : isSmall
                 ? "px-3 py-1.5 text-sm"
-                : "px-4 py-3 text-lg",
+                : "px-4 py-3 text-sm",
             !visible && "invisible",
           )}
         >
@@ -261,7 +261,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 "hover:bg-muted focus-visible:bg-muted",
                 "data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
                 tab.triggerEl.dataset["state"] === "active" &&
-                  "text-primary-600 dark:text-primary-400 font-bold",
+                  "text-primary-600 dark:text-primary-400 font-semibold",
               )}
             >
               {tab.label}
@@ -427,7 +427,7 @@ const TabsTrigger = forwardRef<
     className={cn(
       [
         "inline-flex items-center gap-2 px-4 py-3",
-        "font-heading font-bold text-lg",
+        "font-sans font-semibold text-sm",
         "text-foreground",
         "transition-[color,transform] duration-200 ease-out",
         "hover:text-primary-600 dark:hover:text-primary-400",
