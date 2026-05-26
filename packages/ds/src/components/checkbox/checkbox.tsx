@@ -5,14 +5,17 @@ import { cn } from "@ac/lib/cn";
 
 const checkboxVariants = cva(
   [
-    "peer shrink-0 bg-surface",
-    "border-3 border-edge",
+    "peer shrink-0 bg-transparent",
+    "border border-edge",
     "hover:border-edge-hover",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
-    "data-[state=checked]:text-primary-foreground",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:text-foreground/30",
+    "disabled:cursor-not-allowed",
+    "data-[state=checked]:bg-accent data-[state=checked]:border-accent",
+    "data-[state=checked]:text-neutral-950",
     "transition-colors",
   ].join(" "),
   {
@@ -44,7 +47,8 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         ref={ref}
         className={cn(
           checkboxVariants({ size }),
-          error && "border-3 border-error-400 hover:border-error-500",
+          error &&
+            "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
           className,
         )}
         aria-invalid={error || undefined}
