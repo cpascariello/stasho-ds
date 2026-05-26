@@ -765,17 +765,17 @@ CVA-based instrument-panel button with 7 variants, 3 sizes, icon slots, loading/
 import { Button } from "@stasho/ds/button";
 ```
 
-**Visual style:** Square corners (`rounded-none`), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) add an outer halo for "electric" energy.
+**Visual style:** Square corners (`rounded-none`), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) carry an outer halo at rest for "electric" energy. Primary and Secondary stay halo-less at rest and gain a chassis-matching outer halo on hover (per Decision #82, SKIN-PRINCIPLES § Filled chassis).
 
 #### Variants
 
 ```tsx
-<Button variant="primary">Deploy instance</Button>      {/* Deep-blue chassis, cyan LED */}
-<Button variant="secondary">Configure</Button>          {/* Neutral chassis, cyan LED */}
-<Button variant="destructive">Delete</Button>           {/* Blood-orange chassis, white LED, halo */}
-<Button variant="warning">Force restart</Button>        {/* Amber chassis, dark LED, halo */}
-<Button variant="success">Confirm</Button>              {/* Teal-green chassis, dark LED, halo */}
-<Button variant="outline">Learn more</Button>           {/* Transparent, cyan border + cyan text */}
+<Button variant="primary">Deploy instance</Button>      {/* Brand-blue chassis (both modes), cyan LED, primary-blue halo on hover */}
+<Button variant="secondary">Configure</Button>          {/* Raised light chassis (light) / neutral-900 (dark), cyan LED, neutral halo on hover */}
+<Button variant="destructive">Delete</Button>           {/* Blood-orange chassis, white LED, blood-orange halo at rest + on hover */}
+<Button variant="warning">Force restart</Button>        {/* Amber chassis, dark LED, amber halo at rest + on hover */}
+<Button variant="success">Confirm</Button>              {/* Teal-green chassis, dark LED, teal-green halo at rest + on hover */}
+<Button variant="outline">Learn more</Button>           {/* Transparent chassis, primary-blue text + border (light) / cyan (dark) */}
 <Button variant="ghost">Cancel</Button>                 {/* Pure label, no chassis, no LED */}
 ```
 
@@ -806,7 +806,7 @@ When `iconLeft` is provided on a filled variant, it replaces the LED and inherit
 <Button loading iconLeft={<PlusIcon />}>
   Saving…
 </Button>                                  {/* iconLeft is suppressed during load; chase replaces it */}
-<Button disabled>Unavailable</Button>      {/* Chassis flattens; LED dims to muted gray */}
+<Button disabled>Unavailable</Button>      {/* Chassis flattens to bg-muted (light) / neutral-900 (dark); LED keeps variant color */}
 ```
 
 #### As Link (asChild)
@@ -833,6 +833,24 @@ import { buttonVariants } from "@stasho/ds/button";
   Documentation
 </a>
 ```
+
+#### Theme behavior
+
+Buttons adapt across light and dark themes. Decision #82 governs the layering pattern (light-mode classes as the base; existing dark-mode classes re-qualified with `dark:`).
+
+| Variant | Light mode | Dark mode |
+|---|---|---|
+| Primary | brand-blue gradient (`primary-400 → primary-500`), white text, cyan LED + glow | **same gradient as light** (unified per Decision #82), cyan LED + glow |
+| Primary hover | chassis static, bevel highlight intensifies (0.55 → 0.7), outer halo `0 0 40px rgba(0,64,255,0.35)` | same chassis + bevel intensifies, outer halo `0 0 40px rgba(0,64,255,0.75)` (stronger for dark surface) |
+| Secondary | raised light gradient (`--background → --surface`), `--foreground` text, hairline edge, cyan LED | `bg-neutral-900` chassis (verbatim from shipping), white text, cyan LED |
+| Secondary hover | chassis static, outer halo `0 0 24px rgba(20,15,40,0.18)` (dark glow on light chassis) | chassis static, outer halo `0 0 32px rgba(255,255,255,0.2)` (white glow on dark chassis) |
+| Destructive / Warning / Success | unchanged across modes (same-hex rule on saturated chassis + halo) | unchanged |
+| Outline | `text-primary` (primary-blue) + primary-blue border, LED `bg-primary/35` | `text-accent` (cyan) + cyan border, LED `bg-accent/50` |
+| Ghost | `text-foreground/75`, `bg-surface` on hover | `text-white/75`, `bg-white/[0.04]` on hover |
+| Disabled (all filled variants) | `bg-muted` flat chassis, `text-foreground/30`, hairline edge | `bg-neutral-900` flat chassis, `text-white/30` |
+| Disabled Outline | `bg-muted` chassis, `text-foreground/30` | transparent (preserves shipped behavior — see BACKLOG) |
+| Focus | `outline-2 outline-accent outline-offset-2` (same in both modes) | same |
+| Loading | dual-dot chase per Decision #81 (same in both modes) | same |
 
 ### Input
 

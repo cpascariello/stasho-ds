@@ -23,49 +23,83 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-[linear-gradient(180deg,var(--color-primary-900)_0%,var(--color-primary-950)_100%)]",
-          "[box-shadow:inset_0_1px_0_rgba(0,225,250,0.4),inset_0_-1px_0_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.05)]",
-          "hover:bg-[linear-gradient(180deg,var(--color-primary-700)_0%,var(--color-primary-900)_100%)]",
-          "hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.6),inset_0_-1px_0_rgba(0,0,0,0.6),0_0_20px_rgba(0,64,255,0.4)]",
-          "disabled:bg-neutral-900 disabled:bg-none disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // unified brand-blue chassis (both modes)
+          "bg-[linear-gradient(180deg,var(--color-primary-400)_0%,var(--color-primary-500)_100%)]",
+          "[box-shadow:inset_0_1px_0_rgba(0,225,250,0.55),inset_0_-1px_0_rgba(0,0,0,0.35)]",
+          // hover: chassis static, bevel highlight intensifies, halo appears (color matches chassis-500)
+          "hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.35)]",
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.75)]",
+          "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
         ].join(" "),
         secondary: [
-          "bg-neutral-900",
-          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
-          "hover:bg-neutral-800",
-          "disabled:text-white/30",
+          // light (base): raised light chassis, dark text, hairline edge
+          "bg-[linear-gradient(180deg,var(--background)_0%,var(--surface)_100%)] text-foreground",
+          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10)]",
+          // hover: chassis static, dark/neutral halo extends chassis outward
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10),0_0_24px_rgba(20,15,40,0.18)]",
+          "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:bg-neutral-900 dark:bg-none dark:text-white",
+          "dark:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+          // dark hover: chassis static, white halo extends chassis outward
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4),0_0_32px_rgba(255,255,255,0.2)]",
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         destructive: [
           "bg-error text-error-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_24px_rgba(255,61,0,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_40px_rgba(255,61,0,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         warning: [
           "bg-warn text-warn-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_24px_rgba(255,197,61,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_40px_rgba(255,197,61,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         success: [
           "bg-success text-success-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_24px_rgba(43,213,142,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_40px_rgba(43,213,142,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         outline: [
-          "bg-transparent text-accent border border-[rgba(0,225,250,0.4)]",
-          "hover:border-accent",
-          "disabled:text-white/30 disabled:border-white/10",
+          // light (base): primary-blue text + border, flat chassis when disabled
+          "bg-transparent text-primary border border-[rgba(0,64,255,0.55)]",
+          "hover:border-primary",
+          "disabled:text-foreground/30 disabled:border-[rgba(20,15,40,0.15)] disabled:bg-muted",
+          // dark (overrides — current shipped behavior preserved)
+          "dark:text-accent dark:border-[rgba(0,225,250,0.4)]",
+          "dark:hover:border-accent",
+          "dark:disabled:text-white/30 dark:disabled:border-white/10 dark:disabled:bg-transparent",
         ].join(" "),
         ghost: [
-          "bg-transparent text-white/75 font-semibold",
-          "hover:bg-white/[0.04] hover:text-white",
-          "disabled:text-white/30 disabled:bg-transparent",
+          // light (base): foreground text, surface hover
+          "bg-transparent text-foreground/75 font-semibold",
+          "hover:bg-surface hover:text-foreground",
+          "disabled:text-foreground/30 disabled:bg-transparent",
+          // dark (overrides — current shipped behavior)
+          "dark:text-white/75",
+          "dark:hover:bg-white/[0.04] dark:hover:text-white",
+          "dark:disabled:text-white/30 dark:disabled:bg-transparent",
         ].join(" "),
       },
       size: {
@@ -111,7 +145,7 @@ const ledColorClass: Record<Variant, string> = {
   destructive: "bg-white text-white [box-shadow:0_0_8px_currentColor]",
   warning: "bg-warn-foreground text-warn-foreground",
   success: "bg-success-foreground text-success-foreground",
-  outline: "bg-accent/50 text-accent",
+  outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
   // ghost: LED is never rendered for ghost, so this entry is a sentinel.
   ghost: "",
 };
@@ -123,8 +157,8 @@ const iconGlowClass: Record<Variant, string> = {
   destructive: "text-white",
   warning: "text-warn-foreground",
   success: "text-success-foreground",
-  outline: "text-accent [filter:drop-shadow(0_0_4px_var(--accent))]",
-  ghost: "text-white/60",
+  outline: "text-primary dark:text-accent [filter:drop-shadow(0_0_4px_currentColor)]",
+  ghost: "text-foreground/60 dark:text-white/60",
 };
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
