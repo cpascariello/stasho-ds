@@ -58,22 +58,34 @@ const buttonVariants = cva(
           "bg-error text-error-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_24px_rgba(255,61,0,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_40px_rgba(255,61,0,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         warning: [
           "bg-warn text-warn-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_24px_rgba(255,197,61,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_40px_rgba(255,197,61,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         success: [
           "bg-success text-success-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_24px_rgba(43,213,142,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_40px_rgba(43,213,142,0.75)]",
-          "disabled:bg-neutral-900 disabled:text-white/30",
-          "disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         outline: [
           // light (base): primary-blue text + border, flat chassis when disabled
