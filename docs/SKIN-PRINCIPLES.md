@@ -32,8 +32,8 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 ### Same-hex rule
 **Rule:** Accent tokens (`--primary`, `--accent`, `--success`, `--warn`, `--error`) hold the same hex value in `:root` and `.theme-dark`.
 **Why:** Saturated colors at mid-to-low lightness read identically across modes (Radix / Geist convention). Drift between dark and light variants creates a system that feels like two skins glued together.
-**How:** Only surface/background/foreground tokens differ between modes. Never create `--primary-dark` / `--primary-light` siblings. If accent contrast against light surfaces is an AA risk for body text, use the existing primary scale (`text-primary-700 dark:text-primary-300`), not a different hex.
-**Source:** Decisions #77, #78.
+**How:** Only surface/background/foreground tokens differ between modes. Never create `--primary-dark` / `--primary-light` siblings. The rule applies to **filled chassis fills and glows** — Primary's chassis uses the same gradient (`primary-400 → primary-500`) in both modes, and saturated semantic chassis hold their hex. It does NOT bind **outline chrome** (border + text), which can shift to a contrast-paired accent in light mode (e.g., Button Outline uses `text-accent`/`border-accent` in dark mode but `text-primary`/`border-primary` in light, per Decision #82). For body text where AA contrast against light surfaces is a risk, use a scale step (`text-primary-700 dark:text-primary-300`) rather than a different hex.
+**Source:** Decisions #77, #78, #82.
 
 ### Semantic color mapping
 **Rule:** Each accent has one job. Don't redirect them.
@@ -176,8 +176,10 @@ These are the patterns we've discovered while building components for this skin.
 **Source:** Button redesign spec.
 
 ### Hover intensifies, doesn't repaint
-**Rule:** Hover brightens the existing chassis gradient and grows the LED/halo glow. It does NOT shift the chassis to a different color.
+**Rule:** Hover keeps the chassis static and lets the bevel / LED / halo carry the change. It does NOT shift the chassis to a different color.
 **Why:** Repainting on hover reads as "different state". Intensifying on hover reads as "same state, but the system noticed you". The instrument metaphor is "the indicator gets brighter when you reach for it", not "the indicator changes color when you reach for it".
+**How:** For filled variants (Primary, Secondary), the chassis gradient stays at its resting steps. The inset bevel highlight strengthens (e.g., cyan top from 0.55 → 0.7), and a chassis-matching outer halo appears (see § Filled chassis below). For semantic variants (destructive / warning / success), the existing rest-state outer halo grows from 24px → 40px and intensifies from 0.5 → 0.75 opacity.
+**Source:** Decision #82.
 
 ### Loading pulses, never spins
 **Rule:** Loading state animates the existing LED (or icon-as-LED) with a glow/opacity pulse. No spinner swap.
@@ -190,18 +192,21 @@ These are the patterns we've discovered while building components for this skin.
 **Why:** A gradient on a saturated color reads muddy. A solid color on a saturated chassis reads flat. A solid color with an outer halo reads as glowing-hot — exactly the affect those states want.
 **Source:** Button redesign spec (option C from `semantic-brighter.html`).
 
-### Filled chassis = bevel + cyan LED (no halo)
-**Rule:** Primary and secondary chassis use bevel + cyan LED. They do NOT carry an outer halo.
-**Why:** If primary glowed, every screen would be drowned in cyan halos. The halo is reserved for the saturated semantic chassis where it doubles as the "alarm light is on" signal.
-**Source:** Button redesign spec.
+### Filled chassis = bevel + cyan LED at rest, halo on hover
+**Rule:** Primary and secondary chassis use bevel + cyan LED at rest. They do NOT carry an outer halo at rest. On hover, a chassis-matching outer halo appears — primary-blue (`#0040FF`) on Primary, neutral (dark on light, white on dark) on Secondary. The halo is the hover intensification signal.
+**Why:** If filled variants glowed continuously, every screen would be drowned in halos and the saturated-semantic "alarm light is on" reading would weaken. Reserving the halo for hover gives clear feedback ("the system noticed you") without continuous visual noise. The chassis stays static during hover per § Motion → "Hover intensifies, doesn't repaint" — the halo carries all the change.
+**How:** Primary hover halo: `0 0 40px rgba(0,64,255,0.35)` in light, `0 0 40px rgba(0,64,255,0.75)` in dark. Secondary hover halo: `0 0 24px rgba(20,15,40,0.18)` in light (dark glow on light chassis), `0 0 32px rgba(255,255,255,0.2)` in dark (white glow on dark chassis).
+**Source:** Decisions #80, #82.
 
 ### Quiet variants are quiet
 **Rule:** Outline and ghost variants drop both the halo AND the LED glow (outline keeps a dim disc, ghost has nothing). No glow, no halo, no chassis.
 **Why:** Quiet variants are for lower-emphasis actions. Giving them any glow puts them on the same visual plane as filled controls and breaks the hierarchy.
 
 ### Disabled flattens
-**Rule:** Disabled chassis collapse to neutral dark gray, LED dims to ~25% opacity with no glow, label drops to muted white. `cursor: not-allowed`.
-**Why:** The disabled state should look semantically broken — no light, no signal, no temperature. If you can squint and still see a primary-blue chassis, the disabled state is wrong.
+**Rule:** Disabled chassis collapse to a neutral gray matching the mode (`bg-muted` in light, `bg-neutral-900` in dark). Label drops to `text-foreground/30` (light) or `text-white/30` (dark). LED keeps its variant color. `cursor: not-allowed`.
+**Why:** The disabled state should look semantically broken — no light, no signal, no temperature. The flat neutral chassis carries this on its own; trying to also dim the LED tends to make it disappear at 4–6px rather than read as "off".
+**How:** All variants (including Outline in light mode) flatten to the muted chassis when disabled. Outline disabled in dark mode preserves shipped behavior (no chassis change — a deferred backlog item).
+**Source:** Decision #82.
 
 ---
 

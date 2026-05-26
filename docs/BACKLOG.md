@@ -98,6 +98,12 @@ Ideas and scope creep captured for later consideration.
 **Description:** Switch accent-colored body text from raw `text-accent` to a contrast-aware scale step (`text-accent-700 dark:text-accent-300`) once a real cyan-text moment lands in a consumer app. The same-hex rule is right for fills/borders/indicators; inline body text needs a darker step on light surfaces for AA contrast.
 **Priority:** Low
 
+### 2026-05-26 — Dark-mode Outline disabled chassis
+
+**Source:** Identified during Button light-mode chunk (Decision #82)
+**Description:** Outline disabled in dark mode keeps a transparent chassis (no `dark:disabled:bg-X`) while every other variant flattens to `bg-neutral-900`. Inconsistent with "Disabled flattens" principle. Fix by adding `dark:disabled:bg-neutral-900` to the Outline variant — small dark-mode behavior change, kept out of the light-mode chunk scope.
+**Priority:** Low
+
 ---
 
 ## Completed / Rejected
@@ -142,5 +148,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-04 — Tabs `maxVisible` prop (count-based cap on visible tab count, stricter-wins composition with `overflow="collapse"`)
 - [x] 2026-05-26 — Abyssal Void skin (deep purple + cyan + teal + amber + blood-orange, same-hex rule, 0/0/2/4 radius, Anybody/Inter/Departure Mono)
 - [x] 2026-05-26 — Button redesign as instrument-panel control (LED signature, 7 variants, 3 sizes, sentence case Inter, loading via dual-dot chase)
+- [x] 2026-05-26 — Button light-mode treatment + dark-mode Primary unification (Decision #82: brand-blue Primary across both modes, raised-light Secondary in light, primary-blue Outline in light, foreground-text Ghost in light, `bg-muted` disabled chassis in light for all filled variants including destructive/warning/success, chassis-static + halo-on-hover for Primary and Secondary)
 
 </details>
