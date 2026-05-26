@@ -98,6 +98,21 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **Why:** Inter's default 1.5 line-height creates a line-box taller than cap-height, leaving a small glyph (4–6px LED, 11–13px icon) floating relative to lowercase x-height.
 **How:** Apply `line-height: 1` on the control + wrap the label in a flex span so vertical centering operates against the actual text bounds, not the inflated line-box.
 
+### Anybody is for headings only
+**Rule:** Page titles, section headers, dialog titles. Never on labels, chips, links, controls, tab triggers, or anywhere a user reads the text as part of operating the UI.
+**Why:** Anybody is editorial-industrial. Applied to labels it reads as a poster headline grafted onto a control surface — the system feels "themed" rather than coherent.
+**Source:** Decision #83.
+
+### Departure Mono is the telemetry voice
+**Rule:** Status chips, column headers, numeric indices, version strings, ID strings, telemetry micro-labels. Force uppercase via CSS at the component level where the role is unambiguous (Badge, Alert variant label) — apply `uppercase` utility selectively where consumer strings might want mixed case (e.g., Table headers when consumers pass already-uppercase strings).
+**Why:** Departure Mono's pixel-CRT proportions carry "this is system-emitted data" in a way Inter cannot. Forcing uppercase keeps the vocabulary consistent across consumer surfaces without depending on usage discipline.
+**Source:** Decision #83.
+
+### No italic on interactive labels
+**Rule:** Italic stays out of buttons, chips, links, headers, tab triggers, breadcrumb items, and badges. Italic is allowed on running prose where the register adds something (Alert message body).
+**Why:** Italic on a label reads as "secondary / supporting" — wrong register for "press this" or "current location." The first generation of the skin used italic as decoration; the new generation drops it from labels and keeps it for prose.
+**Source:** Decision #83.
+
 ---
 
 ## 4 · Geometry

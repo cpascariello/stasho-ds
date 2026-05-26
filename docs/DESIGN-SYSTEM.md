@@ -41,7 +41,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Need | Use | Not |
 |------|-----|-----|
 | Inline health indicator next to text | **StatusDot** — compact, semantic colors, pulse on healthy | Badge — too large for inline status |
-| Categorical label (count, type, state) | **Badge** — gradient fills, icon slots, uppercase heading font | StatusDot — no text content |
+| Categorical label (count, type, state) | **Badge** — gradient fills, icon slots, Departure Mono UC label (CSS-forced) | StatusDot — no text content |
 | Dismissible banner message | **Alert** — auto-dismiss timer, progress bar, semantic variants | Dialog — too interruptive for status messages |
 | Blocking user decision | **Dialog** — overlay, focus trap, `locked` mode for forced choice | Alert — can be ignored or dismissed |
 | Passive extra info on hover | **Tooltip** — non-blocking, hover/focus triggered | Dialog — too heavy for supplementary info |
@@ -655,7 +655,7 @@ Dismissible status banner with 4 semantic variants, optional title, auto-dismiss
 import { Alert } from "@aleph-front/ds/alert";
 ```
 
-**Visual style:** Full 1px variant-colored border, gradient background at 10% opacity over page background, `font-heading` uppercase label.
+**Visual style:** Full 1px variant-colored border, gradient background at 10% opacity over page background, Departure Mono UC tracking-wider variant label.
 
 #### Variants
 
@@ -749,13 +749,13 @@ import {
 | Part | Element | Role |
 |------|---------|------|
 | `Breadcrumb` | `<nav>` | Wrapper with `aria-label="Breadcrumb"` |
-| `BreadcrumbList` | `<ol>` | Ordered list with flex layout, font-heading uppercase styling |
+| `BreadcrumbList` | `<ol>` | Ordered list with flex layout, Inter Medium sentence case |
 | `BreadcrumbItem` | `<li>` | List item wrapper |
 | `BreadcrumbLink` | `<a>` / Slot | Navigation link with hover color transition |
 | `BreadcrumbSeparator` | `<li>` | Visual separator (`/` default), `aria-hidden="true"` |
 | `BreadcrumbPage` | `<span>` | Current page with `aria-current="page"`, muted color |
 
-**Visual style:** `font-heading font-extrabold italic uppercase text-xs` on the list. Links use `text-foreground` with `hover:text-primary-600` (dark: `primary-400`). Separators and current page use `text-muted`. No CVA — no variants.
+**Visual style:** `font-sans font-medium text-sm` on the list (Inter Medium sentence case). Links use `text-foreground` with `hover:text-primary-600` (dark: `primary-400`). Separators and current page use `text-muted`. No CVA — no variants.
 
 ### Button
 
@@ -1024,7 +1024,7 @@ import { Select } from "@aleph-front/ds/select";
 
 ### Badge
 
-Semantic label for status, counts, and categories. Two fill modes (solid gradient, outline), optional icon slots, uppercase heading font.
+Semantic label for status, counts, and categories. Two fill modes (solid gradient, outline), optional icon slots, Departure Mono UC label face with CSS-forced uppercase.
 
 ```tsx
 import { Badge } from "@aleph-front/ds/badge";
@@ -1073,7 +1073,7 @@ import { badgeVariants } from "@aleph-front/ds/badge";
 <span className={badgeVariants({ fill: "outline", variant: "success", size: "sm" })}>Active</span>
 ```
 
-**Visual style:** `font-heading font-extrabold italic uppercase`, `rounded-md` (6px). Solid fill uses gradient CSS utility classes (`gradient-fill-success`, etc.) from tokens.css. Outline fill uses `border` + token-scale border colors + subtle `/20` opacity backgrounds in dark mode. `default` variant uses `dark:text-white` for contrast on the dark `gradient-info` endpoint.
+**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-md` (6px). Solid fill uses gradient CSS utility classes (`gradient-fill-success`, etc.) from tokens.css. Outline fill uses `border` + token-scale border colors + subtle `/20` opacity backgrounds in dark mode. `default` variant uses `dark:text-white` for contrast on the dark `gradient-info` endpoint.
 
 ### Card
 
@@ -1218,7 +1218,7 @@ Controlled pagination with fixed-slot layout, configurable sibling count, first/
 import { Pagination } from "@aleph-front/ds/pagination";
 ```
 
-**Visual style:** Rounded page buttons (`size-8 rounded-full`), `font-heading font-bold`, active page highlighted with `bg-primary-400` (dark: `bg-primary-600`). Caret icons from Phosphor.
+**Visual style:** Rounded page buttons (`size-8 rounded-full`), Departure Mono text-sm page numbers and ellipsis, active page highlighted with `bg-primary-400` (dark: `bg-primary-600`). Caret icons from Phosphor.
 
 #### Usage
 
@@ -1333,7 +1333,7 @@ const columns: Column<Node>[] = [
 <Table columns={columns} data={nodes} keyExtractor={(r) => r.id} activeKey={selectedId} />
 ```
 
-**Visual style:** Alternating rows (`even:bg-muted/30`), hover highlight (`hover:bg-muted/50`), clickable rows with `cursor-pointer` and left inset border on hover. Header row `bg-muted/50 text-muted-foreground text-sm font-semibold uppercase tracking-wide`.
+**Visual style:** Alternating rows (`even:bg-muted/30`), hover highlight (`hover:bg-muted/50`), clickable rows with `cursor-pointer` and left inset border on hover. Header row uses Departure Mono UC tracking-widest 11px (`font-mono uppercase tracking-widest text-[11px] text-muted-foreground`).
 
 **Keyboard accessibility:** Sortable headers are focusable (`tabIndex={0}`) and respond to Enter/Space. Clickable rows are focusable and respond to Enter. Headers include `aria-sort` (`ascending`/`descending`/`none`). Active row has `aria-current="true"`.
 
@@ -1469,7 +1469,7 @@ Pass `size="sm"` to `TabsList` for a compact variant. Works with both underline 
 
 | | md (default) | sm |
 |---|---|---|
-| **Underline trigger** | `px-4 py-3 text-lg` | `px-3 py-1.5 text-sm` |
+| **Underline trigger** | `px-4 py-3 text-sm` | `px-3 py-1.5 text-sm` |
 | **Underline border** | `border-b-4`, indicator `h-1` | `border-b-2`, indicator `h-0.5` |
 | **Pill trigger** | `px-5 py-1.5 text-sm` | `px-3 py-1 text-xs` |
 | **Pill container** | `p-1` | `p-0.5` |
@@ -1515,7 +1515,7 @@ When many tabs exceed the available width, `overflow="collapse"` on `TabsList` a
 
 `maxVisible` activates the same overflow code path as `overflow="collapse"` — passing it alone is enough; you don't need to also pass `overflow`. When both are set, the **stricter** limit wins: visible = `min(widthFit, maxVisible)`. Hidden tabs go into the dropdown either way.
 
-**Styling (underline):** `font-heading font-bold text-lg` triggers. 4px baseline at 40% `edge` opacity, 4px solid primary sliding indicator. Active/hover text uses `primary-600` / `dark:primary-400`.
+**Styling (underline):** `font-sans font-semibold text-sm` triggers (Inter Semibold sentence case). 4px baseline at 40% `edge` opacity, 4px solid primary sliding indicator. Active/hover text uses `primary-600` / `dark:primary-400`.
 
 **Styling (pill):** Rounded container `bg-muted` (brand-tinted). Active indicator `bg-primary-600` / `dark:bg-primary-500`. Triggers `text-muted-foreground` inactive, `text-white` active, compact `px-5 py-1.5 text-sm`.
 
