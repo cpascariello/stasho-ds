@@ -100,19 +100,19 @@
   --color-base-950: oklch(0.10 0.002 273);  /* #07080a void / background */
 
   /* Gradients */
-  --gradient-main-base: linear-gradient(90deg, #141421 8.24%, #5100CD 71.81%);
-  --gradient-main-dark: linear-gradient(90deg, #1C1C32 8.24%, #5100CD 71.81%);
-  --gradient-lime: linear-gradient(90deg, #D6FF00 27.88%, #F5F7DB 100%);
-  --gradient-success: linear-gradient(90deg, #36D846 0%, #63E570 100%);
-  --gradient-warning: linear-gradient(90deg, #FFE814 0%, #FBAE18 100%);
-  --gradient-error: linear-gradient(90deg, #FFAC89 0%, #DE3668 90.62%);
-  --gradient-info: linear-gradient(90deg, #C8ADF0 22.66%, #5100CD 244.27%);
+  --gradient-main-base: linear-gradient(90deg, #1A0440 8.24%, #2A0563 71.81%);
+  --gradient-main-dark: linear-gradient(90deg, #0a0312 8.24%, #2A0563 71.81%);
+  --gradient-accent: linear-gradient(90deg, #00B8D4 0%, #00E1FA 100%);
+  --gradient-success: linear-gradient(90deg, #2BD58E 0%, #5DDFAB 100%);
+  --gradient-warning: linear-gradient(90deg, #FFE14D 0%, #FFC53D 100%);
+  --gradient-error: linear-gradient(90deg, #FF6A3D 0%, #FF3D00 100%);
+  --gradient-info: linear-gradient(90deg, #00E1FA 22.66%, #2A0563 244.27%);
   --gradient-destructive: var(--gradient-error);
 
-  /* Shadows */
-  --shadow-brand-sm: 0px 4px 4px oklch(0.372 0.254 285.48 / 0.15);
-  --shadow-brand: 0px 4px 24px oklch(0.372 0.254 285.48 / 0.1);
-  --shadow-brand-lg: 0px 4px 48px oklch(0.372 0.254 285.48 / 0.25);
+  /* Shadows (anchored on primary-800 oklch(0.27 0.180 270)) */
+  --shadow-brand-sm: 0px 4px 4px oklch(0.27 0.180 270 / 0.20);
+  --shadow-brand: 0px 4px 24px oklch(0.27 0.180 270 / 0.15);
+  --shadow-brand-lg: 0px 4px 48px oklch(0.27 0.180 270 / 0.30);
 
   /* Fonts */
   --font-heading: "rigid-square", ui-sans-serif, system-ui, sans-serif;
