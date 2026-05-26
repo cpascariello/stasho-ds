@@ -14,6 +14,7 @@ const checkboxVariants = cva(
     "disabled:border-edge/50",
     "disabled:text-foreground/30",
     "disabled:cursor-not-allowed",
+    "disabled:data-[state=checked]:text-foreground/30",
     "data-[state=checked]:bg-accent data-[state=checked]:border-accent",
     "data-[state=checked]:text-neutral-950",
     "transition-colors",
