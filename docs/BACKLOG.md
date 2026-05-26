@@ -150,5 +150,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-26 — Button redesign as instrument-panel control (LED signature, 7 variants, 3 sizes, sentence case Inter, loading via dual-dot chase)
 - [x] 2026-05-26 — Button light-mode treatment + dark-mode Primary unification (Decision #82: brand-blue Primary across both modes, raised-light Secondary in light, primary-blue Outline in light, foreground-text Ghost in light, `bg-muted` disabled chassis in light for all filled variants including destructive/warning/success, chassis-static + halo-on-hover for Primary and Secondary)
 - [x] 2026-05-26 — Typography reset across 6 components (Decision #83: Alert variant label, Badge, Pagination numbers, Table headers → Departure Mono UC; Breadcrumb, Tabs triggers → Inter Semibold sentence case; Anybody removed from all interactive label roles)
+- [x] 2026-05-27 — Text-input chassis reset (Decision #84: flat-slot chassis for Input/Textarea/Select/Combobox/MultiSelect — `bg-background dark:bg-surface` + 1px `border-edge`, cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled; FormField switched from `text-error-600` to semantic `text-error`)
 
 </details>

@@ -7,13 +7,19 @@ import { cn } from "@ac/lib/cn";
 const triggerVariants = cva(
   [
     "inline-flex items-center justify-between",
-    "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-none",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "ring-0 transition-colors",
+    "w-full font-sans text-foreground",
+    "bg-background dark:bg-surface",
+    "border border-edge rounded-none",
+    "hover:border-edge-hover",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:text-foreground/30",
+    "disabled:cursor-not-allowed",
+    "transition-colors",
     "data-[placeholder]:text-muted-foreground",
+    "disabled:data-[placeholder]:text-muted-foreground/50",
   ].join(" "),
   {
     variants: {
@@ -70,7 +76,8 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
           aria-invalid={error || undefined}
           className={cn(
             triggerVariants({ size }),
-            error && "border-3 border-error-400 hover:border-error-500",
+            error &&
+              "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
             className,
           )}
         >

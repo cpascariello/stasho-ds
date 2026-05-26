@@ -223,6 +223,12 @@ These are the patterns we've discovered while building components for this skin.
 **How:** All variants (including Outline in light mode) flatten to the muted chassis when disabled. Outline disabled in dark mode preserves shipped behavior (no chassis change — a deferred backlog item).
 **Source:** Decision #82.
 
+### Flat slot for typed input
+**Rule:** Text-entry controls (Input, Textarea, Select trigger, Combobox trigger, MultiSelect trigger) use a flat fill (`--background` in light, `--surface` in dark) with a 1px `--edge` hairline border. No bevel, no chassis gradient — they're the inverse of Button: a slot, not a switch.
+**Why:** The instrument-panel metaphor has Button as depth and Input as plane — Button's bevel and LED carry the "switch you press" reading, Input is the "slot you put data into" defined by its hairline. Bevels on inputs would double the visual weight on dense forms and compete with Button's bevel for the eye's "this is interactive hardware" signal.
+**How:** Resting chassis = `--background` (light) / `--surface` (dark). Focus = hairline swaps to `--accent` (or `--accent-700` in light for AA). Error = hairline swaps to `--error` + helper text in `--error`, value stays foreground. Disabled = chassis sinks one step (light → `--muted`, dark → `--background`) + value drops to 30% opacity + hairline drops to half-`--edge` alpha. Hover = none for text inputs; hairline brightens to `--edge-hover` for dropdown triggers (Select / Combobox / MultiSelect). No halo at rest, on focus, or on error.
+**Source:** Decision #84.
+
 ---
 
 ## 7 · Adding to these principles

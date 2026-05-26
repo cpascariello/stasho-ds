@@ -867,15 +867,17 @@ import { Input } from "@aleph-front/ds/input";
 
 **Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
 
-**Visuals:** Borderless flat fill (`bg-primary-100 dark:bg-base-700`). `rounded-full` pill shape. Distinguishes from page background via fill contrast alone.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none` (brutalist per skin vocabulary). No bevel, no gradient. Hover = no change (I-beam affordance is sufficient for pure text inputs).
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light, for AA on white) / `border-accent` (dark). No ring, no halo.
 
-**Focus ring:** Flush `ring-3` in `primary-500`, animated via `box-shadow` transition. No offset.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`. Value stays `text-foreground`.
+
+**Disabled:** Chassis sinks one step on the surface ladder (`bg-muted` light / `bg-background` dark). Hairline drops to `border-edge/50`. Value drops to `text-foreground/30`, placeholder to `text-muted-foreground/50`. `cursor-not-allowed`.
 
 ### Textarea
 
-Multi-line text input. Same API as Input, `rounded-2xl`, borderless flat fill, vertical resize.
+Multi-line text input. Same API as Input, `rounded-none`, flat-slot chassis, vertical resize.
 
 ```tsx
 import { Textarea } from "@aleph-front/ds/textarea";
@@ -886,6 +888,8 @@ import { Textarea } from "@aleph-front/ds/textarea";
 ```
 
 **Defaults:** `rows={4}`, `resize-y`, `size="md"`
+
+**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-none`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error` and keeps it through hover and focus (`hover:border-error focus-visible:border-error`). Disabled chassis sinks one step (`bg-muted` light, `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, placeholder to `text-muted-foreground/50`, cursor to `not-allowed`.
 
 ### FormField
 
@@ -907,6 +911,8 @@ import { Input } from "@aleph-front/ds/input";
 **Props:** `label` (required), `required`, `helperText`, `error`, `className`
 
 **Accessibility:** Auto-generates `id`, wires `htmlFor`, `aria-describedby`, and `role="alert"` on errors. When `error` is present, auto-injects `error={true}` and `aria-invalid={true}` into the child input via `cloneElement` — no need to pass `error` to both FormField and Input.
+
+**Visual style:** Required asterisk (`*`) and error helper text use the semantic `--error` token (`text-error`). Previously referenced `text-error-600` — now decoupled from scale steps so future palette changes don't affect the error signal.
 
 ### Checkbox
 
@@ -1016,11 +1022,15 @@ import { Select } from "@aleph-front/ds/select";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Borderless flat fill, matching Input/Textarea. `rounded-full` pill shape.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance).
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
+
+**Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
 
 ### Badge
 
@@ -1571,13 +1581,17 @@ import { Combobox } from "@aleph-front/ds/combobox";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Borderless flat fill, matching Input/Textarea/Select. `rounded-full` pill shape. Chevron rotates on open.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Chevron rotates on open.
+
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
 **Search:** Type to filter options by label. `emptyMessage` shown when no options match (default: "No results found.").
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
 
 ### Slider
 
@@ -1651,11 +1665,15 @@ import { MultiSelect } from "@aleph-front/ds/multi-select";
 
 **Selection:** Clicking an item toggles it (adds or removes). Dropdown stays open after selection for multi-toggle. Checkbox visuals on each item indicate selected state.
 
-**Visuals:** Borderless flat fill, `rounded-2xl`. Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected items show filled checkbox with check icon.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
+
+**Disabled:** Uses `aria-disabled:` variants (trigger is a `<div role="button">`, not a native `<input>`). Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected items show filled checkbox with check icon.
 
 ### ProgressBar
 
