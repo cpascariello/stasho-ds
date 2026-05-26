@@ -9,7 +9,7 @@ const triggerVariants = cva(
   [
     "inline-flex items-center justify-between",
     "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-full",
+    "border-0 rounded-none",
     "focus-visible:outline-none focus-visible:ring-3",
     "focus-visible:ring-primary-500",
     "disabled:opacity-50 disabled:pointer-events-none",
@@ -105,7 +105,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
           <Popover.Content
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
-              "overflow-hidden rounded-2xl",
+              "overflow-hidden rounded-none",
               "bg-surface border border-edge shadow-brand",
             )}
             sideOffset={4}
@@ -134,7 +134,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                       setOpen(false);
                     }}
                     className={cn(
-                      "relative flex items-center rounded-xl px-4 py-2",
+                      "relative flex items-center rounded-none px-4 py-2",
                       "text-sm text-foreground cursor-pointer select-none",
                       "outline-none",
                       "data-[selected=true]:bg-muted",
