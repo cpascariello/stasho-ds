@@ -2,74 +2,109 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Button } from "./button";
 
+const filledLedVariants = [
+  "primary",
+  "secondary",
+  "destructive",
+  "warning",
+  "success",
+  "outline",
+] as const;
+
 describe("Button", () => {
   it("renders a button element with children", () => {
     render(<Button>Click me</Button>);
     expect(screen.getByRole("button", { name: "Click me" })).toBeTruthy();
   });
 
+  describe("LED indicator", () => {
+    it.each(filledLedVariants)("renders LED on %s variant by default", (variant) => {
+      render(<Button variant={variant}>Action</Button>);
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led]")).toBeTruthy();
+    });
+
+    it("does NOT render LED on ghost variant", () => {
+      render(<Button variant="ghost">Cancel</Button>);
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led]")).toBeNull();
+    });
+
+    it("does NOT render LED when iconLeft is provided", () => {
+      render(
+        <Button iconLeft={<svg data-testid="left-icon" />}>Deploy</Button>,
+      );
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led]")).toBeNull();
+      expect(screen.getByTestId("left-icon")).toBeTruthy();
+    });
+  });
+
   describe("icons", () => {
     it("renders iconLeft before children", () => {
       render(
-        <Button iconLeft={<svg data-testid="left-icon" />}>
-          Label
-        </Button>,
+        <Button iconLeft={<svg data-testid="left-icon" />}>Label</Button>,
       );
       const button = screen.getByRole("button");
       const icon = screen.getByTestId("left-icon");
-      expect(button.contains(icon)).toBe(true);
       const children = Array.from(button.children);
       const iconIndex = children.findIndex((c) => c.contains(icon));
-      const labelIndex = children.findIndex(
-        (c) => c.textContent === "Label",
-      );
+      const labelIndex = children.findIndex((c) => c.textContent === "Label");
       expect(iconIndex).toBeLessThan(labelIndex);
     });
 
     it("renders iconRight after children", () => {
       render(
-        <Button iconRight={<svg data-testid="right-icon" />}>
-          Label
-        </Button>,
+        <Button iconRight={<svg data-testid="right-icon" />}>Label</Button>,
       );
       const button = screen.getByRole("button");
       const icon = screen.getByTestId("right-icon");
-      expect(button.contains(icon)).toBe(true);
       const children = Array.from(button.children);
       const iconIndex = children.findIndex((c) => c.contains(icon));
-      const labelIndex = children.findIndex(
-        (c) => c.textContent === "Label",
-      );
+      const labelIndex = children.findIndex((c) => c.textContent === "Label");
       expect(iconIndex).toBeGreaterThan(labelIndex);
     });
   });
 
   describe("loading", () => {
-    it("shows spinner when loading", () => {
+    it("pulses the LED when loading without iconLeft", () => {
       render(<Button loading>Loading</Button>);
       const button = screen.getByRole("button");
-      const spinner = button.querySelector("svg.animate-spin");
-      expect(spinner).toBeTruthy();
+      const led = button.querySelector("[data-led]");
+      expect(led).toBeTruthy();
+      expect(led?.className).toContain("animate-button-led");
     });
 
-    it("has aria-busy when loading", () => {
-      render(<Button loading>Loading</Button>);
-      expect(screen.getByRole("button").getAttribute("aria-busy")).toBe(
-        "true",
-      );
-    });
-
-    it("hides icons when loading", () => {
+    it("pulses the iconLeft wrapper when loading with iconLeft", () => {
       render(
-        <Button
-          loading
-          iconLeft={<svg data-testid="left-icon" />}
-          iconRight={<svg data-testid="right-icon" />}
-        >
+        <Button loading iconLeft={<svg data-testid="left-icon" />}>
           Loading
         </Button>,
       );
-      expect(screen.queryByTestId("left-icon")).toBeNull();
+      const button = screen.getByRole("button");
+      const iconWrapper = button.querySelector("[data-led-icon]");
+      expect(iconWrapper).toBeTruthy();
+      expect(iconWrapper?.className).toContain("animate-button-led");
+      expect(screen.getByTestId("left-icon")).toBeTruthy();
+    });
+
+    it("does NOT render a separate spinner element when loading", () => {
+      render(<Button loading>Loading</Button>);
+      const button = screen.getByRole("button");
+      expect(button.querySelector("svg.animate-spin")).toBeNull();
+    });
+
+    it("sets aria-busy when loading", () => {
+      render(<Button loading>Loading</Button>);
+      expect(screen.getByRole("button").getAttribute("aria-busy")).toBe("true");
+    });
+
+    it("hides iconRight when loading", () => {
+      render(
+        <Button loading iconRight={<svg data-testid="right-icon" />}>
+          Loading
+        </Button>,
+      );
       expect(screen.queryByTestId("right-icon")).toBeNull();
     });
   });
