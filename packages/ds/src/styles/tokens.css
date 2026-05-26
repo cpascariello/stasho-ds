@@ -352,3 +352,24 @@
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.15); }
 }
+
+/* ── Button LED pulse (loading state) ─────────── */
+
+@keyframes button-led-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px currentColor;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px currentColor, 0 0 24px color-mix(in oklch, currentColor 50%, transparent);
+  }
+}
+
+.animate-button-led {
+  animation: button-led-pulse 1.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-button-led { animation: none; }
+}
