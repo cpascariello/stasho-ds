@@ -229,7 +229,7 @@ docs/plans/                   # Design and implementation plans
 
 - npm workspaces monorepo with source-level subpath exports (`@stasho/ds/*`)
 - Three-layer token system (OKLCH color scales 50–950, semantic tokens incl. `--surface` for elevated backgrounds, Tailwind mapping)
-- Abyssal Void skin: deep purple `#2A0563` primary + cyan `#00E1FA` accent + teal-green `#2BD58E` success + amber `#ffc53d` warn + blood-orange `#FF3D00` error, same hex in both modes (Radix step-9 convention)
+- Abyssal Void skin: electric blue `#0040FF` primary + cyan `#00E1FA` accent + teal-green `#2BD58E` success + amber `#ffc53d` warn + blood-orange `#FF3D00` error, same hex in both modes (Radix step-9 convention)
 - Observatory Mono dark surface ladder (`#07080a → #161718`), faintly violet-tinted off-white light ladder (hue 270)
 - Radius vocabulary 0/0/2/4 — `full` reserved for StatusDot, Slider, ProgressBar tracks, Switch thumb, MultiSelect chips, Stepper indicators, Tabs pill variant
 - Typography: Anybody (headings), Inter (body), Departure Mono (telemetry/labels — self-hosted)
@@ -252,8 +252,7 @@ docs/plans/                   # Design and implementation plans
 - Breadcrumb component with composable 6-part API (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage), `asChild` via Radix Slot for framework routing, semantic nav/ol/li markup, custom separator support, hover color transition
 - Badge component with 5 semantic variants (default/success/warning/error/info), 2 fill modes (solid gradient/outline), 2 sizes, optional iconLeft/iconRight slots, uppercase heading font
 - StatusDot component with 5 health status variants (healthy/degraded/error/offline/unknown), pulse animation on healthy, 2 sizes, built-in role="status" and auto aria-label
-- Card component with 3 variants (default/noise/ghost), 3 padding sizes, optional title prop — noise variant uses `fx-grain-lg`
-- FX Grain texture utilities (`fx-grain-xs/sm/md/lg`) — SVG feTurbulence purple dot overlays with radial gradient backgrounds, 4 intensity levels, dark mode support, all colors from DS tokens
+- Card component with 2 variants (default/ghost), 3 padding sizes, optional title prop
 - Skeleton loading placeholder with consumer-driven sizing via className
 - Table component with generic typing, sortable columns (right-aligned columns render the sort icon to the left of header text via inline-flex + flex-row-reverse so text stays flush with body cell right edge), keyboard-accessible sorting (Enter/Space), aria-sort, alternating rows, hover, row click (keyboard Enter), activeKey row highlight (aria-current), emptyState prop, controlled-sort mode via `sortColumn`/`sortDirection`/`onSortChange` (skip internal sorting and let the parent pre-sort `data` — required when paginating outside the table)
 - Tooltip component wrapping Radix UI with DS styling, dark mode contrast fix (composable API: Provider, Root, Trigger, Content)

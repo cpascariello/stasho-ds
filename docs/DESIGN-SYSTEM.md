@@ -12,7 +12,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Badge](#badge) | Semantic label for status, counts, categories | `@aleph-front/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@aleph-front/ds/breadcrumb` |
 | [Button](#button) | Action trigger with 6 variants, 4 sizes, gradient fills | `@aleph-front/ds/button` |
-| [Card](#card) | Content container with 3 variants (default/noise/ghost) | `@aleph-front/ds/card` |
+| [Card](#card) | Content container with 2 variants (default/ghost) | `@aleph-front/ds/card` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@aleph-front/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@aleph-front/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@aleph-front/ds/copyable-text` |
@@ -66,7 +66,6 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Need | Use | Not |
 |------|-----|-----|
 | Content section | **Card** `variant="default"` — `bg-surface`, borderless | Plain div — Card provides consistent surface fill and theming |
-| Textured decorative panel | **Card** `variant="noise"` — grain SVG overlay | Card default — noise adds visual interest for hero/feature cards |
 | Transparent grouping (no chrome) | **Card** `variant="ghost"` — no border, no background | Card default — ghost avoids visual nesting when cards are inside cards |
 | Location in page hierarchy | **Breadcrumb** — semantic nav/ol, `asChild` for router links | Plain text links — Breadcrumb handles separators and aria |
 | Switching between content panels | **Tabs** — underline or pill variant, keyboard navigation | Buttons + conditional rendering — Tabs manages state, a11y, and indicators |
@@ -188,7 +187,7 @@ Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--
 
 | Scale | Hue | Anchor | Use for |
 |-------|-----|--------|---------|
-| `primary` | 270 (deep purple) | 800 = brand `#2A0563` | Brand identity, primary actions |
+| `primary` | 264 (electric blue) | 500 = brand `#0040FF` | Brand identity, primary actions |
 | `accent` | 215 (cyan) | 300 = brand `#00E1FA` | Accents, highlights, CTAs |
 | `success` | 160 (teal-green) | 400 = brand `#2BD58E` | Success states |
 | `warning` | 87 (amber) | 400 = brand `#ffc53d` | Warning states |
@@ -206,7 +205,7 @@ Accents (`primary`/`accent`/`success`/`warn`/`error`) resolve to the **same hex*
 |-------|---------------|-------|------|---------|
 | `background` | `bg-background` | `oklch(0.99 0.005 270)` | `#07080a` | Page background |
 | `foreground` | `text-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Primary text |
-| `primary` | `bg-primary`, `text-primary` | `#2A0563` | `#2A0563` | Interactive elements |
+| `primary` | `bg-primary`, `text-primary` | `#0040FF` | `#0040FF` | Interactive elements |
 | `primary-foreground` | `text-primary-foreground` | `#ffffff` | `#ffffff` | Text on primary backgrounds |
 | `accent` | `bg-accent`, `text-accent` | `#00E1FA` | `#00E1FA` | Highlights, emphasis |
 | `accent-foreground` | `text-accent-foreground` | `#001014` | `#001014` | Text on accent backgrounds |
@@ -344,13 +343,13 @@ Available as CSS custom properties. Use via `style` attribute.
 
 | Name | CSS variable | Colors | Use for |
 |------|-------------|--------|---------|
-| `main` | `var(--gradient-main)` | `#1A0440` → `#2A0563` (light) / `#0a0312` → `#2A0563` (dark) | Primary gradient. Theme-aware — promoted to semantic layer. |
+| `main` | `var(--gradient-main)` | `#00104D` → `#0040FF` (light) / `#00041A` → `#0040FF` (dark) | Primary gradient. Theme-aware — promoted to semantic layer. |
 | `accent` | `var(--gradient-accent)` | `#00B8D4` → `#00E1FA` | Secondary button fill, accent CTAs |
 | `success` | `var(--gradient-success)` | `#2BD58E` → `#5DDFAB` | Success states |
 | `warning` | `var(--gradient-warning)` | `#FFE14D` → `#FFC53D` | Warning states |
 | `error` | `var(--gradient-error)` | `#FF6A3D` → `#FF3D00` | Error states |
 | `destructive` | `var(--gradient-destructive)` | (alias → `error`) | Convenience alias |
-| `info` | `var(--gradient-info)` | `#00E1FA` → `#2A0563` | Info states |
+| `info` | `var(--gradient-info)` | `#00E1FA` → `#0040FF` | Info states |
 
 ### Gradient Border Utilities
 
@@ -388,30 +387,6 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 <button className="gradient-fill-accent text-accent-foreground px-6 py-3">
   Secondary Action
 </button>
-```
-
-### FX Grain Textures
-
-CSS utility classes that apply a radial gradient background with an SVG `feTurbulence` noise overlay via `::after`. The element gets `position: relative` and `isolation: isolate` automatically. The overlay inherits `border-radius` from the parent.
-
-| Class | Effect | Light overlay | Dark overlay |
-|-------|--------|--------------|-------------|
-| `fx-grain-xs` | Subtle dots | 0.1 | 0.2 |
-| `fx-grain-sm` | Fading edge dots | 0.2 | 0.2 |
-| `fx-grain-md` | Sparse dots | 0.35 | 0.35 |
-| `fx-grain-lg` | Strong dots | 0.5 | 0.5 |
-
-**Light mode:** Radial gradients from `primary-100`/`primary-50` center to `primary-50` edge.
-**Dark mode:** Radial gradients from `var(--surface)` center to transparent edge. All colors derived from DS tokens — no hardcoded hex values.
-
-```tsx
-{/* Grain background on any element */}
-<div className="fx-grain-lg rounded-xl p-6">
-  Content with strong grain texture
-</div>
-
-{/* Card component uses fx-grain-lg for its noise variant */}
-<Card variant="noise">Card with grain</Card>
 ```
 
 ### Usage Examples
@@ -1086,8 +1061,7 @@ import { Card } from "@aleph-front/ds/card";
 #### Variants
 
 ```tsx
-<Card variant="default">Default card</Card>  {/* bg-surface, borderless, rounded-md */}
-<Card variant="noise">Grain texture</Card>    {/* purple grain SVG overlay */}
+<Card variant="default">Default card</Card>  {/* bg-surface, borderless */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```
 
@@ -1800,7 +1774,7 @@ Run `npm run dev` and visit http://localhost:3000. Sidebar navigation organized 
 | Route | Content |
 |-------|---------|
 | `/components/badge` | Variants, fill modes, sizes, icons |
-| `/components/card` | Default/noise/ghost variants, padding sizes, title |
+| `/components/card` | Default/ghost variants, padding sizes, title |
 | `/components/copyable-text` | Sizes, truncation, external link, copy animation |
 | `/components/status-dot` | Statuses, sizes, inline usage |
 | `/components/table` | Sorting, row click, active row, empty state |

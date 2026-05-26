@@ -2,18 +2,18 @@
    Layer 1: Color Scales, Gradients, Shadows, Fonts
    ────────────────────────────────────────────── */
 @theme {
-  /* Primary (Abyssal deep purple, H: 290) — 800 = brand #2A0563 */
-  --color-primary-50: oklch(0.97 0.015 290);
-  --color-primary-100: oklch(0.93 0.030 290);
-  --color-primary-200: oklch(0.86 0.060 290);
-  --color-primary-300: oklch(0.75 0.110 290);
-  --color-primary-400: oklch(0.60 0.165 290);
-  --color-primary-500: oklch(0.45 0.200 290);
-  --color-primary-600: oklch(0.35 0.200 290);
-  --color-primary-700: oklch(0.30 0.190 290);
-  --color-primary-800: oklch(0.27 0.180 290);
-  --color-primary-900: oklch(0.20 0.140 290);
-  --color-primary-950: oklch(0.14 0.090 290);
+  /* Primary (Abyssal electric blue, H: 264) — 500 = brand #0040FF */
+  --color-primary-50: oklch(0.97 0.020 264);
+  --color-primary-100: oklch(0.94 0.045 264);
+  --color-primary-200: oklch(0.87 0.085 264);
+  --color-primary-300: oklch(0.77 0.140 264);
+  --color-primary-400: oklch(0.65 0.215 264);
+  --color-primary-500: oklch(0.50 0.280 264);
+  --color-primary-600: oklch(0.42 0.255 264);
+  --color-primary-700: oklch(0.34 0.220 264);
+  --color-primary-800: oklch(0.27 0.180 264);
+  --color-primary-900: oklch(0.19 0.135 264);
+  --color-primary-950: oklch(0.12 0.080 264);
 
   /* Accent (Abyssal bright cyan, H: 215) — 300 = brand #00E1FA */
   --color-accent-50: oklch(0.98 0.020 215);
@@ -100,19 +100,19 @@
   --color-base-950: oklch(0.10 0.002 273);  /* #07080a void / background */
 
   /* Gradients */
-  --gradient-main-base: linear-gradient(90deg, #1A0440 8.24%, #2A0563 71.81%);
-  --gradient-main-dark: linear-gradient(90deg, #0a0312 8.24%, #2A0563 71.81%);
+  --gradient-main-base: linear-gradient(90deg, #00104D 8.24%, #0040FF 71.81%);
+  --gradient-main-dark: linear-gradient(90deg, #00041A 8.24%, #0040FF 71.81%);
   --gradient-accent: linear-gradient(90deg, #00B8D4 0%, #00E1FA 100%);
   --gradient-success: linear-gradient(90deg, #2BD58E 0%, #5DDFAB 100%);
   --gradient-warning: linear-gradient(90deg, #FFE14D 0%, #FFC53D 100%);
   --gradient-error: linear-gradient(90deg, #FF6A3D 0%, #FF3D00 100%);
-  --gradient-info: linear-gradient(90deg, #00E1FA 22.66%, #2A0563 244.27%);
+  --gradient-info: linear-gradient(90deg, #00E1FA 22.66%, #0040FF 244.27%);
   --gradient-destructive: var(--gradient-error);
 
-  /* Shadows (anchored on primary-800 oklch(0.27 0.180 270)) */
-  --shadow-brand-sm: 0px 4px 4px oklch(0.27 0.180 270 / 0.20);
-  --shadow-brand: 0px 4px 24px oklch(0.27 0.180 270 / 0.15);
-  --shadow-brand-lg: 0px 4px 48px oklch(0.27 0.180 270 / 0.30);
+  /* Shadows (anchored on primary-800 oklch(0.27 0.180 264)) */
+  --shadow-brand-sm: 0px 4px 4px oklch(0.27 0.180 264 / 0.20);
+  --shadow-brand: 0px 4px 24px oklch(0.27 0.180 264 / 0.15);
+  --shadow-brand-lg: 0px 4px 48px oklch(0.27 0.180 264 / 0.30);
 
   /* Fonts */
   --font-heading: "Anybody", ui-sans-serif, system-ui, sans-serif;
@@ -133,7 +133,7 @@
   --background: oklch(0.99 0.005 270);
   --foreground: oklch(0.22 0.015 270);
 
-  --primary: #2A0563;
+  --primary: #0040FF;
   --primary-foreground: #ffffff;
   --accent: #00E1FA;
   --accent-foreground: #001014;
@@ -163,7 +163,7 @@
   --background: #07080a;
   --foreground: #f3f3f3;
 
-  --primary: #2A0563;
+  --primary: #0040FF;
   --primary-foreground: #ffffff;
   --accent: #00E1FA;
   --accent-foreground: #001014;
@@ -287,140 +287,6 @@
 
 .gradient-fill-info {
   background: var(--gradient-info) border-box;
-}
-
-/* ── FX Grain Textures ───────────────────────────────── */
-
-/* Shared base: stacking context */
-.fx-grain-lg,
-.fx-grain-xs,
-.fx-grain-sm,
-.fx-grain-md {
-  position: relative;
-  isolation: isolate;
-}
-
-/* Shared ::after: texture overlay */
-:is(.fx-grain-lg, .fx-grain-xs, .fx-grain-sm, .fx-grain-md)::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background-size: 400px 400px;
-  background-repeat: repeat;
-  pointer-events: none;
-}
-
-/* ── Light mode gradients ── */
-
-.fx-grain-lg {
-  background-image: radial-gradient(
-    50% 50%,
-    var(--color-primary-100) 0%,
-    oklch(from var(--color-primary-100) l c h / 0.40) 100%
-  );
-}
-
-.fx-grain-xs {
-  background-image: radial-gradient(
-    50% 50%,
-    oklch(from var(--color-primary-100) l c h / 0.40) 0%,
-    oklch(from var(--color-primary-100) l c h / 0.40) 100%
-  );
-}
-
-.fx-grain-sm {
-  background-image: radial-gradient(
-    50% 50%,
-    oklch(from var(--color-primary-100) l c h / 0.40) 0%,
-    oklch(from var(--color-primary-100) l c h / 0.23) 100%
-  );
-}
-
-.fx-grain-md {
-  background: radial-gradient(
-      50% 50%,
-      oklch(from var(--color-primary-100) l c h / 0.40) 0%,
-      oklch(from var(--color-primary-100) l c h / 0.05) 100%
-    ),
-    oklch(from var(--color-primary-100) l c h / 0.40);
-}
-
-/* ── Dark mode gradients ── */
-
-.theme-dark .fx-grain-lg {
-  background-image: radial-gradient(
-    50% 50%,
-    var(--surface) 0%,
-    oklch(from var(--surface) l c h / 0.57) 100%
-  );
-}
-
-.theme-dark .fx-grain-xs {
-  background-image: radial-gradient(
-    50% 50%,
-    var(--surface) 0%,
-    oklch(from var(--surface) l c h / 0.57) 100%
-  );
-}
-
-.theme-dark .fx-grain-sm {
-  background-image: radial-gradient(
-    50% 50%,
-    var(--surface) 0%,
-    oklch(from var(--surface) l c h / 0.25) 100%
-  );
-}
-
-.theme-dark .fx-grain-md {
-  background: radial-gradient(
-      50% 50%,
-      oklch(from var(--surface) l c h / 0.40) 0%,
-      oklch(from var(--surface) l c h / 0.05) 100%
-    ),
-    var(--surface);
-}
-
-/* ── Dark mode texture opacity overrides ── */
-
-.theme-dark .fx-grain-lg::after {
-  opacity: 0.5;
-}
-
-.theme-dark .fx-grain-xs::after {
-  opacity: 0.2;
-}
-
-.theme-dark .fx-grain-sm::after {
-  opacity: 0.2;
-}
-
-.theme-dark .fx-grain-md::after {
-  opacity: 0.35;
-}
-
-/* ── Texture overlays (::after) ── */
-
-/* Texture: scattered purple dots */
-.fx-grain-lg::after {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4yNSIgdHlwZT0iZnJhY3RhbE5vaXNlIiBudW1PY3RhdmVzPSIzIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMSAwIDAgMCAwIDAgMCAwIDAgMCAwLjgwIDAgMCAwIDEwIC03LjI1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIi8+PC9zdmc+");
-  opacity: 0.5;
-}
-
-.fx-grain-xs::after {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4yNSIgdHlwZT0iZnJhY3RhbE5vaXNlIiBudW1PY3RhdmVzPSIzIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMSAwIDAgMCAwIDAgMCAwIDAgMCAwLjgwIDAgMCAwIDEwIC03LjI1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIi8+PC9zdmc+");
-  opacity: 0.1;
-}
-
-.fx-grain-sm::after {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4yNSIgdHlwZT0iZnJhY3RhbE5vaXNlIiBudW1PY3RhdmVzPSIzIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMSAwIDAgMCAwIDAgMCAwIDAgMCAwLjgwIDAgMCAwIDEwIC03LjI1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIi8+PC9zdmc+");
-  opacity: 0.2;
-}
-
-.fx-grain-md::after {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDAwIiB3aWR0aD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii4yNSIgdHlwZT0iZnJhY3RhbE5vaXNlIiBudW1PY3RhdmVzPSIzIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAuMSAwIDAgMCAwIDAgMCAwIDAgMCAwLjgwIDAgMCAwIDEwIC03LjI1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIi8+PC9zdmc+");
-  opacity: 0.35;
 }
 
 /* ── Alert gradient backgrounds ──────────────────────── */

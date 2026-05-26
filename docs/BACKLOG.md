@@ -55,13 +55,6 @@ Ideas and scope creep captured for later consideration.
 - ~~Breadcrumb~~ — done (see completed)
 **Priority:** High
 
-### 2026-03-09 — Card grain size variants
-
-**Source:** Identified while bumping DS in scheduler-dashboard
-**Description:** The Card component only exposes a single `noise` variant (`fx-grain-lg`). The token layer already has `fx-grain-xs`, `fx-grain-sm`, `fx-grain-md`, and `fx-grain-lg` classes. Expose grain size selection through the Card API — either as separate variants (`noise-xs`, `noise-sm`, `noise-md`, `noise-lg`) or a compound variant (`variant="noise" grain="sm"`).
-**Priority:** Low
-
-
 ### 2026-03-14 — Composition recipes for DESIGN-SYSTEM.md
 
 **Source:** Identified during DESIGN-SYSTEM.md improvement pass
@@ -131,7 +124,8 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-03-06 — Phosphor Icons integration (replaced inline SVGs, added to DS as dependency, preview showcase)
 - [x] 2026-03-06 — CopyableText component (middle-ellipsis truncation, clip-path circle reveal, optional external link)
 - [x] 2026-03-09 — Logo components (icon mark + full logo, currentColor, 2 components instead of 4 SVGs)
-- [x] 2026-03-09 — FX grain backgrounds (4 size variants xs/sm/md/lg, DS token colors, dark mode, preview showcase)
+- [x] 2026-03-09 — FX grain backgrounds (4 size variants xs/sm/md/lg, DS token colors, dark mode, preview showcase) — **removed 2026-05-26** in Abyssal Void skin redesign
+- [x] 2026-05-26 — Card grain size variants — rejected: fx-grain removed entirely in Abyssal Void
 - [x] 2026-03-09 — Tabs component (Radix wrapper, sliding indicator, composable API, badge/subscript support)
 - [x] 2026-03-10 — Alert component (4 variants, dismiss with exit animation, auto-dismiss timer, auto-styled links)
 - [x] 2026-03-10 — Pagination component (controlled API, configurable siblingCount/showFirstLast, pure buildPageRange function, a11y)

@@ -231,7 +231,7 @@ export default function OverviewPage() {
     <>
       {/* Hero — full-bleed with left-aligned text + logo mark right */}
       <div
-        className="-mt-6 sm:-mt-8 mb-10 fx-grain-lg py-8 sm:py-10"
+        className="-mt-6 sm:-mt-8 mb-10 py-8 sm:py-10"
         style={{
           background: "var(--gradient-main)",
           marginInline: "-9999px",
@@ -412,7 +412,7 @@ export default function OverviewPage() {
         </div>
 
         {/* Block 6: Resource Overview Card */}
-        <Card variant="noise" padding="lg">
+        <Card padding="lg">
           <Breadcrumb className="mb-4">
             <BreadcrumbList>
               <BreadcrumbItem>
