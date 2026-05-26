@@ -165,7 +165,7 @@ export function Table<T>({
               <th
                 key={col.header}
                 className={cn(
-                  "px-4 py-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground",
+                  "px-4 py-3 font-mono font-normal uppercase tracking-widest text-[11px] text-muted-foreground",
                   alignClass[col.align ?? "left"],
                   col.sortable && "cursor-pointer select-none",
                 )}
