@@ -4,13 +4,18 @@ import { cn } from "@ac/lib/cn";
 
 const inputVariants = cva(
   [
-    "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-none",
+    "w-full font-sans text-foreground",
+    "bg-background dark:bg-surface",
+    "border border-edge rounded-none",
     "placeholder:text-muted-foreground",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "ring-0 transition-colors",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:text-foreground/30",
+    "disabled:placeholder:text-muted-foreground/50",
+    "disabled:cursor-not-allowed",
+    "transition-colors",
   ].join(" "),
   {
     variants: {
@@ -37,7 +42,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         className={cn(
           inputVariants({ size }),
-          error && "border-3 border-error-400 hover:border-error-500",
+          error &&
+            "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
           className,
         )}
         aria-invalid={error || undefined}
