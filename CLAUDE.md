@@ -64,6 +64,18 @@ When the conversation drifts from the stated task:
 - When dev starts, create feature branch from main before any file edits
 - Branch naming: `<type>/[name]` (e.g. `feature/`, `fix/`, `chore/`, `refactor/`)
 
+**Integration branches (long-lived multi-chunk work):**
+
+Some work spans many chunks over multiple sessions (e.g. a full skin redesign). Don't merge each chunk to `main` directly — use an integration branch that accumulates chunks and merges to main only when the full thing is done.
+
+- The integration branch lives on origin (e.g. `skin/paraplu`) and never gets squash-merged until the work is complete.
+- Each chunk = a short-lived branch off the integration branch, with its own worktree if needed: `git checkout -b skin/buttons-animations` from inside the integration worktree.
+- Chunk PRs target the integration branch, not main: `gh pr create --base skin/paraplu --title "..."`. Squash-merge chunks into the integration branch with `gh pr merge <num> --squash --delete-branch`.
+- After each chunk merge, sync the integration branch in the worktree: `git checkout skin/paraplu && git pull --ff-only origin skin/paraplu`.
+- When the whole integration is ready, treat the integration branch itself as a normal feature branch: PR it into main, squash-merge.
+- CI (`.github/workflows/ci.yml`) only runs on PRs to `main`. Chunk PRs into an integration branch rely on local `npm run check` — that's the safety net.
+- Active integration branches: `skin/paraplu` (Abyssal Void skin, Decision #79).
+
 **Before merging:** Update ALL docs before squash merging to main.
 - `docs/DESIGN-SYSTEM.md` -- add/update tokens, components, hooks, or patterns
 - `docs/ARCHITECTURE.md` -- add/update patterns for any new architectural decisions, new files, or changed structure
@@ -92,11 +104,11 @@ Never interrupt based on file count or commit count.
 
 1. Run project checks (lint, typecheck, test) — stop if anything fails
 2. Push branch: `git push -u origin <branch>`
-3. Create PR if none exists: `gh pr create --title "..." --body "..."`
+3. Create PR if none exists: `gh pr create --title "..." --body "..."` — pass `--base <integration-branch>` if shipping a chunk into a long-lived integration branch (e.g. `--base skin/paraplu`) rather than into main
 4. Squash-merge: `gh pr merge <number> --squash --delete-branch`
-5. Sync local main: `git checkout main && git pull --ff-only origin main`
-6. Delete local branch: `git branch -D <branch>`
-7. Remove any associated worktrees: `git worktree list` and `git worktree remove <path> --force` for stale entries
+5. Sync the target branch — if PR targeted main: `git checkout main && git pull --ff-only origin main`. If PR targeted an integration branch, the integration worktree should `git checkout <integration> && git pull --ff-only origin <integration>` instead
+6. Delete local chunk branch: `git branch -D <branch>`
+7. Remove any associated worktrees: `git worktree list` and `git worktree remove <path> --force` for stale entries — never remove the integration branch's worktree until the integration itself merges to main
 
 **Never merge locally.** Option 1 ("Merge back to main locally") from the finishing skill is not allowed — hooks block direct pushes to main, and local merges cause SHA divergence after squash-merge. Always go through the PR.
 
