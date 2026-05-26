@@ -104,8 +104,7 @@ const iconSizeClass: Record<Size, string> = {
   md: "size-[13px]",
 };
 
-// LED color + static glow per variant. currentColor on the box-shadow lets the
-// animate-button-led keyframe inherit the dot's color.
+// LED color + static glow per variant.
 const ledColorClass: Record<Variant, string> = {
   primary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
   secondary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
@@ -161,26 +160,51 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     );
 
-    const showLed = !iconLeft && v !== "ghost";
-
     const leadingSlot = (() => {
+      // Loading replaces everything in the leading slot (except on ghost).
+      if (loading && v !== "ghost") {
+        return (
+          <span
+            data-led-chase
+            aria-hidden="true"
+            className="inline-flex shrink-0 gap-[3px]"
+          >
+            <span
+              className={cn(
+                "inline-block rounded-full",
+                ledSizeClass[s],
+                ledColorClass[v],
+                "animate-button-chase-a",
+              )}
+            />
+            <span
+              className={cn(
+                "inline-block rounded-full",
+                ledSizeClass[s],
+                ledColorClass[v],
+                "animate-button-chase-b",
+              )}
+            />
+          </span>
+        );
+      }
+      // Resting state with iconLeft.
       if (iconLeft) {
         return (
           <span
             aria-hidden="true"
-            {...(loading ? { "data-led-icon": true } : {})}
             className={cn(
               "inline-flex items-center justify-center shrink-0",
               iconSizeClass[s],
               iconGlowClass[v],
-              loading && "animate-button-led",
             )}
           >
             {iconLeft}
           </span>
         );
       }
-      if (showLed) {
+      // Resting state with static LED (non-ghost variants).
+      if (v !== "ghost") {
         return (
           <span
             data-led
@@ -189,7 +213,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               "inline-block rounded-full shrink-0",
               ledSizeClass[s],
               ledColorClass[v],
-              loading && "animate-button-led",
             )}
           />
         );
