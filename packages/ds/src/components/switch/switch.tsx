@@ -13,6 +13,7 @@ const switchVariants = cva(
     "disabled:bg-muted dark:disabled:bg-background",
     "disabled:border-edge/50 disabled:shadow-none",
     "disabled:cursor-not-allowed",
+    "disabled:data-[state=checked]:border-edge/50",
     "data-[state=checked]:border-accent/30",
     "transition-colors",
   ].join(" "),
@@ -38,7 +39,8 @@ const thumbVariants = cva(
     "data-[state=unchecked]:translate-x-0.5",
     "group-hover/sw:data-[state=checked]:shadow-[0_0_5px_var(--accent),0_0_10px_rgba(0,225,250,0.6)]",
     "group-focus-visible/sw:data-[state=checked]:shadow-[0_0_5px_var(--accent),0_0_10px_rgba(0,225,250,0.6)]",
-    "group-disabled/sw:bg-foreground/30 group-disabled/sw:shadow-none",
+    "group-disabled/sw:bg-foreground/30 group-disabled/sw:data-[state=checked]:bg-foreground/30",
+    "group-disabled/sw:shadow-none",
   ].join(" "),
   {
     variants: {

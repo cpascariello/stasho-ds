@@ -30,8 +30,8 @@ const thumbVariants = cva(
     "hover:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
     "focus-visible:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
-    "disabled:bg-foreground/30 disabled:border-foreground/30",
-    "disabled:shadow-none disabled:cursor-not-allowed",
+    "data-[disabled]:bg-foreground/30 data-[disabled]:border-foreground/30",
+    "data-[disabled]:shadow-none data-[disabled]:cursor-not-allowed",
   ].join(" "),
   {
     variants: {
@@ -96,7 +96,7 @@ const Slider = forwardRef<
         {...rootProps}
       >
         <SliderPrimitive.Track className={cn(trackVariants({ size }))}>
-          <SliderPrimitive.Range className="absolute h-full bg-accent rounded-full" />
+          <SliderPrimitive.Range className="absolute h-full bg-accent data-[disabled]:bg-foreground/30 rounded-full" />
         </SliderPrimitive.Track>
         {displayValue.map((val, i) => (
           <SliderPrimitive.Thumb

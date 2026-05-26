@@ -14,6 +14,7 @@ const radioItemVariants = cva(
     "disabled:border-edge/50",
     "disabled:cursor-not-allowed",
     "disabled:[&_span]:bg-foreground/30",
+    "disabled:data-[state=checked]:border-edge/50",
     "data-[state=checked]:border-accent",
     "transition-colors",
   ].join(" "),

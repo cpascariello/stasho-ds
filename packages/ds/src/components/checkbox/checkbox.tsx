@@ -15,6 +15,8 @@ const checkboxVariants = cva(
     "disabled:text-foreground/30",
     "disabled:cursor-not-allowed",
     "disabled:data-[state=checked]:text-foreground/30",
+    "disabled:data-[state=checked]:bg-muted dark:disabled:data-[state=checked]:bg-background",
+    "disabled:data-[state=checked]:border-edge/50",
     "data-[state=checked]:bg-accent data-[state=checked]:border-accent",
     "data-[state=checked]:text-neutral-950",
     "transition-colors",
@@ -49,7 +51,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         className={cn(
           checkboxVariants({ size }),
           error &&
-            "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+            "border-error data-[state=checked]:border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
           className,
         )}
         aria-invalid={error || undefined}
