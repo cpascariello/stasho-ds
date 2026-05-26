@@ -2,18 +2,18 @@
    Layer 1: Color Scales, Gradients, Shadows, Fonts
    ────────────────────────────────────────────── */
 @theme {
-  /* Primary (Abyssal deep purple, H: 270) — 800 = brand #2A0563 */
-  --color-primary-50: oklch(0.97 0.015 270);
-  --color-primary-100: oklch(0.93 0.030 270);
-  --color-primary-200: oklch(0.86 0.060 270);
-  --color-primary-300: oklch(0.75 0.110 270);
-  --color-primary-400: oklch(0.60 0.165 270);
-  --color-primary-500: oklch(0.45 0.200 270);
-  --color-primary-600: oklch(0.35 0.200 270);
-  --color-primary-700: oklch(0.30 0.190 270);
-  --color-primary-800: oklch(0.27 0.180 270);
-  --color-primary-900: oklch(0.20 0.140 270);
-  --color-primary-950: oklch(0.14 0.090 270);
+  /* Primary (Abyssal deep purple, H: 290) — 800 = brand #2A0563 */
+  --color-primary-50: oklch(0.97 0.015 290);
+  --color-primary-100: oklch(0.93 0.030 290);
+  --color-primary-200: oklch(0.86 0.060 290);
+  --color-primary-300: oklch(0.75 0.110 290);
+  --color-primary-400: oklch(0.60 0.165 290);
+  --color-primary-500: oklch(0.45 0.200 290);
+  --color-primary-600: oklch(0.35 0.200 290);
+  --color-primary-700: oklch(0.30 0.190 290);
+  --color-primary-800: oklch(0.27 0.180 290);
+  --color-primary-900: oklch(0.20 0.140 290);
+  --color-primary-950: oklch(0.14 0.090 290);
 
   /* Accent (Abyssal bright cyan, H: 215) — 300 = brand #00E1FA */
   --color-accent-50: oklch(0.98 0.020 215);
