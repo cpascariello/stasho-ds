@@ -14,7 +14,7 @@ const buttonVariants = cva(
   [
     "inline-flex items-center justify-center",
     "font-heading font-bold",
-    "rounded-full border-3 transition-colors",
+    "rounded-none border-3 transition-colors",
     "focus-visible:outline-none focus-visible:ring-2",
     "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
     "disabled:pointer-events-none",
@@ -27,7 +27,7 @@ const buttonVariants = cva(
           "disabled:opacity-50",
         ].join(" "),
         secondary: [
-          "gradient-fill-lime text-neutral-950 border-neutral-950",
+          "gradient-fill-accent text-accent-foreground border-transparent",
           "disabled:opacity-50",
         ].join(" "),
         outline: [
