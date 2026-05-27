@@ -140,7 +140,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 | Modals | `rounded-xl` | 4px | Dialog |
 | Cards | `rounded-lg` | 2px | Card |
 | Contained markers | `rounded-[2px]` | 2px | Badge |
-| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks, MultiSelect tag chips |
+| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks |
 
 Tooltip is a popover, not a card — the radius reflects its role. The Abyssal radius scale maps `rounded-sm / rounded-md` to 0px, `rounded-lg` to 2px, `rounded-xl` to 4px; reach for the semantic class that matches the intended pixel value rather than guessing from shadcn-era defaults.
 **Source:** Decision #87.
@@ -150,12 +150,12 @@ Tooltip is a popover, not a card — the radius reflects its role. The Abyssal r
 
 - StatusDot (a dot IS round)
 - Slider thumb (the ring IS an aperture — a round shape encodes the "scope reticle / position marker" reading; `rounded-full` is principled, not convention)
+- RadioGroup item (a radio dot IS round — the shape carries the "single-selection within a group" semantic, mirroring the physical radio button)
 - ProgressBar track (the rounded ends are a graph convention)
-- MultiSelect tag chips (tags carry "soft / removable" semantics) — **still flagged for audit**
 
 **Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible. The list is "round-by-design only, never round-by-convention" — entries need a semantic reason for the round shape, not a precedent from other DSs.
 **How:** Adding a new element to this list requires a decision in `docs/DECISIONS.md`.
-**Source:** Decisions #86 (Tabs pill removed), #88 (Switch track + thumb removed; Stepper indicators removed), #89 (Slider thumb kept on `rounded-full` with principled aperture justification). MultiSelect chips carry the remaining convention-only justification and should be revisited in a dedicated rounded-full audit chunk.
+**Source:** Decisions #86 (Tabs pill removed), #88 (Switch track + thumb removed; Stepper indicators removed), #89 (Slider thumb kept on `rounded-full` with principled aperture justification), #90 (RadioGroup item added — was always round-by-design but never listed), #91 (MultiSelect chips removed — convention-only justification did not survive audit).
 
 ### Hairline borders, never thick
 **Rule:** 1px borders. No `border-2`, no `border-3`.

@@ -35,7 +35,7 @@ const triggerVariants = cva(
 
 const tagVariants = cva(
   [
-    "inline-flex items-center gap-1 rounded-full bg-muted",
+    "inline-flex items-center gap-1 rounded-[2px] bg-muted",
     "text-foreground max-w-32 select-none",
   ].join(" "),
   {
@@ -165,7 +165,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       aria-label={`Remove ${opt.label}`}
                       onClick={(e) => removeTag(e, opt.value)}
                       className={cn(
-                        "shrink-0 rounded-full",
+                        "shrink-0 rounded-[2px]",
                         "hover:bg-foreground/10 transition-colors",
                         size === "sm" ? "size-3.5" : "size-4",
                       )}
@@ -195,7 +195,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 aria-label="Clear all"
                 onClick={clearAll}
                 className={cn(
-                  "shrink-0 rounded-full",
+                  "shrink-0 rounded-[2px]",
                   "text-muted-foreground",
                   "hover:text-foreground transition-colors",
                   size === "sm" ? "size-4" : "size-5",
