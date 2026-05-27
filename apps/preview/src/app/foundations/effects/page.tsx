@@ -1,9 +1,9 @@
 import { PageHeader } from "@preview/components/page-header";
 
 const SHADOWS = [
-  { name: "brand-sm", class: "shadow-brand-sm" },
-  { name: "brand", class: "shadow-brand" },
-  { name: "brand-lg", class: "shadow-brand-lg" },
+  { name: "sm", class: "shadow-sm" },
+  { name: "", class: "shadow" },
+  { name: "lg", class: "shadow-lg" },
 ] as const;
 
 const GRADIENTS = [
@@ -68,8 +68,8 @@ export default function EffectsPage() {
             {TRANSITIONS.map(({ name, duration }) => (
               <div
                 key={name}
-                className="rounded-lg border border-edge p-4 hover:border-primary
-                           hover:shadow-brand cursor-pointer"
+                className="rounded-lg border border-edge p-4 hover:border-accent
+                           hover:shadow cursor-pointer"
                 style={{
                   transitionProperty: "border-color, box-shadow",
                   transitionDuration: duration,

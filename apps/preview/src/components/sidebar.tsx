@@ -280,7 +280,7 @@ function MobileDrawer({
       <nav
         aria-label="Design system"
         className={`absolute inset-y-0 left-0 w-80 bg-background border-r border-edge
-                    overflow-y-auto py-6 px-4 shadow-brand-lg
+                    overflow-y-auto py-6 px-4 shadow-lg
                     transition-transform motion-reduce:transition-none ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
