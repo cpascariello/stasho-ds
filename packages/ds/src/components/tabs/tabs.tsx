@@ -202,19 +202,14 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
           className={cn(
             "inline-flex items-center justify-center shrink-0",
             "font-sans font-semibold",
-            hasActiveHidden && isPill
-              ? "text-white"
-              : hasActiveHidden
-                ? "text-primary-600 dark:text-primary-400"
-                : "text-muted-foreground",
+            hasActiveHidden ? "text-accent" : "text-muted-foreground",
             "transition-colors duration-200",
-            "hover:text-primary-600 dark:hover:text-primary-400",
-            "focus-visible:outline-none focus-visible:ring-2",
-            "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
+            "hover:text-accent",
+            "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
             "motion-reduce:transition-none",
             isPill
               ? cn(
-                  "relative z-10 rounded-full",
+                  "relative z-10 rounded-[2px]",
                   isSmall ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm",
                 )
               : isSmall
@@ -261,7 +256,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 "hover:bg-muted focus-visible:bg-muted",
                 "data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
                 tab.triggerEl.dataset["state"] === "active" &&
-                  "text-primary-600 dark:text-primary-400 font-semibold",
+                  "text-accent font-semibold",
               )}
             >
               {tab.label}
