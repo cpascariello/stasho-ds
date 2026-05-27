@@ -53,6 +53,7 @@ const NAV: NavEntry[] = [
         items: [
           { label: "Alert", href: "/components/alert" },
           { label: "Dialog", href: "/components/dialog" },
+          { label: "Loader", href: "/components/loader" },
           { label: "ProgressBar", href: "/components/progress-bar" },
           { label: "Skeleton", href: "/components/skeleton" },
           { label: "Tooltip", href: "/components/tooltip" },

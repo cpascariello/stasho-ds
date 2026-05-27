@@ -8,30 +8,31 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 
 | Component | Purpose | Import |
 |-----------|---------|--------|
-| [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@aleph-front/ds/alert` |
-| [Badge](#badge) | Semantic label for status, counts, categories | `@aleph-front/ds/badge` |
-| [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@aleph-front/ds/breadcrumb` |
+| [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@stasho/ds/alert` |
+| [Badge](#badge) | Semantic label for status, counts, categories | `@stasho/ds/badge` |
+| [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
 | [Button](#button) | Action trigger with 7 variants, 3 sizes, cyan LED signature | `@stasho/ds/button` |
-| [Card](#card) | Content container with 2 variants (default/ghost) | `@aleph-front/ds/card` |
-| [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@aleph-front/ds/checkbox` |
-| [Combobox](#combobox) | Searchable dropdown selector | `@aleph-front/ds/combobox` |
-| [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@aleph-front/ds/copyable-text` |
-| [Dialog](#dialog) | Modal with composable 8-part API, lock mode | `@aleph-front/ds/dialog` |
-| [FormField](#formfield) | Label + helper + error wrapper with auto-wired a11y | `@aleph-front/ds/form-field` |
-| [Input](#input) | Text input with 2 sizes, borderless flat styling | `@aleph-front/ds/input` |
-| [Logo](#logo) | Brand mark (icon + full wordmark variants) | `@aleph-front/ds/logo` |
-| [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@aleph-front/ds/multi-select` |
-| [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@aleph-front/ds/pagination` |
-| [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@aleph-front/ds/radio-group` |
-| [Select](#select) | Dropdown selector with flat options prop | `@aleph-front/ds/select` |
-| [Skeleton](#skeleton) | Animated loading placeholder | `@aleph-front/ds/ui/skeleton` |
-| [Slider](#slider) | Range input, single or two-thumb mode | `@aleph-front/ds/slider` |
-| [StatusDot](#statusdot) | Health status circle with pulse animation | `@aleph-front/ds/status-dot` |
-| [Switch](#switch) | On/off toggle with animated sliding thumb | `@aleph-front/ds/switch` |
-| [Table](#table) | Generic typed table with sorting and row selection | `@aleph-front/ds/table` |
-| [Tabs](#tabs) | Tabbed interface with underline/pill variants | `@aleph-front/ds/tabs` |
-| [Textarea](#textarea) | Multi-line text input with vertical resize | `@aleph-front/ds/textarea` |
-| [Tooltip](#tooltip) | Hover/focus tooltip with DS styling | `@aleph-front/ds/tooltip` |
+| [Card](#card) | Content container with 2 variants (default/ghost) | `@stasho/ds/card` |
+| [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
+| [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
+| [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@stasho/ds/copyable-text` |
+| [Dialog](#dialog) | Modal with composable 8-part API, lock mode | `@stasho/ds/dialog` |
+| [FormField](#formfield) | Label + helper + error wrapper with auto-wired a11y | `@stasho/ds/form-field` |
+| [Input](#input) | Text input with 2 sizes, borderless flat styling | `@stasho/ds/input` |
+| [Loader](#loader) | Standalone dual-dot cyan chase for inline loading | `@stasho/ds/loader` |
+| [Logo](#logo) | Brand mark (icon + full wordmark variants) | `@stasho/ds/logo` |
+| [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
+| [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
+| [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@stasho/ds/radio-group` |
+| [Select](#select) | Dropdown selector with flat options prop | `@stasho/ds/select` |
+| [Skeleton](#skeleton) | Animated loading placeholder | `@stasho/ds/ui/skeleton` |
+| [Slider](#slider) | Range input, single or two-thumb mode | `@stasho/ds/slider` |
+| [StatusDot](#statusdot) | Health status circle with pulse animation | `@stasho/ds/status-dot` |
+| [Switch](#switch) | On/off toggle with animated sliding thumb | `@stasho/ds/switch` |
+| [Table](#table) | Generic typed table with sorting and row selection | `@stasho/ds/table` |
+| [Tabs](#tabs) | Tabbed interface with underline/pill variants | `@stasho/ds/tabs` |
+| [Textarea](#textarea) | Multi-line text input with vertical resize | `@stasho/ds/textarea` |
+| [Tooltip](#tooltip) | Hover/focus tooltip with DS styling | `@stasho/ds/tooltip` |
 
 ## Component Selection Guide
 
@@ -45,8 +46,9 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Blocking user decision | **Dialog** — overlay, focus trap, `locked` mode for forced choice | Alert — can be ignored or dismissed |
 | Passive extra info on hover | **Tooltip** — non-blocking, hover/focus triggered | Dialog — too heavy for supplementary info |
 | Loading placeholder (content area) | **Skeleton** — consumer-sized via className, pulse animation | ProgressBar — Skeleton is for layout placeholders, ProgressBar is for measurable work |
-| Inline loading indicator (button action) | **Button `loading` prop** — animates the LED into a two-dot chase (Decision #81 / § 6 "Loading pulses, never spins") | Standalone spinner — removed in Decision #93; the LED chase carries the loading signal |
-| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Skeleton — ProgressBar shows measurable progress, Skeleton is for layout |
+| Inline loading indicator (button action) | **Button `loading` prop** — animates the LED into a two-dot chase (Decision #81 / § 6 "Loading pulses, never spins") | Standalone Loader — for in-button loading the chase belongs inside the button |
+| Standalone loading indicator (outside a button) | **Loader** — extracts Button's chase as a primitive, optional inline label (Decision #94) | Rotating spinner — § 6 "Loading pulses, never spins" |
+| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Skeleton / Loader — ProgressBar shows measurable progress |
 
 ### Selection & Input
 
@@ -137,25 +139,25 @@ Tests never assert CSS class names — those are implementation details that bre
 Install the DS package in your app:
 
 ```bash
-npm install @aleph-front/ds
+npm install @stasho/ds
 ```
 
 Import tokens in your CSS and components via subpath exports:
 
 ```css
 @import "tailwindcss";
-@import "@aleph-front/ds/styles/tokens.css";
+@import "@stasho/ds/styles/tokens.css";
 
 @custom-variant dark (&:where(.theme-dark, .theme-dark *));
 ```
 
 ```tsx
-import { Button } from "@aleph-front/ds/button";
-import { Input } from "@aleph-front/ds/input";
-import { cn } from "@aleph-front/ds/lib/cn";
+import { Button } from "@stasho/ds/button";
+import { Input } from "@stasho/ds/input";
+import { cn } from "@stasho/ds/lib/cn";
 ```
 
-Consumer apps need `transpilePackages: ["@aleph-front/ds"]` in their Next.js config (DS exports raw `.tsx` source).
+Consumer apps need `transpilePackages: ["@stasho/ds"]` in their Next.js config (DS exports raw `.tsx` source).
 
 ## Themes
 
@@ -503,7 +505,7 @@ The DS uses [Phosphor Icons](https://phosphoricons.com/) — 7,000+ icons in 6 w
 
 ### Installation
 
-Phosphor is a regular dependency of `@aleph-front/ds`. Consumers who need additional icons beyond what the DS uses internally can import directly from `@phosphor-icons/react` (installed transitively).
+Phosphor is a regular dependency of `@stasho/ds`. Consumers who need additional icons beyond what the DS uses internally can import directly from `@phosphor-icons/react` (installed transitively).
 
 ### Usage
 
@@ -558,7 +560,7 @@ Two SVG components for the Aleph Cloud brand mark. Both use `fill="currentColor"
 ### Usage
 
 ```tsx
-import { Logo, LogoFull } from "@aleph-front/ds/logo";
+import { Logo, LogoFull } from "@stasho/ds/logo";
 
 {/* Icon mark only */}
 <Logo className="size-10" aria-label="Aleph Cloud" />
@@ -674,7 +676,7 @@ Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay s
 Dismissible status banner with 4 semantic variants, optional title, auto-dismiss timer with progress bar, and exit animation.
 
 ```tsx
-import { Alert } from "@aleph-front/ds/alert";
+import { Alert } from "@stasho/ds/alert";
 ```
 
 **Visual style:** 1px hairline border using semantic tokens (`border-warning`, `border-error`, `border-accent` for info, `border-success`). Top→bottom gradient background (180deg) using `oklch(from var(--token) l c h / opacity)` — 18% opacity at the top fading to 6% at the baseline — sourced from semantic tokens so dark mode is handled by `var(--background)` swapping (no `.theme-dark` override block needed). Departure Mono UC tracking-wider variant label with light-mode carve-out (`text-warning-500 dark:text-warning` etc.) for AA contrast on near-white backgrounds. Info variant uses cyan accent (`border-accent`, `bg-accent`-derived gradient) — not primary-blue — to avoid competing with Button chassis.
@@ -735,7 +737,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@aleph-front/ds/breadcrumb";
+} from "@stasho/ds/breadcrumb";
 ```
 
 #### Default
@@ -879,7 +881,7 @@ Buttons adapt across light and dark themes. Decision #82 governs the layering pa
 Styled text input with CVA sizing and error state.
 
 ```tsx
-import { Input } from "@aleph-front/ds/input";
+import { Input } from "@stasho/ds/input";
 
 <Input size="md" placeholder="Enter text" />
 <Input size="sm" placeholder="Small" />
@@ -902,7 +904,7 @@ import { Input } from "@aleph-front/ds/input";
 Multi-line text input. Same API as Input, `rounded-none`, flat-slot chassis, vertical resize.
 
 ```tsx
-import { Textarea } from "@aleph-front/ds/textarea";
+import { Textarea } from "@stasho/ds/textarea";
 
 <Textarea placeholder="Enter message" />
 <Textarea size="sm" rows={6} />
@@ -918,8 +920,8 @@ import { Textarea } from "@aleph-front/ds/textarea";
 Layout wrapper that wires label, helper text, and error message to a child input with proper accessibility attributes.
 
 ```tsx
-import { FormField } from "@aleph-front/ds/form-field";
-import { Input } from "@aleph-front/ds/input";
+import { FormField } from "@stasho/ds/form-field";
+import { Input } from "@stasho/ds/input";
 
 <FormField label="Email" required helperText="We'll never share it">
   <Input type="email" placeholder="you@example.com" />
@@ -941,7 +943,7 @@ import { Input } from "@aleph-front/ds/input";
 Toggle control for boolean values. Wraps Radix UI Checkbox with CVA styling.
 
 ```tsx
-import { Checkbox } from "@aleph-front/ds/checkbox";
+import { Checkbox } from "@stasho/ds/checkbox";
 
 <Checkbox />
 <Checkbox defaultChecked />
@@ -970,7 +972,7 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 Mutually exclusive option set. Wraps Radix UI RadioGroup with CVA styling.
 
 ```tsx
-import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
+import { RadioGroup, RadioGroupItem } from "@stasho/ds/radio-group";
 
 <RadioGroup defaultValue="a" onValueChange={setValue}>
   <RadioGroupItem value="a" />
@@ -1001,7 +1003,7 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 Toggle control for on/off states. Wraps Radix UI Switch with CVA styling and animated thumb.
 
 ```tsx
-import { Switch } from "@aleph-front/ds/switch";
+import { Switch } from "@stasho/ds/switch";
 
 <Switch />
 <Switch defaultChecked />
@@ -1025,7 +1027,7 @@ import { Switch } from "@aleph-front/ds/switch";
 Dropdown selector. Wraps Radix UI Select with flat `options` prop API.
 
 ```tsx
-import { Select } from "@aleph-front/ds/select";
+import { Select } from "@stasho/ds/select";
 
 <Select
   placeholder="Choose..."
@@ -1063,7 +1065,7 @@ import { Select } from "@aleph-front/ds/select";
 Semantic label for status, counts, and categories. Two fill modes (flat saturated solid, tinted hairline outline), optional icon slots, Departure Mono UC label face with CSS-forced uppercase.
 
 ```tsx
-import { Badge } from "@aleph-front/ds/badge";
+import { Badge } from "@stasho/ds/badge";
 ```
 
 #### Fill Modes
@@ -1105,7 +1107,7 @@ Icon wrappers scale with badge size: 10px (`size-2.5`) for sm, 12px (`size-3`) f
 #### Custom Composition with badgeVariants
 
 ```tsx
-import { badgeVariants } from "@aleph-front/ds/badge";
+import { badgeVariants } from "@stasho/ds/badge";
 
 <span className={badgeVariants({ fill: "outline", variant: "success", size: "sm" })}>Active</span>
 ```
@@ -1117,7 +1119,7 @@ import { badgeVariants } from "@aleph-front/ds/badge";
 Content container with semantic background and border. Used for stat cards, panels, and layout grouping.
 
 ```tsx
-import { Card } from "@aleph-front/ds/card";
+import { Card } from "@stasho/ds/card";
 ```
 
 #### Variants
@@ -1152,7 +1154,7 @@ Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
 Truncated text display with copy-to-clipboard and optional external link. Designed for hashes, wallet addresses, API keys, and other long strings that need to be copiable but not fully visible. Uses a stroke-draw micro-animation on copy (Copy fades out, SVG checkmark draws its stroke via `stroke-dashoffset`).
 
 ```tsx
-import { CopyableText } from "@aleph-front/ds/copyable-text";
+import { CopyableText } from "@stasho/ds/copyable-text";
 ```
 
 #### Sizes
@@ -1202,7 +1204,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@aleph-front/ds/dialog";
+} from "@stasho/ds/dialog";
 
 {/* Uncontrolled */}
 <Dialog>
@@ -1256,7 +1258,7 @@ Plus all Radix `Dialog.Content` props (`onOpenAutoFocus`, `onCloseAutoFocus`, et
 Controlled pagination with fixed-slot layout, configurable sibling count, first/last jump buttons, and ellipsis logic. Pure `buildPageRange()` function always produces `2*siblingCount+5` items when `showFirstLast` is true, eliminating layout shift. Slots are keyed by position so the DOM stays stable during navigation.
 
 ```tsx
-import { Pagination } from "@aleph-front/ds/pagination";
+import { Pagination } from "@stasho/ds/pagination";
 ```
 
 **Visual style:** 26×26 number buttons + 32×32 nav arrow buttons, Departure Mono text-sm page numbers and ellipsis, active page is a tinted cyan cell (`bg-accent/15` + `text-accent-500 dark:text-accent`). Rest state: quiet `text-foreground/60` with no background. Hover: text shifts to `text-accent-500 dark:text-accent` with no bg change. Ellipsis at `text-foreground/40`. Disabled nav uses wave-1 pattern (`text-foreground/30 cursor-not-allowed` — not `opacity-50 pointer-events-none`). Focus: `outline-2 outline-accent outline-offset-2`. Caret icons from Phosphor.
@@ -1304,7 +1306,7 @@ import { Pagination } from "@aleph-front/ds/pagination";
 Small colored circle indicating health status. Used inline with text labels in tables and lists. Accessible by default — includes `role="status"` and auto-derived `aria-label` from the status prop.
 
 ```tsx
-import { StatusDot } from "@aleph-front/ds/status-dot";
+import { StatusDot } from "@stasho/ds/status-dot";
 ```
 
 #### Statuses
@@ -1335,7 +1337,7 @@ import { StatusDot } from "@aleph-front/ds/status-dot";
 Generic typed table with sortable columns, alternating rows, hover highlight, row click, keyboard accessibility, and empty state.
 
 ```tsx
-import { Table, type Column } from "@aleph-front/ds/table";
+import { Table, type Column } from "@stasho/ds/table";
 ```
 
 #### Column Definition
@@ -1410,7 +1412,7 @@ Radix UI tooltip wrapper with DS styling. Composable API with four exports.
 ```tsx
 import {
   Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
-} from "@aleph-front/ds/tooltip";
+} from "@stasho/ds/tooltip";
 ```
 
 #### Usage
@@ -1444,7 +1446,7 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 Radix UI Tabs with DS styling, sliding active indicator, and text nudge micro-animation. Composable API — Radix Root is re-exported directly; List wraps the indicator logic. Underline variant uses a 1px hairline track at 40% `edge` opacity with a 1px solid cyan accent indicator that slides to the active tab.
 
 ```tsx
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@aleph-front/ds/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@stasho/ds/tabs";
 ```
 
 #### Usage
@@ -1576,21 +1578,51 @@ When many tabs exceed the available width, `overflow="collapse"` on `TabsList` a
 Animated loading placeholder. No width/height props — sizing is controlled by the consumer via `className`.
 
 ```tsx
-import { Skeleton } from "@aleph-front/ds/ui/skeleton";
+import { Skeleton } from "@stasho/ds/ui/skeleton";
 
 <Skeleton className="h-4 w-32" />           {/* Text line */}
 <Skeleton className="h-10 w-full" />         {/* Input field */}
 <Skeleton className="size-12 rounded-full" /> {/* Avatar */}
 ```
 
-Uses `animate-pulse bg-muted rounded-md`. Hidden from accessibility tree via `aria-hidden="true"`. Respects `prefers-reduced-motion` via `motion-reduce:animate-none`.
+Uses `animate-pulse bg-muted rounded-none`. Hidden from accessibility tree via `aria-hidden="true"`. Respects `prefers-reduced-motion` via `motion-reduce:animate-none`.
+
+### Loader
+
+Standalone loading indicator. Dual-dot cyan chase extracted from Button's loading state (Decision #94) — the same animation, available outside a button.
+
+```tsx
+import { Loader } from "@stasho/ds/loader";
+
+<Loader />                              {/* Default md size, "Loading" aria-label */}
+<Loader size="xs" />
+<Loader size="sm" />
+<Loader>Saving…</Loader>                {/* Inline label */}
+<Loader aria-label="Syncing inbox" />   {/* Custom aria-label when no children */}
+```
+
+**Props:** `size` (xs/sm/md, default md), `children` (optional inline label), `aria-label` (defaults to "Loading" when no children), `className`. Forwards ref to the root `<span>`.
+
+**Sizes:** Dots match Button's LED ladder.
+
+| Size | Dot | Label |
+|------|-----|-------|
+| `xs` | `size-1` (4px) | `text-xs` |
+| `sm` | `size-[5px]` | `text-sm` |
+| `md` | `size-1.5` (6px) | `text-sm` |
+
+**Visuals:** Two `bg-accent` (cyan) dots with `[box-shadow:0_0_8px_currentColor]` glow, alternating opacity via `animate-button-chase-a` / `animate-button-chase-b` keyframes (0.9s ease-in-out infinite). Always cyan per § 5 "Cyan is the moving signal" — no variant colors.
+
+**Accessibility:** `role="status"`. When children are provided, the visible label is the accessible name (`aria-label` is omitted). When no children, `aria-label` defaults to "Loading" and can be overridden by the consumer. Dots are wrapped in `aria-hidden="true"`. Respects `prefers-reduced-motion` — the chase pauses and dots hold full opacity.
+
+**When to use:** Standalone loading indicator outside a button (data fetch, sync status, background work). For loading state inside a Button, use Button's `loading` prop instead — it handles the chase internally and manages `aria-busy`.
 
 ### Combobox
 
 Searchable dropdown selector. Wraps cmdk + Radix Popover with flat `options` prop API.
 
 ```tsx
-import { Combobox } from "@aleph-front/ds/combobox";
+import { Combobox } from "@stasho/ds/combobox";
 
 <Combobox
   placeholder="Search tokens..."
@@ -1631,7 +1663,7 @@ import { Combobox } from "@aleph-front/ds/combobox";
 Range input for selecting numeric values. Wraps Radix Slider primitive with CVA track/thumb variants. Supports single-value and range (two-thumb) modes.
 
 ```tsx
-import { Slider } from "@aleph-front/ds/slider";
+import { Slider } from "@stasho/ds/slider";
 
 {/* Single thumb */}
 <Slider defaultValue={[50]} />
@@ -1670,7 +1702,7 @@ import { Slider } from "@aleph-front/ds/slider";
 Searchable multi-selection dropdown with tag display, checkbox indicators, and clear-all action. Wraps cmdk + Radix Popover (same stack as Combobox).
 
 ```tsx
-import { MultiSelect } from "@aleph-front/ds/multi-select";
+import { MultiSelect } from "@stasho/ds/multi-select";
 
 <MultiSelect
   placeholder="Select tokens..."
@@ -1715,7 +1747,7 @@ import { MultiSelect } from "@aleph-front/ds/multi-select";
 Determinate or indeterminate progress indicator with 3 sizes and optional description.
 
 ```tsx
-import { ProgressBar, ProgressBarDescription } from "@aleph-front/ds/progress-bar";
+import { ProgressBar, ProgressBarDescription } from "@stasho/ds/progress-bar";
 
 // Determinate — value out of max (default 100)
 <ProgressBar value={35} label="Upload progress" />
@@ -1753,7 +1785,7 @@ Composable multi-step indicator with horizontal/vertical orientation. Ships with
 import {
   Stepper, StepperList, StepperItem, StepperIndicator,
   StepperLabel, StepperDescription, StepperConnector,
-} from "@aleph-front/ds/stepper";
+} from "@stasho/ds/stepper";
 
 <Stepper aria-label="Deployment wizard">
   <StepperList>
