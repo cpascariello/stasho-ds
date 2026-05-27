@@ -202,10 +202,12 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
           className={cn(
             "inline-flex items-center justify-center shrink-0",
             "font-sans font-semibold",
-            hasActiveHidden ? "text-accent" : "text-muted-foreground",
+            hasActiveHidden
+              ? "text-accent-700 dark:text-accent"
+              : "text-muted-foreground",
             "transition-colors duration-200",
-            "hover:text-accent",
-            "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+            "hover:text-accent-700 dark:hover:text-accent",
+            "focus-visible:outline-2 focus-visible:outline-accent-700 dark:focus-visible:outline-accent focus-visible:outline-offset-2",
             "motion-reduce:transition-none",
             isPill
               ? cn(
@@ -256,7 +258,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 "hover:bg-muted focus-visible:bg-muted",
                 "data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
                 tab.triggerEl.dataset["state"] === "active" &&
-                  "text-accent font-semibold",
+                  "text-accent-700 dark:text-accent font-semibold",
               )}
             >
               {tab.label}
@@ -392,7 +394,7 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
                     : "",
                 ]
               : [
-                  "-bottom-px h-px bg-accent",
+                  "-bottom-px h-px bg-accent-700 dark:bg-accent",
                   ready
                     ? "transition-[transform,width] duration-200 ease-out"
                     : "",
@@ -422,11 +424,11 @@ const TabsTrigger = forwardRef<
         "font-sans font-semibold text-sm",
         "text-foreground",
         "transition-[color,transform] duration-200 ease-out",
-        "hover:text-accent",
-        "data-[state=active]:text-accent",
+        "hover:text-accent-700 dark:hover:text-accent",
+        "data-[state=active]:text-accent-700 dark:data-[state=active]:text-accent",
         "data-[state=active]:-translate-y-0.5",
         "disabled:text-foreground/30 disabled:cursor-not-allowed",
-        "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+        "focus-visible:outline-2 focus-visible:outline-accent-700 dark:focus-visible:outline-accent focus-visible:outline-offset-2",
         "motion-reduce:transition-none",
         // Small size overrides (underline)
         "group-data-[size=sm]:px-3 group-data-[size=sm]:py-1.5",
@@ -438,8 +440,8 @@ const TabsTrigger = forwardRef<
         "group-data-[variant=pill]:text-sm",
         "group-data-[variant=pill]:text-muted-foreground",
         "group-data-[variant=pill]:translate-y-0",
-        "group-data-[variant=pill]:hover:text-accent",
-        "group-data-[variant=pill]:data-[state=active]:text-accent",
+        "group-data-[variant=pill]:hover:text-accent-700 dark:group-data-[variant=pill]:hover:text-accent",
+        "group-data-[variant=pill]:data-[state=active]:text-accent-700 dark:group-data-[variant=pill]:data-[state=active]:text-accent",
         "group-data-[variant=pill]:data-[state=active]:translate-y-0",
         // Small pill overrides (compound group selector)
         "group-[[data-variant=pill][data-size=sm]]:px-3",

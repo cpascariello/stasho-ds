@@ -49,7 +49,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **How:** Don't use `--success` for "selected" or `--accent` for "warning". The role mapping is what makes the palette legible at a glance.
 **Source:** Decisions #78, #79.
 
-**Active states.** Selected / checked / active states on form controls and navigation (Switch, Slider, Checkbox, Radio, active Tab, active Breadcrumb, ProgressBar) use `--accent`. Primary's chassis role (Button only) is preserved.
+**Active states.** Selected / checked / active states on form controls and navigation (Switch, Slider, Checkbox, Radio, active Tab, active Breadcrumb, ProgressBar) use `--accent`. Primary's chassis role (Button only) is preserved. **Light-mode body text carve-out:** cyan `text-accent` at L=0.84 fails AA contrast on light surfaces. UI text colored by `--accent` (Tab hover/active, Breadcrumb hover/current page, OverflowTrigger active, focus outlines) uses `text-accent-700 dark:text-accent` (matching the input-focus precedent in Decision #84). Indicator fills (`bg-accent`, `bg-accent/15`) stay same-hex — those are chassis surfaces, not body text.
 **Source:** Decision #86.
 
 ### No decorative texture

@@ -67,7 +67,7 @@ const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
         className={cn(
           "text-foreground",
           "transition-colors duration-150",
-          "hover:text-accent",
+          "hover:text-accent-700 dark:hover:text-accent",
           "motion-reduce:transition-none",
           className,
         )}
@@ -110,7 +110,7 @@ const BreadcrumbPage = forwardRef<
   <span
     ref={ref}
     aria-current="page"
-    className={cn("text-accent", className)}
+    className={cn("text-accent-700 dark:text-accent", className)}
     {...rest}
   />
 ));
