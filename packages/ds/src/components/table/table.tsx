@@ -221,11 +221,11 @@ export function Table<T>({
                 className={cn(
                   "border-b border-edge transition-all",
                   activeKey === keyExtractor(row)
-                    ? "bg-primary-600/10 shadow-[inset_3px_0_0_var(--color-primary-500)]"
+                    ? "bg-accent/15 shadow-[inset_3px_0_0_var(--accent)]"
                     : "even:bg-muted/30",
                   "hover:bg-muted/50",
                   onRowClick &&
-                    "cursor-pointer hover:shadow-[inset_3px_0_0_var(--color-primary-500)]",
+                    "cursor-pointer hover:shadow-[inset_3px_0_0_var(--accent)]",
                 )}
                 aria-current={
                   activeKey === keyExtractor(row) ? "true" : undefined

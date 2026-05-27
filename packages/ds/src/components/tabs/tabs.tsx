@@ -252,7 +252,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 });
               }}
               className={cn(
-                "flex w-full items-center rounded-sm px-3 py-2",
+                "flex w-full items-center rounded-none px-3 py-2",
                 "text-sm text-foreground cursor-pointer select-none",
                 "outline-none",
                 "hover:bg-muted focus-visible:bg-muted",
