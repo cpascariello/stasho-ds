@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 const cardVariants = cva("rounded-lg", {
   variants: {
     variant: {
-      default: "bg-surface text-surface-foreground",
+      default: "bg-surface text-surface-foreground border border-edge",
       ghost: "bg-transparent",
     },
     padding: {

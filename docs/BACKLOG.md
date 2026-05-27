@@ -15,6 +15,18 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-05-27 — Switch size ladder revisit (cascade from Checkbox/Radio shrink)
+
+**Source:** Decision #90 brainstorm
+**Description:** Checkbox and Radio shrunk to xs/sm/md = 14/16/20 in Decision #90. Switch still ships at ~16/20/24 (chunk-4 sizes). The visual mismatch between Switch and Checkbox/Radio in form contexts will read heavy on Switch. Audit Switch sizes and either shrink to match (most likely outcome) or document why Switch keeps its heavier ladder. Single chunk: `skin/switch-ladder-revisit` off `skin/paraplu`.
+**Priority:** Medium
+
+### 2026-05-27 — Boolean form focus pattern consistency
+
+**Source:** Decision #90 brainstorm (out of scope, flagged)
+**Description:** Switch + Slider use `outline-2 outline-accent outline-offset-2` focus (separately-rendered thumbs need external outline). Checkbox + Radio use border-swap focus (small targets where the chassis hairline carries focus). The split is principled per Decision #85, but a future audit could unify if a real reason emerges. Document the split + decision criteria; no code change implied unless an issue surfaces.
+**Priority:** Low
+
 ### 2026-03-01 — Theme persistence across page reloads
 
 **Source:** Identified during accessibility audit

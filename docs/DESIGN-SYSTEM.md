@@ -958,11 +958,11 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 
 **Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px, rounded 4px) · `sm` (20px, rounded-md 6px) · `md` (24px, rounded-md 6px, default)
+**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). All sizes use `rounded-none` (vocabulary alignment per Decision #90 — `rounded` / `rounded-md` resolved to 0px under the Abyssal scale).
 
-**Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM.
+**Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM. Check glyph is Phosphor `<Check weight="bold" />` (Decision #90 — replaces the prior hand-rolled SVG; matches Stepper completed indicator per Decision #88).
 
-**Visual style:** Flat-hairline chassis — transparent unchecked / `bg-accent` checked with dark `text-neutral-950` check glyph (legible on cyan in both modes); 1px `border-edge` → `border-accent` on checked, cyan hairline focus (`border-accent-700` light / `border-accent` dark). Disabled flattens to muted-sink chassis (`bg-muted` light / `bg-background` dark) with `cursor: not-allowed`; compound `disabled:data-[state=checked]:*` rules keep disabled+checked sunk (no cyan leak).
+**Visual style:** Flat-slot chassis matching Input — rest fill is `bg-background` (light) / `bg-surface` (dark) with 1px `border-edge` hairline (Decision #90 — the chassis is visible at rest in dark mode, no longer transparent). Checked = `bg-accent` + `border-accent` + dark `text-neutral-950` Phosphor glyph (legible on cyan in both modes). Focus = hairline swaps to `border-accent-700` (light) / `border-accent` (dark). Disabled flattens to muted-sink chassis (`bg-muted` light / `bg-background` dark) with `cursor: not-allowed`; compound `disabled:data-[state=checked]:*` rules keep disabled+checked sunk (no cyan leak).
 
 **Error:** `error={true}` switches to 1px `border-error` semantic token (overrides checked-accent via `data-[state=checked]:border-error`), sets `aria-invalid`.
 
@@ -991,11 +991,11 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 
 **RadioGroupItem props:** `value`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px) · `sm` (20px) · `md` (24px, default)
+**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). Cascade from Checkbox per Decision #90 (chassis is shared per Decision #85). `rounded-full` (round-by-design).
 
 **Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
 
-**Visual style:** Flat-hairline chassis matching Checkbox — transparent fill, 1px `border-edge` → `border-accent` on checked; indicator dot is `bg-accent`. Disabled flattens chassis (muted-sink) and dims the dot via descendant rule (`disabled:[&_span]:bg-foreground/30`) — `peer-disabled:` doesn't apply because Radix nests Indicator as a child of Item.
+**Visual style:** Flat-slot chassis matching Checkbox — rest fill is `bg-background` (light) / `bg-surface` (dark) with 1px `border-edge` → `border-accent` on checked; indicator dot is `bg-accent`. Disabled flattens chassis (muted-sink) and dims the dot via descendant rule (`disabled:[&_span]:bg-foreground/30`) — `peer-disabled:` doesn't apply because Radix nests Indicator as a child of Item.
 
 ### Switch
 
@@ -1061,7 +1061,7 @@ import { Select } from "@aleph-front/ds/select";
 
 ### Badge
 
-Semantic label for status, counts, and categories. Two fill modes (solid gradient, outline), optional icon slots, Departure Mono UC label face with CSS-forced uppercase.
+Semantic label for status, counts, and categories. Two fill modes (flat saturated solid, tinted hairline outline), optional icon slots, Departure Mono UC label face with CSS-forced uppercase.
 
 ```tsx
 import { Badge } from "@aleph-front/ds/badge";
@@ -1069,21 +1069,22 @@ import { Badge } from "@aleph-front/ds/badge";
 
 #### Fill Modes
 
-**Solid (default):** gradient background with dark text.
+**Solid (default):** flat saturated background with dark text. Default uses `bg-muted` + foreground text.
 
 ```tsx
-<Badge variant="default">Informational</Badge>  {/* gradient-fill-info */}
-<Badge variant="success">Healthy</Badge>         {/* gradient-fill-success */}
-<Badge variant="warning">In Progress</Badge>     {/* gradient-fill-warning */}
-<Badge variant="error">Failed</Badge>            {/* gradient-fill-error */}
-<Badge variant="info">3 VMs</Badge>              {/* neutral solid fill */}
+<Badge variant="default">Informational</Badge>  {/* bg-muted text-foreground */}
+<Badge variant="success">Healthy</Badge>         {/* bg-success text-neutral-950 */}
+<Badge variant="warning">In Progress</Badge>     {/* bg-warning text-neutral-950 */}
+<Badge variant="error">Failed</Badge>            {/* bg-error text-neutral-950 */}
+<Badge variant="info">3 VMs</Badge>              {/* bg-accent text-neutral-950 (cyan) */}
 ```
 
-**Outline:** colored border with subtle background.
+**Outline:** tinted background + 1px colored hairline + colored text. Default outline uses neutral `border-edge` + `text-foreground/70`. Each semantic variant uses the light-mode `-500` text carve-out for AA contrast on light surfaces.
 
 ```tsx
-<Badge fill="outline" variant="success">Healthy</Badge>
+<Badge fill="outline" variant="success">Healthy</Badge>  {/* bg-success/15 border-success/40 text-success-500 dark:text-success */}
 <Badge fill="outline" variant="error">Failed</Badge>
+<Badge fill="outline" variant="info">Live</Badge>        {/* cyan accent */}
 ```
 
 #### Icons
@@ -1110,7 +1111,7 @@ import { badgeVariants } from "@aleph-front/ds/badge";
 <span className={badgeVariants({ fill: "outline", variant: "success", size: "sm" })}>Active</span>
 ```
 
-**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-md` (6px). Solid fill uses gradient CSS utility classes (`gradient-fill-success`, etc.) from tokens.css. Outline fill uses `border` + token-scale border colors + subtle `/20` opacity backgrounds in dark mode. `default` variant uses `dark:text-white` for contrast on the dark `gradient-info` endpoint.
+**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-[2px]` (contained-marker radius per SKIN-PRINCIPLES § 4 chip-row split — Decision #90). No gradients. Solid fill is a single saturated semantic background + `text-neutral-950` (info uses `bg-accent` cyan; default uses `bg-muted` + `text-foreground`). Outline fill is `bg-{token}/15` + 1px `border-{token}/40` + `text-{token}-500 dark:text-{token}` (light-mode `-500` carve-out generalized across all four semantic variants per Decision #88). Default outline drops to `bg-transparent border-edge text-foreground/70`.
 
 ### Card
 
@@ -1123,7 +1124,7 @@ import { Card } from "@aleph-front/ds/card";
 #### Variants
 
 ```tsx
-<Card variant="default">Default card</Card>  {/* bg-surface, borderless */}
+<Card variant="default">Default card</Card>  {/* bg-surface + 1px border-edge hairline */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```
 
@@ -1740,6 +1741,8 @@ import { ProgressBar, ProgressBarDescription } from "@aleph-front/ds/progress-ba
 **Sizes:** `sm` = 4px, `md` = 6px (default), `lg` = 10px track height.
 
 **Indeterminate mode:** Omit `value`. The fill bar animates a sliding loop. `aria-valuenow` is omitted per WAI-ARIA spec.
+
+**Visual style:** Fill is `bg-accent` (cyan) — applies in both determinate and indeterminate modes. Track is `bg-muted dark:bg-neutral-900` with the Switch/Slider inset bevel (`shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]`) per SKIN-PRINCIPLES § 5. No glow on the fill (Decision #90 § 6 Direction C amendment — bevel + cyan carries the lit-surface signal without committing to a persistent glow; glow is reserved for directly-grabbed controls and "you are here" beacons).
 
 **Custom colors:** Target the fill via `[&_[data-fill]]` selector in className. Works with any Tailwind `bg-*` class.
 

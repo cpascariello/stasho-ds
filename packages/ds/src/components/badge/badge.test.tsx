@@ -19,83 +19,116 @@ describe("Badge", () => {
   });
 
   describe("fill=solid (default)", () => {
-    it("applies gradient-fill-info for default variant", () => {
+    it("default solid uses bg-muted + text-foreground", () => {
       const { container } = render(<Badge>Label</Badge>);
-      expect(container.firstElementChild?.className).toContain(
-        "gradient-fill-info",
-      );
-    });
-
-    it("applies gradient-fill-success for success variant", () => {
-      const { container } = render(
-        <Badge variant="success">Label</Badge>,
-      );
-      expect(container.firstElementChild?.className).toContain(
-        "gradient-fill-success",
-      );
-    });
-
-    it("applies gradient-fill-warning for warning variant", () => {
-      const { container } = render(
-        <Badge variant="warning">Label</Badge>,
-      );
-      expect(container.firstElementChild?.className).toContain(
-        "gradient-fill-warning",
-      );
-    });
-
-    it("applies gradient-fill-error for error variant", () => {
-      const { container } = render(
-        <Badge variant="error">Label</Badge>,
-      );
-      expect(container.firstElementChild?.className).toContain(
-        "gradient-fill-error",
-      );
-    });
-
-    it("applies neutral bg for info variant", () => {
-      const { container } = render(
-        <Badge variant="info">Label</Badge>,
-      );
       const cls = container.firstElementChild?.className ?? "";
-      expect(cls).toContain("bg-neutral-100");
+      expect(cls).toContain("bg-muted");
+      expect(cls).toContain("text-foreground");
       expect(cls).not.toContain("gradient-fill");
+    });
+
+    it("success solid uses bg-success + text-neutral-950", () => {
+      const { container } = render(<Badge variant="success">Label</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-success");
+      expect(cls).toContain("text-neutral-950");
+    });
+
+    it("warning solid uses bg-warning + text-neutral-950", () => {
+      const { container } = render(<Badge variant="warning">Label</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-warning");
+      expect(cls).toContain("text-neutral-950");
+    });
+
+    it("error solid uses bg-error + text-neutral-950", () => {
+      const { container } = render(<Badge variant="error">Label</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-error");
+      expect(cls).toContain("text-neutral-950");
+    });
+
+    it("info solid uses bg-accent + text-neutral-950", () => {
+      const { container } = render(<Badge variant="info">Label</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-accent");
+      expect(cls).toContain("text-neutral-950");
+    });
+
+    it("no solid variant carries a gradient-fill class", () => {
+      for (const variant of [
+        "default",
+        "success",
+        "warning",
+        "error",
+        "info",
+      ] as const) {
+        const { container } = render(<Badge variant={variant}>L</Badge>);
+        expect(container.firstElementChild?.className).not.toContain(
+          "gradient-fill",
+        );
+      }
     });
   });
 
   describe("fill=outline", () => {
-    it("applies border class", () => {
-      const { container } = render(
-        <Badge fill="outline">Label</Badge>,
-      );
+    it("applies the 1px border class", () => {
+      const { container } = render(<Badge fill="outline">Label</Badge>);
       expect(container.firstElementChild?.className).toContain("border");
     });
 
-    it("applies border-success-400 for success variant", () => {
-      const { container } = render(
-        <Badge fill="outline" variant="success">Label</Badge>,
-      );
-      expect(container.firstElementChild?.className).toContain(
-        "border-success-400",
-      );
-    });
-
-    it("applies border-error-400 for error variant", () => {
-      const { container } = render(
-        <Badge fill="outline" variant="error">Label</Badge>,
-      );
-      expect(container.firstElementChild?.className).toContain(
-        "border-error-400",
-      );
-    });
-
-    it("applies border-primary-300 for default variant", () => {
+    it("default outline uses border-edge + foreground/70 text", () => {
       const { container } = render(
         <Badge fill="outline" variant="default">Label</Badge>,
       );
-      expect(container.firstElementChild?.className).toContain(
-        "border-primary-300",
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("border-edge");
+      expect(cls).toContain("text-foreground/70");
+      expect(cls).not.toContain("border-primary");
+    });
+
+    it("success outline uses bg-success/15 + border-success/40 + text-success-500 dark:text-success", () => {
+      const { container } = render(
+        <Badge fill="outline" variant="success">Label</Badge>,
       );
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-success/15");
+      expect(cls).toContain("border-success/40");
+      expect(cls).toContain("text-success-500");
+      expect(cls).toContain("dark:text-success");
+    });
+
+    it("warning outline uses bg-warning/15 + border-warning/40 + text-warning-500 dark:text-warning", () => {
+      const { container } = render(
+        <Badge fill="outline" variant="warning">Label</Badge>,
+      );
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-warning/15");
+      expect(cls).toContain("border-warning/40");
+      expect(cls).toContain("text-warning-500");
+      expect(cls).toContain("dark:text-warning");
+    });
+
+    it("error outline uses bg-error/15 + border-error/40 + text-error-500 dark:text-error", () => {
+      const { container } = render(
+        <Badge fill="outline" variant="error">Label</Badge>,
+      );
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-error/15");
+      expect(cls).toContain("border-error/40");
+      expect(cls).toContain("text-error-500");
+      expect(cls).toContain("dark:text-error");
+    });
+
+    it("info outline uses bg-accent/15 + border-accent/40 + text-accent-500 dark:text-accent", () => {
+      const { container } = render(
+        <Badge fill="outline" variant="info">Label</Badge>,
+      );
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("bg-accent/15");
+      expect(cls).toContain("border-accent/40");
+      expect(cls).toContain("text-accent-500");
+      expect(cls).toContain("dark:text-accent");
     });
 
     it("does not apply gradient-fill classes", () => {
@@ -188,17 +221,17 @@ describe("Badge", () => {
       expect(container.firstElementChild?.textContent).toBe("active");
     });
 
-    it("applies rounded-none", () => {
+    it("applies rounded-[2px]", () => {
       const { container } = render(<Badge>Label</Badge>);
-      expect(container.firstElementChild?.className).toContain("rounded-none");
+      expect(container.firstElementChild?.className).toContain("rounded-[2px]");
     });
   });
 
   describe("badgeVariants export", () => {
-    it("accepts fill parameter", () => {
+    it("accepts fill parameter and emits semantic-token border", () => {
       const cls = badgeVariants({ fill: "outline", variant: "success" });
       expect(cls).toContain("border");
-      expect(cls).toContain("border-success-400");
+      expect(cls).toContain("border-success/40");
     });
   });
 });

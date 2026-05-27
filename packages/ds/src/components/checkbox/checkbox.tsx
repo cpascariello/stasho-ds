@@ -1,11 +1,13 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
+import { Check } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@ac/lib/cn";
 
 const checkboxVariants = cva(
   [
-    "peer shrink-0 bg-transparent",
+    "peer shrink-0",
+    "bg-background dark:bg-surface",
     "border border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none",
@@ -24,9 +26,9 @@ const checkboxVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-4 rounded",
-        sm: "size-5 rounded-md",
-        md: "size-6 rounded-md",
+        xs: "size-3.5 rounded-none",
+        sm: "size-4 rounded-none",
+        md: "size-5 rounded-none",
       },
     },
     defaultVariants: {
@@ -66,18 +68,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             "transition-[clip-path] duration-200 ease-in-out motion-reduce:transition-none",
           )}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-[90%]"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+          <Check weight="bold" className="size-[80%]" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     );
