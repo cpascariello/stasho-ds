@@ -454,7 +454,7 @@ Floating-surface chrome uses two tokens so all popovers re-theme from one place:
 
 | Token | Resolves to | Used by |
 |---|---|---|
-| `--popover-bg` | `var(--surface)` | Tooltip, Select / Combobox / MultiSelect dropdowns, Tabs overflow DropdownMenu |
+| `--popover-bg` | `var(--surface)` | Tooltip, Slider tooltip, Select / Combobox / MultiSelect dropdowns, Tabs overflow DropdownMenu |
 | `--popover-border` | `var(--edge)` | (same) |
 
 These bridge to Tailwind utilities `bg-popover-bg` and `border-popover-border`. Reach for the popover token on any floating surface — not `bg-surface` + `border-edge` directly — so retheming the popover identity flows through one declaration.
@@ -1646,7 +1646,7 @@ import { Slider } from "@aleph-front/ds/slider";
 
 **Sizes:** `sm` (1.5px track, 16px thumb) · `md` (2px track, 20px thumb, default)
 
-**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-surface border border-edge rounded-none text-foreground`, aligned with the chunk 4 popover token (Tooltip component matches in chunk 6).
+**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground`, sharing the chunk-6 popover token with Tooltip and the four dropdown surfaces (Decision #87).
 
 **Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill and thumb are `bg-accent`; thumb has a 1px `border-accent` ring for circular separation against the cyan range fill. Thumb glows on hover/focus (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the thumb. Disabled flattens range + thumb to `bg-foreground/30` and removes the bevel; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply.
 

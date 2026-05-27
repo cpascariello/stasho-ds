@@ -264,7 +264,7 @@ These are the patterns we've discovered while building components for this skin.
 
 ### Popover surface tokens
 **Rule:** All floating surfaces that aren't modals share a single popover token: `bg-popover-bg border border-popover-border`. The token resolves through `--surface` / `--edge`, so retheming the popover identity flows through one declaration.
-**Why:** Tooltip + four dropdown surfaces all carrying inline `bg-surface border border-edge` would drift into five subtly different popovers over time. One token, one re-theme seam.
+**Why:** Tooltip + Slider tooltip + four dropdown surfaces all carrying inline `bg-surface border border-edge` would drift into six subtly different popovers over time. One token, one re-theme seam.
 **How:** `--popover-bg: var(--surface)` and `--popover-border: var(--edge)` in both `:root` and `.theme-dark`; bridged through `--color-popover-bg` / `--color-popover-border` in the Tailwind `@theme inline` block so `bg-popover-bg` / `border-popover-border` are utility classes. Popover Content gets `rounded-none` per the radii table.
 **Source:** Decision #87.
 
