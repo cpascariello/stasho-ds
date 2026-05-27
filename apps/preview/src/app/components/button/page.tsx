@@ -14,7 +14,7 @@ const variants = [
   "ghost",
 ] as const;
 
-const sizes = ["xs", "sm", "md"] as const;
+const sizes = ["xs", "sm", "md", "lg"] as const;
 
 function PlaceholderIcon({ label }: { label: string }) {
   return (
@@ -39,7 +39,7 @@ export default function ButtonPage() {
     <>
       <PageHeader
         title="Button"
-        description="Instrument-panel control with cyan LED signature. 7 variants, 3 sizes, icon slots, loading/disabled states, and asChild polymorphism."
+        description="Instrument-panel control with cyan LED signature. 7 variants, 4 sizes, icon slots, loading/disabled states, and asChild polymorphism."
       />
       <DemoSection title="Variants">
         <div className="flex flex-wrap items-center gap-3">

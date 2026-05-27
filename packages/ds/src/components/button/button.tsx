@@ -106,6 +106,7 @@ const buttonVariants = cva(
         xs: "py-[6px] px-3 text-[11px] gap-1.5",
         sm: "py-[7px] px-3.5 text-xs gap-[7px]",
         md: "py-[9px] px-[18px] text-[13px] gap-2",
+        lg: "py-[13px] px-6 text-[15px] gap-2.5",
       },
     },
     compoundVariants: [
@@ -113,6 +114,7 @@ const buttonVariants = cva(
       { variant: "outline", size: "xs", class: "py-[5px] px-[11px]" },
       { variant: "outline", size: "sm", class: "py-[6px] px-[13px]" },
       { variant: "outline", size: "md", class: "py-[8px] px-[17px]" },
+      { variant: "outline", size: "lg", class: "py-[12px] px-[23px]" },
     ],
     defaultVariants: {
       variant: "primary",
@@ -129,6 +131,7 @@ const ledSizeClass: Record<Size, string> = {
   xs: "size-1",
   sm: "size-[5px]",
   md: "size-1.5",
+  lg: "size-2",
 };
 
 // Icon dimensions per size (used for both iconLeft wrapper and iconRight wrapper).
@@ -136,6 +139,7 @@ const iconSizeClass: Record<Size, string> = {
   xs: "size-[11px]",
   sm: "size-3",
   md: "size-[13px]",
+  lg: "size-4",
 };
 
 // LED color + static glow per variant.

@@ -65,7 +65,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **Source:** Decisions #77, #78.
 
 ### Hairline borders
-**Rule:** Borders use `rgba(255,255,255,0.08)` (or the `--edge` token), 1px width, never accent-tinted.
+**Rule:** Borders use the `--edge` token, 1px width, never accent-tinted.
 **Why:** Accent-tinted chrome dilutes accents as content signals. A cyan-bordered card competes with a cyan-LED button for the user's "this is live" eye.
 **How:** All chrome is white-at-low-opacity (or the `--edge` token). Accents only appear where they carry meaning — LED, focus ring, link text, active indicators.
 **Source:** Decision #78.

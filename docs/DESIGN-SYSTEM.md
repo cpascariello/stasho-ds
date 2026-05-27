@@ -11,7 +11,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@stasho/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@stasho/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
-| [Button](#button) | Action trigger with 7 variants, 3 sizes, cyan LED signature | `@stasho/ds/button` |
+| [Button](#button) | Action trigger with 7 variants, 4 sizes, cyan LED signature | `@stasho/ds/button` |
 | [Card](#card) | Content container with 2 variants (default/ghost) | `@stasho/ds/card` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
@@ -218,10 +218,10 @@ Accents (`primary`/`accent`/`success`/`warning`/`error`) resolve to the **same h
 | `error-foreground` | `text-error-foreground` | `#ffffff` | `#ffffff` | Text on error backgrounds |
 | `muted` | `bg-muted` | `oklch(0.94 0.009 270)` | base-800 | Subdued backgrounds |
 | `muted-foreground` | `text-muted-foreground` | `oklch(0.55 0.014 270)` | `oklch(0.62 0.012 273)` | Subdued text, labels |
-| `surface` | `bg-surface` | `oklch(0.94 0.009 270)` | base-900 (`#0d0d0d`) | Elevated surfaces (cards, form fields) |
+| `surface` | `bg-surface` | `oklch(0.94 0.009 270)` | `oklch(0.18 0.005 273)` | Elevated surfaces (cards, form fields) |
 | `surface-foreground` | `text-surface-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Text on elevated surfaces |
-| `edge` | `border-edge` | `oklch(0.87 0.013 270)` | `rgba(255,255,255,0.08)` | Borders, dividers |
-| `edge-hover` | `border-edge-hover` | `oklch(0.80 0.015 270)` | `rgba(255,255,255,0.14)` | Hover state borders |
+| `edge` | `border-edge` | `oklch(0.87 0.013 270)` | `rgba(255,255,255,0.16)` | Borders, dividers |
+| `edge-hover` | `border-edge-hover` | `oklch(0.80 0.015 270)` | `rgba(255,255,255,0.24)` | Hover state borders |
 
 ### Surface Ladders
 
@@ -230,11 +230,11 @@ Accents (`primary`/`accent`/`success`/`warning`/`error`) resolve to the **same h
 | Token | Hex | Role |
 |-------|-----|------|
 | `--background` | `#07080a` | Page void |
-| `--color-base-900` | `#0d0d0d` | Surface (panels, cards) |
+| `--color-base-900` | `#0d0d0d` | (legacy scale step — `--surface` no longer maps here per Decision #95) |
 | `--color-base-800` | `#101111` | Elevated (modals, muted) |
 | `--color-base-700` | `#161718` | Raised (popovers) |
 
-Borders in dark mode are white-low-opacity hairlines: `rgba(255,255,255,0.08)` resting, `rgba(255,255,255,0.14)` hover. Accents are **never** used in chrome.
+`--surface` resolves to `oklch(0.18 0.005 273)` in dark mode (Decision #95) — slightly lifted off the void to keep cards, dropdowns, inputs, and dialog readable as discrete surfaces. Borders in dark mode are white-low-opacity hairlines: `rgba(255,255,255,0.16)` resting, `rgba(255,255,255,0.24)` hover. Accents are **never** used in chrome.
 
 **Light:** off-white ladder with a faint hue-270 violet tint, `oklch(0.99 0.005 270) → oklch(0.94 0.009 270) → oklch(0.87 0.013 270)`.
 
@@ -783,7 +783,7 @@ import {
 
 ### Button
 
-CVA-based instrument-panel button with 7 variants, 3 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
+CVA-based instrument-panel button with 7 variants, 4 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
 
 ```tsx
 import { Button } from "@stasho/ds/button";
@@ -806,9 +806,10 @@ import { Button } from "@stasho/ds/button";
 #### Sizes
 
 ```tsx
-<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,  text-[11px] */}
-<Button size="sm">Small</Button>         {/* py-[7px] px-3.5, text-xs */}
+<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,    text-[11px] */}
+<Button size="sm">Small</Button>         {/* py-[7px] px-3.5,  text-xs       */}
 <Button size="md">Medium</Button>        {/* py-[9px] px-[18px], text-[13px] — default */}
+<Button size="lg">Large</Button>         {/* py-[13px] px-6,   text-[15px]   — opt-in for hero CTAs */}
 ```
 
 #### Icons
