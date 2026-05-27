@@ -113,7 +113,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
               "overflow-hidden rounded-none",
-              "bg-surface border border-edge shadow-brand",
+              "bg-popover-bg border border-popover-border shadow",
             )}
             sideOffset={4}
             align="start"
@@ -145,8 +145,8 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                       "text-sm text-foreground cursor-pointer select-none",
                       "outline-none",
                       "data-[selected=true]:bg-muted",
-                      "data-[disabled=true]:opacity-50",
-                      "data-[disabled=true]:pointer-events-none",
+                      "data-[disabled=true]:text-foreground/30",
+                      "data-[disabled=true]:cursor-not-allowed",
                     )}
                   >
                     <span className="flex-1">{option.label}</span>

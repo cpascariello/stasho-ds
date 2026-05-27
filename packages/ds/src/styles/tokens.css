@@ -109,10 +109,10 @@
   --gradient-info: linear-gradient(90deg, #00E1FA 22.66%, #0040FF 244.27%);
   --gradient-destructive: var(--gradient-error);
 
-  /* Shadows (anchored on primary-800 oklch(0.27 0.180 264)) */
-  --shadow-brand-sm: 0px 4px 4px oklch(0.27 0.180 264 / 0.20);
-  --shadow-brand: 0px 4px 24px oklch(0.27 0.180 264 / 0.15);
-  --shadow-brand-lg: 0px 4px 48px oklch(0.27 0.180 264 / 0.30);
+  /* Shadows — neutral elevation, no brand tint (Decision #87) */
+  --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.10);
+  --shadow: 0px 4px 16px rgba(0, 0, 0, 0.20);
+  --shadow-lg: 0px 24px 60px rgba(0, 0, 0, 0.65);
 
   /* Fonts */
   --font-heading: "Anybody", ui-sans-serif, system-ui, sans-serif;
@@ -150,6 +150,8 @@
   --surface-foreground: oklch(0.22 0.015 270);
   --edge: oklch(0.87 0.013 270);
   --edge-hover: oklch(0.80 0.015 270);
+  --popover-bg: var(--surface);
+  --popover-border: var(--edge);
 
   --gradient-main: var(--gradient-main-base);
 
@@ -180,6 +182,8 @@
   --surface-foreground: #f3f3f3;
   --edge: rgba(255, 255, 255, 0.08);
   --edge-hover: rgba(255, 255, 255, 0.14);
+  --popover-bg: var(--surface);
+  --popover-border: var(--edge);
 
   --gradient-main: var(--gradient-main-dark);
 }
@@ -206,6 +210,8 @@
   --color-surface-foreground: var(--surface-foreground);
   --color-edge: var(--edge);
   --color-edge-hover: var(--edge-hover);
+  --color-popover-bg: var(--popover-bg);
+  --color-popover-border: var(--popover-border);
 }
 
 /* ──────────────────────────────────────────────

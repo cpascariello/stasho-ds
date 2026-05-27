@@ -209,13 +209,13 @@ const QUICK_LINKS: QuickLinkGroup[] = [
       { label: "Checkbox", href: "/components/checkbox", description: "3 sizes, clip-path animation" },
       { label: "Combobox", href: "/components/combobox", description: "Searchable dropdown" },
       { label: "FormField", href: "/components/form-field", description: "Label + error wrapper" },
-      { label: "Input", href: "/components/input", description: "2 sizes, shadow-brand style" },
+      { label: "Input", href: "/components/input", description: "2 sizes, flat-slot chassis" },
       { label: "MultiSelect", href: "/components/multi-select", description: "Tags with overflow" },
       { label: "Radio Group", href: "/components/radio-group", description: "3 sizes, group disabled" },
       { label: "Select", href: "/components/select", description: "Flat options, portal dropdown" },
       { label: "Slider", href: "/components/slider", description: "Single or range, tooltip" },
       { label: "Switch", href: "/components/switch", description: "Animated sliding thumb" },
-      { label: "Textarea", href: "/components/textarea", description: "Vertical resize, shadow-brand" },
+      { label: "Textarea", href: "/components/textarea", description: "Vertical resize, flat-slot chassis" },
     ],
   },
 ];
@@ -481,7 +481,7 @@ export default function OverviewPage() {
                   key={item.href}
                   href={item.href}
                   className="block rounded-lg border border-edge p-3
-                             hover:border-primary hover:shadow-brand-sm
+                             hover:border-accent hover:shadow-sm
                              transition-all"
                   style={{ transitionDuration: "var(--duration-fast)" }}
                 >

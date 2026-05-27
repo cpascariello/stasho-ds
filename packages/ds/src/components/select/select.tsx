@@ -90,7 +90,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
           <SelectPrimitive.Content
             className={cn(
               "z-50 overflow-hidden rounded-none",
-              "bg-surface border border-edge shadow-brand",
+              "bg-popover-bg border border-popover-border shadow",
             )}
             position="popper"
             sideOffset={4}
@@ -106,8 +106,8 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     "text-sm text-foreground cursor-pointer select-none",
                     "outline-none",
                     "data-[highlighted]:bg-muted",
-                    "data-[disabled]:opacity-50",
-                    "data-[disabled]:pointer-events-none",
+                    "data-[disabled]:text-foreground/30",
+                    "data-[disabled]:cursor-not-allowed",
                   )}
                 >
                   <SelectPrimitive.ItemText>

@@ -38,7 +38,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         <DialogPrimitive.Content
           ref={ref}
           className={cn(
-            "relative w-full max-w-md rounded-[4px] bg-surface p-6 shadow-brand-lg",
+            "relative w-full max-w-md rounded-xl bg-surface p-6",
             "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
             "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             "motion-reduce:animate-none",
@@ -58,8 +58,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
               className={cn(
                 "absolute top-4 right-4 rounded-none",
                 "text-muted-foreground transition-colors hover:text-foreground",
-                "focus-visible:outline-none focus-visible:ring-2",
-                "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
+                "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
               )}
               aria-label="Close"
             >

@@ -112,7 +112,7 @@ const Slider = forwardRef<
               <span
                 className={cn(
                   "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
-                  "rounded-none bg-surface border border-edge px-2 py-1",
+                  "rounded-none bg-popover-bg border border-popover-border px-2 py-1",
                   "text-xs text-foreground whitespace-nowrap pointer-events-none",
                 )}
               >
