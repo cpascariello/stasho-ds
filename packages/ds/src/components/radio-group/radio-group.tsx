@@ -5,7 +5,8 @@ import { cn } from "@ac/lib/cn";
 
 const radioItemVariants = cva(
   [
-    "peer shrink-0 rounded-full bg-transparent",
+    "peer shrink-0 rounded-full",
+    "bg-background dark:bg-surface",
     "border border-edge",
     "hover:border-edge-hover",
     "focus-visible:outline-none",
@@ -21,9 +22,9 @@ const radioItemVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-4",
-        sm: "size-5",
-        md: "size-6",
+        xs: "size-3.5",
+        sm: "size-4",
+        md: "size-5",
       },
     },
     defaultVariants: {
