@@ -26,7 +26,6 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Select](#select) | Dropdown selector with flat options prop | `@aleph-front/ds/select` |
 | [Skeleton](#skeleton) | Animated loading placeholder | `@aleph-front/ds/ui/skeleton` |
 | [Slider](#slider) | Range input, single or two-thumb mode | `@aleph-front/ds/slider` |
-| [Spinner](#spinner) | Animated loading indicator | `@aleph-front/ds/ui/spinner` |
 | [StatusDot](#statusdot) | Health status circle with pulse animation | `@aleph-front/ds/status-dot` |
 | [Switch](#switch) | On/off toggle with animated sliding thumb | `@aleph-front/ds/switch` |
 | [Table](#table) | Generic typed table with sorting and row selection | `@aleph-front/ds/table` |
@@ -45,9 +44,9 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Dismissible banner message | **Alert** — auto-dismiss timer, progress bar, semantic variants | Dialog — too interruptive for status messages |
 | Blocking user decision | **Dialog** — overlay, focus trap, `locked` mode for forced choice | Alert — can be ignored or dismissed |
 | Passive extra info on hover | **Tooltip** — non-blocking, hover/focus triggered | Dialog — too heavy for supplementary info |
-| Loading placeholder (content area) | **Skeleton** — consumer-sized via className, pulse animation | Spinner — Skeleton is for layout placeholders, Spinner is for inline loading |
-| Inline loading indicator (button, action) | **Spinner** — animated circle, no layout footprint | Skeleton — Skeleton is for content area placeholders |
-| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Spinner — ProgressBar shows measurable progress, Spinner is for unknown duration |
+| Loading placeholder (content area) | **Skeleton** — consumer-sized via className, pulse animation | ProgressBar — Skeleton is for layout placeholders, ProgressBar is for measurable work |
+| Inline loading indicator (button action) | **Button `loading` prop** — animates the LED into a two-dot chase (Decision #81 / § 6 "Loading pulses, never spins") | Standalone spinner — removed in Decision #93; the LED chase carries the loading signal |
+| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Skeleton — ProgressBar shows measurable progress, Skeleton is for layout |
 
 ### Selection & Input
 
@@ -124,7 +123,7 @@ OKLCH also enables Tailwind's `/opacity` modifier (`bg-primary-600/50`) because 
 
 Test **behavior and accessibility**, not appearance. The preview app is the visual test suite. Automated tests verify:
 
-- Interactive logic (loading state shows spinner, hides icons)
+- Interactive logic (loading state runs the LED chase, hides icons)
 - Accessibility attributes (`aria-invalid`, `aria-busy`, `disabled`)
 - DOM structure (polymorphic rendering, prop forwarding)
 - Edge cases (empty states, disabled interactions)
@@ -1185,7 +1184,7 @@ import { CopyableText } from "@aleph-front/ds/copyable-text";
 />
 ```
 
-When `href` is provided, the truncated text itself becomes a clickable link (opens in new tab), plus an ArrowUpRight icon button. Both use `target="_blank"` and `rel="noopener noreferrer"`. Text color automatically switches to `text-primary-500` (light) / `text-primary-300` (dark) to indicate a navigable link. Override with `className` if needed.
+When `href` is provided, the truncated text itself becomes a clickable link (opens in new tab), plus an ArrowUpRight icon button. Both use `target="_blank"` and `rel="noopener noreferrer"`. Text color automatically switches to `text-accent-500` (light) / `text-accent` (dark) to indicate a navigable link per § 2 Color link role. Override with `className` if needed.
 
 **Animation:** Copy button plays a reveal animation (circle expand + check icon) on click. Respects `prefers-reduced-motion`.
 
@@ -1809,16 +1808,6 @@ import {
 
 **Connectors are siblings:** `StepperConnector` must be a sibling of `StepperItem` in the list — not a child. Both render as `<li>`.
 
-### Spinner
-
-Animated loading indicator. Used internally by Button but available standalone.
-
-```tsx
-import { Spinner } from "@aleph-front/ds/ui/spinner";
-
-<Spinner className="size-5 text-primary-600" />
-```
-
 ---
 
 ## Token File Reference
@@ -1908,5 +1897,5 @@ Theme switcher in the sticky header toggles light/dark. Responsive layout with m
 ### Motion Sensitivity
 
 All animated components respect `prefers-reduced-motion: reduce` via Tailwind's `motion-reduce:` variant:
-- **Continuous animations** (pulse, spin): Disabled entirely with `motion-reduce:animate-none` (Skeleton, Spinner, StatusDot healthy pulse)
+- **Continuous animations** (pulse, chase): Disabled entirely with `motion-reduce:animate-none` (Skeleton, StatusDot healthy pulse, Button loading chase, ProgressBar indeterminate)
 - **One-shot transitions** (clip-path, transform): Disabled with `motion-reduce:transition-none` (Checkbox, RadioGroup, Switch, Tooltip, Table sort chevron)
