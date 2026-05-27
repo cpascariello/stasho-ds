@@ -233,7 +233,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
               "overflow-hidden rounded-none",
-              "bg-surface border border-edge shadow-brand",
+              "bg-popover-bg border border-popover-border shadow",
             )}
             sideOffset={4}
             align="start"
@@ -273,17 +273,17 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                         "cursor-pointer select-none",
                         "outline-none",
                         "data-[selected=true]:bg-muted",
-                        "data-[disabled=true]:opacity-50",
-                        "data-[disabled=true]:pointer-events-none",
+                        "data-[disabled=true]:text-foreground/30",
+                        "data-[disabled=true]:cursor-not-allowed",
                       )}
                     >
                       <span
                         className={cn(
                           "flex size-4 shrink-0 items-center",
                           "justify-center",
-                          "rounded border-2 transition-colors",
+                          "rounded-none border transition-colors",
                           selected
-                            ? "border-primary bg-primary text-primary-foreground"
+                            ? "border-accent bg-accent text-accent-foreground"
                             : "border-edge bg-surface",
                         )}
                         aria-hidden="true"

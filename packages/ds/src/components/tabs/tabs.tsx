@@ -227,7 +227,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
         <DropdownMenu.Content
           className={cn(
             "z-50 min-w-[8rem]",
-            "rounded-md bg-surface border border-edge shadow-brand",
+            "rounded-none bg-popover-bg border border-popover-border shadow",
             "p-1",
             "motion-reduce:transition-none",
           )}
@@ -256,7 +256,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 "text-sm text-foreground cursor-pointer select-none",
                 "outline-none",
                 "hover:bg-muted focus-visible:bg-muted",
-                "data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
+                "data-[disabled]:text-foreground/30 data-[disabled]:cursor-not-allowed",
                 tab.triggerEl.dataset["state"] === "active" &&
                   "text-accent-500 dark:text-accent font-semibold",
               )}
