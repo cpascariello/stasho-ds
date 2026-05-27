@@ -39,8 +39,6 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           ref={ref}
           className={cn(
             "relative w-full max-w-md rounded-xl bg-surface p-6",
-            "border-t-2 border-t-accent",
-            "shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]",
             "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
             "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             "motion-reduce:animate-none",

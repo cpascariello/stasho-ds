@@ -1229,7 +1229,7 @@ import {
 
 **Exports:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogClose`, `DialogTitle`, `DialogDescription`, `DialogHeader`, `DialogFooter`, `DialogContentProps`
 
-**Visual style:** `bg-surface` content with `rounded-xl` (4px under the Abyssal scale). 2px `--accent` cyan top-rail (`border-t-2 border-t-accent`) is the surface-scale LED-as-signature — see SKIN-PRINCIPLES § 6 "Cyan top-rail = live surface". Drop shadow is the neutral `--shadow-lg` paired with an outer cyan glow (`shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]`). Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral.
+**Visual style:** `bg-surface` content with `rounded-xl` (4px under the Abyssal scale), no border, no drop shadow — the content separates from page via the frosted overlay alone. Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral, frosted.
 
 **Props (DialogContent):**
 

@@ -256,12 +256,6 @@ These are the patterns we've discovered while building components for this skin.
 **How:** `--shadow-sm / --shadow / --shadow-lg` tokens carry neutral black at varying opacity + blur (`0.10` / `0.20` / `0.65`). The old `--shadow-brand-*` tokens are removed; consumers migrate to the renamed utilities (`shadow-sm`, `shadow`, `shadow-lg`).
 **Source:** Decision #87.
 
-### Cyan top-rail = live surface
-**Rule:** Modal Dialog surfaces carry a 2px `--accent` top border with outer cyan glow as the surface-scale LED-as-signature. Popovers and Card do NOT get the rail.
-**Why:** Dialog interrupts the user's flow with a "do this now" surface — the cyan rail reads as "this surface is listening." Popover dropdowns are auxiliary chrome, not interruptions, so they stay calm. Card is a passive container.
-**How:** `border-t-2 border-t-accent` on Dialog content; outer cyan glow inlined in the box-shadow alongside the neutral `--shadow-lg` drop (`shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]`). Same cyan, smaller dose than Button halo.
-**Source:** Decision #87.
-
 ### Popover surface tokens
 **Rule:** All floating surfaces that aren't modals share a single popover token: `bg-popover-bg border border-popover-border`. The token resolves through `--surface` / `--edge`, so retheming the popover identity flows through one declaration.
 **Why:** Tooltip + Slider tooltip + four dropdown surfaces all carrying inline `bg-surface border border-edge` would drift into six subtly different popovers over time. One token, one re-theme seam.
