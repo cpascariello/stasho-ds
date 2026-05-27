@@ -195,16 +195,19 @@ Five token swaps, no structural change. `sideOffset` default of 6 unchanged.
 All four popover Content elements share one new class block:
 
 ```ts
-// today (Select, Combobox, MultiSelect, Tabs overflow DropdownMenu Content)
+// today (Select, Combobox, MultiSelect — already at rounded-none)
 "bg-surface border border-edge shadow-brand"
 "rounded-none"
 
-// new
+// today (Tabs overflow DropdownMenu — uses rounded-md, violates § 4 popover 0px rule)
+"rounded-md bg-surface border border-edge shadow-brand"
+
+// new (all four — popover token + neutral shadow + 0px radius locked)
 "bg-popover-bg border border-popover-border shadow"
 "rounded-none"
 ```
 
-Width/positioning utilities (`w-[var(--radix-popover-trigger-width)]`, `sideOffset`, `align`, `position="popper"`) are preserved per component.
+Tabs overflow DropdownMenu's `rounded-md` → `rounded-none` is the only radius change among the four; the other three are already at 0px. Width/positioning utilities (`w-[var(--radix-popover-trigger-width)]`, `sideOffset`, `align`, `position="popper"`, `min-w-[8rem]` on DropdownMenu) are preserved per component.
 
 ### 7.2 · Items
 
@@ -213,7 +216,7 @@ Width/positioning utilities (`w-[var(--radix-popover-trigger-width)]`, `sideOffs
 | Select | `data-[disabled]:opacity-50 data-[disabled]:pointer-events-none` | `data-[disabled]:text-foreground/30 data-[disabled]:cursor-not-allowed` |
 | Combobox (cmdk) | `data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none` | `data-[disabled=true]:text-foreground/30 data-[disabled=true]:cursor-not-allowed` |
 | MultiSelect (cmdk) | same as Combobox | same fix |
-| Tabs overflow DropdownMenu Item | check + align if uses opacity-50 | align to `text-foreground/30 cursor-not-allowed` |
+| Tabs overflow DropdownMenu | `data-[disabled]:opacity-50 data-[disabled]:pointer-events-none` (confirmed via source check) | `data-[disabled]:text-foreground/30 data-[disabled]:cursor-not-allowed` |
 
 Highlighted-item rule (`data-[highlighted]:bg-muted` for Select, `data-[selected=true]:bg-muted` for cmdk) is unchanged — already calm and correct.
 
@@ -281,7 +284,11 @@ Append: "Popovers (Tooltip + dropdown Contents) use `rounded-none` (0px) per the
 ## 11 · Risks and implementation notes
 
 1. **Tailwind 4 scanner for compound `shadow-[]`** — `shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]` is a single arbitrary value with two comma-separated shadows. Verify the scanner picks it up; if not, decompose to a CSS variable or fall back to inline style on `DialogContent`.
-2. **`shadow-brand-*` consumers outside chunk 6** — grep before removing the tokens. If any non-chunk-6 component still uses them, update inline as a no-op chassis touch in the chunk 6 PR.
+2. **`shadow-brand-*` consumers in the preview app** — confirmed via grep. Three call sites need migration in the chunk 6 PR or the rename breaks the build:
+   - `apps/preview/src/components/sidebar.tsx:283` — `shadow-brand-lg` → `shadow-lg`
+   - `apps/preview/src/app/page.tsx:484` — `hover:shadow-brand-sm` → `hover:shadow-sm`
+   - `apps/preview/src/app/foundations/effects/page.tsx` — Effects foundation page references `brand-sm / brand / brand-lg` in a showcase grid. Update class names to `sm / / lg`; update the displayed labels to match.
+   - `apps/preview/src/app/page.tsx:212, 218` — two description strings mention "shadow-brand" as copy. Update the strings so the description matches reality (`"shadow style"` or similar).
 3. **Tooltip + Slider tooltip alignment** — chunk 4 established `bg-surface border border-edge rounded-none text-foreground` inline on the Slider tooltip. Chunk 6's `--popover-bg` token resolves to the same value. Verify no visual drift; if exact tokens differ, the Slider tooltip gets a one-line follow-up touch to use `bg-popover-bg` too.
 4. **Dialog cyan glow at light-mode visual budget** — the cyan glow (`rgba(0,225,250,0.5)` at 8px) is calibrated for dark mode. On light backgrounds the glow may read different. Visual check during implementation; if glow disappears against light, bump opacity to 0.7 or thicken to 12px.
 5. **Card title typography decision** — Decision #83 reserved Anybody for "headings only." Card title via the `title` prop is a section heading within the card body, which falls under the heading umbrella. If implementation review surfaces inconsistency between Card title and other in-card text styling, that's a separate scope (typography sweep #2), not chunk 6.
