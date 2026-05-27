@@ -18,6 +18,15 @@ Each entry includes:
 
 ---
 
+## Decision #93 — 2026-05-27
+
+**Context:** Skin coverage audit (full sweep against SKIN-PRINCIPLES.md) surfaced `ui/Spinner` as a pre-skin holdout. The component is a hand-rolled SVG `animate-spin` ring — the exact loading pattern that § 6 "Loading pulses, never spins" rejects. Decision #81 already replaced Button's internal spinner with a dual-dot LED chase; Spinner remained as a public subpath export (`@stasho/ds/ui/spinner`) but had zero internal consumers (no imports anywhere in `packages/ds/src` or `apps/preview/src`).
+**Decision:** Delete `ui/Spinner` outright. Remove the source file and the `./ui/spinner` subpath from `packages/ds/package.json` exports. No deprecation shim, no carve-out, no replacement standalone-loader component.
+**Rationale:** Three layers. (1) The principle is clear and recent (§ 6 "Loading pulses, never spins" — Decision #81). Spinner is a direct contradiction sitting in the public API. (2) Zero internal consumers means deletion has no ripple — the audit verified no `from .../spinner` imports anywhere in the repo. (3) Package is pre-1.0 (`@stasho/ds@0.1.0`), so the subpath removal is not a breaking-change concern; the global standard is "Replace, don't deprecate". When a standalone loader is genuinely needed in the future, it should be designed under the Abyssal principles (LED pulse, not a rotating ring) and shipped as a new component with its own decision entry — not as a revived Spinner.
+**Alternatives considered:** Keep with a documented § 6 carve-out (rejected — carve-outs accumulate; an exception with zero usage is a maintenance burden carrying nothing). Deprecate with a console.warn shim (rejected — pre-1.0 package, no consumers, no benefit; "Replace, don't deprecate"). Replace with an LED-pulse standalone loader in this same chunk (rejected — scope creep; no current consumer is asking for it, and designing a "pulse loader" component deserves its own brainstorm rather than being bundled into a coverage-finish sweep).
+
+---
+
 ## Decision #92 — 2026-05-27
 
 **Context:** Two follow-ups from the Decision #90 brainstorm sat in BACKLOG.md after wave-1 finished. (1) **Switch size ladder revisit:** Checkbox and Radio shrunk to 14/16/20 in #90 (`size-3.5` / `size-4` / `size-5`); Switch still shipped at the chunk-4 sizes (track 20×36 / 26×48 / 32×60 with thumbs 12/18/24), so in a form with a Switch row sitting next to a Checkbox row, the Switch read heavy regardless of semantic importance — md Switch at 32px tall was 60% larger than md Checkbox at 20px. (2) **Boolean focus pattern consistency:** Switch + Slider use `outline-2 outline-accent outline-offset-2`; Checkbox + Radio use border-swap (`focus-visible:border-accent-700 dark:focus-visible:border-accent`). The split was established in Decision #85 but never written down as a principle — future boolean components had no rule to follow.
