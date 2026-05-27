@@ -49,6 +49,9 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **How:** Don't use `--success` for "selected" or `--accent` for "warning". The role mapping is what makes the palette legible at a glance.
 **Source:** Decisions #78, #79.
 
+**Active states.** Selected / checked / active states on form controls and navigation (Switch, Slider, Checkbox, Radio, active Tab, active Breadcrumb, ProgressBar) use `--accent`. Primary's chassis role (Button only) is preserved. **Light-mode body text carve-out:** cyan `text-accent` at L≈0.85 fails AA contrast on light surfaces. UI text colored by `--accent` (Tab hover/active, Breadcrumb hover/current page, OverflowTrigger active, focus outlines) uses `text-accent-500 dark:text-accent` — mid-cyan in light, full cyan in dark. The 1px Tabs underline indicator follows the same step (`bg-accent-500 dark:bg-accent`) so its hairline reads against near-white. Tinted indicator fills (`bg-accent/15`) stay same-hex — those are chassis surfaces and lean on the accent text on top of them to carry the active signal.
+**Source:** Decision #86.
+
 ### No decorative texture
 **Rule:** No grain, noise, patterns, or texture fills on any surface.
 **Why:** The skin's depth comes from gradient + halo + bevel — visual mass from light, not from material. Texture conflicts with that vocabulary and pulls the system toward "designed object" instead of "control instrument".
@@ -135,12 +138,12 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 - StatusDot (a dot IS round)
 - Slider thumb / Switch thumb (a control puck IS round)
 - ProgressBar track (the rounded ends are a graph convention)
-- MultiSelect tag chips (tags carry "soft / removable" semantics)
-- Stepper indicators (a step ring IS round)
-- Tabs pill variant (segmented control is pill-shaped by convention)
+- MultiSelect tag chips (tags carry "soft / removable" semantics) — **flagged for audit**
+- Stepper indicators (a step ring IS round) — **flagged for audit**
 
-**Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible.
+**Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible. The list is "round-by-design only, never round-by-convention" — entries need a semantic reason for the round shape, not a precedent from other DSs.
 **How:** Adding a new element to this list requires a decision in `docs/DECISIONS.md`.
+**Source:** Decision #86 (Tabs pill removed). MultiSelect chips and Stepper indicators carry the same convention-only justification that Tabs pill did and should be revisited in a dedicated rounded-full audit chunk after chunk 5 ships.
 
 ### Hairline borders, never thick
 **Rule:** 1px borders. No `border-2`, no `border-3`.
