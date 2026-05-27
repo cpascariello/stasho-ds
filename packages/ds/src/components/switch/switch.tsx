@@ -7,12 +7,14 @@ const switchVariants = cva(
   [
     "peer inline-flex shrink-0 cursor-pointer",
     "items-center rounded-full",
-    "border-3 border-edge bg-muted",
-    "hover:border-edge-hover",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
+    "border border-edge bg-muted dark:bg-neutral-900",
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+    "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50 disabled:shadow-none",
+    "disabled:cursor-not-allowed",
+    "disabled:data-[state=checked]:border-edge/50",
+    "data-[state=checked]:border-accent/30",
     "transition-colors",
   ].join(" "),
   {
@@ -31,9 +33,14 @@ const switchVariants = cva(
 
 const thumbVariants = cva(
   [
-    "pointer-events-none block rounded-full bg-white",
-    "shadow-sm transition-transform motion-reduce:transition-none",
+    "pointer-events-none block rounded-full",
+    "bg-edge data-[state=checked]:bg-accent",
+    "transition-all motion-reduce:transition-none",
     "data-[state=unchecked]:translate-x-0.5",
+    "group-hover/sw:data-[state=checked]:shadow-[0_0_5px_var(--accent),0_0_10px_rgba(0,225,250,0.6)]",
+    "group-focus-visible/sw:data-[state=checked]:shadow-[0_0_5px_var(--accent),0_0_10px_rgba(0,225,250,0.6)]",
+    "group-disabled/sw:bg-foreground/30 group-disabled/sw:data-[state=checked]:bg-foreground/30",
+    "group-disabled/sw:shadow-none",
   ].join(" "),
   {
     variants: {
@@ -60,7 +67,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     return (
       <SwitchPrimitive.Root
         ref={ref}
-        className={cn(switchVariants({ size }), className)}
+        className={cn("group/sw", switchVariants({ size }), className)}
         {...rest}
       >
         <SwitchPrimitive.Thumb className={thumbVariants({ size })} />

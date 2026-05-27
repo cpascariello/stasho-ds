@@ -229,6 +229,12 @@ These are the patterns we've discovered while building components for this skin.
 **How:** Resting chassis = `--background` (light) / `--surface` (dark). Focus = hairline swaps to `--accent` (or `--accent-700` in light for AA). Error = hairline swaps to `--error` + helper text in `--error`, value stays foreground. Disabled = chassis sinks one step (light → `--muted`, dark → `--background`) + value drops to 30% opacity + hairline drops to half-`--edge` alpha. Hover = none for text inputs; hairline brightens to `--edge-hover` for dropdown triggers (Select / Combobox / MultiSelect). No halo at rest, on focus, or on error.
 **Source:** Decision #84.
 
+### Direction C — LED scales by role, not by size
+**Rule:** The LED treatment extends to small "on/active" states selectively. Glow is reserved for components where the lit element IS the active surface (Switch thumb, Slider thumb, ProgressBar fill). Slot/text indicators (Checkbox check, Radio dot, active Tab text, active Pagination number, active Breadcrumb) stay flat-cyan — they're markers on a surface, not lit surfaces themselves.
+**Why:** A 14px Switch thumb glows because the thumb IS the on/off indicator. A 14px ticked Checkbox doesn't glow because the check is just a marker on a slot. A form with 10 ticked checkboxes would bloom into 10 cyan halos under uniform LED treatment — Direction C keeps it calm by extending the rule by role.
+**How:** Switch and Slider thumbs gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only (solid cyan at rest). Switch and Slider tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat. Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*` or `data-[disabled]:*` for Radix `<span>`-rendered parts) so the sink wins over the checked-accent rules.
+**Source:** Decision #85.
+
 ---
 
 ## 7 · Adding to these principles

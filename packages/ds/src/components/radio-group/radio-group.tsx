@@ -5,13 +5,17 @@ import { cn } from "@ac/lib/cn";
 
 const radioItemVariants = cva(
   [
-    "peer shrink-0 rounded-full bg-surface",
-    "border-3 border-edge",
+    "peer shrink-0 rounded-full bg-transparent",
+    "border border-edge",
     "hover:border-edge-hover",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "data-[state=checked]:border-primary",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:cursor-not-allowed",
+    "disabled:[&_span]:bg-foreground/30",
+    "disabled:data-[state=checked]:border-edge/50",
+    "data-[state=checked]:border-accent",
     "transition-colors",
   ].join(" "),
   {
@@ -70,7 +74,7 @@ const RadioGroupItem = forwardRef<HTMLButtonElement, RadioGroupItemProps>(
             "transition-[clip-path] duration-200 ease-in-out motion-reduce:transition-none",
           )}
         >
-          <span className="block size-[80%] rounded-full bg-primary" />
+          <span className="block size-[80%] rounded-full bg-accent" />
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
     );
