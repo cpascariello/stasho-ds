@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 const badgeVariants = cva(
   [
     "inline-flex items-center justify-center gap-1.5",
-    "rounded-none font-mono uppercase tracking-wider",
+    "rounded-[2px] font-mono uppercase tracking-wider",
     "whitespace-nowrap select-none",
   ].join(" "),
   {
@@ -30,70 +30,56 @@ const badgeVariants = cva(
       {
         fill: "solid",
         variant: "default",
-        className: "gradient-fill-info text-neutral-950",
+        className: "bg-muted text-foreground",
       },
       {
         fill: "solid",
         variant: "success",
-        className: "gradient-fill-success text-neutral-950",
+        className: "bg-success text-neutral-950",
       },
       {
         fill: "solid",
         variant: "warning",
-        className: "gradient-fill-warning text-neutral-950",
+        className: "bg-warning text-neutral-950",
       },
       {
         fill: "solid",
         variant: "error",
-        className: "gradient-fill-error text-neutral-950",
+        className: "bg-error text-neutral-950",
       },
       {
         fill: "solid",
         variant: "info",
-        className: [
-          "bg-neutral-100 text-neutral-700",
-          "dark:bg-neutral-800 dark:text-neutral-200",
-        ].join(" "),
+        className: "bg-accent text-neutral-950",
       },
       {
         fill: "outline",
         variant: "default",
-        className: [
-          "border-primary-300 bg-primary-100 text-neutral-950",
-          "dark:bg-primary-900/20 dark:text-neutral-200",
-        ].join(" "),
+        className: "bg-transparent border-edge text-foreground/70",
       },
       {
         fill: "outline",
         variant: "success",
-        className: [
-          "border-success-400 bg-success-100 text-neutral-950",
-          "dark:bg-success-900/20 dark:text-neutral-200",
-        ].join(" "),
+        className:
+          "bg-success/15 border-success/40 text-success-500 dark:text-success",
       },
       {
         fill: "outline",
         variant: "warning",
-        className: [
-          "border-warning-400 bg-warning-100 text-neutral-950",
-          "dark:bg-warning-900/20 dark:text-neutral-200",
-        ].join(" "),
+        className:
+          "bg-warning/15 border-warning/40 text-warning-500 dark:text-warning",
       },
       {
         fill: "outline",
         variant: "error",
-        className: [
-          "border-error-400 bg-error-100 text-neutral-950",
-          "dark:bg-error-900/20 dark:text-neutral-200",
-        ].join(" "),
+        className:
+          "bg-error/15 border-error/40 text-error-500 dark:text-error",
       },
       {
         fill: "outline",
         variant: "info",
-        className: [
-          "border-neutral-400 bg-neutral-100/50 text-neutral-700",
-          "dark:border-neutral-600 dark:bg-neutral-800/50 dark:text-neutral-300",
-        ].join(" "),
+        className:
+          "bg-accent/15 border-accent/40 text-accent-500 dark:text-accent",
       },
     ],
     defaultVariants: {
