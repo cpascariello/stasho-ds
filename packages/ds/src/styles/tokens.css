@@ -178,10 +178,10 @@
 
   --muted: var(--color-base-800);
   --muted-foreground: oklch(0.62 0.012 273);
-  --surface: var(--color-base-900);
+  --surface: oklch(0.18 0.005 273);
   --surface-foreground: #f3f3f3;
-  --edge: rgba(255, 255, 255, 0.08);
-  --edge-hover: rgba(255, 255, 255, 0.14);
+  --edge: rgba(255, 255, 255, 0.16);
+  --edge-hover: rgba(255, 255, 255, 0.24);
   --popover-bg: var(--surface);
   --popover-border: var(--edge);
 

@@ -11,7 +11,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@stasho/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@stasho/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
-| [Button](#button) | Action trigger with 7 variants, 3 sizes, cyan LED signature | `@stasho/ds/button` |
+| [Button](#button) | Action trigger with 7 variants, 4 sizes, cyan LED signature | `@stasho/ds/button` |
 | [Card](#card) | Content container with 2 variants (default/ghost) | `@stasho/ds/card` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
@@ -783,7 +783,7 @@ import {
 
 ### Button
 
-CVA-based instrument-panel button with 7 variants, 3 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
+CVA-based instrument-panel button with 7 variants, 4 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
 
 ```tsx
 import { Button } from "@stasho/ds/button";
@@ -806,9 +806,10 @@ import { Button } from "@stasho/ds/button";
 #### Sizes
 
 ```tsx
-<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,  text-[11px] */}
-<Button size="sm">Small</Button>         {/* py-[7px] px-3.5, text-xs */}
+<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,    text-[11px] */}
+<Button size="sm">Small</Button>         {/* py-[7px] px-3.5,  text-xs       */}
 <Button size="md">Medium</Button>        {/* py-[9px] px-[18px], text-[13px] — default */}
+<Button size="lg">Large</Button>         {/* py-[13px] px-6,   text-[15px]   — opt-in for hero CTAs */}
 ```
 
 #### Icons
