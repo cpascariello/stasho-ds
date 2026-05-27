@@ -262,6 +262,21 @@ These are the patterns we've discovered while building components for this skin.
 **How:** `--popover-bg: var(--surface)` and `--popover-border: var(--edge)` in both `:root` and `.theme-dark`; bridged through `--color-popover-bg` / `--color-popover-border` in the Tailwind `@theme inline` block so `bg-popover-bg` / `border-popover-border` are utility classes. Popover Content gets `rounded-none` per the radii table.
 **Source:** Decision #87.
 
+### Switch thumb mirrors Checkbox at the same size step
+**Rule:** Switch thumb dimensions match Checkbox/Radio at the same `size` variant (xs/sm/md → thumb 12/16/20). Track height = thumb + 4px (2px symmetric breathing); track width follows a 1.75–1.83 ratio.
+**Why:** In a form, a Switch row sitting next to a Checkbox row at the same `size` should read as the same visual weight. Pre-revisit Switch was 32px tall at md while Checkbox was 20px — the Switch dominated regardless of semantic importance. Matching the *thumb* (the focal lit element) creates a visible "same size" relationship across boolean controls; track scales proportionally without becoming a stadium.
+**How:** xs `h-4 w-7` (16×28) thumb `size-3` (12); sm `h-5 w-9` (20×36) thumb `size-4` (16); md `h-6 w-11` (24×44) thumb `size-5` (20). Thumb translate from `tx-0.5` (2px) to `tx-[thumb_w + 4]` keeps 2px breathing both ends. xs thumb stays 12 (not 14) because a 14-thumb in a 16-track leaves zero breathing room — divergence accepted at xs only.
+**Source:** Decision #92.
+
+### Boolean focus pattern split by surface count
+**Rule:** Single-surface boolean controls use border-swap focus; multi-element boolean controls with a separately-rendered focal element use external outline.
+- **Border-swap:** `focus-visible:border-accent-700 dark:focus-visible:border-accent` — Checkbox, RadioGroup, Input, Textarea, Select trigger, Combobox trigger, MultiSelect trigger.
+- **External outline:** `outline-2 outline-accent outline-offset-2` — Switch (focus on track around the thumb), Slider thumb, Button, Tabs trigger, Dialog close, Pagination cells.
+
+**Why:** Border-swap repaints the chassis hairline cyan — the focus signal lives where the eye already is. This works when the chassis IS the control (a square checkbox, an input slot). When the focal grabbed element is a separately-rendered child (Switch thumb, Slider thumb), painting the chassis edge cyan would put the focus signal on the wrong surface — the user is reaching for the thumb, not the track. External outline lands the focus signal at the chassis edge of the parent so it visually surrounds the focal area without conflicting with the thumb's own color states (off / on / disabled / error).
+**How:** When adding a new boolean component, ask: "does focus need to land on a child element with its own color states?" If yes, use external outline. If the control is a single chassis surface and the chassis edge is the natural focus carrier, use border-swap. Compound `focus-visible:` with `dark:focus-visible:` for border-swap because cyan at L=0.84 needs the `-700` step on light surfaces for AA contrast (Decision #84 carve-out generalized).
+**Source:** Decisions #85 (split established), #92 (rule documented after Switch follow-up audit).
+
 ---
 
 ## 7 · Adding to these principles

@@ -15,18 +15,6 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
-### 2026-05-27 — Switch size ladder revisit (cascade from Checkbox/Radio shrink)
-
-**Source:** Decision #90 brainstorm
-**Description:** Checkbox and Radio shrunk to xs/sm/md = 14/16/20 in Decision #90. Switch still ships at ~16/20/24 (chunk-4 sizes). The visual mismatch between Switch and Checkbox/Radio in form contexts will read heavy on Switch. Audit Switch sizes and either shrink to match (most likely outcome) or document why Switch keeps its heavier ladder. Single chunk: `skin/switch-ladder-revisit` off `skin/paraplu`.
-**Priority:** Medium
-
-### 2026-05-27 — Boolean form focus pattern consistency
-
-**Source:** Decision #90 brainstorm (out of scope, flagged)
-**Description:** Switch + Slider use `outline-2 outline-accent outline-offset-2` focus (separately-rendered thumbs need external outline). Checkbox + Radio use border-swap focus (small targets where the chassis hairline carries focus). The split is principled per Decision #85, but a future audit could unify if a real reason emerges. Document the split + decision criteria; no code change implied unless an issue surfaces.
-**Priority:** Low
-
 ### 2026-03-01 — Theme persistence across page reloads
 
 **Source:** Identified during accessibility audit
@@ -168,5 +156,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-27 — Chunk 6 container surfaces (Decision #87): shadow tokens renamed + neutralized (`--shadow-brand-*` → `--shadow-*` plain rgba); popover surface tokenized (`--popover-bg` / `--popover-border` resolving through `--surface` / `--edge`); Tooltip + 4 popover dropdowns (Select / Combobox / MultiSelect / Tabs overflow DropdownMenu) aligned to popover token + neutral shadow + flat-sink disabled; Dialog content stays flat (no border, no drop shadow — separation from page via frosted overlay alone) + `rounded-xl` (4px) semantic radius + Button-pattern close focus; MultiSelect inner indicator → `bg-accent border-accent` (cyan, no longer brand-blue) with 1px hairline + 0px radius; Card radius semantic (`rounded-lg` = 2px); preview-app consumers (sidebar.tsx, page.tsx, foundations/effects/page.tsx) migrated. SKIN-PRINCIPLES § 6 gains "Elevation is neutral" + "Popover surface tokens"; § 4 gains "Surface radii by role" table with explicit Tailwind-class → pixel mapping for the Abyssal scale.
 - [x] 2026-05-27 — Wave-1 finish: Pagination + Switch + Stepper + Alert (Decision #88: Pagination tinted-cyan active pill + 26×26 numbers + wave-1 disabled; Switch square track + square thumb; Stepper square indicators + cyan halo on active + filled completed chip with auto-Check + StepperConnector `completed` prop; Alert semantic tokens + top→bottom gradient + cyan info; SKIN-PRINCIPLES § 2 active-states + carve-out generalisation, § 4 rounded-full list shrinks, § 6 Direction C extends to Stepper)
 - [x] 2026-05-27 — Rounded-full audit: MultiSelect chips (Decision #91: chip + per-tag dismiss X + clear-all X all moved from `rounded-full` to `rounded-[2px]`, joining the wave's "contained group" family — Card, Tabs pill list, Switch, Stepper indicators; SKIN-PRINCIPLES § 4 reserved list final state — StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks; bullet list gains RadioGroup entry that was missing from Decision #90's amendment)
+- [x] 2026-05-27 — Switch follow-ups: size ladder revisit + boolean focus pattern principle (Decision #92: Switch thumb sizes match Checkbox/Radio at sm/md = 16/20, xs stays 12 for breathing; tracks proportional 1.75–1.83 ratio = `h-4 w-7` / `h-5 w-9` / `h-6 w-11`; symmetric 2px breathing both ends. Focus pattern documented as principle in SKIN-PRINCIPLES § 6 "Boolean focus pattern split by surface count" — single-surface controls use border-swap, multi-element controls with separately-rendered focal element use external outline; no code change for focus pattern, docs-only as per the backlog item)
 
 </details>
