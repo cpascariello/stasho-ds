@@ -132,6 +132,18 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **Why:** The 0/0/2/4 ladder pushes the brutalist character at every interactive surface, and reserves rounding for the few elements where it carries meaning (cards as physical objects, modals as floating overlays).
 **Source:** Decision #78.
 
+### Surface radii by role
+
+| Role | Tailwind class | Pixels | Components |
+|---|---|---|---|
+| Popovers | `rounded-none` | 0px | Tooltip, Select/Combobox/MultiSelect dropdowns, Tabs overflow DropdownMenu |
+| Modals | `rounded-xl` | 4px | Dialog |
+| Cards | `rounded-lg` | 2px | Card |
+| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, Switch thumb, ProgressBar tracks, MultiSelect tag chips, Stepper indicators, Tabs pill variant |
+
+Tooltip is a popover, not a card — the radius reflects its role. The Abyssal radius scale maps `rounded-sm / rounded-md` to 0px, `rounded-lg` to 2px, `rounded-xl` to 4px; reach for the semantic class that matches the intended pixel value rather than guessing from shadcn-era defaults.
+**Source:** Decision #87.
+
 ### `full` is for round-by-design only
 **Rule:** `rounded-full` is reserved for elements where roundness is the semantic, not decoration:
 
@@ -237,6 +249,24 @@ These are the patterns we've discovered while building components for this skin.
 **Why:** A 14px Switch thumb glows because the thumb IS the on/off indicator. A 14px ticked Checkbox doesn't glow because the check is just a marker on a slot. A form with 10 ticked checkboxes would bloom into 10 cyan halos under uniform LED treatment — Direction C keeps it calm by extending the rule by role.
 **How:** Switch and Slider thumbs gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only (solid cyan at rest). Switch and Slider tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat. Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*` or `data-[disabled]:*` for Radix `<span>`-rendered parts) so the sink wins over the checked-accent rules.
 **Source:** Decision #85.
+
+### Elevation is neutral
+**Rule:** Drop shadows on floating surfaces (Dialog, Tooltip, popover dropdowns) use plain `rgba(0,0,0,X)` — never brand-tinted.
+**Why:** The skin's brand color lives in foregrounds (LEDs, halos, active states), not in elevations. Blue-tinted shadows on every popover compete with Button's brand identity and read as "branded chrome" rather than "thing floating in space." Same principle that pushed cyan out of focus chrome on text inputs (Decision #84) — elevations get the same treatment.
+**How:** `--shadow-sm / --shadow / --shadow-lg` tokens carry neutral black at varying opacity + blur (`0.10` / `0.20` / `0.65`). The old `--shadow-brand-*` tokens are removed; consumers migrate to the renamed utilities (`shadow-sm`, `shadow`, `shadow-lg`).
+**Source:** Decision #87.
+
+### Cyan top-rail = live surface
+**Rule:** Modal Dialog surfaces carry a 2px `--accent` top border with outer cyan glow as the surface-scale LED-as-signature. Popovers and Card do NOT get the rail.
+**Why:** Dialog interrupts the user's flow with a "do this now" surface — the cyan rail reads as "this surface is listening." Popover dropdowns are auxiliary chrome, not interruptions, so they stay calm. Card is a passive container.
+**How:** `border-t-2 border-t-accent` on Dialog content; outer cyan glow inlined in the box-shadow alongside the neutral `--shadow-lg` drop (`shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]`). Same cyan, smaller dose than Button halo.
+**Source:** Decision #87.
+
+### Popover surface tokens
+**Rule:** All floating surfaces that aren't modals share a single popover token: `bg-popover-bg border border-popover-border`. The token resolves through `--surface` / `--edge`, so retheming the popover identity flows through one declaration.
+**Why:** Tooltip + four dropdown surfaces all carrying inline `bg-surface border border-edge` would drift into five subtly different popovers over time. One token, one re-theme seam.
+**How:** `--popover-bg: var(--surface)` and `--popover-border: var(--edge)` in both `:root` and `.theme-dark`; bridged through `--color-popover-bg` / `--color-popover-border` in the Tailwind `@theme inline` block so `bg-popover-bg` / `border-popover-border` are utility classes. Popover Content gets `rounded-none` per the radii table.
+**Source:** Decision #87.
 
 ---
 

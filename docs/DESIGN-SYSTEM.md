@@ -328,12 +328,12 @@ Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` re
 
 | Tailwind class | CSS variable | Value | Use for |
 |----------------|--------------|-------|---------|
-| `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, dropdowns, badges, alerts |
-| `rounded-[2px]` | — | `2px` | Cards |
-| `rounded-[4px]` | — | `4px` | Modals (Dialog) |
+| `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts |
+| `rounded-lg` | `--radius-lg` | `2px` | Cards |
+| `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
 | `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, Switch thumb, MultiSelect tag chips, Stepper indicators, Tabs pill variant |
 
-Because both `--radius-sm` and `--radius-md` resolve to `0`, the 2px and 4px exceptions use literal arbitrary values (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — keeping the scale honest.
+The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
@@ -415,37 +415,49 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 
 ## Shadows
 
-Available as Tailwind utility classes.
+Available as Tailwind utility classes. Neutral drops at three elevations — no brand tint (SKIN-PRINCIPLES § 6 "Elevation is neutral", Decision #87).
 
 | Name | Tailwind class | Value | Use for |
 |------|---------------|-------|---------|
-| `brand-sm` | `shadow-brand-sm` | `0px 4px 4px` (15% brand) | Tight elements (tooltips, hover accents) |
-| `brand` | `shadow-brand` | `0px 4px 24px` (10% brand) | Elevated surfaces (dropdowns, popovers) |
-| `brand-lg` | `shadow-brand-lg` | `0px 4px 48px` (25% brand) | Emphasized elements, modals |
+| `sm` | `shadow-sm` | `0px 2px 4px rgba(0,0,0,0.10)` | Tight elements (tooltips, hover accents) |
+| (default) | `shadow` | `0px 4px 16px rgba(0,0,0,0.20)` | Elevated surfaces (popover dropdowns) |
+| `lg` | `shadow-lg` | `0px 24px 60px rgba(0,0,0,0.65)` | Modals, mobile drawers |
 
 ### Usage Examples
 
 ```tsx
 {/* Card with subtle shadow */}
-<div className="bg-surface rounded-lg p-6 shadow-brand-sm">
+<div className="bg-surface rounded-lg p-6 shadow-sm">
   Subtle card
 </div>
 
-{/* Elevated card */}
-<div className="bg-surface rounded-lg p-6 shadow-brand">
-  Default elevation
+{/* Popover dropdown */}
+<div className="bg-popover-bg border border-popover-border rounded-none p-1 shadow">
+  Dropdown content
 </div>
 
-{/* Modal or hero element */}
-<div className="bg-surface rounded-lg p-8 shadow-brand-lg">
-  High emphasis
+{/* Modal — paired with cyan top-rail per SKIN-PRINCIPLES § 6 "Cyan top-rail = live surface" */}
+<div className="bg-surface rounded-xl p-8 border-t-2 border-t-accent
+                shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]">
+  Dialog content
 </div>
 
 {/* Interactive shadow on hover */}
-<div className="bg-surface rounded-lg p-6 shadow-brand-sm hover:shadow-brand transition-shadow">
+<div className="bg-surface rounded-lg p-6 shadow-sm hover:shadow transition-shadow">
   Hover for more shadow
 </div>
 ```
+
+### Popover surface tokens
+
+Floating-surface chrome uses two tokens so all popovers re-theme from one place:
+
+| Token | Resolves to | Used by |
+|---|---|---|
+| `--popover-bg` | `var(--surface)` | Tooltip, Select / Combobox / MultiSelect dropdowns, Tabs overflow DropdownMenu |
+| `--popover-border` | `var(--edge)` | (same) |
+
+These bridge to Tailwind utilities `bg-popover-bg` and `border-popover-border`. Reach for the popover token on any floating surface — not `bg-surface` + `border-edge` directly — so retheming the popover identity flows through one declaration.
 
 ---
 
@@ -599,7 +611,7 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
 
 ```tsx
 <div className="bg-surface text-surface-foreground rounded-lg border border-edge
-                shadow-brand-sm hover:shadow-brand p-6"
+                shadow-sm hover:shadow p-6"
      style={{ transitionDuration: "var(--duration-fast)" }}>
   <h3 className="font-heading text-xl font-extrabold italic mb-2">
     Card Title
@@ -626,7 +638,7 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
     </p>
     <button
       style={{ background: "var(--gradient-accent)" }}
-      className="mt-8 text-accent-foreground px-8 py-3 font-bold text-lg shadow-brand-lg"
+      className="mt-8 text-accent-foreground px-8 py-3 font-bold text-lg shadow-lg"
     >
       Get Started
     </button>
@@ -1034,7 +1046,7 @@ import { Select } from "@aleph-front/ds/select";
 
 **Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Badge
 
@@ -1121,6 +1133,8 @@ import { Card } from "@aleph-front/ds/card";
 ```
 
 Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
+
+**Visual style:** `rounded-lg` (2px under the Abyssal scale), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
 
 ### CopyableText
 
@@ -1214,6 +1228,8 @@ import {
 ```
 
 **Exports:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogClose`, `DialogTitle`, `DialogDescription`, `DialogHeader`, `DialogFooter`, `DialogContentProps`
+
+**Visual style:** `bg-surface` content with `rounded-xl` (4px under the Abyssal scale). 2px `--accent` cyan top-rail (`border-t-2 border-t-accent`) is the surface-scale LED-as-signature — see SKIN-PRINCIPLES § 6 "Cyan top-rail = live surface". Drop shadow is the neutral `--shadow-lg` paired with an outer cyan glow (`shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]`). Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral.
 
 **Props (DialogContent):**
 
@@ -1410,7 +1426,7 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 <TooltipContent side="left" />
 ```
 
-**Styling:** `bg-neutral-900 text-white text-sm rounded-lg px-3 py-1.5 shadow-brand-sm` with Radix animation attributes. Dark mode uses `bg-base-800` for contrast against the dark page background.
+**Styling:** Popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground text-sm shadow-sm px-3 py-1.5`. Same chassis as Select / Combobox / MultiSelect / Tabs overflow dropdowns — re-themable through `--popover-bg` / `--popover-border`. Radix animation attributes (`fade-in-0 zoom-in-95` on enter; reverse on close) unchanged.
 
 ### Tabs
 
@@ -1597,7 +1613,7 @@ import { Combobox } from "@aleph-front/ds/combobox";
 
 **Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Slider
 
@@ -1681,7 +1697,7 @@ import { MultiSelect } from "@aleph-front/ds/multi-select";
 
 **Disabled:** Uses `aria-disabled:` variants (trigger is a `<div role="button">`, not a native `<input>`). Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected items show filled checkbox with check icon.
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected items show filled checkbox: `border-accent bg-accent text-accent-foreground` (cyan, 1px hairline, 0px radius — matches Checkbox/Radio cyan-checked treatment).
 
 ### ProgressBar
 
