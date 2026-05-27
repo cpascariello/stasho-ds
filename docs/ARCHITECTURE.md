@@ -89,8 +89,7 @@ aleph-cloud-ds/
 │       │   │   │   └── tooltip.test.tsx
 │       │   │   └── ui/
 │       │   │       ├── skeleton.tsx
-│       │   │       ├── skeleton.test.tsx
-│       │   │       └── spinner.tsx
+│       │   │       └── skeleton.test.tsx
 │       │   ├── styles/
 │       │   │   └── tokens.css
 │       │   └── lib/
@@ -370,10 +369,10 @@ The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` 
 **Context:** Users with vestibular disorders or motion sensitivity need a way to disable animations. `prefers-reduced-motion: reduce` is the OS-level signal.
 
 **Approach:** All animated components use Tailwind's `motion-reduce:` variant to disable motion:
-- **Continuous animations** (`animate-pulse`, `animate-spin`): `motion-reduce:animate-none` stops the animation entirely.
+- **Continuous animations** (`animate-pulse`, `animate-button-chase-*`, indeterminate progress): `motion-reduce:animate-none` stops the animation entirely.
 - **One-shot transitions** (`transition-[clip-path]`, `transition-transform`): `motion-reduce:transition-none` makes state changes instant.
 
-**Key files:** `skeleton.tsx`, `spinner.tsx`, `status-dot.tsx` (continuous); `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` (one-shot)
+**Key files:** `skeleton.tsx`, `status-dot.tsx`, `button.tsx` (loading chase), `progress-bar.tsx` (indeterminate) — continuous; `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` — one-shot.
 
 **Rule:** Every new component with animation must include the appropriate `motion-reduce:` variant. Continuous animations use `animate-none`; transitions use `transition-none`.
 
@@ -616,7 +615,7 @@ Design system components are visual by nature — most of their code maps props 
 
 | Category | Example | Why |
 |----------|---------|-----|
-| Interactive behavior | Loading state shows spinner, hides icons | Logic that can silently break |
+| Interactive behavior | Loading state runs LED chase, hides icons | Logic that can silently break |
 | Accessibility | `aria-busy` when loading, `disabled` attribute | Invisible to visual review |
 | Polymorphism | `asChild` renders an `<a>` instead of `<button>` | Non-obvious DOM behavior |
 | Prop forwarding | `aria-label`, `className` merging | Contract with consumers |
