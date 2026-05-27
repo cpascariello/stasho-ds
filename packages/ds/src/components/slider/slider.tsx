@@ -24,20 +24,22 @@ const trackVariants = cva(
 
 const thumbVariants = cva(
   [
-    "block rounded-full bg-accent",
-    "border border-accent",
-    "transition-shadow motion-reduce:transition-none",
+    "block rounded-full bg-background",
+    "border-[1.5px] border-accent",
+    "transition-[background-color,box-shadow] motion-reduce:transition-none",
+    "hover:bg-accent",
     "hover:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
     "focus-visible:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
-    "data-[disabled]:bg-foreground/30 data-[disabled]:border-foreground/30",
+    "data-[disabled]:bg-background data-[disabled]:border-foreground/30",
+    "data-[disabled]:hover:bg-background",
     "data-[disabled]:shadow-none data-[disabled]:cursor-not-allowed",
   ].join(" "),
   {
     variants: {
       size: {
-        sm: "size-4",
-        md: "size-5",
+        sm: "size-3",
+        md: "size-3.5",
       },
     },
     defaultVariants: {
@@ -105,7 +107,7 @@ const Slider = forwardRef<
               thumbVariants({ size }),
               "relative",
               error &&
-                "border-error hover:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:outline-error",
+                "border-error hover:bg-error hover:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:outline-error",
             )}
           >
             {showTooltip && hovering && (
