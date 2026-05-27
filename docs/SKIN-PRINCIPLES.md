@@ -49,8 +49,8 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 **How:** Don't use `--success` for "selected" or `--accent` for "warning". The role mapping is what makes the palette legible at a glance.
 **Source:** Decisions #78, #79.
 
-**Active states.** Selected / checked / active states on form controls and navigation (Switch, Slider, Checkbox, Radio, active Tab, active Breadcrumb, ProgressBar) use `--accent`. Primary's chassis role (Button only) is preserved. **Light-mode body text carve-out:** cyan `text-accent` at L≈0.85 fails AA contrast on light surfaces. UI text colored by `--accent` (Tab hover/active, Breadcrumb hover/current page, OverflowTrigger active, focus outlines) uses `text-accent-500 dark:text-accent` — mid-cyan in light, full cyan in dark. The 1px Tabs underline indicator follows the same step (`bg-accent-500 dark:bg-accent`) so its hairline reads against near-white. Tinted indicator fills (`bg-accent/15`) stay same-hex — those are chassis surfaces and lean on the accent text on top of them to carry the active signal.
-**Source:** Decision #86.
+**Active states.** Selected / checked / active states on form controls, navigation, and informational surfaces use `--accent`. Components: Switch, Slider, Checkbox, Radio, active Tab, active Breadcrumb, ProgressBar, **Pagination current page**, **Stepper active + completed indicators**, **Alert `info` variant**. Primary's chassis role (Button only) is preserved. **Light-mode body text carve-out:** saturated semantic tokens at mid lightness (cyan L≈0.84, amber L≈0.83, teal L≈0.78) fail AA contrast on light surfaces. UI text colored by these tokens uses the `<token>-500` scale step in light mode: `text-accent-500 dark:text-accent`, `text-warning-500 dark:text-warning`, `text-success-500 dark:text-success`, `text-error-500 dark:text-error`. Borders and tinted backgrounds (`bg-<token>/15`) stay same-hex — those are chassis surfaces that lean on accent text on top of them to carry the active signal.
+**Source:** Decisions #86, #88.
 
 ### No decorative texture
 **Rule:** No grain, noise, patterns, or texture fills on any surface.
@@ -148,14 +148,13 @@ Tooltip is a popover, not a card — the radius reflects its role. The Abyssal r
 **Rule:** `rounded-full` is reserved for elements where roundness is the semantic, not decoration:
 
 - StatusDot (a dot IS round)
-- Slider thumb / Switch thumb (a control puck IS round)
+- Slider thumb (a control puck IS round — same convention argument as Switch, but the visual difference at 16px between square and round thumb is functionally invisible AND Slider thumb shipped with `rounded-full` in chunk 4 as part of the bevel + LED treatment; kept for now, flagged for the rounded-full audit chunk)
 - ProgressBar track (the rounded ends are a graph convention)
-- MultiSelect tag chips (tags carry "soft / removable" semantics) — **flagged for audit**
-- Stepper indicators (a step ring IS round) — **flagged for audit**
+- MultiSelect tag chips (tags carry "soft / removable" semantics) — **still flagged for audit**
 
 **Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible. The list is "round-by-design only, never round-by-convention" — entries need a semantic reason for the round shape, not a precedent from other DSs.
 **How:** Adding a new element to this list requires a decision in `docs/DECISIONS.md`.
-**Source:** Decision #86 (Tabs pill removed). MultiSelect chips and Stepper indicators carry the same convention-only justification that Tabs pill did and should be revisited in a dedicated rounded-full audit chunk after chunk 5 ships.
+**Source:** Decisions #86 (Tabs pill removed), #88 (Switch track + thumb removed; Stepper indicators removed). MultiSelect chips and Slider thumb carry the same convention-only justification and should be revisited in a dedicated rounded-full audit chunk.
 
 ### Hairline borders, never thick
 **Rule:** 1px borders. No `border-2`, no `border-3`.
@@ -245,10 +244,10 @@ These are the patterns we've discovered while building components for this skin.
 **Source:** Decision #84.
 
 ### Direction C — LED scales by role, not by size
-**Rule:** The LED treatment extends to small "on/active" states selectively. Glow is reserved for components where the lit element IS the active surface (Switch thumb, Slider thumb, ProgressBar fill). Slot/text indicators (Checkbox check, Radio dot, active Tab text, active Pagination number, active Breadcrumb) stay flat-cyan — they're markers on a surface, not lit surfaces themselves.
+**Rule:** The LED treatment extends to small "on/active" states selectively. Glow is reserved for components where the lit element IS the active surface (Switch thumb, Slider thumb, ProgressBar fill, **Stepper active indicator**). Slot/text indicators (Checkbox check, Radio dot, active Tab text, active Pagination number, active Breadcrumb, **Stepper completed indicator**) stay flat-cyan — they're markers on a surface, not lit surfaces themselves.
 **Why:** A 14px Switch thumb glows because the thumb IS the on/off indicator. A 14px ticked Checkbox doesn't glow because the check is just a marker on a slot. A form with 10 ticked checkboxes would bloom into 10 cyan halos under uniform LED treatment — Direction C keeps it calm by extending the rule by role.
-**How:** Switch and Slider thumbs gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only (solid cyan at rest). Switch and Slider tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat. Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*` or `data-[disabled]:*` for Radix `<span>`-rendered parts) so the sink wins over the checked-accent rules.
-**Source:** Decision #85.
+**How:** Switch and Slider thumbs gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only (solid cyan at rest). Stepper active indicators carry a persistent halo `box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)` (the indicator IS the "you are here" beacon, so the halo is rest‑state, not hover‑state). Switch and Slider tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat, as are Stepper completed indicators (solid cyan chip carries the state alone). Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*` or `data-[disabled]:*` for Radix `<span>`-rendered parts) so the sink wins over the checked-accent rules.
+**Source:** Decisions #85, #88.
 
 ### Elevation is neutral
 **Rule:** Drop shadows on floating surfaces (Dialog, Tooltip, popover dropdowns) use plain `rgba(0,0,0,X)` — never brand-tinted.
