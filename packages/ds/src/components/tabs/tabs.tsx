@@ -363,13 +363,11 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
           "group relative flex",
           isPill
             ? [
-                "rounded-full bg-muted",
+                "rounded-[2px] bg-muted border border-edge",
                 isSmall ? "p-0.5" : "p-1",
                 !isCollapse && "inline-flex",
               ]
-            : isSmall
-              ? "border-b-2 border-edge/40"
-              : "border-b-4 border-edge/40",
+            : "border-b border-edge/40",
           className,
         )}
         {...rest}
@@ -392,15 +390,14 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
             isPill
               ? [
                   isSmall ? "inset-y-0.5" : "inset-y-1",
-                  "rounded-full bg-primary-600 dark:bg-primary-500",
+                  "rounded-[2px] bg-accent/15",
                   ready ? "opacity-100" : "opacity-0",
                   ready
                     ? "transition-[transform,width,opacity] duration-200 ease-out"
                     : "",
                 ]
               : [
-                  isSmall ? "-bottom-0.5 h-0.5" : "-bottom-1 h-1",
-                  "bg-primary-600 dark:bg-primary-400",
+                  "-bottom-px h-px bg-accent",
                   ready
                     ? "transition-[transform,width] duration-200 ease-out"
                     : "",
