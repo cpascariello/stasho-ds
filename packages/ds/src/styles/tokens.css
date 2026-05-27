@@ -217,7 +217,7 @@
    detected from source files. This directive feeds
    them directly into the candidate list.
    ────────────────────────────────────────────── */
-@source inline("group-data-[variant=pill]:relative group-data-[variant=pill]:z-10 group-data-[variant=pill]:rounded-[2px] group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5 group-data-[variant=pill]:text-sm group-data-[variant=pill]:text-muted-foreground group-data-[variant=pill]:translate-y-0 group-data-[variant=pill]:hover:text-accent-700 dark:group-data-[variant=pill]:hover:text-accent group-data-[variant=pill]:data-[state=active]:text-accent-700 dark:group-data-[variant=pill]:data-[state=active]:text-accent group-data-[variant=pill]:data-[state=active]:translate-y-0");
+@source inline("group-data-[variant=pill]:relative group-data-[variant=pill]:z-10 group-data-[variant=pill]:rounded-[2px] group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5 group-data-[variant=pill]:text-sm group-data-[variant=pill]:text-muted-foreground group-data-[variant=pill]:translate-y-0 group-data-[variant=pill]:hover:text-accent group-data-[variant=pill]:data-[state=active]:text-accent group-data-[variant=pill]:data-[state=active]:translate-y-0");
 
 /* ──────────────────────────────────────────────
    Utilities: gradient border effects
