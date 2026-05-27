@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Swap every `primary-*` active/hover treatment in Tabs and Breadcrumb to `--accent` cyan, plus three alignment fixes per spec (Tabs focus → Button outline pattern, Tabs disabled → semantic flatten, pill active fill → tinted cyan).
+**Goal:** Swap every `primary-*` active/hover treatment in Tabs and Breadcrumb to `--accent` cyan, plus five alignment fixes per spec: Tabs focus → Button outline pattern (#82), Tabs disabled → semantic flatten (#84), pill active fill → tinted cyan, TabsList underline → 1px hairline (track + indicator), TabsList pill → `rounded-[2px]` + 1px `border-edge` hairline (removes Tabs pill from the SKIN-PRINCIPLES § 4 round-by-design list).
 
 **Architecture:** Mechanical class-string swaps inside two component files. No new tokens, no new files, no API changes. Each component subtree gets a focused commit; docs land in one final commit. Tests are class-name-agnostic per ARCHITECTURE Testing Philosophy — existing tests should pass unchanged, no new tests added for visual class changes.
 
@@ -18,7 +18,7 @@
 
 | File | What changes | Owner |
 |---|---|---|
-| `packages/ds/src/components/tabs/tabs.tsx` | TabsList sliding indicator (~ lines 395, 403), TabsTrigger className block (~ lines 428–458), OverflowTrigger className + DropdownMenu Item active (~ lines 202–224, 257–265) | Tasks 2 · 3 · 4 |
+| `packages/ds/src/components/tabs/tabs.tsx` | TabsList className (underline border-b + pill chrome — lines 357–376), TabsList sliding indicator (lines 388–411), TabsTrigger className block (lines 428–458), OverflowTrigger className + DropdownMenu Item active (lines 202–224, 257–265) | Tasks 2 · 3 · 4 |
 | `packages/ds/src/components/breadcrumb/breadcrumb.tsx` | BreadcrumbLink hover (~ line 70), BreadcrumbSeparator (~ line 95), BreadcrumbPage (~ line 113) | Task 5 |
 | `docs/SKIN-PRINCIPLES.md` | Append § 2 amendment per spec § 7 | Task 8 |
 | `docs/DESIGN-SYSTEM.md` | Refresh Tabs + Breadcrumb entries | Task 8 |
@@ -62,10 +62,10 @@ Expected: `Switched to a new branch 'skin/active-state-recolor'`.
 
 ---
 
-## Task 2: Tabs — TabsList sliding indicator (both variants)
+## Task 2: Tabs — TabsList chrome (underline thickness + pill shape + indicators)
 
 **Files:**
-- Modify: `packages/ds/src/components/tabs/tabs.tsx:388-410` (the indicator `<div>` inside `TabsList`)
+- Modify: `packages/ds/src/components/tabs/tabs.tsx:357-411` (the `TabsList` container className and the indicator `<div>` inside it)
 
 **Steps:**
 
@@ -78,9 +78,61 @@ npm run test -w packages/ds -- tabs.test
 
 Expected: all existing Tabs tests pass. Clean baseline before touching styling.
 
-- [ ] **Step 2: Replace the indicator's variant class arrays**
+- [ ] **Step 2: Replace the TabsList container className**
 
-Open `packages/ds/src/components/tabs/tabs.tsx`. Find the indicator `<div>` near lines 388–410 (inside `TabsList`'s return):
+Open `packages/ds/src/components/tabs/tabs.tsx`. Find the `<TabsPrimitive.List>` near lines 357–376 (inside `TabsList`'s return):
+
+```tsx
+      <TabsPrimitive.List
+        ref={setRefs}
+        data-variant={variant}
+        data-size={size}
+        className={cn(
+          "group relative flex",
+          isPill
+            ? [
+                "rounded-full bg-muted",
+                isSmall ? "p-0.5" : "p-1",
+                !isCollapse && "inline-flex",
+              ]
+            : isSmall
+              ? "border-b-2 border-edge/40"
+              : "border-b-4 border-edge/40",
+          className,
+        )}
+        {...rest}
+      >
+```
+
+Replace with:
+
+```tsx
+      <TabsPrimitive.List
+        ref={setRefs}
+        data-variant={variant}
+        data-size={size}
+        className={cn(
+          "group relative flex",
+          isPill
+            ? [
+                "rounded-[2px] bg-muted border border-edge",
+                isSmall ? "p-0.5" : "p-1",
+                !isCollapse && "inline-flex",
+              ]
+            : "border-b border-edge/40",
+          className,
+        )}
+        {...rest}
+      >
+```
+
+Changes:
+- Pill: `rounded-full bg-muted` → `rounded-[2px] bg-muted border border-edge` (Q6 — adds hairline + Card-grade radius)
+- Underline (sm + md collapse): `border-b-2 border-edge/40` / `border-b-4 border-edge/40` → `border-b border-edge/40` (Q5 — 1px hairline for both sizes; the `isSmall ? ... : ...` ternary collapses to a single class)
+
+- [ ] **Step 3: Replace the indicator `<div>` className**
+
+In the same file, find the indicator `<div>` near lines 388–411:
 
 ```tsx
         <div
@@ -109,7 +161,7 @@ Open `packages/ds/src/components/tabs/tabs.tsx`. Find the indicator `<div>` near
         />
 ```
 
-Replace the two `bg-*` lines so the pill indicator becomes a cyan tint and the underline indicator becomes solid cyan:
+Replace with:
 
 ```tsx
         <div
@@ -119,15 +171,14 @@ Replace the two `bg-*` lines so the pill indicator becomes a cyan tint and the u
             isPill
               ? [
                   isSmall ? "inset-y-0.5" : "inset-y-1",
-                  "rounded-full bg-accent/15",
+                  "rounded-[2px] bg-accent/15",
                   ready ? "opacity-100" : "opacity-0",
                   ready
                     ? "transition-[transform,width,opacity] duration-200 ease-out"
                     : "",
                 ]
               : [
-                  isSmall ? "-bottom-0.5 h-0.5" : "-bottom-1 h-1",
-                  "bg-accent",
+                  "-bottom-px h-px bg-accent",
                   ready
                     ? "transition-[transform,width] duration-200 ease-out"
                     : "",
@@ -139,12 +190,12 @@ Replace the two `bg-*` lines so the pill indicator becomes a cyan tint and the u
 ```
 
 Changes:
-- Pill: `bg-primary-600 dark:bg-primary-500` → `bg-accent/15`
-- Underline: `bg-primary-600 dark:bg-primary-400` → `bg-accent`
+- Pill: `rounded-full bg-primary-600 dark:bg-primary-500` → `rounded-[2px] bg-accent/15` (Q1 + Q6)
+- Underline (sm + md collapse): the `isSmall ? "-bottom-0.5 h-0.5" : "-bottom-1 h-1"` ternary + `bg-primary-600 dark:bg-primary-400` collapse to `"-bottom-px h-px bg-accent"` (Q5 — both sizes use 1px hairline; `-bottom-px` is Tailwind for `bottom: -1px`)
 
-The underline indicator stays a solid bar (no glow) per Direction C: text/slot indicators are flat cyan, not lit surfaces.
+The underline indicator stays a solid bar (no glow) per Direction C — text/slot indicators are flat cyan, not lit surfaces.
 
-- [ ] **Step 3: Run Tabs tests, confirm pass**
+- [ ] **Step 4: Run Tabs tests**
 
 ```bash
 npm run test -w packages/ds -- tabs.test
@@ -152,11 +203,13 @@ npm run test -w packages/ds -- tabs.test
 
 Expected: all tests pass. (Class-name changes don't break behavior tests.)
 
-- [ ] **Step 4: Commit**
+**Implementation note:** if `-bottom-px` doesn't resolve in your Tailwind 4 build (it should — `px` is the 1px scale token), fallback is `[bottom:-1px]` arbitrary value. Same for `h-px` → `[height:1px]`. Both are standard Tailwind utilities and should just work.
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add packages/ds/src/components/tabs/tabs.tsx
-git commit -m "feat(skin): Tabs — cyan sliding indicator (underline solid, pill tinted)"
+git commit -m "feat(skin): Tabs — TabsList hairline underline + pill rounded-[2px] + cyan indicators"
 ```
 
 ---
@@ -245,7 +298,7 @@ const TabsTrigger = forwardRef<
         "group-data-[size=sm]:text-sm group-data-[size=sm]:gap-1.5",
         // Pill variant overrides (via group data attribute on TabsList)
         "group-data-[variant=pill]:relative group-data-[variant=pill]:z-10",
-        "group-data-[variant=pill]:rounded-full",
+        "group-data-[variant=pill]:rounded-[2px]",
         "group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5",
         "group-data-[variant=pill]:text-sm",
         "group-data-[variant=pill]:text-muted-foreground",
@@ -270,6 +323,7 @@ Key changes:
 - `data-[state=active]:text-primary-600` + `dark:data-[state=active]:text-primary-400` → `data-[state=active]:text-accent` (one line)
 - `disabled:opacity-20 disabled:pointer-events-none` → `disabled:text-foreground/30 disabled:cursor-not-allowed`
 - `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2` → `focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2` (drop ring + outline-none; native outline replaces ring shadow)
+- Pill: `group-data-[variant=pill]:rounded-full` → `group-data-[variant=pill]:rounded-[2px]` (Q6 — matches the new pill list shape from Task 2)
 - Pill: `group-data-[variant=pill]:hover:text-foreground` → `group-data-[variant=pill]:hover:text-accent`
 - Pill: `group-data-[variant=pill]:data-[state=active]:text-white` → `group-data-[variant=pill]:data-[state=active]:text-accent`
 - Pill: drop `group-data-[variant=pill]:focus-visible:ring-offset-0` (outline pattern doesn't use ring-offset; nothing to override)
@@ -354,7 +408,7 @@ Replace with:
             "motion-reduce:transition-none",
             isPill
               ? cn(
-                  "relative z-10 rounded-full",
+                  "relative z-10 rounded-[2px]",
                   isSmall ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm",
                 )
               : isSmall
@@ -369,6 +423,7 @@ Key changes:
 - Active-hidden ternary collapses: `hasActiveHidden && isPill ? "text-white" : hasActiveHidden ? "text-primary-600 dark:text-primary-400" : "text-muted-foreground"` becomes `hasActiveHidden ? "text-accent" : "text-muted-foreground"`. The pill carve-out (`text-white`) is no longer needed because both pill and non-pill active states use the same `text-accent` now — the cyan reads against both the tinted pill indicator and the underline track.
 - `hover:text-primary-600 dark:hover:text-primary-400` → `hover:text-accent`
 - Focus: ring → outline (same swap as TabsTrigger)
+- Pill branch: `"relative z-10 rounded-full"` → `"relative z-10 rounded-[2px]"` (Q6 — matches the new pill list + trigger shape)
 
 - [ ] **Step 2: Replace the DropdownMenu Item active styling**
 
@@ -604,25 +659,30 @@ Open the printed URL (typically `http://localhost:3000`).
 Navigate to `/components/tabs`. Check the underline variant section.
 
 Expected:
-- Sliding indicator is cyan (`#00E1FA`), not blue
+- Underline track is 1px (hairline) at both sm and md sizes — not the prior 2px/4px chrome
+- Sliding indicator is 1px solid cyan (`#00E1FA`) — overlays the track at active position
 - Active trigger text is cyan, nudged up 2px above the indicator bar
 - Hover on a non-active trigger turns the text cyan
 - Focused trigger shows a 2px cyan outline at 2px offset (Tab to it from another control to test)
 - Disabled trigger renders at 30% foreground opacity with `not-allowed` cursor — not faded at 20% opacity
 
-Toggle the theme switcher (top right). Verify the cyan stays the same hex in both modes (same-hex rule).
+Toggle the theme switcher (top right). Verify the cyan stays the same hex in both modes (same-hex rule). The 1px cyan indicator should remain readable in both modes; if it disappears against a busy background, flag for fallback to 2px.
 
 - [ ] **Step 3: Verify Tabs pill variant**
 
 Same page, scroll to the pill variant section.
 
 Expected:
+- Pill list shape is `rounded-[2px]` (Card-grade rounded corners) — not the prior pill/capsule shape
+- Pill list has a 1px `border-edge` hairline framing the segmented control
+- Pill list background is still `bg-muted` (the cyan-tinted indicator slides on top)
+- Pill triggers are also `rounded-[2px]` (matches the list shape)
 - Active pill background is a soft cyan tint (`bg-accent/15`), not a solid colored pill
 - Active text is cyan
 - Hover on non-active pill turns text cyan
 - Disabled pill: text at 30% foreground opacity
 
-Check both md (default) and sm sizes if both are shown. Toggle theme — the tinted indicator may look more subtle in light mode (warning in spec § 9); if it's hard to see, note for follow-up.
+Check both md (default) and sm sizes if both are shown. Toggle theme — the tinted indicator may look more subtle in light mode (warning in spec § 9); if it's hard to see, note for follow-up. The 2px rounded corners on the list may feel "boxy" compared to the prior pill — this is intentional per the SKIN-PRINCIPLES § 4 amendment; confirm the read is "instrument switch panel" not "broken pill control".
 
 - [ ] **Step 4: Verify Tabs overflow + dropdown**
 
@@ -672,7 +732,7 @@ If anything looks off (light-mode pill tint too subtle, separator too quiet, foc
 
 **Steps:**
 
-- [ ] **Step 1: Update SKIN-PRINCIPLES.md — § 2 amendment**
+- [ ] **Step 1: Update SKIN-PRINCIPLES.md — § 2 amendment (active states)**
 
 Open `docs/SKIN-PRINCIPLES.md`. Find § 2 Color → "Semantic color mapping" sub-section. After the table mapping `--primary` / `--accent` / etc. to their roles, add a new paragraph (or extend the existing `--accent` row's "Role" description):
 
@@ -682,6 +742,33 @@ Open `docs/SKIN-PRINCIPLES.md`. Find § 2 Color → "Semantic color mapping" sub
 ```
 
 Place this after the existing "Semantic color mapping" paragraph and before "No decorative texture". Match the existing prose voice — short, declarative, sourced.
+
+- [ ] **Step 1b: Update SKIN-PRINCIPLES.md — § 4 round-by-design list**
+
+Same file. Find § 4 Geometry → "`full` is for round-by-design only" sub-section. The current list reads:
+
+```markdown
+- StatusDot (a dot IS round)
+- Slider thumb / Switch thumb (a control puck IS round)
+- ProgressBar track (the rounded ends are a graph convention)
+- MultiSelect tag chips (tags carry "soft / removable" semantics)
+- Stepper indicators (a step ring IS round)
+- Tabs pill variant (segmented control is pill-shaped by convention)
+```
+
+**Remove the Tabs pill entry** — chunk 5 reshapes the pill list and triggers to `rounded-[2px]`. Also update the rule's prose to clarify that "by convention" alone is not sufficient justification (the list is "round-by-design", not "round-by-precedent"):
+
+```markdown
+- StatusDot (a dot IS round)
+- Slider thumb / Switch thumb (a control puck IS round)
+- ProgressBar track (the rounded ends are a graph convention)
+- MultiSelect tag chips (tags carry "soft / removable" semantics) — **flagged for audit**
+- Stepper indicators (a step ring IS round) — **flagged for audit**
+
+**Source:** Decision #86 (Tabs pill removed). The `--accent` round-by-design list is "round-by-design only, never round-by-convention" — entries on this list need a semantic reason for the round shape, not a precedent from other DSs. MultiSelect chips and Stepper indicators carry the same convention-only justification that Tabs pill did and should be revisited in a dedicated rounded-full audit chunk after chunk 5 ships.
+```
+
+(Switch track is already round per "Switch thumb" being on the list — the *track* shape is implicit in `rounded-full` on the container. The audit should also revisit whether Switch track needs `rounded-full` or can move to `rounded-[2px]`.)
 
 - [ ] **Step 2: Update DESIGN-SYSTEM.md — Tabs entry**
 
@@ -708,18 +795,34 @@ Open `docs/DECISIONS.md`. Append a new entry at the top of the decision log (aft
 ```markdown
 ## Decision #86 — 2026-05-27
 
-**Context:** Tabs and Breadcrumb signaled active/hover with `text-primary-600 dark:text-primary-400` / `bg-primary-*` — primary blue's chassis role from Button competing with active-state navigation for visual weight. Wave-1 spec § 5 committed conceptually to cyan accent as the wave's active-state language; chunk 5 implements that swap across Tabs (TabsList indicators, TabsTrigger, OverflowTrigger, DropdownMenu items) and Breadcrumb (link hover, separator, current page). Brainstorming resolved four open visual questions: pill-variant active fill (full vs outlined vs tinted), underline-trigger lift, current-page treatment, and separator weight.
-**Decision:** Adopt cyan `--accent` for active and hover across Tabs and Breadcrumb. **Tabs underline:** sliding indicator becomes `bg-accent`, active trigger text becomes `text-accent`, active translate-y-0.5 lift is kept. **Tabs pill:** sliding indicator becomes `bg-accent/15` (tinted, not solid), active trigger text becomes `text-accent`, hover text becomes `text-accent` (replaces `text-foreground`). **Tabs trigger alignment fixes:** focus moves from `ring-primary-400 ring-offset-2` to `outline-2 outline-accent outline-offset-2` (Decision #82 Button pattern); disabled moves from `opacity-20` to `text-foreground/30 cursor-not-allowed` (Decision #84 vocabulary — no opacity tricks, semantic flatten). **OverflowTrigger** mirrors TabsTrigger active/hover/focus; the per-pill `text-white` carve-out collapses to a single `text-accent` (works against both pill and underline backgrounds). **DropdownMenu** active hidden-tab item becomes `text-accent font-semibold`. **Breadcrumb:** link hover becomes `text-accent`, separator drops to `text-foreground/25` (quieter than the direct-port `foreground/40`), current page becomes `text-accent` (drops the opacity-40 workaround). Out of scope: DropdownMenu Content `rounded-md` + `shadow-brand` (chunk 6 popover audit).
-**Rationale:** **Pill-tinted fill over solid** — the wave's strongest visual lever already lives on Button chassis; a fully saturated cyan pill would be the loudest single cyan surface in the wave and put a navigation control on the same visual plane as the brand action. Tinted carries "active" via colour without committing the pill area to brand saturation. **Underline nudge kept** — position + colour both signal active; with cyan replacing primary, the nudge becomes additive emphasis rather than the sole signal, and dropping it would break visual continuity with the prior implementation. **Current page in full cyan** — consistent with the active-state vocabulary across chunk 4 (Checkbox, Radio, Switch, Slider) and chunk 5 Tabs; the previous `opacity-40` workaround read as "deprioritised", the opposite of what the current page is. **Separator at 25%** — with the current page now cyan, the trail labels and separators want to recede so the cyan reads cleanly; 40% would compete, `text-edge` (≈8% hairline) would disappear. **Disabled flatten** — opacity-20 reads "loading" or "fading out"; foreground/30 + cursor-not-allowed reads "this control is semantically broken" (the chunk-4 vocabulary). **Focus outline over ring** — composes with the active trigger's translate-y nudge (a box-shadow ring would replace the bevel; outline sits at the chassis edge). Same-hex rule applies — `text-accent` / `outline-accent` need no `dark:` variants.
-**Alternatives considered:** Solid cyan pill fill (loudest — rejected for the noise-budget reason above). Outlined cyan chip on pill, mirroring Pagination chunk-4 treatment (rejected — a segmented control benefits from a fill cue more than a navigation chip does). Drop the underline nudge (rejected — colour alone is enough but the nudge gives the active state a second cue and matches the prior implementation's read). Neutral current breadcrumb page (rejected — implicit signal via aria-current + last-position is too quiet; the trail needs a visible focal point). Cyan dot prefix + neutral page text (rejected — borrows from StatusDot vocabulary; dot reads as health/status not navigation). Separator at `text-foreground/40` (rejected — direct port of the opacity but doesn't take advantage of the new cyan focal point). Separator at `text-edge` (rejected — too quiet; separator becomes nearly invisible). Keep `ring-primary-400` focus (rejected — ring + outline-none was needed for the primary-tinted shadow ring; the native outline composes more cleanly with the chassis at 2px outline-offset and matches the Button pattern). Keep `opacity-20` disabled (rejected — Decision #84 ruled opacity tricks out of the chassis vocabulary; semantic flatten is the established replacement).
+**Context:** Tabs and Breadcrumb signaled active/hover with `text-primary-600 dark:text-primary-400` / `bg-primary-*` — primary blue's chassis role from Button competing with active-state navigation for visual weight. Wave-1 spec § 5 committed conceptually to cyan accent as the wave's active-state language; chunk 5 implements that swap across Tabs (TabsList indicators, TabsTrigger, OverflowTrigger, DropdownMenu items) and Breadcrumb (link hover, separator, current page). Separately, TabsList chrome (underline border-b at 2px/4px, pill list with `bg-muted` no border and `rounded-full` shape + triggers) predated the strict 0/0/2/4 + hairline-only geometry of Decisions #78 / #82 / #84. Brainstorming resolved six visual questions: pill active fill, underline nudge, breadcrumb current page, breadcrumb separator, underline track + indicator thickness, and pill list/trigger shape (including whether `rounded-full` survives the "round-by-design" rule).
+**Decision:** Adopt cyan `--accent` for active and hover across Tabs and Breadcrumb. **Tabs underline:** track + indicator collapse to 1px hairline at both sm and md (`border-b border-edge/40` + `-bottom-px h-px bg-accent`); active trigger text becomes `text-accent` with the `-translate-y-0.5` lift kept. **Tabs pill list:** moves from `rounded-full bg-muted` (no border) to `rounded-[2px] bg-muted border border-edge` — adds the chunk-4 hairline chrome vocabulary, drops Tabs pill from the SKIN-PRINCIPLES § 4 round-by-design reserved list. **Tabs pill triggers + sliding indicator:** `rounded-full` → `rounded-[2px]` to match the new list shape; indicator becomes `bg-accent/15` (tinted, not solid); active trigger text becomes `text-accent`, hover text becomes `text-accent`. **Tabs trigger alignment:** focus moves from `ring-primary-400 ring-offset-2` to `outline-2 outline-accent outline-offset-2` (Decision #82); disabled moves from `opacity-20` to `text-foreground/30 cursor-not-allowed` (Decision #84). **OverflowTrigger** mirrors TabsTrigger active/hover/focus; per-pill `text-white` carve-out collapses to `text-accent`; pill branch `rounded-full` → `rounded-[2px]`. **DropdownMenu** active hidden-tab item becomes `text-accent font-semibold`. **Breadcrumb:** link hover → `text-accent`, separator → `text-foreground/25`, current page → `text-accent` (drops the opacity-40 workaround). **Cascade flagged for follow-up:** Switch track, MultiSelect tag chips, Stepper indicators carry the same convention-only `rounded-full` justification — handled in a dedicated rounded-full audit chunk after chunk 5 ships. Out of scope: DropdownMenu Content `rounded-md` + `shadow-brand` (chunk 6 popover audit).
+**Rationale:** **Pill-tinted fill over solid** — fully saturated cyan pill would be the loudest single cyan surface in the wave and put a navigation control on the same visual plane as Button. Tinted carries "active" via colour without committing the pill area to brand saturation. **Underline nudge kept** — position + colour both signal active; with cyan replacing primary, the nudge becomes additive emphasis. **Underline collapse to 1px hairline** — SKIN-PRINCIPLES § 4 mandates hairline borders; the previous 4px chrome was a pre-Abyssal carve-out, and with cyan as the active signal, both track and indicator can honour the rule without losing the slide-between-tabs read. **Pill list `rounded-[2px]` + hairline border** — two principles converge: the chunk-4 chrome vocabulary (text inputs adopted 1px `--edge` hairlines as the "slot" framing — segmented controls deserve the same), and the round-by-design rule (Tabs pill was on the reserved list under "by convention", which doesn't survive scrutiny — convention is not a skin principle). `rounded-[2px]` (Card grade) over `rounded-none` because the 2px softening matches Card and Dialog and gives a useful visual ladder ("contained group" vs "primitive control"). **Current page in full cyan** — consistent with active-state vocabulary across chunk 4 and Tabs; previous `opacity-40` read as "deprioritised", the opposite of what current page is. **Separator at 25%** — with the current page now cyan, separators recede so the cyan reads cleanly; 40% would compete, `text-edge` would disappear. **Disabled flatten** — `opacity-20` reads "loading"; `foreground/30 + cursor-not-allowed` reads "semantically broken" (Decision #84 vocabulary). **Focus outline over ring** — composes with the trigger's translate-y nudge (box-shadow ring would replace the bevel; outline sits at the chassis edge and matches Button). Same-hex rule: `text-accent` / `outline-accent` need no `dark:` variants.
+**Alternatives considered:** Solid cyan pill fill (loudest — rejected for noise-budget). Outlined cyan chip on pill mirroring Pagination chunk-4 treatment (rejected — segmented control benefits from a fill cue more than navigation chip does). Drop underline nudge (rejected — colour alone is enough but the nudge gives a second cue). Hairline underline track + 2px indicator (rejected — middle-ground; the 1px/1px treatment reads cleanly with cyan doing the lifting). Keep `rounded-full` on pill (rejected — "by convention" is not a principle; the skin is committedly brutalist). `rounded-none` on pill (rejected — loses the Card-grade "contained group" softening that distinguishes pill list from text input chassis). Neutral current breadcrumb page (rejected — too implicit; trail needs a visible focal point). Cyan dot prefix + neutral page text (rejected — borrows StatusDot vocabulary). Separator at `text-foreground/40` (rejected — direct port of opacity but doesn't yield to the new cyan focal point). Separator at `text-edge` (rejected — too quiet). Keep `ring-primary-400` focus (rejected — ring + outline-none was needed for the primary-tinted shadow ring; native outline composes more cleanly). Keep `opacity-20` disabled (rejected — Decision #84 ruled opacity tricks out of chassis vocabulary). Bundle Switch track + MultiSelect chips + Stepper indicators into this chunk (rejected — Switch is shipped, MultiSelect + Stepper are chunk 6+ scope; a focused rounded-full audit chunk is more reviewable).
 ```
 
-- [ ] **Step 5: Move chunk-5 item to Completed in BACKLOG.md**
+- [ ] **Step 5: Update BACKLOG.md — completed entry + two new open items**
 
 Open `docs/BACKLOG.md`. If there is an Open Item for chunk 5 / active-state recolor, move it under `## Completed / Rejected`. If there isn't one, add a Completed entry under that section:
 
 ```markdown
-- [x] 2026-05-27 — Chunk 5 active-state recolor (Tabs + Breadcrumb): `primary-*` → cyan `--accent` on active/hover; pill indicator → `bg-accent/15` tinted; underline indicator → solid cyan; Tabs focus → outline-accent pattern (Decision #82 alignment); Tabs disabled → semantic flatten (Decision #84 alignment); Breadcrumb current page → `text-accent`; Breadcrumb separator → `text-foreground/25`
+- [x] 2026-05-27 — Chunk 5 active-state recolor + TabsList chrome polish (Tabs + Breadcrumb): `primary-*` → cyan `--accent` on active/hover; pill indicator → `bg-accent/15` tinted; underline track + indicator collapse to 1px hairline (both sizes); pill list adds 1px `border-edge` hairline + moves to `rounded-[2px]`; pill triggers + sliding indicator + OverflowTrigger pill branch all move to `rounded-[2px]`; Tabs focus → outline-accent pattern (Decision #82 alignment); Tabs disabled → semantic flatten (Decision #84 alignment); Breadcrumb current page → `text-accent`; Breadcrumb separator → `text-foreground/25`. SKIN-PRINCIPLES § 2 + § 4 amended.
+```
+
+Then add two new entries under `## Open Items` (the section above `## Completed / Rejected`) to capture the chunk-5 cascade:
+
+```markdown
+### 2026-05-27 — Pagination active-state recolor
+
+**Source:** Wave-1 spec § 5.1; pulled out of chunk 5 to keep both chunks reviewable
+**Description:** Apply the wave-1 § 5.1 change table to Pagination — `text-primary-*` → cyan accent on number color, hover, and ellipsis; active number becomes outlined chip (`bg-muted dark:bg-neutral-900` + `border border-accent` + `text-accent`); number button size drops to 26×26 (nav arrows stay 32×32). Own short chunk: `skin/pagination-recolor` off `skin/paraplu`.
+**Priority:** High (blocks the visual cohesion of the wave — pagination is the last component still rendering primary-blue active state)
+
+### 2026-05-27 — Rounded-full audit
+
+**Source:** Decision #86 cascade
+**Description:** SKIN-PRINCIPLES § 4 amendment ("round-by-design only, never round-by-convention") flags three remaining components on the reserved list that share the convention-only justification Tabs pill just lost: Switch track (currently `rounded-full` — shipped in chunk 4), MultiSelect tag chips (chunks 6+ territory, unshipped), Stepper indicators (chunk 7 territory, unshipped). Audit each and either keep `rounded-full` with a new semantic justification or move to `rounded-[2px]` to match the Tabs pill treatment. Single chunk: `skin/rounded-full-audit` off `skin/paraplu`.
+**Priority:** Medium (does not block the wave but completes the principle work started in chunk 5)
 ```
 
 - [ ] **Step 6: Update CLAUDE.md — Current Features**
