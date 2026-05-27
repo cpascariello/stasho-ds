@@ -333,7 +333,7 @@ Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` re
 | `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
 | `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, MultiSelect tag chips |
 
-The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb remains `rounded-full` for now — flagged for the dedicated rounded-full audit chunk. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
+The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb stays `rounded-full` with a principled aperture justification (Decision #89). See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
@@ -1655,13 +1655,13 @@ import { Slider } from "@aleph-front/ds/slider";
 
 **Range mode:** Pass a two-element array (e.g., `defaultValue={[25, 75]}`) to render two thumbs. The filled range spans between the thumbs. Radix prevents thumbs from crossing each other.
 
-**Sizes:** `sm` (1.5px track, 16px thumb) · `md` (2px track, 20px thumb, default)
+**Sizes:** `sm` (6px track, 12px thumb) · `md` (8px track, 14px thumb, default)
 
 **Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground`, sharing the chunk-6 popover token with Tooltip and the four dropdown surfaces (Decision #87).
 
-**Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill and thumb are `bg-accent`; thumb has a 1px `border-accent` ring for circular separation against the cyan range fill. Thumb glows on hover/focus (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the thumb. Disabled flattens range + thumb to `bg-foreground/30` and removes the bevel; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply.
+**Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill is `bg-accent`. Thumb is a 1.5px `border-accent` ring on a `bg-background` interior (aperture — the dark interior differentiates the thumb from the cyan range fill; the ring carries the brand color). On hover, the interior fills `bg-accent` and an outer halo lights up (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) — a documented carve-out from "hover intensifies, doesn't repaint" because the thumb is directly grabbed (Decision #89). Focus uses `outline-2 outline-accent outline-offset-2` + the same halo; the ring stays open on focus alone. Disabled flattens the ring to `border-foreground/30` (interior stays `bg-background`) and the range to `bg-foreground/30`; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply. The compound `data-[disabled]:hover:bg-background` keeps the disabled chassis static under hover.
 
-**Error:** `error={true}` swaps the thumb border to `border-error` and replaces the cyan glow with a blood-orange glow on hover/focus. Track is unchanged — at 4–8px height the track is too thin to render a visible 1px error border.
+**Error:** `error={true}` swaps the thumb ring to `border-error` and replaces the cyan glow with a blood-orange glow on hover/focus; the interior fills `bg-error` on hover (parallels the standard hover fill). Track is unchanged — at 4–8px height the track is too thin to render a visible 1px error border.
 
 **Keyboard:** Arrow left/right adjusts by `step`. Tab between thumbs in range mode. Fully accessible via Radix.
 
