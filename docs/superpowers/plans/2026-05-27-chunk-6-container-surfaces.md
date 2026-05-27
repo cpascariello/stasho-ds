@@ -62,7 +62,7 @@ git status
 git branch --show-current
 ```
 
-Expected: `skin/paraplu`. Working tree should have no staged changes. Untracked file in `.superpowers/brainstorm/` is fine (gitignored). The untracked `docs/superpowers/specs/2026-05-27-chunk-5-active-state-recolor-design.md` is from a parallel chunk-5 session — leave it untracked.
+Expected: `skin/paraplu`. Working tree should have no staged changes. Untracked files in `.superpowers/brainstorm/` are fine (gitignored). Any leftover screenshots like `before-*.png` / `after-*.png` at the repo root from prior chunk visual-verification can be deleted before branching — they are workspace artifacts, not project files.
 
 - [ ] **Step 2: Sync `skin/paraplu` from origin**
 
