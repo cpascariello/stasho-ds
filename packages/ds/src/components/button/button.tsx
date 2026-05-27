@@ -60,7 +60,7 @@ const buttonVariants = cva(
           "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         warning: [
-          "bg-warn text-warn-foreground",
+          "bg-warning text-warning-foreground",
           "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_24px_rgba(255,197,61,0.5)]",
           "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_40px_rgba(255,197,61,0.75)]",
           // light (base): flat muted chassis when disabled
@@ -143,7 +143,7 @@ const ledColorClass: Record<Variant, string> = {
   primary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
   secondary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
   destructive: "bg-white text-white [box-shadow:0_0_8px_currentColor]",
-  warning: "bg-warn-foreground text-warn-foreground",
+  warning: "bg-warning-foreground text-warning-foreground",
   success: "bg-success-foreground text-success-foreground",
   outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
   // ghost: LED is never rendered for ghost, so this entry is a sentinel.
@@ -155,7 +155,7 @@ const iconGlowClass: Record<Variant, string> = {
   primary: "text-accent [filter:drop-shadow(0_0_4px_var(--accent))]",
   secondary: "text-accent [filter:drop-shadow(0_0_4px_var(--accent))]",
   destructive: "text-white",
-  warning: "text-warn-foreground",
+  warning: "text-warning-foreground",
   success: "text-success-foreground",
   outline: "text-primary dark:text-accent [filter:drop-shadow(0_0_4px_currentColor)]",
   ghost: "text-foreground/60 dark:text-white/60",

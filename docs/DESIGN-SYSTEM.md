@@ -183,7 +183,7 @@ Use as Tailwind classes. Semantic tokens resolve to different values per theme.
 
 Full OKLCH 50–950 scales. Each scale has 11 stops, available as Tailwind classes like `bg-primary-600`, `text-error-500`, etc. Supports `/opacity` modifier: `bg-primary-600/50`.
 
-Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--accent`, `--success`, `--warn`, `--error`) resolve to the **same hex** in both light and dark mode (Radix step-9 convention). Scale steps remain available for tinted backgrounds, hover states, and contrast-aware inline text.
+Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--accent`, `--success`, `--warning`, `--error`) resolve to the **same hex** in both light and dark mode (Radix step-9 convention). Scale steps remain available for tinted backgrounds, hover states, and contrast-aware inline text.
 
 | Scale | Hue | Anchor | Use for |
 |-------|-----|--------|---------|
@@ -199,7 +199,7 @@ Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--
 
 ### Semantic Colors
 
-Accents (`primary`/`accent`/`success`/`warn`/`error`) resolve to the **same hex** in both modes. Surfaces (`background`/`foreground`/`muted`/`surface`/`edge`) still swap per theme.
+Accents (`primary`/`accent`/`success`/`warning`/`error`) resolve to the **same hex** in both modes. Surfaces (`background`/`foreground`/`muted`/`surface`/`edge`) still swap per theme.
 
 | Token | Tailwind class | Light | Dark | Use for |
 |-------|---------------|-------|------|---------|
@@ -211,8 +211,8 @@ Accents (`primary`/`accent`/`success`/`warn`/`error`) resolve to the **same hex*
 | `accent-foreground` | `text-accent-foreground` | `#001014` | `#001014` | Text on accent backgrounds |
 | `success` | `bg-success`, `text-success` | `#2BD58E` | `#2BD58E` | Success indicators |
 | `success-foreground` | `text-success-foreground` | `#00130a` | `#00130a` | Text on success backgrounds |
-| `warn` | `bg-warn`, `text-warn` | `#ffc53d` | `#ffc53d` | Warning indicators |
-| `warn-foreground` | `text-warn-foreground` | `#1a1100` | `#1a1100` | Text on warn backgrounds |
+| `warning` | `bg-warning`, `text-warning` | `#ffc53d` | `#ffc53d` | Warning indicators |
+| `warning-foreground` | `text-warning-foreground` | `#1a1100` | `#1a1100` | Text on warning backgrounds |
 | `error` | `bg-error`, `text-error` | `#FF3D00` | `#FF3D00` | Error / destructive indicators |
 | `error-foreground` | `text-error-foreground` | `#ffffff` | `#ffffff` | Text on error backgrounds |
 | `muted` | `bg-muted` | `oklch(0.94 0.009 270)` | base-800 | Subdued backgrounds |
