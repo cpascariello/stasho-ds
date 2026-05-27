@@ -125,8 +125,8 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 
 | Element | Radius |
 |---|---|
-| Buttons, inputs, selects, chips, dropdowns, toasts | `0` |
-| Cards | `2px` |
+| Buttons, inputs, selects, dropdowns, toasts | `0` |
+| Badges, Cards | `2px` |
 | Modals, dialogs | `4px` |
 
 **Why:** The 0/0/2/4 ladder pushes the brutalist character at every interactive surface, and reserves rounding for the few elements where it carries meaning (cards as physical objects, modals as floating overlays).
@@ -139,7 +139,8 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 | Popovers | `rounded-none` | 0px | Tooltip, Select/Combobox/MultiSelect dropdowns, Tabs overflow DropdownMenu |
 | Modals | `rounded-xl` | 4px | Dialog |
 | Cards | `rounded-lg` | 2px | Card |
-| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, Switch thumb, ProgressBar tracks, MultiSelect tag chips, Stepper indicators, Tabs pill variant |
+| Contained markers | `rounded-[2px]` | 2px | Badge |
+| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks, MultiSelect tag chips |
 
 Tooltip is a popover, not a card — the radius reflects its role. The Abyssal radius scale maps `rounded-sm / rounded-md` to 0px, `rounded-lg` to 2px, `rounded-xl` to 4px; reach for the semantic class that matches the intended pixel value rather than guessing from shadcn-era defaults.
 **Source:** Decision #87.
@@ -244,10 +245,10 @@ These are the patterns we've discovered while building components for this skin.
 **Source:** Decision #84.
 
 ### Direction C — LED scales by role, not by size
-**Rule:** The LED treatment extends to small "on/active" states selectively. Glow is reserved for components where the lit element IS the active surface (Switch thumb, Slider thumb, ProgressBar fill, **Stepper active indicator**). Slot/text indicators (Checkbox check, Radio dot, active Tab text, active Pagination number, active Breadcrumb, **Stepper completed indicator**) stay flat-cyan — they're markers on a surface, not lit surfaces themselves.
+**Rule:** The LED treatment extends to small "on/active" states selectively. Glow is reserved for components where the lit element IS the active surface AND is either directly grabbed or carries a persistent "you are here" reading (Switch thumb on hover/focus, Slider thumb on hover/focus, **Stepper active indicator** persistent). Lit surfaces that are passive readouts (ProgressBar fill) stay flat-cyan on a beveled track — the bevel + cyan carries the signal without committing to glow. Slot/text indicators (Checkbox check, Radio dot, active Tab text, active Pagination number, active Breadcrumb, **Stepper completed indicator**) likewise stay flat-cyan — they're markers on a surface, not lit surfaces themselves.
 **Why:** A 14px Switch thumb glows because the thumb IS the on/off indicator. A 14px ticked Checkbox doesn't glow because the check is just a marker on a slot. A form with 10 ticked checkboxes would bloom into 10 cyan halos under uniform LED treatment — Direction C keeps it calm by extending the rule by role.
-**How:** Switch thumbs are solid cyan at rest and gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only. Slider thumbs are 1.5px cyan rings on a `bg-background` interior at rest (an aperture); on hover, the interior fills `bg-accent` and an outer halo `0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)` lights up — a documented carve-out from § 5 "hover intensifies, doesn't repaint" because the Slider thumb is a directly-grabbed control and the fill is the "you've got it" cue. The repaint is bounded to the interior of an existing chassis (no border, size, or shape change). Stepper active indicators carry a persistent halo `box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)` (the indicator IS the "you are here" beacon, so the halo is rest‑state, not hover‑state). Switch and Slider tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat, as are Stepper completed indicators (solid cyan chip carries the state alone). Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*`, `data-[disabled]:*` for Radix `<span>`-rendered parts, and `data-[disabled]:hover:*` to keep the disabled chassis static under hover) so the sink wins over checked-accent / hover-fill rules.
-**Source:** Decisions #85, #88, #89.
+**How:** Switch thumbs are solid cyan at rest and gain `box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)` on hover/focus only. Slider thumbs are 1.5px cyan rings on a `bg-background` interior at rest (an aperture); on hover, the interior fills `bg-accent` and an outer halo `0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)` lights up — a documented carve-out from § 5 "hover intensifies, doesn't repaint" because the Slider thumb is a directly-grabbed control and the fill is the "you've got it" cue. The repaint is bounded to the interior of an existing chassis (no border, size, or shape change). Stepper active indicators carry a persistent halo `box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)` (the indicator IS the "you are here" beacon, so the halo is rest‑state, not hover‑state). ProgressBar fill stays flat cyan on a beveled track — the bevel + cyan carries the lit-surface signal without committing to a persistent glow. Glow is reserved for directly-grabbed controls (Slider thumb) and "you are here" beacons (Stepper active); a passive readout like ProgressBar doesn't earn the glow budget. Switch, Slider, and ProgressBar tracks carry the same inset bevel as Button (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`). Checkbox / Radio / Tabs / Pagination / Breadcrumb cyan states are flat, as are Stepper completed indicators (solid cyan chip carries the state alone). Disabled cascades for these components require compound variants (`disabled:data-[state=checked]:*`, `data-[disabled]:*` for Radix `<span>`-rendered parts, and `data-[disabled]:hover:*` to keep the disabled chassis static under hover) so the sink wins over checked-accent / hover-fill rules.
+**Source:** Decisions #85, #88, #89, #90.
 
 ### Elevation is neutral
 **Rule:** Drop shadows on floating surfaces (Dialog, Tooltip, popover dropdowns) use plain `rgba(0,0,0,X)` — never brand-tinted.
