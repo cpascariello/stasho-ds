@@ -48,6 +48,9 @@ aleph-cloud-ds/
 │       │   │   ├── input/
 │       │   │   │   ├── input.tsx
 │       │   │   │   └── input.test.tsx
+│       │   │   ├── loader/
+│       │   │   │   ├── loader.tsx
+│       │   │   │   └── loader.test.tsx
 │       │   │   ├── logo/
 │       │   │   │   ├── logo.tsx
 │       │   │   │   └── logo.test.tsx
@@ -372,7 +375,7 @@ The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` 
 - **Continuous animations** (`animate-pulse`, `animate-button-chase-*`, indeterminate progress): `motion-reduce:animate-none` stops the animation entirely.
 - **One-shot transitions** (`transition-[clip-path]`, `transition-transform`): `motion-reduce:transition-none` makes state changes instant.
 
-**Key files:** `skeleton.tsx`, `status-dot.tsx`, `button.tsx` (loading chase), `progress-bar.tsx` (indeterminate) — continuous; `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` — one-shot.
+**Key files:** `skeleton.tsx`, `status-dot.tsx`, `button.tsx` (loading chase), `loader.tsx` (chase primitive), `progress-bar.tsx` (indeterminate) — continuous; `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` — one-shot.
 
 **Rule:** Every new component with animation must include the appropriate `motion-reduce:` variant. Continuous animations use `animate-none`; transitions use `transition-none`.
 

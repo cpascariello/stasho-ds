@@ -48,6 +48,7 @@
     "./logo": "./src/components/logo/logo.tsx",
     "./progress-bar": "./src/components/progress-bar/progress-bar.tsx",
     "./stepper": "./src/components/stepper/stepper.tsx",
+    "./loader": "./src/components/loader/loader.tsx",
     "./lib/cn": "./src/lib/cn.ts",
     "./styles/tokens.css": "./src/styles/tokens.css"
   },
