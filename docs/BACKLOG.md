@@ -104,11 +104,11 @@ Ideas and scope creep captured for later consideration.
 **Description:** Outline disabled in dark mode keeps a transparent chassis (no `dark:disabled:bg-X`) while every other variant flattens to `bg-neutral-900`. Inconsistent with "Disabled flattens" principle. Fix by adding `dark:disabled:bg-neutral-900` to the Outline variant — small dark-mode behavior change, kept out of the light-mode chunk scope.
 **Priority:** Low
 
-### 2026-05-27 — Rounded-full audit
+### 2026-05-27 — Rounded-full audit (MultiSelect chips remaining)
 
 **Source:** Decision #86 cascade
-**Description:** § 4 reserved list after Decision #88 keeps: StatusDot, Slider thumb (kept for now on the same convention-only justification but with the defence that bevel + LED at 16px make the round/square visual difference functionally invisible), ProgressBar track, MultiSelect tag chips (still flagged). This chunk reviews Slider thumb and MultiSelect tag chips and decides whether each keeps `rounded-full` with a stronger semantic justification or moves to `rounded-[2px]`. Single chunk: `skin/rounded-full-audit` off `skin/paraplu`.
-**Priority:** Medium (does not block the wave but completes the principle work started in chunk 5)
+**Description:** SKIN-PRINCIPLES § 4 amendment ("round-by-design only, never round-by-convention") flagged Switch track + thumb, Stepper indicators, Slider thumb, and MultiSelect tag chips as carrying convention-only `rounded-full` justifications. Switch + Stepper resolved in wave-1-finish (Decision #88 — both moved to `rounded-[2px]`). Slider thumb resolved in Decision #89 — `rounded-full` kept with a principled aperture / reticle justification. Only **MultiSelect tag chips** remain — audit and either keep with a new semantic justification or move to `rounded-[2px]`. Single chunk: `skin/multiselect-chips-audit` off `skin/paraplu`.
+**Priority:** Low (final principle cleanup — does not block any feature work)
 
 ---
 
