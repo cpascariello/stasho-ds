@@ -331,9 +331,9 @@ Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` re
 | `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts |
 | `rounded-lg` | `--radius-lg` | `2px` | Cards |
 | `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
-| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, MultiSelect tag chips |
+| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks |
 
-The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb stays `rounded-full` with a principled aperture justification (Decision #89). See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
+The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb stays `rounded-full` with a principled aperture justification (Decision #89). MultiSelect chips moved to `rounded-[2px]` (Decision #91) — convention-only "soft/removable" argument did not survive audit; chips join the wave's "contained group" family. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
