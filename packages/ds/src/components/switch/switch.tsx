@@ -6,7 +6,7 @@ import { cn } from "@ac/lib/cn";
 const switchVariants = cva(
   [
     "peer inline-flex shrink-0 cursor-pointer",
-    "items-center rounded-full",
+    "items-center rounded-[2px]",
     "border border-edge bg-muted dark:bg-neutral-900",
     "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
@@ -33,7 +33,7 @@ const switchVariants = cva(
 
 const thumbVariants = cva(
   [
-    "pointer-events-none block rounded-full",
+    "pointer-events-none block rounded-[2px]",
     "bg-edge data-[state=checked]:bg-accent",
     "transition-all motion-reduce:transition-none",
     "data-[state=unchecked]:translate-x-0.5",

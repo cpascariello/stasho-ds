@@ -264,6 +264,48 @@ describe("StepperIndicator", () => {
       "completed",
     );
   });
+
+  it("renders children when state is inactive", () => {
+    render(
+      <Stepper aria-label="Steps">
+        <StepperList>
+          <StepperItem state="inactive">
+            <StepperIndicator>5</StepperIndicator>
+          </StepperItem>
+        </StepperList>
+      </Stepper>,
+    );
+    expect(screen.getByText("5")).toBeTruthy();
+  });
+
+  it("renders children when state is active", () => {
+    render(
+      <Stepper aria-label="Steps">
+        <StepperList>
+          <StepperItem state="active">
+            <StepperIndicator>5</StepperIndicator>
+          </StepperItem>
+        </StepperList>
+      </Stepper>,
+    );
+    expect(screen.getByText("5")).toBeTruthy();
+  });
+
+  it("replaces children with Check icon when state is completed", () => {
+    render(
+      <Stepper aria-label="Steps">
+        <StepperList>
+          <StepperItem state="completed">
+            <StepperIndicator data-testid="indicator">5</StepperIndicator>
+          </StepperItem>
+        </StepperList>
+      </Stepper>,
+    );
+    // The number "5" should not appear as text since it's replaced by the icon
+    expect(screen.queryByText("5")).toBeNull();
+    // The indicator should contain an SVG (the Check icon)
+    expect(screen.getByTestId("indicator").querySelector("svg")).toBeTruthy();
+  });
 });
 
 describe("StepperLabel", () => {
@@ -391,7 +433,7 @@ describe("StepperConnector", () => {
     );
   });
 
-  it("applies h-1 for horizontal and w-1 for vertical", () => {
+  it("applies h-px for horizontal and w-px for vertical", () => {
     const { rerender } = render(
       <Stepper aria-label="Steps">
         <StepperList>
@@ -405,7 +447,7 @@ describe("StepperConnector", () => {
         </StepperList>
       </Stepper>,
     );
-    expect(screen.getByTestId("conn").className).toContain("h-1");
+    expect(screen.getByTestId("conn").className).toContain("h-px");
 
     rerender(
       <Stepper orientation="vertical" aria-label="Steps">
@@ -420,7 +462,41 @@ describe("StepperConnector", () => {
         </StepperList>
       </Stepper>,
     );
-    expect(screen.getByTestId("conn").className).toContain("w-1");
+    expect(screen.getByTestId("conn").className).toContain("w-px");
+  });
+
+  it("omits data-completed when completed is not set", () => {
+    render(
+      <Stepper aria-label="Steps">
+        <StepperList>
+          <StepperItem>
+            <StepperLabel>One</StepperLabel>
+          </StepperItem>
+          <StepperConnector data-testid="conn" />
+          <StepperItem>
+            <StepperLabel>Two</StepperLabel>
+          </StepperItem>
+        </StepperList>
+      </Stepper>,
+    );
+    expect(screen.getByTestId("conn")).not.toHaveAttribute("data-completed");
+  });
+
+  it("sets data-completed when completed prop is true", () => {
+    render(
+      <Stepper aria-label="Steps">
+        <StepperList>
+          <StepperItem state="completed">
+            <StepperLabel>One</StepperLabel>
+          </StepperItem>
+          <StepperConnector data-testid="conn" completed />
+          <StepperItem state="completed">
+            <StepperLabel>Two</StepperLabel>
+          </StepperItem>
+        </StepperList>
+      </Stepper>,
+    );
+    expect(screen.getByTestId("conn")).toHaveAttribute("data-completed", "");
   });
 });
 

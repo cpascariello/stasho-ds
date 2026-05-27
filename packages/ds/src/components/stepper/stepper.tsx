@@ -6,6 +6,7 @@ import {
   useContext,
   type HTMLAttributes,
 } from "react";
+import { Check } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
 
 /* ── Stepper context (orientation) ─────────────── */
@@ -114,23 +115,22 @@ const StepperIndicator = forwardRef<HTMLDivElement, StepperIndicatorProps>(
         ref={ref}
         data-state={state}
         className={cn(
-          "relative flex size-8 items-center justify-center rounded-full",
-          "font-heading text-sm font-bold",
-          "border-2 border-edge text-muted-foreground",
-          "data-[state=active]:border-primary-500 data-[state=active]:bg-primary-500 data-[state=active]:text-white",
-          "data-[state=completed]:border-primary-500 data-[state=completed]:bg-primary-500 data-[state=completed]:text-white",
-          "transition-all duration-300 motion-reduce:transition-colors",
+          "relative flex size-8 items-center justify-center rounded-[2px]",
+          "font-sans text-sm font-semibold",
+          "border border-edge text-foreground/45 bg-transparent",
+          "data-[state=active]:border-accent data-[state=active]:text-accent-500 dark:data-[state=active]:text-accent",
+          "data-[state=active]:shadow-[0_0_6px_rgba(0,225,250,0.5),0_0_14px_rgba(0,225,250,0.3)]",
+          "data-[state=completed]:border-accent data-[state=completed]:bg-accent data-[state=completed]:text-neutral-950",
+          "transition-all duration-200 motion-reduce:transition-colors",
           className,
         )}
         {...rest}
       >
-        {state === "active" && (
-          <>
-            <span className="absolute -inset-1 rounded-full border-2 border-primary-400/35 animate-[ring-wave_2.4s_ease-in-out_infinite] motion-reduce:animate-none" />
-            <span className="absolute -inset-1.5 rounded-full border border-primary-300/25 animate-[ring-wave_2.4s_ease-in-out_-1.2s_infinite] motion-reduce:animate-none" />
-          </>
+        {state === "completed" ? (
+          <Check weight="bold" className="size-4" aria-hidden="true" />
+        ) : (
+          children
         )}
-        {children}
       </div>
     );
   },
@@ -186,19 +186,23 @@ StepperDescription.displayName = "StepperDescription";
 
 /* ── StepperConnector (li, visual line) ────────── */
 
-type StepperConnectorProps = HTMLAttributes<HTMLLIElement>;
+type StepperConnectorProps = HTMLAttributes<HTMLLIElement> & {
+  /** Mark the connector as filled (cyan) — used between two consecutive completed steps. */
+  completed?: boolean;
+};
 
 const StepperConnector = forwardRef<HTMLLIElement, StepperConnectorProps>(
-  ({ className, ...rest }, ref) => {
+  ({ className, completed, ...rest }, ref) => {
     const { orientation } = useStepperContext();
     return (
       <li
         ref={ref}
         aria-hidden="true"
         data-orientation={orientation}
+        data-completed={completed ? "" : undefined}
         className={cn(
-          "relative overflow-hidden rounded-full bg-edge/50 flex-1",
-          orientation === "horizontal" ? "h-1" : "w-1",
+          "relative overflow-hidden flex-1 bg-edge data-[completed]:bg-accent transition-colors",
+          orientation === "horizontal" ? "h-px" : "w-px",
           className,
         )}
         {...rest}

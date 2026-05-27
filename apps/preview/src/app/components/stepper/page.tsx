@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Check } from "@phosphor-icons/react";
 import { Button } from "@stasho/ds/button";
 import {
   Stepper,
@@ -16,28 +15,6 @@ import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 
 type StepState = "completed" | "active" | "inactive";
-
-/* ── Preview-only enhancement (not part of DS) ─── */
-
-function ConnectorFill({
-  filled,
-  vertical = false,
-}: {
-  filled: boolean;
-  vertical?: boolean;
-}) {
-  return (
-    <span
-      className={
-        "absolute inset-0 rounded-full bg-primary-500/70 " +
-        "transition-transform duration-500 ease-out motion-reduce:transition-none " +
-        (vertical
-          ? `origin-top ${filled ? "scale-y-100" : "scale-y-0"}`
-          : `origin-left ${filled ? "scale-x-100" : "scale-x-0"}`)
-      }
-    />
-  );
-}
 
 /* ── Helpers ──────────────────────────────────── */
 
@@ -64,18 +41,14 @@ function InteractiveStepper() {
           {DEPLOY_STEPS.map((s, i) => (
             <Fragment key={s.label}>
               <StepperItem state={getStepState(i, step)}>
-                <StepperIndicator>
-                  {i < step ? <Check size={14} weight="bold" /> : i + 1}
-                </StepperIndicator>
+                <StepperIndicator>{i + 1}</StepperIndicator>
                 <div className="hidden sm:block">
                   <StepperLabel>{s.label}</StepperLabel>
                   <StepperDescription>{s.description}</StepperDescription>
                 </div>
               </StepperItem>
               {i < DEPLOY_STEPS.length - 1 && (
-                <StepperConnector>
-                  <ConnectorFill filled={i < step} />
-                </StepperConnector>
+                <StepperConnector completed={i < step} />
               )}
             </Fragment>
           ))}
@@ -122,21 +95,15 @@ export default function StepperPage() {
           <Stepper aria-label="Setup steps">
             <StepperList>
               <StepperItem state="completed">
-                <StepperIndicator>
-                  <Check size={14} weight="bold" />
-                </StepperIndicator>
+                <StepperIndicator>1</StepperIndicator>
                 <StepperLabel>Account</StepperLabel>
               </StepperItem>
-              <StepperConnector>
-                <ConnectorFill filled />
-              </StepperConnector>
+              <StepperConnector completed />
               <StepperItem state="active">
                 <StepperIndicator>2</StepperIndicator>
                 <StepperLabel>Profile</StepperLabel>
               </StepperItem>
-              <StepperConnector>
-                <ConnectorFill filled={false} />
-              </StepperConnector>
+              <StepperConnector />
               <StepperItem state="inactive">
                 <StepperIndicator>3</StepperIndicator>
                 <StepperLabel>Complete</StepperLabel>
@@ -149,29 +116,21 @@ export default function StepperPage() {
           <Stepper orientation="vertical" aria-label="Deployment pipeline">
             <StepperList>
               <StepperItem state="completed">
-                <StepperIndicator>
-                  <Check size={14} weight="bold" />
-                </StepperIndicator>
+                <StepperIndicator>1</StepperIndicator>
                 <div>
                   <StepperLabel>Build</StepperLabel>
                   <StepperDescription>Compiled in 12s</StepperDescription>
                 </div>
               </StepperItem>
-              <StepperConnector className="ml-4 my-1 min-h-6">
-                <ConnectorFill filled vertical />
-              </StepperConnector>
+              <StepperConnector className="ml-4 my-1 min-h-6" completed />
               <StepperItem state="completed">
-                <StepperIndicator>
-                  <Check size={14} weight="bold" />
-                </StepperIndicator>
+                <StepperIndicator>2</StepperIndicator>
                 <div>
                   <StepperLabel>Test</StepperLabel>
                   <StepperDescription>320 tests passed</StepperDescription>
                 </div>
               </StepperItem>
-              <StepperConnector className="ml-4 my-1 min-h-6">
-                <ConnectorFill filled vertical />
-              </StepperConnector>
+              <StepperConnector className="ml-4 my-1 min-h-6" completed />
               <StepperItem state="active">
                 <StepperIndicator>3</StepperIndicator>
                 <div>
@@ -181,9 +140,7 @@ export default function StepperPage() {
                   </StepperDescription>
                 </div>
               </StepperItem>
-              <StepperConnector className="ml-4 my-1 min-h-6">
-                <ConnectorFill filled={false} vertical />
-              </StepperConnector>
+              <StepperConnector className="ml-4 my-1 min-h-6" />
               <StepperItem state="inactive">
                 <StepperIndicator>4</StepperIndicator>
                 <div>
@@ -207,20 +164,10 @@ export default function StepperPage() {
               {["Select", "Configure", "Deploy"].map((label, i) => (
                 <Fragment key={label}>
                   <StepperItem state={getStepState(i, 1)}>
-                    <StepperIndicator>
-                      {i < 1 ? (
-                        <Check size={14} weight="bold" />
-                      ) : (
-                        i + 1
-                      )}
-                    </StepperIndicator>
+                    <StepperIndicator>{i + 1}</StepperIndicator>
                     <StepperLabel>{label}</StepperLabel>
                   </StepperItem>
-                  {i < 2 && (
-                    <StepperConnector>
-                      <ConnectorFill filled={i < 1} />
-                    </StepperConnector>
-                  )}
+                  {i < 2 && <StepperConnector completed={i < 1} />}
                 </Fragment>
               ))}
             </StepperList>
@@ -233,16 +180,10 @@ export default function StepperPage() {
               {["Upload", "Process", "Complete"].map((label, i) => (
                 <Fragment key={label}>
                   <StepperItem state="completed">
-                    <StepperIndicator>
-                      <Check size={14} weight="bold" />
-                    </StepperIndicator>
+                    <StepperIndicator>{i + 1}</StepperIndicator>
                     <StepperLabel>{label}</StepperLabel>
                   </StepperItem>
-                  {i < 2 && (
-                    <StepperConnector>
-                      <ConnectorFill filled />
-                    </StepperConnector>
-                  )}
+                  {i < 2 && <StepperConnector completed />}
                 </Fragment>
               ))}
             </StepperList>
