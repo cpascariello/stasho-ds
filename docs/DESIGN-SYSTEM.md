@@ -939,7 +939,9 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 
 **Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM.
 
-**Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
+**Visual style:** Flat-hairline chassis — transparent unchecked / `bg-accent` checked with dark `text-neutral-950` check glyph (legible on cyan in both modes); 1px `border-edge` → `border-accent` on checked, cyan hairline focus (`border-accent-700` light / `border-accent` dark). Disabled flattens to muted-sink chassis (`bg-muted` light / `bg-background` dark) with `cursor: not-allowed`; compound `disabled:data-[state=checked]:*` rules keep disabled+checked sunk (no cyan leak).
+
+**Error:** `error={true}` switches to 1px `border-error` semantic token (overrides checked-accent via `data-[state=checked]:border-error`), sets `aria-invalid`.
 
 ### RadioGroup
 
@@ -970,6 +972,8 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 
 **Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
 
+**Visual style:** Flat-hairline chassis matching Checkbox — transparent fill, 1px `border-edge` → `border-accent` on checked; indicator dot is `bg-accent`. Disabled flattens chassis (muted-sink) and dims the dot via descendant rule (`disabled:[&_span]:bg-foreground/30`) — `peer-disabled:` doesn't apply because Radix nests Indicator as a child of Item.
+
 ### Switch
 
 Toggle control for on/off states. Wraps Radix UI Switch with CVA styling and animated thumb.
@@ -992,7 +996,7 @@ import { Switch } from "@aleph-front/ds/switch";
 
 **Sizes:** `xs` (36×20px track, 12px thumb) · `sm` (48×26px track, 18px thumb) · `md` (60×32px track, 24px thumb, default)
 
-**Visuals:** Pill track, sliding white thumb with `transition-transform`, 2px gap from track edges. Off = `bg-muted border-edge`, on = `bg-primary`.
+**Visuals:** Pill track with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` thumb; on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state.
 
 ### Select
 
@@ -1624,9 +1628,11 @@ import { Slider } from "@aleph-front/ds/slider";
 
 **Sizes:** `sm` (1.5px track, 16px thumb) · `md` (2px track, 20px thumb, default)
 
-**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a dark pill.
+**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-surface border border-edge rounded-none text-foreground`, aligned with the chunk 4 popover token (Tooltip component matches in chunk 6).
 
-**Error:** `error={true}` adds `ring-2 ring-error-400` to the track.
+**Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill and thumb are `bg-accent`; thumb has a 1px `border-accent` ring for circular separation against the cyan range fill. Thumb glows on hover/focus (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the thumb. Disabled flattens range + thumb to `bg-foreground/30` and removes the bevel; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply.
+
+**Error:** `error={true}` swaps the thumb border to `border-error` and replaces the cyan glow with a blood-orange glow on hover/focus. Track is unchanged — at 4–8px height the track is too thin to render a visible 1px error border.
 
 **Keyboard:** Arrow left/right adjusts by `step`. Tab between thumbs in range mode. Fully accessible via Radix.
 
