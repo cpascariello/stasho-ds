@@ -260,7 +260,7 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 
 **Layer 3 bridge entries for semantic accents.** `@theme inline` now surfaces `--color-success`, `--color-warn`, `--color-error` (plus `-foreground` pairs) alongside the existing `--color-primary` / `--color-accent`. Consumers get `bg-success`, `text-warn`, `border-error`, etc. as first-class Tailwind utilities — no inline `style={{ color: 'var(--success)' }}` required.
 
-**Radius scale (Layer 1).** The radius vocabulary is `0 / 0 / 2 / 4`. `--radius-sm` and `--radius-md` are both literally `0`, `--radius-lg` is `2px`, `--radius-xl` is `4px`. When a small non-zero radius is needed (Card 2px, Dialog 4px), use a literal arbitrary value (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — this keeps the scale honest. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements (StatusDot, Slider thumb, ProgressBar tracks, Switch thumb, MultiSelect tag chips, Stepper indicators, Tabs pill variant).
+**Radius scale (Layer 1).** The radius vocabulary is `0 / 0 / 2 / 4`. `--radius-sm` and `--radius-md` are both literally `0`, `--radius-lg` is `2px`, `--radius-xl` is `4px`. When a small non-zero radius is needed (Card 2px, Dialog 4px), use a literal arbitrary value (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — this keeps the scale honest. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements only — never round-by-convention. After Decision #88 the reserved list is: StatusDot, Slider thumb (kept for now — flagged for the rounded-full audit chunk), ProgressBar tracks, MultiSelect tag chips. Switch track + thumb and Stepper indicators moved to `rounded-[2px]` in wave-1.
 
 ### Theme Switching
 
@@ -564,6 +564,10 @@ The component is intentionally unstyled — no CVA variants, no opinionated colo
 
 **When to use dual context:** When a compound component has orthogonal concerns at different nesting levels. Orientation applies at the container level; state applies at the item level. A single context would conflate the two, and prop drilling through intermediate components (`StepperList`) would be fragile.
 
+**Connector completed state:** `<StepperConnector completed />` renders `data-completed=""` and fills the connector cyan (`bg-accent`). Consumers pass the prop between two consecutive completed steps to show progress. The connector does not derive `completed` from adjacent items — it would require either DOM inspection (fragile) or a third context — so the prop stays explicit at the call site.
+
+**Indicator auto-Check:** When the surrounding `StepperItem` has `state="completed"`, `StepperIndicator` renders a Phosphor `<Check weight="bold" />` icon instead of its `children`. Consumers who pass numeric labels get the swap for free; consumers who need a custom completed glyph can render their own component inside `StepperItem` and inspect `state` externally (the same state value they pass into the item is already in their hands).
+
 ### ProgressBar Description Pattern
 
 **Context:** A ProgressBar optionally has a description below the track. When present, the component needs a wrapper div for layout, and the description must be linked to the progressbar via `aria-describedby`.
@@ -581,6 +585,10 @@ Copy button uses a two-layer stack:
 2. Reveal layer: `bg-foreground` circle expanding via `clip-path: circle(0% → 50%)` with spring `cubic-bezier(0.34, 1.56, 0.64, 1)`, plus a Check icon that scales in with 75ms delay
 
 Hover state uses `bg-foreground/10` for visibility in both light and dark themes.
+
+### Alert
+
+**Alert `alert-bg-*` classes:** The four variant backgrounds are CSS classes in `tokens.css` rather than Tailwind utilities because the gradient stops use `oklch(from var(--token) l c h / opacity)` syntax which Tailwind's scanner cannot extract from class strings. Each class renders a 180deg gradient layered on `var(--background)` — 18% opacity at the top, 6% at the baseline. The single gradient works in both themes because the underlying `--background` swaps per theme; no `.theme-dark` override block is needed. To add a new variant: add the class in `tokens.css` and add a key to the component's `VARIANT_BG_CLASS` map.
 
 ### Button
 

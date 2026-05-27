@@ -331,9 +331,9 @@ Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` re
 | `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts |
 | `rounded-lg` | `--radius-lg` | `2px` | Cards |
 | `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
-| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, Switch thumb, MultiSelect tag chips, Stepper indicators, Tabs pill variant |
+| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, ProgressBar tracks, MultiSelect tag chips |
 
-The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
+The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb remains `rounded-full` for now — flagged for the dedicated rounded-full audit chunk. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
@@ -607,6 +607,17 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
 3. Add Tailwind mapping in `@theme inline` block: `--color-my-token: var(--my-token);`
 4. Use as Tailwind class: `bg-my-token`, `text-my-token`, `border-my-token`
 
+### Light-mode carve-out for semantic text colors
+
+Saturated semantic tokens (`--accent`, `--warning`, `--success`, `--error`) fail AA contrast on light surfaces. When using these tokens for UI text, apply the `<token>-500` scale step in light mode:
+
+- `text-accent-500 dark:text-accent`
+- `text-warning-500 dark:text-warning`
+- `text-success-500 dark:text-success`
+- `text-error-500 dark:text-error`
+
+Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay same-hex — the carve-out applies only to text where the token is the foreground color on a near-white background.
+
 ### Composing a Card
 
 ```tsx
@@ -667,7 +678,7 @@ Dismissible status banner with 4 semantic variants, optional title, auto-dismiss
 import { Alert } from "@aleph-front/ds/alert";
 ```
 
-**Visual style:** Full 1px variant-colored border, gradient background at 10% opacity over page background, Departure Mono UC tracking-wider variant label.
+**Visual style:** 1px hairline border using semantic tokens (`border-warning`, `border-error`, `border-accent` for info, `border-success`). Top→bottom gradient background (180deg) using `oklch(from var(--token) l c h / opacity)` — 18% opacity at the top fading to 6% at the baseline — sourced from semantic tokens so dark mode is handled by `var(--background)` swapping (no `.theme-dark` override block needed). Departure Mono UC tracking-wider variant label with light-mode carve-out (`text-warning-500 dark:text-warning` etc.) for AA contrast on near-white backgrounds. Info variant uses cyan accent (`border-accent`, `bg-accent`-derived gradient) — not primary-blue — to avoid competing with Button chassis.
 
 #### Variants
 
@@ -1008,7 +1019,7 @@ import { Switch } from "@aleph-front/ds/switch";
 
 **Sizes:** `xs` (36×20px track, 12px thumb) · `sm` (48×26px track, 18px thumb) · `md` (60×32px track, 24px thumb, default)
 
-**Visuals:** Pill track with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` thumb; on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state.
+**Visuals:** Square track (`rounded-[2px]`) with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` square thumb (`rounded-[2px]`); on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state. The rest of the chassis (bevel, cyan on-state, hover/focus glow, disabled flatten) is unchanged from the original chunk 4 implementation.
 
 ### Select
 
@@ -1248,7 +1259,7 @@ Controlled pagination with fixed-slot layout, configurable sibling count, first/
 import { Pagination } from "@aleph-front/ds/pagination";
 ```
 
-**Visual style:** Rounded page buttons (`size-8 rounded-full`), Departure Mono text-sm page numbers and ellipsis, active page highlighted with `bg-primary-400` (dark: `bg-primary-600`). Caret icons from Phosphor.
+**Visual style:** 26×26 number buttons + 32×32 nav arrow buttons, Departure Mono text-sm page numbers and ellipsis, active page is a tinted cyan cell (`bg-accent/15` + `text-accent-500 dark:text-accent`). Rest state: quiet `text-foreground/60` with no background. Hover: text shifts to `text-accent-500 dark:text-accent` with no bg change. Ellipsis at `text-foreground/40`. Disabled nav uses wave-1 pattern (`text-foreground/30 cursor-not-allowed` — not `opacity-50 pointer-events-none`). Focus: `outline-2 outline-accent outline-offset-2`. Caret icons from Phosphor.
 
 #### Usage
 
@@ -1734,7 +1745,7 @@ import { ProgressBar, ProgressBarDescription } from "@aleph-front/ds/progress-ba
 
 ### Stepper
 
-Composable multi-step indicator with horizontal/vertical orientation. Unstyled by default — consumers apply visual treatment via `data-state` and `data-orientation` attribute selectors.
+Composable multi-step indicator with horizontal/vertical orientation. Ships with Abyssal Void indicator styling by default — consumers can further override via `data-state` and `data-orientation` attribute selectors.
 
 ```tsx
 import {
@@ -1780,7 +1791,16 @@ import {
 | `StepperDescription` | `<span>` | Step subtitle, inherits `data-state` |
 | `StepperConnector` | `<li>` | Line between steps, `aria-hidden`, inherits `data-orientation` |
 
-**State:** `StepperItem` accepts `state` prop (`"completed"` | `"active"` | `"inactive"`, default `"inactive"`). State propagates as `data-state` to all child parts via React context. Style with `data-[state=completed]:`, `data-[state=active]:`, etc.
+**Indicator style:** Square `rounded-[2px]` `size-8` hairline-edge chassis with Inter Semibold text. Inactive: `border border-edge text-foreground/45 bg-transparent`. Active: cyan hairline + persistent halo (`box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)`) + `text-accent-500 dark:text-accent`. Completed: solid cyan chip (`bg-accent`) with dark check glyph (`text-neutral-950`) — `StepperIndicator` auto-renders `<Check weight="bold" />` replacing `{children}` when the surrounding `StepperItem` has `state="completed"`.
+
+**Connector style:** 1px hairline (`h-px` horizontal / `w-px` vertical) `bg-edge` default. Pass `completed` prop to fill `bg-accent` between two consecutive completed steps:
+
+```tsx
+<StepperConnector completed />  {/* fills cyan between completed steps */}
+<StepperConnector />            {/* edge color (default) */}
+```
+
+**State:** `StepperItem` accepts `state` prop (`"completed"` | `"active"` | `"inactive"`, default `"inactive"`). State propagates as `data-state` to all child parts via React context. Additional styling can be applied via `data-[state=completed]:`, `data-[state=active]:`, etc.
 
 **Orientation:** `Stepper` accepts `orientation` (`"horizontal"` | `"vertical"`, default `"horizontal"`). Propagates as `data-orientation` to `StepperConnector` and layout classes on `StepperList`.
 
