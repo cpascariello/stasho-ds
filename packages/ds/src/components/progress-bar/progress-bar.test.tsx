@@ -124,6 +124,55 @@ describe("ProgressBar", () => {
     });
   });
 
+  describe("chassis tokens (post-revisit)", () => {
+    it("track uses bg-muted dark:bg-neutral-900", () => {
+      const { container } = render(
+        <ProgressBar value={50} label="Progress" />,
+      );
+      const track = container.querySelector(
+        "[role='progressbar']",
+      ) as HTMLElement;
+      expect(track.className).toContain("bg-muted");
+      expect(track.className).toContain("dark:bg-neutral-900");
+    });
+
+    it("track carries inset bevel", () => {
+      const { container } = render(
+        <ProgressBar value={50} label="Progress" />,
+      );
+      const track = container.querySelector(
+        "[role='progressbar']",
+      ) as HTMLElement;
+      expect(track.className).toContain(
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+      );
+    });
+
+    it("fill uses bg-accent (cyan)", () => {
+      const { container } = render(
+        <ProgressBar value={50} label="Progress" />,
+      );
+      const fill = container.querySelector("[data-fill]") as HTMLElement;
+      expect(fill.className).toContain("bg-accent");
+      expect(fill.className).not.toContain("bg-primary");
+    });
+
+    it("fill does not carry a glow box-shadow", () => {
+      const { container } = render(
+        <ProgressBar value={50} label="Progress" />,
+      );
+      const fill = container.querySelector("[data-fill]") as HTMLElement;
+      expect(fill.className).not.toMatch(/shadow-\[0_0_/);
+    });
+
+    it("indeterminate fill also uses bg-accent", () => {
+      const { container } = render(<ProgressBar label="Loading" />);
+      const fill = container.querySelector("[data-fill]") as HTMLElement;
+      expect(fill.className).toContain("bg-accent");
+      expect(fill).toHaveAttribute("data-indeterminate");
+    });
+  });
+
   it("merges custom className onto track", () => {
     render(<ProgressBar value={50} label="Progress" className="custom" />);
     const bar = screen.getByRole("progressbar");

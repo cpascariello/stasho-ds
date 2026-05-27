@@ -41,7 +41,7 @@ export default function TypographyPage() {
           <div className="space-y-4 max-w-prose">
             <div>
               <p className="text-xs text-muted-foreground mb-1">
-                Body -- Titillium Web 400, 16px, 1.6 line-height
+                Body -- Inter 400, 16px, 1.6 line-height
               </p>
               <p className="font-sans text-base leading-relaxed">
                 The quick brown fox jumps over the lazy dog. stasho provides
@@ -50,7 +50,7 @@ export default function TypographyPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">
-                Body Bold -- Titillium Web 700
+                Body Bold -- Inter 700
               </p>
               <p className="font-sans text-base font-bold leading-relaxed">
                 The quick brown fox jumps over the lazy dog.
@@ -58,7 +58,7 @@ export default function TypographyPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">
-                Body Italic -- Titillium Web 400 italic
+                Body Italic -- Inter 400 italic
               </p>
               <p className="font-sans text-base italic leading-relaxed">
                 The quick brown fox jumps over the lazy dog.
@@ -66,7 +66,7 @@ export default function TypographyPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">
-                Code -- Source Code Pro 400
+                Code -- Departure Mono 400
               </p>
               <p className="font-mono text-base leading-relaxed">
                 const node = await aleph.create({"{"} channel: &quot;test&quot;{" "}
@@ -82,16 +82,16 @@ export default function TypographyPage() {
             <div className="rounded-lg border border-edge p-4">
               <p className="text-xs text-muted-foreground mb-2">font-heading</p>
               <p className="font-heading text-xl font-extrabold italic">
-                rigid-square
+                Anybody
               </p>
             </div>
             <div className="rounded-lg border border-edge p-4">
               <p className="text-xs text-muted-foreground mb-2">font-sans</p>
-              <p className="font-sans text-xl">Titillium Web</p>
+              <p className="font-sans text-xl">Inter</p>
             </div>
             <div className="rounded-lg border border-edge p-4">
               <p className="text-xs text-muted-foreground mb-2">font-mono</p>
-              <p className="font-mono text-xl">Source Code Pro</p>
+              <p className="font-mono text-xl">Departure Mono</p>
             </div>
           </div>
         </section>

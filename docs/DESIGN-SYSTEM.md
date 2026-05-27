@@ -11,8 +11,8 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@aleph-front/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@aleph-front/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@aleph-front/ds/breadcrumb` |
-| [Button](#button) | Action trigger with 6 variants, 4 sizes, gradient fills | `@aleph-front/ds/button` |
-| [Card](#card) | Content container with 3 variants (default/noise/ghost) | `@aleph-front/ds/card` |
+| [Button](#button) | Action trigger with 7 variants, 3 sizes, cyan LED signature | `@stasho/ds/button` |
+| [Card](#card) | Content container with 2 variants (default/ghost) | `@aleph-front/ds/card` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@aleph-front/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@aleph-front/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@aleph-front/ds/copyable-text` |
@@ -26,7 +26,6 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Select](#select) | Dropdown selector with flat options prop | `@aleph-front/ds/select` |
 | [Skeleton](#skeleton) | Animated loading placeholder | `@aleph-front/ds/ui/skeleton` |
 | [Slider](#slider) | Range input, single or two-thumb mode | `@aleph-front/ds/slider` |
-| [Spinner](#spinner) | Animated loading indicator | `@aleph-front/ds/ui/spinner` |
 | [StatusDot](#statusdot) | Health status circle with pulse animation | `@aleph-front/ds/status-dot` |
 | [Switch](#switch) | On/off toggle with animated sliding thumb | `@aleph-front/ds/switch` |
 | [Table](#table) | Generic typed table with sorting and row selection | `@aleph-front/ds/table` |
@@ -41,13 +40,13 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Need | Use | Not |
 |------|-----|-----|
 | Inline health indicator next to text | **StatusDot** — compact, semantic colors, pulse on healthy | Badge — too large for inline status |
-| Categorical label (count, type, state) | **Badge** — gradient fills, icon slots, uppercase heading font | StatusDot — no text content |
+| Categorical label (count, type, state) | **Badge** — gradient fills, icon slots, Departure Mono UC label (CSS-forced) | StatusDot — no text content |
 | Dismissible banner message | **Alert** — auto-dismiss timer, progress bar, semantic variants | Dialog — too interruptive for status messages |
 | Blocking user decision | **Dialog** — overlay, focus trap, `locked` mode for forced choice | Alert — can be ignored or dismissed |
 | Passive extra info on hover | **Tooltip** — non-blocking, hover/focus triggered | Dialog — too heavy for supplementary info |
-| Loading placeholder (content area) | **Skeleton** — consumer-sized via className, pulse animation | Spinner — Skeleton is for layout placeholders, Spinner is for inline loading |
-| Inline loading indicator (button, action) | **Spinner** — animated circle, no layout footprint | Skeleton — Skeleton is for content area placeholders |
-| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Spinner — ProgressBar shows measurable progress, Spinner is for unknown duration |
+| Loading placeholder (content area) | **Skeleton** — consumer-sized via className, pulse animation | ProgressBar — Skeleton is for layout placeholders, ProgressBar is for measurable work |
+| Inline loading indicator (button action) | **Button `loading` prop** — animates the LED into a two-dot chase (Decision #81 / § 6 "Loading pulses, never spins") | Standalone spinner — removed in Decision #93; the LED chase carries the loading signal |
+| Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Skeleton — ProgressBar shows measurable progress, Skeleton is for layout |
 
 ### Selection & Input
 
@@ -66,7 +65,6 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Need | Use | Not |
 |------|-----|-----|
 | Content section | **Card** `variant="default"` — `bg-surface`, borderless | Plain div — Card provides consistent surface fill and theming |
-| Textured decorative panel | **Card** `variant="noise"` — grain SVG overlay | Card default — noise adds visual interest for hero/feature cards |
 | Transparent grouping (no chrome) | **Card** `variant="ghost"` — no border, no background | Card default — ghost avoids visual nesting when cards are inside cards |
 | Location in page hierarchy | **Breadcrumb** — semantic nav/ol, `asChild` for router links | Plain text links — Breadcrumb handles separators and aria |
 | Switching between content panels | **Tabs** — underline or pill variant, keyboard navigation | Buttons + conditional rendering — Tabs manages state, a11y, and indicators |
@@ -125,7 +123,7 @@ OKLCH also enables Tailwind's `/opacity` modifier (`bg-primary-600/50`) because 
 
 Test **behavior and accessibility**, not appearance. The preview app is the visual test suite. Automated tests verify:
 
-- Interactive logic (loading state shows spinner, hides icons)
+- Interactive logic (loading state runs the LED chase, hides icons)
 - Accessibility attributes (`aria-invalid`, `aria-busy`, `disabled`)
 - DOM structure (polymorphic rendering, prop forwarding)
 - Edge cases (empty states, disabled interactions)
@@ -184,34 +182,59 @@ Use as Tailwind classes. Semantic tokens resolve to different values per theme.
 
 Full OKLCH 50–950 scales. Each scale has 11 stops, available as Tailwind classes like `bg-primary-600`, `text-error-500`, etc. Supports `/opacity` modifier: `bg-primary-600/50`.
 
+Anchored on the **Abyssal Void** palette. The semantic accents (`--primary`, `--accent`, `--success`, `--warning`, `--error`) resolve to the **same hex** in both light and dark mode (Radix step-9 convention). Scale steps remain available for tinted backgrounds, hover states, and contrast-aware inline text.
+
 | Scale | Hue | Anchor | Use for |
 |-------|-----|--------|---------|
-| `primary` | 285.48 (purple) | 600 = brand #5100CD | Brand identity, primary actions |
-| `accent` | 121.30 (lime) | 300 = brand #D4FF00 | Accents, highlights, CTAs |
-| `success` | 145 (green) | 500 = #36D846 | Success states |
-| `warning` | 75 (amber) | 500 = #FBAE18 | Warning states |
-| `error` | 12 (red) | 600 = #DE3668 | Error states |
+| `primary` | 264 (electric blue) | 500 = brand `#0040FF` | Brand identity, primary actions |
+| `accent` | 215 (cyan) | 300 = brand `#00E1FA` | Accents, highlights, CTAs |
+| `success` | 160 (teal-green) | 400 = brand `#2BD58E` | Success states |
+| `warning` | 87 (amber) | 400 = brand `#ffc53d` | Warning states |
+| `error` | 25 (blood-orange) | 500 = brand `#FF3D00` | Error / destructive states |
 | `destructive` | (alias → `error`) | — | Convenience alias for shadcn/Tailwind convention |
-| `neutral` | 280 (brand indigo tint) | — | Borders, backgrounds, text, dark surfaces |
+| `neutral` | 273 (cool indigo tint) | — | Borders, backgrounds, text |
+
+**Light-mode contrast pattern.** Inline body text rendered in an accent color uses the standard "darker step for light, lighter step for dark" pattern: `text-{color}-500 dark:text-{color}-300`. The same-hex rule applies only to *fills, borders, and indicators* — not to text on light surfaces, which needs a darker scale step for AA contrast.
 
 ### Semantic Colors
 
-Swap automatically between light and dark themes.
+Accents (`primary`/`accent`/`success`/`warning`/`error`) resolve to the **same hex** in both modes. Surfaces (`background`/`foreground`/`muted`/`surface`/`edge`) still swap per theme.
 
 | Token | Tailwind class | Light | Dark | Use for |
 |-------|---------------|-------|------|---------|
-| `background` | `bg-background` | `#F9F4FF` | `#141421` | Page background |
-| `foreground` | `text-foreground` | `#141421` | `#F9F4FF` | Primary text |
-| `primary` | `bg-primary`, `text-primary` | primary-600 | primary-400 | Interactive elements |
+| `background` | `bg-background` | `oklch(0.99 0.005 270)` | `#07080a` | Page background |
+| `foreground` | `text-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Primary text |
+| `primary` | `bg-primary`, `text-primary` | `#0040FF` | `#0040FF` | Interactive elements |
 | `primary-foreground` | `text-primary-foreground` | `#ffffff` | `#ffffff` | Text on primary backgrounds |
-| `accent` | `bg-accent`, `text-accent` | accent-300 | accent-300 | Highlights, emphasis |
-| `accent-foreground` | `text-accent-foreground` | `#141421` | `#141421` | Text on accent backgrounds |
-| `muted` | `bg-muted` | primary-100 | neutral-900 | Subdued backgrounds |
-| `muted-foreground` | `text-muted-foreground` | neutral-500 | neutral-400 | Subdued text, labels |
-| `surface` | `bg-surface` | primary-50 | neutral-900 | Elevated/interactive surface backgrounds (cards, form fields) |
-| `surface-foreground` | `text-surface-foreground` | `#141421` | `#F9F4FF` | Text on elevated surfaces |
-| `edge` | `border-edge` | primary-200 | neutral-800 | Borders, dividers |
-| `edge-hover` | `border-edge-hover` | primary-300 | neutral-700 | Hover state borders |
+| `accent` | `bg-accent`, `text-accent` | `#00E1FA` | `#00E1FA` | Highlights, emphasis |
+| `accent-foreground` | `text-accent-foreground` | `#001014` | `#001014` | Text on accent backgrounds |
+| `success` | `bg-success`, `text-success` | `#2BD58E` | `#2BD58E` | Success indicators |
+| `success-foreground` | `text-success-foreground` | `#00130a` | `#00130a` | Text on success backgrounds |
+| `warning` | `bg-warning`, `text-warning` | `#ffc53d` | `#ffc53d` | Warning indicators |
+| `warning-foreground` | `text-warning-foreground` | `#1a1100` | `#1a1100` | Text on warning backgrounds |
+| `error` | `bg-error`, `text-error` | `#FF3D00` | `#FF3D00` | Error / destructive indicators |
+| `error-foreground` | `text-error-foreground` | `#ffffff` | `#ffffff` | Text on error backgrounds |
+| `muted` | `bg-muted` | `oklch(0.94 0.009 270)` | base-800 | Subdued backgrounds |
+| `muted-foreground` | `text-muted-foreground` | `oklch(0.55 0.014 270)` | `oklch(0.62 0.012 273)` | Subdued text, labels |
+| `surface` | `bg-surface` | `oklch(0.94 0.009 270)` | base-900 (`#0d0d0d`) | Elevated surfaces (cards, form fields) |
+| `surface-foreground` | `text-surface-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Text on elevated surfaces |
+| `edge` | `border-edge` | `oklch(0.87 0.013 270)` | `rgba(255,255,255,0.08)` | Borders, dividers |
+| `edge-hover` | `border-edge-hover` | `oklch(0.80 0.015 270)` | `rgba(255,255,255,0.14)` | Hover state borders |
+
+### Surface Ladders
+
+**Dark (Observatory Mono):** four-step ladder from void to raised, all neutral grays with hue 273:
+
+| Token | Hex | Role |
+|-------|-----|------|
+| `--background` | `#07080a` | Page void |
+| `--color-base-900` | `#0d0d0d` | Surface (panels, cards) |
+| `--color-base-800` | `#101111` | Elevated (modals, muted) |
+| `--color-base-700` | `#161718` | Raised (popovers) |
+
+Borders in dark mode are white-low-opacity hairlines: `rgba(255,255,255,0.08)` resting, `rgba(255,255,255,0.14)` hover. Accents are **never** used in chrome.
+
+**Light:** off-white ladder with a faint hue-270 violet tint, `oklch(0.99 0.005 270) → oklch(0.94 0.009 270) → oklch(0.87 0.013 270)`.
 
 ### Usage Examples
 
@@ -237,13 +260,20 @@ Swap automatically between light and dark themes.
 
 | Tailwind class | Font | Source | Use for |
 |----------------|------|--------|---------|
-| `font-heading` | rigid-square | Adobe Typekit (`acb7qvn`) | Headings, hero text |
-| `font-sans` | Titillium Web | Google Fonts | Body text |
-| `font-mono` | Source Code Pro | Google Fonts | Code blocks |
+| `font-heading` | Anybody | Google Fonts | Headings — weight 900, uppercase, tracking `-0.02em` |
+| `font-sans` | Inter | Google Fonts | Body text |
+| `font-mono` | Departure Mono | Self-hosted (departuremono.com) | Telemetry, code, labels |
+
+### Consumer Font Loading
+
+The DS ships **token references only** — it never bundles font binaries. Consumers load the fonts themselves:
+
+- **Anybody** + **Inter** — load via Google Fonts in your app's `<head>`.
+- **Departure Mono** — self-host. Copy the woff2 from `apps/preview/public/fonts/DepartureMono.woff2` (or download from [departuremono.com](https://departuremono.com)) and declare a single `@font-face` rule in your global stylesheet pointing at `/fonts/DepartureMono.woff2`.
 
 ### Heading Scale
 
-All headings use `font-heading`, weight 800, italic.
+All headings use `font-heading` (Anybody) at weight 900, uppercase, with tighter tracking (`-0.02em`).
 
 | Style | Size | Tailwind equivalent |
 |-------|------|-------------------|
@@ -269,25 +299,40 @@ All headings use `font-heading`, weight 800, italic.
 
 ```tsx
 {/* Page heading */}
-<h1 className="font-heading text-[4.5rem] font-extrabold italic">
-  Aleph Cloud
+<h1 className="font-heading text-[4.5rem] font-black uppercase tracking-[-0.02em]">
+  Abyssal Void
 </h1>
 
 {/* Section heading */}
-<h2 className="font-heading text-[2rem] font-extrabold italic">
+<h2 className="font-heading text-[2rem] font-black uppercase tracking-[-0.02em]">
   Features
 </h2>
 
 {/* Body text */}
 <p className="font-sans text-base leading-relaxed">
-  Decentralized computing for everyone.
+  Deep-sea probe telemetry, brought to the surface.
 </p>
 
-{/* Code block */}
-<pre className="font-mono text-base leading-relaxed bg-muted p-4 rounded-lg">
-  const node = await aleph.create({ channel: "main" });
+{/* Telemetry / mono content */}
+<pre className="font-mono text-base leading-relaxed bg-muted p-4">
+  STATUS: NOMINAL · DEPTH: -4200m · TEMP: 2.1°C
 </pre>
 ```
+
+---
+
+## Radius
+
+Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` reserved for elements that are round by design.
+
+| Tailwind class | CSS variable | Value | Use for |
+|----------------|--------------|-------|---------|
+| `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts |
+| `rounded-lg` | `--radius-lg` | `2px` | Cards |
+| `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
+| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks |
+
+The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb stays `rounded-full` with a principled aperture justification (Decision #89). MultiSelect chips moved to `rounded-[2px]` (Decision #91) — convention-only "soft/removable" argument did not survive audit; chips join the wave's "contained group" family. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
@@ -297,13 +342,13 @@ Available as CSS custom properties. Use via `style` attribute.
 
 | Name | CSS variable | Colors | Use for |
 |------|-------------|--------|---------|
-| `main` | `var(--gradient-main)` | `#141421` → `#5100CD` (light) / `#1C1C32` → `#5100CD` (dark) | Primary gradient, hero sections. Theme-aware — promoted to semantic layer. |
-| `lime` | `var(--gradient-lime)` | `#D6FF00` → `#F5F7DB` | Accent gradient, CTAs |
-| `success` | `var(--gradient-success)` | `#36D846` → `#63E570` | Success states |
-| `warning` | `var(--gradient-warning)` | `#FFE814` → `#FBAE18` | Warning states |
-| `error` | `var(--gradient-error)` | `#FFAC89` → `#DE3668` | Error states |
+| `main` | `var(--gradient-main)` | `#00104D` → `#0040FF` (light) / `#00041A` → `#0040FF` (dark) | Primary gradient. Theme-aware — promoted to semantic layer. |
+| `accent` | `var(--gradient-accent)` | `#00B8D4` → `#00E1FA` | Secondary button fill, accent CTAs |
+| `success` | `var(--gradient-success)` | `#2BD58E` → `#5DDFAB` | Success states |
+| `warning` | `var(--gradient-warning)` | `#FFE14D` → `#FFC53D` | Warning states |
+| `error` | `var(--gradient-error)` | `#FF6A3D` → `#FF3D00` | Error states |
 | `destructive` | `var(--gradient-destructive)` | (alias → `error`) | Convenience alias |
-| `info` | `var(--gradient-info)` | `#C8ADF0` → `#5100CD` | Info states |
+| `info` | `var(--gradient-info)` | `#00E1FA` → `#0040FF` | Info states |
 
 ### Gradient Border Utilities
 
@@ -327,7 +372,7 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 | Class | Gradient | Hover | Active |
 |-------|----------|-------|--------|
 | `gradient-fill-main` | `--gradient-main` | White overlay (lighten) | Black overlay (darken) |
-| `gradient-fill-lime` | `--gradient-lime` | Black overlay (subtle darken) | Black overlay (darken) |
+| `gradient-fill-accent` | `--gradient-accent` | Black overlay (subtle darken) | Black overlay (darken) |
 | `gradient-fill-success` | `--gradient-success` | — | — |
 | `gradient-fill-warning` | `--gradient-warning` | — | — |
 | `gradient-fill-error` | `--gradient-error` | — | — |
@@ -335,36 +380,12 @@ CSS classes for gradient backgrounds with interactive hover/active states. Hover
 
 ```tsx
 {/* Gradient fills with built-in hover/active states */}
-<button className="gradient-fill-main text-white px-6 py-3 rounded-full">
+<button className="gradient-fill-main text-white px-6 py-3">
   Primary Action
 </button>
-<button className="gradient-fill-lime text-neutral-950 px-6 py-3 rounded-full">
+<button className="gradient-fill-accent text-accent-foreground px-6 py-3">
   Secondary Action
 </button>
-```
-
-### FX Grain Textures
-
-CSS utility classes that apply a radial gradient background with an SVG `feTurbulence` noise overlay via `::after`. The element gets `position: relative` and `isolation: isolate` automatically. The overlay inherits `border-radius` from the parent.
-
-| Class | Effect | Light overlay | Dark overlay |
-|-------|--------|--------------|-------------|
-| `fx-grain-xs` | Subtle dots | 0.1 | 0.2 |
-| `fx-grain-sm` | Fading edge dots | 0.2 | 0.2 |
-| `fx-grain-md` | Sparse dots | 0.35 | 0.35 |
-| `fx-grain-lg` | Strong dots | 0.5 | 0.5 |
-
-**Light mode:** Radial gradients from `primary-100`/`primary-50` center to `primary-50` edge.
-**Dark mode:** Radial gradients from `var(--surface)` center to transparent edge. All colors derived from DS tokens — no hardcoded hex values.
-
-```tsx
-{/* Grain background on any element */}
-<div className="fx-grain-lg rounded-xl p-6">
-  Content with strong grain texture
-</div>
-
-{/* Card component uses fx-grain-lg for its noise variant */}
-<Card variant="noise">Card with grain</Card>
 ```
 
 ### Usage Examples
@@ -375,10 +396,10 @@ CSS utility classes that apply a radial gradient background with an SVG `feTurbu
   <h1 className="font-heading text-4xl font-extrabold italic">Welcome</h1>
 </div>
 
-{/* CTA button with lime gradient */}
+{/* CTA button with accent gradient */}
 <button
-  style={{ background: "var(--gradient-lime)" }}
-  className="text-black px-6 py-3 rounded-md font-bold"
+  style={{ background: "var(--gradient-accent)" }}
+  className="text-accent-foreground px-6 py-3 font-bold"
 >
   Get Started
 </button>
@@ -393,37 +414,49 @@ CSS utility classes that apply a radial gradient background with an SVG `feTurbu
 
 ## Shadows
 
-Available as Tailwind utility classes.
+Available as Tailwind utility classes. Neutral drops at three elevations — no brand tint (SKIN-PRINCIPLES § 6 "Elevation is neutral", Decision #87).
 
 | Name | Tailwind class | Value | Use for |
 |------|---------------|-------|---------|
-| `brand-sm` | `shadow-brand-sm` | `0px 4px 4px` (15% brand) | Tight elements (tooltips, hover accents) |
-| `brand` | `shadow-brand` | `0px 4px 24px` (10% brand) | Elevated surfaces (dropdowns, popovers) |
-| `brand-lg` | `shadow-brand-lg` | `0px 4px 48px` (25% brand) | Emphasized elements, modals |
+| `sm` | `shadow-sm` | `0px 2px 4px rgba(0,0,0,0.10)` | Tight elements (tooltips, hover accents) |
+| (default) | `shadow` | `0px 4px 16px rgba(0,0,0,0.20)` | Elevated surfaces (popover dropdowns) |
+| `lg` | `shadow-lg` | `0px 24px 60px rgba(0,0,0,0.65)` | Modals, mobile drawers |
 
 ### Usage Examples
 
 ```tsx
 {/* Card with subtle shadow */}
-<div className="bg-surface rounded-lg p-6 shadow-brand-sm">
+<div className="bg-surface rounded-lg p-6 shadow-sm">
   Subtle card
 </div>
 
-{/* Elevated card */}
-<div className="bg-surface rounded-lg p-6 shadow-brand">
-  Default elevation
+{/* Popover dropdown */}
+<div className="bg-popover-bg border border-popover-border rounded-none p-1 shadow">
+  Dropdown content
 </div>
 
-{/* Modal or hero element */}
-<div className="bg-surface rounded-lg p-8 shadow-brand-lg">
-  High emphasis
+{/* Modal — paired with cyan top-rail per SKIN-PRINCIPLES § 6 "Cyan top-rail = live surface" */}
+<div className="bg-surface rounded-xl p-8 border-t-2 border-t-accent
+                shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_8px_rgba(0,225,250,0.5)]">
+  Dialog content
 </div>
 
 {/* Interactive shadow on hover */}
-<div className="bg-surface rounded-lg p-6 shadow-brand-sm hover:shadow-brand transition-shadow">
+<div className="bg-surface rounded-lg p-6 shadow-sm hover:shadow transition-shadow">
   Hover for more shadow
 </div>
 ```
+
+### Popover surface tokens
+
+Floating-surface chrome uses two tokens so all popovers re-theme from one place:
+
+| Token | Resolves to | Used by |
+|---|---|---|
+| `--popover-bg` | `var(--surface)` | Tooltip, Slider tooltip, Select / Combobox / MultiSelect dropdowns, Tabs overflow DropdownMenu |
+| `--popover-border` | `var(--edge)` | (same) |
+
+These bridge to Tailwind utilities `bg-popover-bg` and `border-popover-border`. Reach for the popover token on any floating surface — not `bg-surface` + `border-edge` directly — so retheming the popover identity flows through one declaration.
 
 ---
 
@@ -573,11 +606,22 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
 3. Add Tailwind mapping in `@theme inline` block: `--color-my-token: var(--my-token);`
 4. Use as Tailwind class: `bg-my-token`, `text-my-token`, `border-my-token`
 
+### Light-mode carve-out for semantic text colors
+
+Saturated semantic tokens (`--accent`, `--warning`, `--success`, `--error`) fail AA contrast on light surfaces. When using these tokens for UI text, apply the `<token>-500` scale step in light mode:
+
+- `text-accent-500 dark:text-accent`
+- `text-warning-500 dark:text-warning`
+- `text-success-500 dark:text-success`
+- `text-error-500 dark:text-error`
+
+Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay same-hex — the carve-out applies only to text where the token is the foreground color on a near-white background.
+
 ### Composing a Card
 
 ```tsx
 <div className="bg-surface text-surface-foreground rounded-lg border border-edge
-                shadow-brand-sm hover:shadow-brand p-6"
+                shadow-sm hover:shadow p-6"
      style={{ transitionDuration: "var(--duration-fast)" }}>
   <h3 className="font-heading text-xl font-extrabold italic mb-2">
     Card Title
@@ -596,15 +640,15 @@ Both components accept all standard SVG attributes (`className`, `aria-label`, `
 ```tsx
 <section style={{ background: "var(--gradient-main)" }} className="py-24 px-6">
   <div className="mx-auto max-w-5xl">
-    <h1 className="font-heading text-[4.5rem] font-extrabold italic text-white">
-      Aleph Cloud
+    <h1 className="font-heading text-[4.5rem] font-black uppercase tracking-[-0.02em] text-white">
+      Abyssal Void
     </h1>
     <p className="font-sans text-xl text-white/80 mt-4 max-w-2xl leading-relaxed">
-      Decentralized computing, storage, and networking.
+      Deep-sea probe telemetry, brought to the surface.
     </p>
     <button
-      style={{ background: "var(--gradient-lime)" }}
-      className="mt-8 text-black px-8 py-3 rounded-md font-bold text-lg shadow-brand-lg"
+      style={{ background: "var(--gradient-accent)" }}
+      className="mt-8 text-accent-foreground px-8 py-3 font-bold text-lg shadow-lg"
     >
       Get Started
     </button>
@@ -633,7 +677,7 @@ Dismissible status banner with 4 semantic variants, optional title, auto-dismiss
 import { Alert } from "@aleph-front/ds/alert";
 ```
 
-**Visual style:** Full 1px variant-colored border, gradient background at 10% opacity over page background, `font-heading` uppercase label.
+**Visual style:** 1px hairline border using semantic tokens (`border-warning`, `border-error`, `border-accent` for info, `border-success`). Top→bottom gradient background (180deg) using `oklch(from var(--token) l c h / opacity)` — 18% opacity at the top fading to 6% at the baseline — sourced from semantic tokens so dark mode is handled by `var(--background)` swapping (no `.theme-dark` override block needed). Departure Mono UC tracking-wider variant label with light-mode carve-out (`text-warning-500 dark:text-warning` etc.) for AA contrast on near-white backgrounds. Info variant uses cyan accent (`border-accent`, `bg-accent`-derived gradient) — not primary-blue — to avoid competing with Button chassis.
 
 #### Variants
 
@@ -727,83 +771,108 @@ import {
 | Part | Element | Role |
 |------|---------|------|
 | `Breadcrumb` | `<nav>` | Wrapper with `aria-label="Breadcrumb"` |
-| `BreadcrumbList` | `<ol>` | Ordered list with flex layout, font-heading uppercase styling |
+| `BreadcrumbList` | `<ol>` | Ordered list with flex layout, Inter Medium sentence case |
 | `BreadcrumbItem` | `<li>` | List item wrapper |
-| `BreadcrumbLink` | `<a>` / Slot | Navigation link with hover color transition |
-| `BreadcrumbSeparator` | `<li>` | Visual separator (`/` default), `aria-hidden="true"` |
-| `BreadcrumbPage` | `<span>` | Current page with `aria-current="page"`, muted color |
+| `BreadcrumbLink` | `<a>` / Slot | Navigation link with cyan hover color transition |
+| `BreadcrumbSeparator` | `<li>` | Visual separator (`/` default), `aria-hidden="true"`, quiet at 25% foreground |
+| `BreadcrumbPage` | `<span>` | Current page with `aria-current="page"`, full cyan accent |
 
-**Visual style:** `font-heading font-extrabold italic uppercase text-xs` on the list. Links use `text-foreground` with `hover:text-primary-600` (dark: `primary-400`). Separators and current page use `text-muted`. No CVA — no variants.
+**Visual style:** `font-sans font-medium text-sm` on the list (Inter Medium sentence case). Links use `text-foreground` with `hover:text-accent`. Separators use `text-foreground/25` to recede so the cyan current page reads cleanly. Current page (`BreadcrumbPage`) uses `text-accent` as the focal point of the trail. Same-hex rule — cyan renders identically in light and dark. No CVA — no variants.
 
 ### Button
 
-CVA-based button with 6 variants, 4 sizes, icon slots, loading/disabled states, and `asChild` polymorphism.
+CVA-based instrument-panel button with 7 variants, 3 sizes, icon slots, loading/disabled states, and `asChild` polymorphism. The cyan LED dot in the leading slot is the brand signature for filled interactive controls.
 
 ```tsx
-import { Button } from "@aleph-front/ds/button";
+import { Button } from "@stasho/ds/button";
 ```
 
-**Visual style:** Pill shape (`rounded-full`), 3px border, `font-heading` at weight 700.
+**Visual style:** Square corners (`rounded-none`), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) carry an outer halo at rest for "electric" energy. Primary and Secondary stay halo-less at rest and gain a chassis-matching outer halo on hover (per Decision #82, SKIN-PRINCIPLES § Filled chassis).
 
 #### Variants
 
 ```tsx
-<Button variant="primary">Primary</Button>     {/* gradient-main fill, white text, no border */}
-<Button variant="secondary">Secondary</Button> {/* gradient-lime fill, black text, black border */}
-<Button variant="outline">Outline</Button>     {/* gradient-main border, primary-100 fill */}
-<Button variant="text">Text</Button>           {/* transparent, no visible border */}
-<Button variant="destructive">Delete</Button>  {/* 20% error fill, dark text (light in dark mode) */}
-<Button variant="warning">Careful</Button>     {/* 20% warning fill, dark text (light in dark mode) */}
+<Button variant="primary">Deploy instance</Button>      {/* Brand-blue chassis (both modes), cyan LED, primary-blue halo on hover */}
+<Button variant="secondary">Configure</Button>          {/* Raised light chassis (light) / neutral-900 (dark), cyan LED, neutral halo on hover */}
+<Button variant="destructive">Delete</Button>           {/* Blood-orange chassis, white LED, blood-orange halo at rest + on hover */}
+<Button variant="warning">Force restart</Button>        {/* Amber chassis, dark LED, amber halo at rest + on hover */}
+<Button variant="success">Confirm</Button>              {/* Teal-green chassis, dark LED, teal-green halo at rest + on hover */}
+<Button variant="outline">Learn more</Button>           {/* Transparent chassis, primary-blue text + border (light) / cyan (dark) */}
+<Button variant="ghost">Cancel</Button>                 {/* Pure label, no chassis, no LED */}
 ```
 
 #### Sizes
 
 ```tsx
-<Button size="xs">Extra Small</Button>  {/* py-1, text-sm */}
-<Button size="sm">Small</Button>        {/* py-1.5, text-base */}
-<Button size="md">Medium</Button>       {/* py-2, text-base (default) */}
-<Button size="lg">Large</Button>        {/* py-2.5, text-lg */}
+<Button size="xs">Extra small</Button>   {/* py-[6px] px-3,  text-[11px] */}
+<Button size="sm">Small</Button>         {/* py-[7px] px-3.5, text-xs */}
+<Button size="md">Medium</Button>        {/* py-[9px] px-[18px], text-[13px] — default */}
 ```
 
 #### Icons
 
+When `iconLeft` is provided on a filled variant, it replaces the LED and inherits the LED's color + glow filter. `iconRight` is always rendered in the variant's foreground color with no glow.
+
 ```tsx
-<Button iconLeft={<PlusIcon />}>Add Item</Button>
-<Button iconRight={<ArrowIcon />}>Next</Button>
-<Button iconLeft={<PlusIcon />} iconRight={<ArrowIcon />}>Both</Button>
+<Button iconLeft={<PlusIcon />}>Add item</Button>           {/* Cyan-glowing icon */}
+<Button iconRight={<ArrowIcon />}>Next</Button>              {/* White arrow */}
+<Button iconLeft={<PlusIcon />} iconRight={<ArrowIcon />}>
+  Both
+</Button>
 ```
 
 #### Loading and Disabled
 
 ```tsx
-<Button loading>Saving...</Button>   {/* Shows spinner, hides icons, aria-busy */}
-<Button disabled>Unavailable</Button> {/* 50% opacity, pointer-events-none */}
+<Button loading>Saving…</Button>          {/* Dual-dot chase; no spinner element; aria-busy */}
+<Button loading iconLeft={<PlusIcon />}>
+  Saving…
+</Button>                                  {/* iconLeft is suppressed during load; chase replaces it */}
+<Button disabled>Unavailable</Button>      {/* Chassis flattens to bg-muted (light) / neutral-900 (dark); LED keeps variant color */}
 ```
 
 #### As Link (asChild)
 
-Renders button styles on a child element instead of `<button>`:
-
 ```tsx
 <Button asChild variant="primary">
-  <a href="/dashboard">Go to Dashboard</a>
+  <a href="/dashboard">Go to dashboard</a>
 </Button>
 
 {/* Works with Next.js Link */}
-<Button asChild variant="text">
+<Button asChild variant="ghost">
   <Link href="/settings">Settings</Link>
 </Button>
 ```
 
-#### Custom Composition with buttonVariants
+Note: when `asChild` is true, the LED/icon content is not rendered — `asChild` is for "link styled as button", not for "rich content button".
+
+#### Custom composition with buttonVariants
 
 ```tsx
-import { buttonVariants } from "@aleph-front/ds/button";
+import { buttonVariants } from "@stasho/ds/button";
 
 <a href="/docs" className={buttonVariants({ variant: "outline", size: "sm" })}>
   Documentation
 </a>
 ```
+
+#### Theme behavior
+
+Buttons adapt across light and dark themes. Decision #82 governs the layering pattern (light-mode classes as the base; existing dark-mode classes re-qualified with `dark:`).
+
+| Variant | Light mode | Dark mode |
+|---|---|---|
+| Primary | brand-blue gradient (`primary-400 → primary-500`), white text, cyan LED + glow | **same gradient as light** (unified per Decision #82), cyan LED + glow |
+| Primary hover | chassis static, bevel highlight intensifies (0.55 → 0.7), outer halo `0 0 40px rgba(0,64,255,0.35)` | same chassis + bevel intensifies, outer halo `0 0 40px rgba(0,64,255,0.75)` (stronger for dark surface) |
+| Secondary | raised light gradient (`--background → --surface`), `--foreground` text, hairline edge, cyan LED | `bg-neutral-900` chassis (verbatim from shipping), white text, cyan LED |
+| Secondary hover | chassis static, outer halo `0 0 24px rgba(20,15,40,0.18)` (dark glow on light chassis) | chassis static, outer halo `0 0 32px rgba(255,255,255,0.2)` (white glow on dark chassis) |
+| Destructive / Warning / Success | unchanged across modes (same-hex rule on saturated chassis + halo) | unchanged |
+| Outline | `text-primary` (primary-blue) + primary-blue border, LED `bg-primary/35` | `text-accent` (cyan) + cyan border, LED `bg-accent/50` |
+| Ghost | `text-foreground/75`, `bg-surface` on hover | `text-white/75`, `bg-white/[0.04]` on hover |
+| Disabled (all filled variants) | `bg-muted` flat chassis, `text-foreground/30`, hairline edge | `bg-neutral-900` flat chassis, `text-white/30` |
+| Disabled Outline | `bg-muted` chassis, `text-foreground/30` | transparent (preserves shipped behavior — see BACKLOG) |
+| Focus | `outline-2 outline-accent outline-offset-2` (same in both modes) | same |
+| Loading | dual-dot chase per Decision #81 (same in both modes) | same |
 
 ### Input
 
@@ -820,15 +889,17 @@ import { Input } from "@aleph-front/ds/input";
 
 **Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
 
-**Visuals:** Borderless flat fill (`bg-primary-100 dark:bg-base-700`). `rounded-full` pill shape. Distinguishes from page background via fill contrast alone.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none` (brutalist per skin vocabulary). No bevel, no gradient. Hover = no change (I-beam affordance is sufficient for pure text inputs).
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light, for AA on white) / `border-accent` (dark). No ring, no halo.
 
-**Focus ring:** Flush `ring-3` in `primary-500`, animated via `box-shadow` transition. No offset.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`. Value stays `text-foreground`.
+
+**Disabled:** Chassis sinks one step on the surface ladder (`bg-muted` light / `bg-background` dark). Hairline drops to `border-edge/50`. Value drops to `text-foreground/30`, placeholder to `text-muted-foreground/50`. `cursor-not-allowed`.
 
 ### Textarea
 
-Multi-line text input. Same API as Input, `rounded-2xl`, borderless flat fill, vertical resize.
+Multi-line text input. Same API as Input, `rounded-none`, flat-slot chassis, vertical resize.
 
 ```tsx
 import { Textarea } from "@aleph-front/ds/textarea";
@@ -839,6 +910,8 @@ import { Textarea } from "@aleph-front/ds/textarea";
 ```
 
 **Defaults:** `rows={4}`, `resize-y`, `size="md"`
+
+**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-none`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error` and keeps it through hover and focus (`hover:border-error focus-visible:border-error`). Disabled chassis sinks one step (`bg-muted` light, `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, placeholder to `text-muted-foreground/50`, cursor to `not-allowed`.
 
 ### FormField
 
@@ -861,6 +934,8 @@ import { Input } from "@aleph-front/ds/input";
 
 **Accessibility:** Auto-generates `id`, wires `htmlFor`, `aria-describedby`, and `role="alert"` on errors. When `error` is present, auto-injects `error={true}` and `aria-invalid={true}` into the child input via `cloneElement` — no need to pass `error` to both FormField and Input.
 
+**Visual style:** Required asterisk (`*`) and error helper text use the semantic `--error` token (`text-error`). Previously referenced `text-error-600` — now decoupled from scale steps so future palette changes don't affect the error signal.
+
 ### Checkbox
 
 Toggle control for boolean values. Wraps Radix UI Checkbox with CVA styling.
@@ -882,11 +957,13 @@ import { Checkbox } from "@aleph-front/ds/checkbox";
 
 **Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px, rounded 4px) · `sm` (20px, rounded-md 6px) · `md` (24px, rounded-md 6px, default)
+**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). All sizes use `rounded-none` (vocabulary alignment per Decision #90 — `rounded` / `rounded-md` resolved to 0px under the Abyssal scale).
 
-**Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM.
+**Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM. Check glyph is Phosphor `<Check weight="bold" />` (Decision #90 — replaces the prior hand-rolled SVG; matches Stepper completed indicator per Decision #88).
 
-**Error:** `error={true}` switches to 3px `border-error-400` border, sets `aria-invalid`.
+**Visual style:** Flat-slot chassis matching Input — rest fill is `bg-background` (light) / `bg-surface` (dark) with 1px `border-edge` hairline (Decision #90 — the chassis is visible at rest in dark mode, no longer transparent). Checked = `bg-accent` + `border-accent` + dark `text-neutral-950` Phosphor glyph (legible on cyan in both modes). Focus = hairline swaps to `border-accent-700` (light) / `border-accent` (dark). Disabled flattens to muted-sink chassis (`bg-muted` light / `bg-background` dark) with `cursor: not-allowed`; compound `disabled:data-[state=checked]:*` rules keep disabled+checked sunk (no cyan leak).
+
+**Error:** `error={true}` switches to 1px `border-error` semantic token (overrides checked-accent via `data-[state=checked]:border-error`), sets `aria-invalid`.
 
 ### RadioGroup
 
@@ -913,9 +990,11 @@ import { RadioGroup, RadioGroupItem } from "@aleph-front/ds/radio-group";
 
 **RadioGroupItem props:** `value`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (16px) · `sm` (20px) · `md` (24px, default)
+**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). Cascade from Checkbox per Decision #90 (chassis is shared per Decision #85). `rounded-full` (round-by-design).
 
 **Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
+
+**Visual style:** Flat-slot chassis matching Checkbox — rest fill is `bg-background` (light) / `bg-surface` (dark) with 1px `border-edge` → `border-accent` on checked; indicator dot is `bg-accent`. Disabled flattens chassis (muted-sink) and dims the dot via descendant rule (`disabled:[&_span]:bg-foreground/30`) — `peer-disabled:` doesn't apply because Radix nests Indicator as a child of Item.
 
 ### Switch
 
@@ -937,9 +1016,9 @@ import { Switch } from "@aleph-front/ds/switch";
 
 **Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (36×20px track, 12px thumb) · `sm` (48×26px track, 18px thumb) · `md` (60×32px track, 24px thumb, default)
+**Sizes:** `xs` (28×16px track, 12px thumb) · `sm` (36×20px track, 16px thumb) · `md` (44×24px track, 20px thumb, default). Thumb sizes match Checkbox/Radio at the same step (sm = 16, md = 20) per Decision #92, so a Switch row reads at the same visual weight as a Checkbox row in forms; xs thumb stays 12 because a 14-thumb in the 16-tall xs track leaves zero breathing. Track ratio is 1.75–1.83 across all sizes (industry-standard switch proportions). Symmetric 2px breathing on both ends of thumb travel.
 
-**Visuals:** Pill track, sliding white thumb with `transition-transform`, 2px gap from track edges. Off = `bg-muted border-edge`, on = `bg-primary`.
+**Visuals:** Square track (`rounded-[2px]`) with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` square thumb (`rounded-[2px]`); on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state. The rest of the chassis (bevel, cyan on-state, hover/focus glow, disabled flatten) is unchanged from the original chunk 4 implementation.
 
 ### Select
 
@@ -969,15 +1048,19 @@ import { Select } from "@aleph-front/ds/select";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Borderless flat fill, matching Input/Textarea. `rounded-full` pill shape.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance).
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
+
+**Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Badge
 
-Semantic label for status, counts, and categories. Two fill modes (solid gradient, outline), optional icon slots, uppercase heading font.
+Semantic label for status, counts, and categories. Two fill modes (flat saturated solid, tinted hairline outline), optional icon slots, Departure Mono UC label face with CSS-forced uppercase.
 
 ```tsx
 import { Badge } from "@aleph-front/ds/badge";
@@ -985,21 +1068,22 @@ import { Badge } from "@aleph-front/ds/badge";
 
 #### Fill Modes
 
-**Solid (default):** gradient background with dark text.
+**Solid (default):** flat saturated background with dark text. Default uses `bg-muted` + foreground text.
 
 ```tsx
-<Badge variant="default">Informational</Badge>  {/* gradient-fill-info */}
-<Badge variant="success">Healthy</Badge>         {/* gradient-fill-success */}
-<Badge variant="warning">In Progress</Badge>     {/* gradient-fill-warning */}
-<Badge variant="error">Failed</Badge>            {/* gradient-fill-error */}
-<Badge variant="info">3 VMs</Badge>              {/* neutral solid fill */}
+<Badge variant="default">Informational</Badge>  {/* bg-muted text-foreground */}
+<Badge variant="success">Healthy</Badge>         {/* bg-success text-neutral-950 */}
+<Badge variant="warning">In Progress</Badge>     {/* bg-warning text-neutral-950 */}
+<Badge variant="error">Failed</Badge>            {/* bg-error text-neutral-950 */}
+<Badge variant="info">3 VMs</Badge>              {/* bg-accent text-neutral-950 (cyan) */}
 ```
 
-**Outline:** colored border with subtle background.
+**Outline:** tinted background + 1px colored hairline + colored text. Default outline uses neutral `border-edge` + `text-foreground/70`. Each semantic variant uses the light-mode `-500` text carve-out for AA contrast on light surfaces.
 
 ```tsx
-<Badge fill="outline" variant="success">Healthy</Badge>
+<Badge fill="outline" variant="success">Healthy</Badge>  {/* bg-success/15 border-success/40 text-success-500 dark:text-success */}
 <Badge fill="outline" variant="error">Failed</Badge>
+<Badge fill="outline" variant="info">Live</Badge>        {/* cyan accent */}
 ```
 
 #### Icons
@@ -1026,7 +1110,7 @@ import { badgeVariants } from "@aleph-front/ds/badge";
 <span className={badgeVariants({ fill: "outline", variant: "success", size: "sm" })}>Active</span>
 ```
 
-**Visual style:** `font-heading font-extrabold italic uppercase`, `rounded-md` (6px). Solid fill uses gradient CSS utility classes (`gradient-fill-success`, etc.) from tokens.css. Outline fill uses `border` + token-scale border colors + subtle `/20` opacity backgrounds in dark mode. `default` variant uses `dark:text-white` for contrast on the dark `gradient-info` endpoint.
+**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-[2px]` (contained-marker radius per SKIN-PRINCIPLES § 4 chip-row split — Decision #90). No gradients. Solid fill is a single saturated semantic background + `text-neutral-950` (info uses `bg-accent` cyan; default uses `bg-muted` + `text-foreground`). Outline fill is `bg-{token}/15` + 1px `border-{token}/40` + `text-{token}-500 dark:text-{token}` (light-mode `-500` carve-out generalized across all four semantic variants per Decision #88). Default outline drops to `bg-transparent border-edge text-foreground/70`.
 
 ### Card
 
@@ -1039,8 +1123,7 @@ import { Card } from "@aleph-front/ds/card";
 #### Variants
 
 ```tsx
-<Card variant="default">Default card</Card>  {/* bg-surface, borderless, rounded-md */}
-<Card variant="noise">Grain texture</Card>    {/* purple grain SVG overlay */}
+<Card variant="default">Default card</Card>  {/* bg-surface + 1px border-edge hairline */}
 <Card variant="ghost">No border</Card>        {/* transparent, no border */}
 ```
 
@@ -1061,6 +1144,8 @@ import { Card } from "@aleph-front/ds/card";
 ```
 
 Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
+
+**Visual style:** `rounded-lg` (2px under the Abyssal scale), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
 
 ### CopyableText
 
@@ -1099,7 +1184,7 @@ import { CopyableText } from "@aleph-front/ds/copyable-text";
 />
 ```
 
-When `href` is provided, the truncated text itself becomes a clickable link (opens in new tab), plus an ArrowUpRight icon button. Both use `target="_blank"` and `rel="noopener noreferrer"`. Text color automatically switches to `text-primary-500` (light) / `text-primary-300` (dark) to indicate a navigable link. Override with `className` if needed.
+When `href` is provided, the truncated text itself becomes a clickable link (opens in new tab), plus an ArrowUpRight icon button. Both use `target="_blank"` and `rel="noopener noreferrer"`. Text color automatically switches to `text-accent-500` (light) / `text-accent` (dark) to indicate a navigable link per § 2 Color link role. Override with `className` if needed.
 
 **Animation:** Copy button plays a reveal animation (circle expand + check icon) on click. Respects `prefers-reduced-motion`.
 
@@ -1155,6 +1240,8 @@ import {
 
 **Exports:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogClose`, `DialogTitle`, `DialogDescription`, `DialogHeader`, `DialogFooter`, `DialogContentProps`
 
+**Visual style:** `bg-surface` content with `rounded-xl` (4px under the Abyssal scale), no border, no drop shadow — the content separates from page via the frosted overlay alone. Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral, frosted.
+
 **Props (DialogContent):**
 
 | Prop | Type | Default | Description |
@@ -1172,7 +1259,7 @@ Controlled pagination with fixed-slot layout, configurable sibling count, first/
 import { Pagination } from "@aleph-front/ds/pagination";
 ```
 
-**Visual style:** Rounded page buttons (`size-8 rounded-full`), `font-heading font-bold`, active page highlighted with `bg-primary-400` (dark: `bg-primary-600`). Caret icons from Phosphor.
+**Visual style:** 26×26 number buttons + 32×32 nav arrow buttons, Departure Mono text-sm page numbers and ellipsis, active page is a tinted cyan cell (`bg-accent/15` + `text-accent-500 dark:text-accent`). Rest state: quiet `text-foreground/60` with no background. Hover: text shifts to `text-accent-500 dark:text-accent` with no bg change. Ellipsis at `text-foreground/40`. Disabled nav uses wave-1 pattern (`text-foreground/30 cursor-not-allowed` — not `opacity-50 pointer-events-none`). Focus: `outline-2 outline-accent outline-offset-2`. Caret icons from Phosphor.
 
 #### Usage
 
@@ -1287,7 +1374,7 @@ const columns: Column<Node>[] = [
 <Table columns={columns} data={nodes} keyExtractor={(r) => r.id} activeKey={selectedId} />
 ```
 
-**Visual style:** Alternating rows (`even:bg-muted/30`), hover highlight (`hover:bg-muted/50`), clickable rows with `cursor-pointer` and left inset border on hover. Header row `bg-muted/50 text-muted-foreground text-sm font-semibold uppercase tracking-wide`.
+**Visual style:** Alternating rows (`even:bg-muted/30`), hover highlight (`hover:bg-muted/50`), clickable rows with `cursor-pointer` and left inset border on hover. Header row uses Departure Mono UC tracking-widest 11px (`font-mono uppercase tracking-widest text-[11px] text-muted-foreground`).
 
 **Keyboard accessibility:** Sortable headers are focusable (`tabIndex={0}`) and respond to Enter/Space. Clickable rows are focusable and respond to Enter. Headers include `aria-sort` (`ascending`/`descending`/`none`). Active row has `aria-current="true"`.
 
@@ -1350,11 +1437,11 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 <TooltipContent side="left" />
 ```
 
-**Styling:** `bg-neutral-900 text-white text-sm rounded-lg px-3 py-1.5 shadow-brand-sm` with Radix animation attributes. Dark mode uses `bg-base-800` for contrast against the dark page background.
+**Styling:** Popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground text-sm shadow-sm px-3 py-1.5`. Same chassis as Select / Combobox / MultiSelect / Tabs overflow dropdowns — re-themable through `--popover-bg` / `--popover-border`. Radix animation attributes (`fade-in-0 zoom-in-95` on enter; reverse on close) unchanged.
 
 ### Tabs
 
-Radix UI Tabs with DS styling, sliding active indicator, and text nudge micro-animation. Composable API — Radix Root is re-exported directly; List wraps the indicator logic. Underline variant uses a 4px baseline at 40% `edge` opacity with a 4px solid primary indicator that slides to the active tab.
+Radix UI Tabs with DS styling, sliding active indicator, and text nudge micro-animation. Composable API — Radix Root is re-exported directly; List wraps the indicator logic. Underline variant uses a 1px hairline track at 40% `edge` opacity with a 1px solid cyan accent indicator that slides to the active tab.
 
 ```tsx
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@aleph-front/ds/tabs";
@@ -1393,7 +1480,7 @@ Tab triggers accept arbitrary children — badges, subscripts, icons:
 
 #### Pill Variant
 
-A segmented-control style with a sliding solid pill indicator. Pass `variant="pill"` to `TabsList`:
+A segmented-control style framed by a 1px `--edge` hairline with a sliding tinted-cyan indicator. Pass `variant="pill"` to `TabsList`:
 
 ```tsx
 <Tabs defaultValue="nodes">
@@ -1423,8 +1510,8 @@ Pass `size="sm"` to `TabsList` for a compact variant. Works with both underline 
 
 | | md (default) | sm |
 |---|---|---|
-| **Underline trigger** | `px-4 py-3 text-lg` | `px-3 py-1.5 text-sm` |
-| **Underline border** | `border-b-4`, indicator `h-1` | `border-b-2`, indicator `h-0.5` |
+| **Underline trigger** | `px-4 py-3 text-sm` | `px-3 py-1.5 text-sm` |
+| **Underline border** | `border-b`, indicator `h-px` | `border-b`, indicator `h-px` |
 | **Pill trigger** | `px-5 py-1.5 text-sm` | `px-3 py-1 text-xs` |
 | **Pill container** | `p-1` | `p-0.5` |
 
@@ -1469,9 +1556,11 @@ When many tabs exceed the available width, `overflow="collapse"` on `TabsList` a
 
 `maxVisible` activates the same overflow code path as `overflow="collapse"` — passing it alone is enough; you don't need to also pass `overflow`. When both are set, the **stricter** limit wins: visible = `min(widthFit, maxVisible)`. Hidden tabs go into the dropdown either way.
 
-**Styling (underline):** `font-heading font-bold text-lg` triggers. 4px baseline at 40% `edge` opacity, 4px solid primary sliding indicator. Active/hover text uses `primary-600` / `dark:primary-400`.
+**Styling (underline):** `font-sans font-semibold text-sm` triggers (Inter Semibold sentence case). 1px hairline track at 40% `edge` opacity, 1px solid cyan accent (`bg-accent`) sliding indicator. Active/hover text uses `text-accent`. Active trigger is nudged up 2px (`-translate-y-0.5`) so the text rests above the indicator bar.
 
-**Styling (pill):** Rounded container `bg-muted` (brand-tinted). Active indicator `bg-primary-600` / `dark:bg-primary-500`. Triggers `text-muted-foreground` inactive, `text-white` active, compact `px-5 py-1.5 text-sm`.
+**Styling (pill):** `rounded-[2px] bg-muted` container framed by a 1px `border-edge` hairline. Active indicator is a tinted cyan fill (`bg-accent/15`), rounded `[2px]` to match the list shape. Triggers `text-muted-foreground` inactive, `text-accent` active and on hover, compact `px-5 py-1.5 text-sm`.
+
+**Focus:** native `outline-2 outline-accent outline-offset-2` (matches Button). **Disabled:** `text-foreground/30` + `cursor-not-allowed` (semantic flatten, no `opacity-20`). **Same-hex rule:** cyan `--accent` (`#00E1FA`) renders identically in light and dark — no `dark:` variants needed.
 
 **Exports:** `Tabs` (Root), `TabsList`, `TabsTrigger`, `TabsContent`, `TabsListProps`, `TabsSize`, `TabsVariant`
 
@@ -1525,13 +1614,17 @@ import { Combobox } from "@aleph-front/ds/combobox";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Borderless flat fill, matching Input/Textarea/Select. `rounded-full` pill shape. Chevron rotates on open.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Chevron rotates on open.
+
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
 **Search:** Type to filter options by label. `emptyMessage` shown when no options match (default: "No results found.").
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected shows check icon.
+**Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Slider
 
@@ -1562,11 +1655,13 @@ import { Slider } from "@aleph-front/ds/slider";
 
 **Range mode:** Pass a two-element array (e.g., `defaultValue={[25, 75]}`) to render two thumbs. The filled range spans between the thumbs. Radix prevents thumbs from crossing each other.
 
-**Sizes:** `sm` (1.5px track, 16px thumb) · `md` (2px track, 20px thumb, default)
+**Sizes:** `sm` (6px track, 12px thumb) · `md` (8px track, 14px thumb, default)
 
-**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a dark pill.
+**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground`, sharing the chunk-6 popover token with Tooltip and the four dropdown surfaces (Decision #87).
 
-**Error:** `error={true}` adds `ring-2 ring-error-400` to the track.
+**Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill is `bg-accent`. Thumb is a 1.5px `border-accent` ring on a `bg-background` interior (aperture — the dark interior differentiates the thumb from the cyan range fill; the ring carries the brand color). On hover, the interior fills `bg-accent` and an outer halo lights up (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) — a documented carve-out from "hover intensifies, doesn't repaint" because the thumb is directly grabbed (Decision #89). Focus uses `outline-2 outline-accent outline-offset-2` + the same halo; the ring stays open on focus alone. Disabled flattens the ring to `border-foreground/30` (interior stays `bg-background`) and the range to `bg-foreground/30`; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply. The compound `data-[disabled]:hover:bg-background` keeps the disabled chassis static under hover.
+
+**Error:** `error={true}` swaps the thumb ring to `border-error` and replaces the cyan glow with a blood-orange glow on hover/focus; the interior fills `bg-error` on hover (parallels the standard hover fill). Track is unchanged — at 4–8px height the track is too thin to render a visible 1px error border.
 
 **Keyboard:** Arrow left/right adjusts by `step`. Tab between thumbs in range mode. Fully accessible via Radix.
 
@@ -1605,11 +1700,15 @@ import { MultiSelect } from "@aleph-front/ds/multi-select";
 
 **Selection:** Clicking an item toggles it (adds or removes). Dropdown stays open after selection for multi-toggle. Checkbox visuals on each item indicate selected state.
 
-**Visuals:** Borderless flat fill, `rounded-2xl`. Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
 
-**Error:** `error={true}` adds 3px `border-error-400` border, sets `aria-invalid`.
+**Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
-**Dropdown:** `rounded-2xl`, `bg-surface`, `border border-edge`, `shadow-brand`. Items highlight with `bg-muted`. Selected items show filled checkbox with check icon.
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid`.
+
+**Disabled:** Uses `aria-disabled:` variants (trigger is a `<div role="button">`, not a native `<input>`). Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
+
+**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected items show filled checkbox: `border-accent bg-accent text-accent-foreground` (cyan, 1px hairline, 0px radius — matches Checkbox/Radio cyan-checked treatment).
 
 ### ProgressBar
 
@@ -1642,11 +1741,13 @@ import { ProgressBar, ProgressBarDescription } from "@aleph-front/ds/progress-ba
 
 **Indeterminate mode:** Omit `value`. The fill bar animates a sliding loop. `aria-valuenow` is omitted per WAI-ARIA spec.
 
+**Visual style:** Fill is `bg-accent` (cyan) — applies in both determinate and indeterminate modes. Track is `bg-muted dark:bg-neutral-900` with the Switch/Slider inset bevel (`shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]`) per SKIN-PRINCIPLES § 5. No glow on the fill (Decision #90 § 6 Direction C amendment — bevel + cyan carries the lit-surface signal without committing to a persistent glow; glow is reserved for directly-grabbed controls and "you are here" beacons).
+
 **Custom colors:** Target the fill via `[&_[data-fill]]` selector in className. Works with any Tailwind `bg-*` class.
 
 ### Stepper
 
-Composable multi-step indicator with horizontal/vertical orientation. Unstyled by default — consumers apply visual treatment via `data-state` and `data-orientation` attribute selectors.
+Composable multi-step indicator with horizontal/vertical orientation. Ships with Abyssal Void indicator styling by default — consumers can further override via `data-state` and `data-orientation` attribute selectors.
 
 ```tsx
 import {
@@ -1692,21 +1793,20 @@ import {
 | `StepperDescription` | `<span>` | Step subtitle, inherits `data-state` |
 | `StepperConnector` | `<li>` | Line between steps, `aria-hidden`, inherits `data-orientation` |
 
-**State:** `StepperItem` accepts `state` prop (`"completed"` | `"active"` | `"inactive"`, default `"inactive"`). State propagates as `data-state` to all child parts via React context. Style with `data-[state=completed]:`, `data-[state=active]:`, etc.
+**Indicator style:** Square `rounded-[2px]` `size-8` hairline-edge chassis with Inter Semibold text. Inactive: `border border-edge text-foreground/45 bg-transparent`. Active: cyan hairline + persistent halo (`box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)`) + `text-accent-500 dark:text-accent`. Completed: solid cyan chip (`bg-accent`) with dark check glyph (`text-neutral-950`) — `StepperIndicator` auto-renders `<Check weight="bold" />` replacing `{children}` when the surrounding `StepperItem` has `state="completed"`.
+
+**Connector style:** 1px hairline (`h-px` horizontal / `w-px` vertical) `bg-edge` default. Pass `completed` prop to fill `bg-accent` between two consecutive completed steps:
+
+```tsx
+<StepperConnector completed />  {/* fills cyan between completed steps */}
+<StepperConnector />            {/* edge color (default) */}
+```
+
+**State:** `StepperItem` accepts `state` prop (`"completed"` | `"active"` | `"inactive"`, default `"inactive"`). State propagates as `data-state` to all child parts via React context. Additional styling can be applied via `data-[state=completed]:`, `data-[state=active]:`, etc.
 
 **Orientation:** `Stepper` accepts `orientation` (`"horizontal"` | `"vertical"`, default `"horizontal"`). Propagates as `data-orientation` to `StepperConnector` and layout classes on `StepperList`.
 
 **Connectors are siblings:** `StepperConnector` must be a sibling of `StepperItem` in the list — not a child. Both render as `<li>`.
-
-### Spinner
-
-Animated loading indicator. Used internally by Button but available standalone.
-
-```tsx
-import { Spinner } from "@aleph-front/ds/ui/spinner";
-
-<Spinner className="size-5 text-primary-600" />
-```
 
 ---
 
@@ -1753,7 +1853,7 @@ Run `npm run dev` and visit http://localhost:3000. Sidebar navigation organized 
 | Route | Content |
 |-------|---------|
 | `/components/badge` | Variants, fill modes, sizes, icons |
-| `/components/card` | Default/noise/ghost variants, padding sizes, title |
+| `/components/card` | Default/ghost variants, padding sizes, title |
 | `/components/copyable-text` | Sizes, truncation, external link, copy animation |
 | `/components/status-dot` | Statuses, sizes, inline usage |
 | `/components/table` | Sorting, row click, active row, empty state |
@@ -1797,5 +1897,5 @@ Theme switcher in the sticky header toggles light/dark. Responsive layout with m
 ### Motion Sensitivity
 
 All animated components respect `prefers-reduced-motion: reduce` via Tailwind's `motion-reduce:` variant:
-- **Continuous animations** (pulse, spin): Disabled entirely with `motion-reduce:animate-none` (Skeleton, Spinner, StatusDot healthy pulse)
+- **Continuous animations** (pulse, chase): Disabled entirely with `motion-reduce:animate-none` (Skeleton, StatusDot healthy pulse, Button loading chase, ProgressBar indeterminate)
 - **One-shot transitions** (clip-path, transform): Disabled with `motion-reduce:transition-none` (Checkbox, RadioGroup, Switch, Tooltip, Table sort chevron)

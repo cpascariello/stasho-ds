@@ -8,12 +8,17 @@ import { cn } from "@ac/lib/cn";
 const triggerVariants = cva(
   [
     "inline-flex items-center gap-1.5",
-    "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-2xl",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "aria-disabled:opacity-50 aria-disabled:pointer-events-none",
-    "ring-0 transition-colors",
+    "w-full font-sans text-foreground",
+    "bg-background dark:bg-surface",
+    "border border-edge rounded-none",
+    "hover:border-edge-hover",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "aria-disabled:bg-muted dark:aria-disabled:bg-background",
+    "aria-disabled:border-edge/50",
+    "aria-disabled:text-foreground/30",
+    "aria-disabled:cursor-not-allowed",
+    "transition-colors",
   ].join(" "),
   {
     variants: {
@@ -30,7 +35,7 @@ const triggerVariants = cva(
 
 const tagVariants = cva(
   [
-    "inline-flex items-center gap-1 rounded-full bg-muted",
+    "inline-flex items-center gap-1 rounded-[2px] bg-muted",
     "text-foreground max-w-32 select-none",
   ].join(" "),
   {
@@ -137,8 +142,11 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
               triggerVariants({ size }),
               "cursor-pointer",
               error &&
-                "border-3 border-error-400 hover:border-error-500",
-              !hasSelection && "text-muted-foreground",
+                "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+              !hasSelection &&
+                (disabled
+                  ? "text-muted-foreground/50"
+                  : "text-muted-foreground"),
               className,
             )}
             {...rest}
@@ -157,7 +165,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       aria-label={`Remove ${opt.label}`}
                       onClick={(e) => removeTag(e, opt.value)}
                       className={cn(
-                        "shrink-0 rounded-full",
+                        "shrink-0 rounded-[2px]",
                         "hover:bg-foreground/10 transition-colors",
                         size === "sm" ? "size-3.5" : "size-4",
                       )}
@@ -187,7 +195,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 aria-label="Clear all"
                 onClick={clearAll}
                 className={cn(
-                  "shrink-0 rounded-full",
+                  "shrink-0 rounded-[2px]",
                   "text-muted-foreground",
                   "hover:text-foreground transition-colors",
                   size === "sm" ? "size-4" : "size-5",
@@ -224,8 +232,8 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
           <Popover.Content
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
-              "overflow-hidden rounded-2xl",
-              "bg-surface border border-edge shadow-brand",
+              "overflow-hidden rounded-none",
+              "bg-popover-bg border border-popover-border shadow",
             )}
             sideOffset={4}
             align="start"
@@ -260,22 +268,22 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       onSelect={() => toggle(option.value)}
                       className={cn(
                         "relative flex items-center gap-2",
-                        "rounded-xl px-3 py-2",
+                        "rounded-none px-3 py-2",
                         "text-sm text-foreground",
                         "cursor-pointer select-none",
                         "outline-none",
                         "data-[selected=true]:bg-muted",
-                        "data-[disabled=true]:opacity-50",
-                        "data-[disabled=true]:pointer-events-none",
+                        "data-[disabled=true]:text-foreground/30",
+                        "data-[disabled=true]:cursor-not-allowed",
                       )}
                     >
                       <span
                         className={cn(
                           "flex size-4 shrink-0 items-center",
                           "justify-center",
-                          "rounded border-2 transition-colors",
+                          "rounded-none border transition-colors",
                           selected
-                            ? "border-primary bg-primary text-primary-foreground"
+                            ? "border-accent bg-accent text-accent-foreground"
                             : "border-edge bg-surface",
                         )}
                         aria-hidden="true"

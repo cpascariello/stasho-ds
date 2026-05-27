@@ -1,26 +1,34 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
+import { Check } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@ac/lib/cn";
 
 const checkboxVariants = cva(
   [
-    "peer shrink-0 bg-surface",
-    "border-3 border-edge",
+    "peer shrink-0",
+    "bg-background dark:bg-surface",
+    "border border-edge",
     "hover:border-edge-hover",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
-    "data-[state=checked]:text-primary-foreground",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:text-foreground/30",
+    "disabled:cursor-not-allowed",
+    "disabled:data-[state=checked]:text-foreground/30",
+    "disabled:data-[state=checked]:bg-muted dark:disabled:data-[state=checked]:bg-background",
+    "disabled:data-[state=checked]:border-edge/50",
+    "data-[state=checked]:bg-accent data-[state=checked]:border-accent",
+    "data-[state=checked]:text-neutral-950",
     "transition-colors",
   ].join(" "),
   {
     variants: {
       size: {
-        xs: "size-4 rounded",
-        sm: "size-5 rounded-md",
-        md: "size-6 rounded-md",
+        xs: "size-3.5 rounded-none",
+        sm: "size-4 rounded-none",
+        md: "size-5 rounded-none",
       },
     },
     defaultVariants: {
@@ -44,7 +52,8 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         ref={ref}
         className={cn(
           checkboxVariants({ size }),
-          error && "border-3 border-error-400 hover:border-error-500",
+          error &&
+            "border-error data-[state=checked]:border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
           className,
         )}
         aria-invalid={error || undefined}
@@ -59,18 +68,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             "transition-[clip-path] duration-200 ease-in-out motion-reduce:transition-none",
           )}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-[90%]"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+          <Check weight="bold" className="size-[80%]" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     );

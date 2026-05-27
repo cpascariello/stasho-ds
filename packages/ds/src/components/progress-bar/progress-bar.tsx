@@ -13,7 +13,11 @@ import { cn } from "@ac/lib/cn";
 /* ── Variants ──────────────────────────────────── */
 
 const progressBarVariants = cva(
-  "relative rounded-full bg-surface overflow-hidden",
+  [
+    "relative rounded-full overflow-hidden",
+    "bg-muted dark:bg-neutral-900",
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+  ].join(" "),
   {
     variants: {
       size: {
@@ -89,7 +93,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
           data-fill=""
           data-indeterminate={indeterminate ? "" : undefined}
           className={cn(
-            "h-full rounded-full bg-primary",
+            "h-full rounded-full bg-accent",
             indeterminate
               ? "animate-progress-indeterminate"
               : "transition-all",

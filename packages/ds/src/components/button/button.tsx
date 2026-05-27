@@ -8,63 +8,112 @@ import {
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@ac/lib/cn";
-import { Spinner } from "@ac/components/ui/spinner";
 
 const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center",
-    "font-heading font-bold",
-    "rounded-full border-3 transition-colors",
-    "focus-visible:outline-none focus-visible:ring-2",
-    "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
-    "disabled:pointer-events-none",
+    "inline-flex items-center font-body font-bold leading-none",
+    "rounded-none border-0 text-white",
+    "transition-[background,box-shadow,transform] duration-150 ease-out",
+    "active:translate-y-px",
+    "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+    "disabled:pointer-events-none disabled:cursor-not-allowed",
+    "motion-reduce:transition-none motion-reduce:active:translate-y-0",
   ].join(" "),
   {
     variants: {
       variant: {
         primary: [
-          "gradient-fill-main text-white border-transparent",
-          "disabled:opacity-50",
+          // unified brand-blue chassis (both modes)
+          "bg-[linear-gradient(180deg,var(--color-primary-400)_0%,var(--color-primary-500)_100%)]",
+          "[box-shadow:inset_0_1px_0_rgba(0,225,250,0.55),inset_0_-1px_0_rgba(0,0,0,0.35)]",
+          // hover: chassis static, bevel highlight intensifies, halo appears (color matches chassis-500)
+          "hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.35)]",
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(0,225,250,0.7),inset_0_-1px_0_rgba(0,0,0,0.35),0_0_40px_rgba(0,64,255,0.75)]",
+          "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
         ].join(" "),
         secondary: [
-          "gradient-fill-lime text-neutral-950 border-neutral-950",
-          "disabled:opacity-50",
-        ].join(" "),
-        outline: [
-          "border-gradient-main text-primary-700",
-          "hover:text-primary-800",
-          "active:text-primary-800",
-          "disabled:opacity-50",
-        ].join(" "),
-        text: [
-          "bg-transparent text-primary-600 dark:text-primary-300 border-transparent",
-          "hover:bg-primary-100 hover:text-primary-700",
-          "dark:hover:bg-primary-200/10 dark:hover:text-primary-200",
-          "active:bg-primary-200 active:text-primary-800",
-          "dark:active:bg-primary-700 dark:active:text-primary-100",
-          "disabled:bg-transparent disabled:text-primary-600/50",
-          "dark:disabled:text-primary-300/50",
+          // light (base): raised light chassis, dark text, hairline edge
+          "bg-[linear-gradient(180deg,var(--background)_0%,var(--surface)_100%)] text-foreground",
+          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10)]",
+          // hover: chassis static, dark/neutral halo extends chassis outward
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(20,15,40,0.10),0_0_24px_rgba(20,15,40,0.18)]",
+          "disabled:bg-muted disabled:bg-none disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:bg-neutral-900 dark:bg-none dark:text-white",
+          "dark:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+          // dark hover: chassis static, white halo extends chassis outward
+          "dark:hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4),0_0_32px_rgba(255,255,255,0.2)]",
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         destructive: [
-          "bg-error-600/20 text-error-700 dark:text-error-300 border-error-600",
-          "hover:bg-error-600/30 hover:border-error-700",
-          "active:bg-error-600/40 active:border-error-800",
-          "disabled:bg-error-600/10 disabled:text-error-700/50 disabled:border-error-600/50",
+          "bg-error text-error-foreground",
+          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_24px_rgba(255,61,0,0.5)]",
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.25),0_0_40px_rgba(255,61,0,0.75)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         warning: [
-          "bg-warning-500/20 text-warning-800 dark:text-warning-200 border-warning-500",
-          "hover:bg-warning-500/30 hover:border-warning-600",
-          "active:bg-warning-500/40 active:border-warning-700",
-          "disabled:bg-warning-500/10 disabled:text-warning-800/50 disabled:border-warning-500/50",
+          "bg-warning text-warning-foreground",
+          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_24px_rgba(255,197,61,0.5)]",
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-1px_0_rgba(0,0,0,0.15),0_0_40px_rgba(255,197,61,0.75)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+        ].join(" "),
+        success: [
+          "bg-success text-success-foreground",
+          "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_24px_rgba(43,213,142,0.5)]",
+          "hover:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(0,0,0,0.2),0_0_40px_rgba(43,213,142,0.75)]",
+          // light (base): flat muted chassis when disabled
+          "disabled:bg-muted disabled:text-foreground/30",
+          "disabled:[box-shadow:inset_0_0_0_1px_rgba(20,15,40,0.06)]",
+          // dark (overrides — current shipped behavior)
+          "dark:disabled:bg-neutral-900 dark:disabled:text-white/30",
+          "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+        ].join(" "),
+        outline: [
+          // light (base): primary-blue text + border, flat chassis when disabled
+          "bg-transparent text-primary border border-[rgba(0,64,255,0.55)]",
+          "hover:border-primary",
+          "disabled:text-foreground/30 disabled:border-[rgba(20,15,40,0.15)] disabled:bg-muted",
+          // dark (overrides — current shipped behavior preserved)
+          "dark:text-accent dark:border-[rgba(0,225,250,0.4)]",
+          "dark:hover:border-accent",
+          "dark:disabled:text-white/30 dark:disabled:border-white/10 dark:disabled:bg-transparent",
+        ].join(" "),
+        ghost: [
+          // light (base): foreground text, surface hover
+          "bg-transparent text-foreground/75 font-semibold",
+          "hover:bg-surface hover:text-foreground",
+          "disabled:text-foreground/30 disabled:bg-transparent",
+          // dark (overrides — current shipped behavior)
+          "dark:text-white/75",
+          "dark:hover:bg-white/[0.04] dark:hover:text-white",
+          "dark:disabled:text-white/30 dark:disabled:bg-transparent",
         ].join(" "),
       },
       size: {
-        xs: "py-1 px-4 text-sm gap-1",
-        sm: "py-1.5 px-5 text-base gap-1.5",
-        md: "py-2 px-6 text-base gap-2",
-        lg: "py-2.5 px-8 text-lg gap-2",
+        xs: "py-[6px] px-3 text-[11px] gap-1.5",
+        sm: "py-[7px] px-3.5 text-xs gap-[7px]",
+        md: "py-[9px] px-[18px] text-[13px] gap-2",
       },
     },
+    compoundVariants: [
+      // Outline subtracts 1px from each padding axis to compensate for its 1px border.
+      { variant: "outline", size: "xs", class: "py-[5px] px-[11px]" },
+      { variant: "outline", size: "sm", class: "py-[6px] px-[13px]" },
+      { variant: "outline", size: "md", class: "py-[8px] px-[17px]" },
+    ],
     defaultVariants: {
       variant: "primary",
       size: "md",
@@ -72,12 +121,45 @@ const buttonVariants = cva(
   },
 );
 
-const iconSize = {
-  xs: "size-3.5",
-  sm: "size-4",
-  md: "size-4",
-  lg: "size-5",
-} as const;
+type Variant = NonNullable<VariantProps<typeof buttonVariants>["variant"]>;
+type Size = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
+
+// LED dimensions per size. text-* sets the LED's currentColor.
+const ledSizeClass: Record<Size, string> = {
+  xs: "size-1",
+  sm: "size-[5px]",
+  md: "size-1.5",
+};
+
+// Icon dimensions per size (used for both iconLeft wrapper and iconRight wrapper).
+const iconSizeClass: Record<Size, string> = {
+  xs: "size-[11px]",
+  sm: "size-3",
+  md: "size-[13px]",
+};
+
+// LED color + static glow per variant.
+const ledColorClass: Record<Variant, string> = {
+  primary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
+  secondary: "bg-accent text-accent [box-shadow:0_0_8px_currentColor]",
+  destructive: "bg-white text-white [box-shadow:0_0_8px_currentColor]",
+  warning: "bg-warning-foreground text-warning-foreground",
+  success: "bg-success-foreground text-success-foreground",
+  outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
+  // ghost: LED is never rendered for ghost, so this entry is a sentinel.
+  ghost: "",
+};
+
+// iconLeft glow treatment per variant — applied to the wrapper span.
+const iconGlowClass: Record<Variant, string> = {
+  primary: "text-accent [filter:drop-shadow(0_0_4px_var(--accent))]",
+  secondary: "text-accent [filter:drop-shadow(0_0_4px_var(--accent))]",
+  destructive: "text-white",
+  warning: "text-warning-foreground",
+  success: "text-success-foreground",
+  outline: "text-primary dark:text-accent [filter:drop-shadow(0_0_4px_currentColor)]",
+  ghost: "text-foreground/60 dark:text-white/60",
+};
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
@@ -103,25 +185,91 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const sizeKey = size ?? "md";
+    const v: Variant = variant ?? "primary";
+    const s: Size = size ?? "md";
+
     const classes = cn(
-      buttonVariants({ variant, size }),
-      loading && "pointer-events-none",
+      buttonVariants({ variant: v, size: s }),
+      loading && "pointer-events-none cursor-wait",
       className,
     );
 
-    const iconClass = cn("shrink-0", iconSize[sizeKey], "[&>svg]:size-full");
+    const leadingSlot = (() => {
+      // Loading replaces everything in the leading slot (except on ghost).
+      if (loading && v !== "ghost") {
+        return (
+          <span
+            data-led-chase
+            aria-hidden="true"
+            className="inline-flex shrink-0 gap-[3px]"
+          >
+            <span
+              className={cn(
+                "inline-block rounded-full",
+                ledSizeClass[s],
+                ledColorClass[v],
+                "animate-button-chase-a",
+              )}
+            />
+            <span
+              className={cn(
+                "inline-block rounded-full",
+                ledSizeClass[s],
+                ledColorClass[v],
+                "animate-button-chase-b",
+              )}
+            />
+          </span>
+        );
+      }
+      // Resting state with iconLeft.
+      if (iconLeft) {
+        return (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "inline-flex items-center justify-center shrink-0",
+              iconSizeClass[s],
+              iconGlowClass[v],
+            )}
+          >
+            {iconLeft}
+          </span>
+        );
+      }
+      // Resting state with static LED (non-ghost variants).
+      if (v !== "ghost") {
+        return (
+          <span
+            data-led
+            aria-hidden="true"
+            className={cn(
+              "inline-block rounded-full shrink-0",
+              ledSizeClass[s],
+              ledColorClass[v],
+            )}
+          />
+        );
+      }
+      return null;
+    })();
 
     const content = (
       <>
-        {loading ? (
-          <Spinner className={cn("shrink-0", iconSize[sizeKey])} />
-        ) : iconLeft ? (
-          <span className={iconClass}>{iconLeft}</span>
-        ) : null}
-        <span>{children}</span>
+        {leadingSlot}
+        <span className="inline-flex items-center leading-none">
+          {children}
+        </span>
         {!loading && iconRight ? (
-          <span className={iconClass}>{iconRight}</span>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "inline-flex items-center justify-center shrink-0",
+              iconSizeClass[s],
+            )}
+          >
+            {iconRight}
+          </span>
         ) : null}
       </>
     );

@@ -28,4 +28,28 @@ describe("Card", () => {
     const { container } = render(<Card>No title</Card>);
     expect(container.querySelector("h3")).toBeNull();
   });
+
+  it("default variant carries the bg-surface chassis", () => {
+    const { container } = render(<Card>Test</Card>);
+    expect(container.firstElementChild?.className).toContain("bg-surface");
+  });
+
+  it("default variant carries a 1px border-edge hairline", () => {
+    const { container } = render(<Card>Test</Card>);
+    const cls = container.firstElementChild?.className ?? "";
+    expect(cls).toContain("border");
+    expect(cls).toContain("border-edge");
+  });
+
+  it("ghost variant has no border", () => {
+    const { container } = render(<Card variant="ghost">Test</Card>);
+    const cls = container.firstElementChild?.className ?? "";
+    expect(cls).toContain("bg-transparent");
+    expect(cls).not.toContain("border-edge");
+  });
+
+  it("applies rounded-lg (2px under Abyssal scale)", () => {
+    const { container } = render(<Card>Test</Card>);
+    expect(container.firstElementChild?.className).toContain("rounded-lg");
+  });
 });

@@ -90,4 +90,42 @@ describe("RadioGroup", () => {
     );
     expect(screen.getByRole("radio")).toBeDefined();
   });
+
+  it("item rest chassis carries bg-background dark:bg-surface", () => {
+    render(
+      <RadioGroup>
+        <RadioGroupItem value="a" />
+      </RadioGroup>,
+    );
+    const cls = screen.getByRole("radio").className;
+    expect(cls).toContain("bg-background");
+    expect(cls).toContain("dark:bg-surface");
+  });
+
+  it("xs size renders item at size-3.5", () => {
+    render(
+      <RadioGroup>
+        <RadioGroupItem value="a" size="xs" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio").className).toContain("size-3.5");
+  });
+
+  it("sm size renders item at size-4", () => {
+    render(
+      <RadioGroup>
+        <RadioGroupItem value="a" size="sm" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio").className).toContain("size-4");
+  });
+
+  it("md size renders item at size-5", () => {
+    render(
+      <RadioGroup>
+        <RadioGroupItem value="a" size="md" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio").className).toContain("size-5");
+  });
 });

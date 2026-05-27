@@ -165,7 +165,7 @@ export function Table<T>({
               <th
                 key={col.header}
                 className={cn(
-                  "px-4 py-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground",
+                  "px-4 py-3 font-mono font-normal uppercase tracking-widest text-[11px] text-muted-foreground",
                   alignClass[col.align ?? "left"],
                   col.sortable && "cursor-pointer select-none",
                 )}
@@ -221,11 +221,11 @@ export function Table<T>({
                 className={cn(
                   "border-b border-edge transition-all",
                   activeKey === keyExtractor(row)
-                    ? "bg-primary-600/10 shadow-[inset_3px_0_0_var(--color-primary-500)]"
+                    ? "bg-accent/15 shadow-[inset_3px_0_0_var(--accent)]"
                     : "even:bg-muted/30",
                   "hover:bg-muted/50",
                   onRowClick &&
-                    "cursor-pointer hover:shadow-[inset_3px_0_0_var(--color-primary-500)]",
+                    "cursor-pointer hover:shadow-[inset_3px_0_0_var(--accent)]",
                 )}
                 aria-current={
                   activeKey === keyExtractor(row) ? "true" : undefined

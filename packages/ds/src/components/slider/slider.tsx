@@ -6,7 +6,8 @@ import { cn } from "@ac/lib/cn";
 const trackVariants = cva(
   [
     "relative w-full grow overflow-hidden rounded-full",
-    "bg-neutral-200 dark:bg-base-700",
+    "bg-muted dark:bg-neutral-900",
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
   ].join(" "),
   {
     variants: {
@@ -23,17 +24,22 @@ const trackVariants = cva(
 
 const thumbVariants = cva(
   [
-    "block rounded-full bg-white",
-    "border-2 border-primary-500",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:pointer-events-none",
+    "block rounded-full bg-background",
+    "border-[1.5px] border-accent",
+    "transition-[background-color,box-shadow] motion-reduce:transition-none",
+    "hover:bg-accent",
+    "hover:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
+    "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+    "focus-visible:shadow-[0_0_6px_var(--accent),0_0_12px_rgba(0,225,250,0.5)]",
+    "data-[disabled]:bg-background data-[disabled]:border-foreground/30",
+    "data-[disabled]:hover:bg-background",
+    "data-[disabled]:shadow-none data-[disabled]:cursor-not-allowed",
   ].join(" "),
   {
     variants: {
       size: {
-        sm: "size-4",
-        md: "size-5",
+        sm: "size-3",
+        md: "size-3.5",
       },
     },
     defaultVariants: {
@@ -80,7 +86,7 @@ const Slider = forwardRef<
         {...(disabled ? { disabled: true } : {})}
         className={cn(
           "relative flex w-full touch-none select-none items-center",
-          disabled && "opacity-50 pointer-events-none",
+          disabled && "cursor-not-allowed",
           className,
         )}
         onValueChange={(val) => {
@@ -91,25 +97,25 @@ const Slider = forwardRef<
         onPointerLeave={() => setHovering(false)}
         {...rootProps}
       >
-        <SliderPrimitive.Track
-          className={cn(
-            trackVariants({ size }),
-            error && "ring-2 ring-error-400",
-          )}
-        >
-          <SliderPrimitive.Range className="absolute h-full bg-primary-500 rounded-full" />
+        <SliderPrimitive.Track className={cn(trackVariants({ size }))}>
+          <SliderPrimitive.Range className="absolute h-full bg-accent data-[disabled]:bg-foreground/30 rounded-full" />
         </SliderPrimitive.Track>
         {displayValue.map((val, i) => (
           <SliderPrimitive.Thumb
             key={i}
-            className={cn(thumbVariants({ size }), "relative")}
+            className={cn(
+              thumbVariants({ size }),
+              "relative",
+              error &&
+                "border-error hover:bg-error hover:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:shadow-[0_0_6px_var(--error),0_0_12px_rgba(255,61,0,0.5)] focus-visible:outline-error",
+            )}
           >
             {showTooltip && hovering && (
               <span
                 className={cn(
                   "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
-                  "rounded-md bg-neutral-900 dark:bg-base-700 px-2 py-1",
-                  "text-xs text-white whitespace-nowrap pointer-events-none",
+                  "rounded-none bg-popover-bg border border-popover-border px-2 py-1",
+                  "text-xs text-foreground whitespace-nowrap pointer-events-none",
                 )}
               >
                 {val}

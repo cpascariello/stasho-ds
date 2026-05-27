@@ -34,7 +34,7 @@ export default function TooltipPage() {
           {(["top", "right", "bottom", "left"] as const).map((side) => (
             <Tooltip key={side}>
               <TooltipTrigger asChild>
-                <Button variant="text" size="sm">
+                <Button variant="ghost" size="sm">
                   {side}
                 </Button>
               </TooltipTrigger>

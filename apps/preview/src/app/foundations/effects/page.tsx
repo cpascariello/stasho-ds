@@ -1,25 +1,18 @@
 import { PageHeader } from "@preview/components/page-header";
 
 const SHADOWS = [
-  { name: "brand-sm", class: "shadow-brand-sm" },
-  { name: "brand", class: "shadow-brand" },
-  { name: "brand-lg", class: "shadow-brand-lg" },
+  { name: "sm", class: "shadow-sm" },
+  { name: "", class: "shadow" },
+  { name: "lg", class: "shadow-lg" },
 ] as const;
 
 const GRADIENTS = [
   { name: "main", var: "var(--gradient-main)" },
-  { name: "lime", var: "var(--gradient-lime)" },
+  { name: "accent", var: "var(--gradient-accent)" },
   { name: "success", var: "var(--gradient-success)" },
   { name: "warning", var: "var(--gradient-warning)" },
   { name: "error", var: "var(--gradient-error)" },
   { name: "info", var: "var(--gradient-info)" },
-] as const;
-
-const GRAINS = [
-  { name: "fx-grain-xs", label: "Purple dots, subtle", cls: "fx-grain-xs" },
-  { name: "fx-grain-sm", label: "Purple dots, fading edge", cls: "fx-grain-sm" },
-  { name: "fx-grain-md", label: "Purple dots, sparse", cls: "fx-grain-md" },
-  { name: "fx-grain-lg", label: "Purple dots, strong", cls: "fx-grain-lg" },
 ] as const;
 
 const TRANSITIONS = [
@@ -33,7 +26,7 @@ export default function EffectsPage() {
     <div>
       <PageHeader
         title="Effects"
-        description="Shadows, gradients, grain textures, and transition tokens."
+        description="Shadows, gradients, and transition tokens."
       />
       <div className="space-y-12">
         <section>
@@ -75,8 +68,8 @@ export default function EffectsPage() {
             {TRANSITIONS.map(({ name, duration }) => (
               <div
                 key={name}
-                className="rounded-lg border border-edge p-4 hover:border-primary
-                           hover:shadow-brand cursor-pointer"
+                className="rounded-lg border border-edge p-4 hover:border-accent
+                           hover:shadow cursor-pointer"
                 style={{
                   transitionProperty: "border-color, box-shadow",
                   transitionDuration: duration,
@@ -88,20 +81,6 @@ export default function EffectsPage() {
                 <p className="text-xs text-muted-foreground mt-1">
                   Hover to preview
                 </p>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section>
-          <h3 className="text-lg font-bold mb-4">Grain Textures</h3>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {GRAINS.map(({ name, label, cls }) => (
-              <div
-                key={name}
-                className={`rounded-xl p-6 h-40 flex flex-col justify-end ${cls}`}
-              >
-                <p className="text-sm font-medium">{name}</p>
-                <p className="text-xs text-muted-foreground mt-1">{label}</p>
               </div>
             ))}
           </div>

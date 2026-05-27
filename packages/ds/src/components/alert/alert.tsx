@@ -30,7 +30,7 @@ const VARIANT_BG_CLASS: Record<AlertVariant, string> = {
 
 const alertVariants = cva(
   [
-    "relative overflow-hidden rounded-sm border",
+    "relative overflow-hidden rounded-none border",
     "px-3 py-2",
     "transition-all duration-200",
     "motion-reduce:transition-none",
@@ -38,10 +38,10 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        warning: "border-warning-400",
-        error: "border-error-300",
-        info: "border-primary-300",
-        success: "border-success-400",
+        warning: "border-warning",
+        error: "border-error",
+        info: "border-accent",
+        success: "border-success",
       },
     },
     defaultVariants: {
@@ -51,14 +51,14 @@ const alertVariants = cva(
 );
 
 const labelVariants = cva(
-  "font-heading font-extrabold italic text-xs uppercase leading-normal pb-1",
+  "font-mono uppercase tracking-wider text-[11px] leading-normal pb-1",
   {
     variants: {
       variant: {
-        warning: "text-warning-600 dark:text-warning-300",
-        error: "text-error-600 dark:text-error-300",
-        info: "text-primary-600 dark:text-primary-300",
-        success: "text-success-600 dark:text-success-300",
+        warning: "text-warning-500 dark:text-warning",
+        error: "text-error-500 dark:text-error",
+        info: "text-accent-500 dark:text-accent",
+        success: "text-success-500 dark:text-success",
       },
     },
   },
@@ -67,10 +67,10 @@ const labelVariants = cva(
 const progressVariants = cva("absolute bottom-0 left-0 h-0.5", {
   variants: {
     variant: {
-      warning: "bg-warning-400",
-      error: "bg-error-400",
-      info: "bg-primary-400",
-      success: "bg-success-400",
+      warning: "bg-warning",
+      error: "bg-error",
+      info: "bg-accent",
+      success: "bg-success",
     },
   },
 });

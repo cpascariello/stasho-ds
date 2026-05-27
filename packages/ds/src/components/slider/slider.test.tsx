@@ -138,4 +138,29 @@ describe("Slider", () => {
     expect(sliders[0]).toHaveAttribute("aria-valuenow", "20");
     expect(sliders[1]).toHaveAttribute("aria-valuenow", "80");
   });
+
+  it("renders thumb with bg-background interior at rest", () => {
+    render(<Slider defaultValue={[50]} />);
+    const thumb = screen.getByRole("slider");
+    expect(thumb.className).toContain("bg-background");
+  });
+
+  it("renders thumb with 1.5px cyan ring at rest", () => {
+    render(<Slider defaultValue={[50]} />);
+    const thumb = screen.getByRole("slider");
+    expect(thumb.className).toContain("border-[1.5px]");
+    expect(thumb.className).toContain("border-accent");
+  });
+
+  it("renders md thumb at size-3.5 (14px)", () => {
+    render(<Slider defaultValue={[50]} size="md" />);
+    const thumb = screen.getByRole("slider");
+    expect(thumb.className).toContain("size-3.5");
+  });
+
+  it("renders sm thumb at size-3 (12px)", () => {
+    render(<Slider defaultValue={[50]} size="sm" />);
+    const thumb = screen.getByRole("slider");
+    expect(thumb.className).toContain("size-3");
+  });
 });

@@ -8,12 +8,17 @@ import { cn } from "@ac/lib/cn";
 const triggerVariants = cva(
   [
     "inline-flex items-center justify-between",
-    "w-full font-sans text-foreground bg-primary-100 dark:bg-base-700",
-    "border-0 rounded-full",
-    "focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-primary-500",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    "ring-0 transition-colors",
+    "w-full font-sans text-foreground",
+    "bg-background dark:bg-surface",
+    "border border-edge rounded-none",
+    "hover:border-edge-hover",
+    "focus-visible:outline-none",
+    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    "disabled:bg-muted dark:disabled:bg-background",
+    "disabled:border-edge/50",
+    "disabled:text-foreground/30",
+    "disabled:cursor-not-allowed",
+    "transition-colors",
   ].join(" "),
   {
     variants: {
@@ -82,8 +87,10 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
           aria-invalid={error || undefined}
           className={cn(
             triggerVariants({ size }),
-            error && "border-3 border-error-400 hover:border-error-500",
-            !selectedLabel && "text-muted-foreground",
+            error &&
+              "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+            !selectedLabel &&
+              (disabled ? "text-muted-foreground/50" : "text-muted-foreground"),
             className,
           )}
           {...rest}
@@ -105,8 +112,8 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
           <Popover.Content
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
-              "overflow-hidden rounded-2xl",
-              "bg-surface border border-edge shadow-brand",
+              "overflow-hidden rounded-none",
+              "bg-popover-bg border border-popover-border shadow",
             )}
             sideOffset={4}
             align="start"
@@ -134,12 +141,12 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                       setOpen(false);
                     }}
                     className={cn(
-                      "relative flex items-center rounded-xl px-4 py-2",
+                      "relative flex items-center rounded-none px-4 py-2",
                       "text-sm text-foreground cursor-pointer select-none",
                       "outline-none",
                       "data-[selected=true]:bg-muted",
-                      "data-[disabled=true]:opacity-50",
-                      "data-[disabled=true]:pointer-events-none",
+                      "data-[disabled=true]:text-foreground/30",
+                      "data-[disabled=true]:cursor-not-allowed",
                     )}
                   >
                     <span className="flex-1">{option.label}</span>

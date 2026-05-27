@@ -80,28 +80,26 @@ type PaginationProps = Omit<HTMLAttributes<HTMLElement>, "onChange"> & {
 
 const NAV_BUTTON = [
   "inline-flex items-center justify-center",
-  "size-8 rounded-full",
-  "text-primary-600 dark:text-primary-400",
-  "hover:bg-primary-100 dark:hover:bg-primary-200/10",
+  "size-8 rounded-none",
+  "text-foreground/60 hover:text-accent-500 dark:hover:text-accent",
   "transition-colors cursor-pointer",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
 ].join(" ");
 
-const NAV_DISABLED = "opacity-50 pointer-events-none";
+const NAV_DISABLED = "text-foreground/30 cursor-not-allowed";
 
 const PAGE_BUTTON = [
   "inline-flex items-center justify-center",
-  "size-8 rounded-full",
-  "font-heading font-bold text-lg",
-  "text-primary-600 dark:text-primary-400",
-  "hover:bg-primary-100 dark:hover:bg-primary-200/10",
+  "size-[26px] rounded-none",
+  "font-mono text-sm",
+  "text-foreground/60 hover:text-accent-500 dark:hover:text-accent",
   "transition-colors cursor-pointer",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
 ].join(" ");
 
 const PAGE_ACTIVE = [
-  "bg-primary-400 text-white dark:bg-primary-600 dark:text-white",
-  "hover:bg-primary-400 dark:hover:bg-primary-600",
+  "bg-accent/15 text-accent-500 dark:text-accent",
+  "hover:text-accent-500 dark:hover:text-accent",
 ].join(" ");
 
 const Pagination = forwardRef<HTMLElement, PaginationProps>(
@@ -164,7 +162,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           item === "ellipsis" ? (
             <span
               key={i}
-              className="inline-flex items-center justify-center size-8 font-heading font-bold text-lg text-primary-600 dark:text-primary-400 select-none"
+              className="inline-flex items-center justify-center size-[26px] font-mono text-sm text-foreground/40 select-none"
               aria-hidden="true"
             >
               {"\u2026"}

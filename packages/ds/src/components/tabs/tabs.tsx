@@ -201,25 +201,22 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
           aria-label="More tabs"
           className={cn(
             "inline-flex items-center justify-center shrink-0",
-            "font-heading font-bold",
-            hasActiveHidden && isPill
-              ? "text-white"
-              : hasActiveHidden
-                ? "text-primary-600 dark:text-primary-400"
-                : "text-muted-foreground",
+            "font-sans font-semibold",
+            hasActiveHidden
+              ? "text-accent-500 dark:text-accent"
+              : "text-muted-foreground",
             "transition-colors duration-200",
-            "hover:text-primary-600 dark:hover:text-primary-400",
-            "focus-visible:outline-none focus-visible:ring-2",
-            "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
+            "hover:text-accent-500 dark:hover:text-accent",
+            "focus-visible:outline-2 focus-visible:outline-accent-500 dark:focus-visible:outline-accent focus-visible:outline-offset-2",
             "motion-reduce:transition-none",
             isPill
               ? cn(
-                  "relative z-10 rounded-full",
+                  "relative z-10 rounded-[2px]",
                   isSmall ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm",
                 )
               : isSmall
                 ? "px-3 py-1.5 text-sm"
-                : "px-4 py-3 text-lg",
+                : "px-4 py-3 text-sm",
             !visible && "invisible",
           )}
         >
@@ -230,7 +227,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
         <DropdownMenu.Content
           className={cn(
             "z-50 min-w-[8rem]",
-            "rounded-md bg-surface border border-edge shadow-brand",
+            "rounded-none bg-popover-bg border border-popover-border shadow",
             "p-1",
             "motion-reduce:transition-none",
           )}
@@ -255,13 +252,13 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 });
               }}
               className={cn(
-                "flex w-full items-center rounded-sm px-3 py-2",
+                "flex w-full items-center rounded-none px-3 py-2",
                 "text-sm text-foreground cursor-pointer select-none",
                 "outline-none",
                 "hover:bg-muted focus-visible:bg-muted",
-                "data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
+                "data-[disabled]:text-foreground/30 data-[disabled]:cursor-not-allowed",
                 tab.triggerEl.dataset["state"] === "active" &&
-                  "text-primary-600 dark:text-primary-400 font-bold",
+                  "text-accent-500 dark:text-accent font-semibold",
               )}
             >
               {tab.label}
@@ -363,13 +360,11 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
           "group relative flex",
           isPill
             ? [
-                "rounded-full bg-muted",
+                "rounded-[2px] bg-muted border border-edge",
                 isSmall ? "p-0.5" : "p-1",
                 !isCollapse && "inline-flex",
               ]
-            : isSmall
-              ? "border-b-2 border-edge/40"
-              : "border-b-4 border-edge/40",
+            : "border-b border-edge/40",
           className,
         )}
         {...rest}
@@ -392,15 +387,14 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
             isPill
               ? [
                   isSmall ? "inset-y-0.5" : "inset-y-1",
-                  "rounded-full bg-primary-600 dark:bg-primary-500",
+                  "rounded-[2px] bg-accent/15",
                   ready ? "opacity-100" : "opacity-0",
                   ready
                     ? "transition-[transform,width,opacity] duration-200 ease-out"
                     : "",
                 ]
               : [
-                  isSmall ? "-bottom-0.5 h-0.5" : "-bottom-1 h-1",
-                  "bg-primary-600 dark:bg-primary-400",
+                  "-bottom-px h-px bg-accent-500 dark:bg-accent",
                   ready
                     ? "transition-[transform,width] duration-200 ease-out"
                     : "",
@@ -427,31 +421,28 @@ const TabsTrigger = forwardRef<
     className={cn(
       [
         "inline-flex items-center gap-2 px-4 py-3",
-        "font-heading font-bold text-lg",
+        "font-sans font-semibold text-sm",
         "text-foreground",
         "transition-[color,transform] duration-200 ease-out",
-        "hover:text-primary-600 dark:hover:text-primary-400",
-        "data-[state=active]:text-primary-600",
-        "dark:data-[state=active]:text-primary-400",
+        "hover:text-accent-500 dark:hover:text-accent",
+        "data-[state=active]:text-accent-500 dark:data-[state=active]:text-accent",
         "data-[state=active]:-translate-y-0.5",
-        "disabled:opacity-20 disabled:pointer-events-none",
-        "focus-visible:outline-none focus-visible:ring-2",
-        "focus-visible:ring-primary-400 focus-visible:ring-offset-2",
+        "disabled:text-foreground/30 disabled:cursor-not-allowed",
+        "focus-visible:outline-2 focus-visible:outline-accent-500 dark:focus-visible:outline-accent focus-visible:outline-offset-2",
         "motion-reduce:transition-none",
         // Small size overrides (underline)
         "group-data-[size=sm]:px-3 group-data-[size=sm]:py-1.5",
         "group-data-[size=sm]:text-sm group-data-[size=sm]:gap-1.5",
         // Pill variant overrides (via group data attribute on TabsList)
         "group-data-[variant=pill]:relative group-data-[variant=pill]:z-10",
-        "group-data-[variant=pill]:rounded-full",
+        "group-data-[variant=pill]:rounded-[2px]",
         "group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5",
         "group-data-[variant=pill]:text-sm",
         "group-data-[variant=pill]:text-muted-foreground",
         "group-data-[variant=pill]:translate-y-0",
-        "group-data-[variant=pill]:hover:text-foreground",
-        "group-data-[variant=pill]:data-[state=active]:text-white",
+        "group-data-[variant=pill]:hover:text-accent-500 dark:group-data-[variant=pill]:hover:text-accent",
+        "group-data-[variant=pill]:data-[state=active]:text-accent-500 dark:group-data-[variant=pill]:data-[state=active]:text-accent",
         "group-data-[variant=pill]:data-[state=active]:translate-y-0",
-        "group-data-[variant=pill]:focus-visible:ring-offset-0",
         // Small pill overrides (compound group selector)
         "group-[[data-variant=pill][data-size=sm]]:px-3",
         "group-[[data-variant=pill][data-size=sm]]:py-1",

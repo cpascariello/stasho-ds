@@ -64,4 +64,41 @@ describe("Checkbox", () => {
     render(<Checkbox size="xs" />);
     expect(screen.getByRole("checkbox")).toBeDefined();
   });
+
+  it("rest chassis carries bg-background dark:bg-surface", () => {
+    render(<Checkbox />);
+    const cls = screen.getByRole("checkbox").className;
+    expect(cls).toContain("bg-background");
+    expect(cls).toContain("dark:bg-surface");
+  });
+
+  it("xs size renders at size-3.5", () => {
+    render(<Checkbox size="xs" />);
+    expect(screen.getByRole("checkbox").className).toContain("size-3.5");
+  });
+
+  it("sm size renders at size-4", () => {
+    render(<Checkbox size="sm" />);
+    expect(screen.getByRole("checkbox").className).toContain("size-4");
+  });
+
+  it("md size renders at size-5", () => {
+    render(<Checkbox size="md" />);
+    expect(screen.getByRole("checkbox").className).toContain("size-5");
+  });
+
+  it("all sizes carry rounded-none", () => {
+    for (const size of ["xs", "sm", "md"] as const) {
+      const { unmount } = render(<Checkbox size={size} />);
+      expect(screen.getByRole("checkbox").className).toContain("rounded-none");
+      unmount();
+    }
+  });
+
+  it("renders the check indicator with Phosphor data attribute or weight signal", () => {
+    render(<Checkbox defaultChecked />);
+    const checkbox = screen.getByRole("checkbox");
+    const svg = checkbox.querySelector("svg");
+    expect(svg?.getAttribute("viewBox")).toBe("0 0 256 256");
+  });
 });

@@ -89,8 +89,7 @@ aleph-cloud-ds/
 │       │   │   │   └── tooltip.test.tsx
 │       │   │   └── ui/
 │       │   │       ├── skeleton.tsx
-│       │   │       ├── skeleton.test.tsx
-│       │   │       └── spinner.tsx
+│       │   │       └── skeleton.test.tsx
 │       │   ├── styles/
 │       │   │   └── tokens.css
 │       │   └── lib/
@@ -214,11 +213,20 @@ If either answer is "no," promote the token:
 
 **Example:** `--gradient-main` has a dark end (`#141421`) that matches the dark mode background. Promoted: `--gradient-main-base` and `--gradient-main-dark` in Layer 1, `--gradient-main` in Layer 2 swaps per theme.
 
-### Card Corner Radius as Surface Default
+### Surface Radius Vocabulary
 
-All elevated surface components (Dialog, dropdowns, popovers, future overlays) must use `rounded-md` — the same corner radius as the Card component. This ensures visual consistency across all "floating panel" surfaces.
+Floating-panel surfaces follow the radius vocabulary: Card uses `rounded-[2px]`, Dialog uses `rounded-[4px]`, and dropdowns/popovers (Select, Combobox, MultiSelect) use `rounded-none` — matching their square triggers. Within a single composition, surface radii should match what the trigger or container in front of them uses.
 
-**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-md", ...)`
+**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-[2px]", ...)`, `packages/ds/src/components/dialog/dialog.tsx` (`rounded-[4px]`).
+
+### Font Loading Boundary
+
+The DS package **never bundles font binaries**. `tokens.css` declares `--font-heading`, `--font-sans`, `--font-mono` as token references only. Consumers are responsible for loading the actual font files:
+
+- **Anybody** (`--font-heading`) and **Inter** (`--font-sans`) — load via Google Fonts in the consumer app's `<head>`.
+- **Departure Mono** (`--font-mono`) — self-host. The preview app keeps a reference copy at `apps/preview/public/fonts/DepartureMono.woff2` and declares `@font-face` in `apps/preview/src/app/globals.css`. Consumer apps copy that woff2 (or re-download from departuremono.com) and add their own `@font-face` rule.
+
+This keeps the published `@stasho/ds` payload small, avoids licensing ambiguity, and lets each consumer choose its own loading strategy (preload hints, `font-display`, swap behavior). Reference: Decision #78.
 
 ### Ecosystem Aliases for Color Tokens
 
@@ -246,6 +254,12 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 **Key files:** `packages/ds/src/styles/tokens.css`
 
 **Notes:** `@theme inline` tells Tailwind to resolve at runtime (not compile time), enabling theme switching. Any Layer 1 value that needs to change per theme (e.g., `--gradient-main`) must be promoted to Layer 2 — see the "Promote Layer 1 Values to Layer 2" rule above.
+
+**Same-hex semantic accent rule (Layer 2).** `--primary`, `--accent`, `--success`, `--warning`, and `--error` are written as hex literals — not Layer 1 scale references — in both `:root` and `.theme-dark`, and the value is identical in both blocks. This is the Radix/Geist step-9 convention: saturated brand colors don't drift between modes because they're literally the same value. The Layer 1 scales (`--color-primary-*` etc.) stay available for tinted backgrounds, hover states, and contrast-aware inline text. Theme-swappable tokens (`--background`, `--foreground`, `--muted`, `--surface`, `--edge`, `--edge-hover`) keep their per-theme variants.
+
+**Layer 3 bridge entries for semantic accents.** `@theme inline` now surfaces `--color-success`, `--color-warning`, `--color-error` (plus `-foreground` pairs) alongside the existing `--color-primary` / `--color-accent`. Consumers get `bg-success`, `text-warning`, `border-error`, etc. as first-class Tailwind utilities — no inline `style={{ color: 'var(--success)' }}` required.
+
+**Radius scale (Layer 1).** The radius vocabulary is `0 / 0 / 2 / 4`. `--radius-sm` and `--radius-md` are both literally `0`, `--radius-lg` is `2px`, `--radius-xl` is `4px`. When a small non-zero radius is needed (Card 2px, Dialog 4px), use a literal arbitrary value (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — this keeps the scale honest. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements only — never round-by-convention. After Decision #88 the reserved list is: StatusDot, Slider thumb (kept for now — flagged for the rounded-full audit chunk), ProgressBar tracks, MultiSelect tag chips. Switch track + thumb and Stepper indicators moved to `rounded-[2px]` in wave-1.
 
 ### Theme Switching
 
@@ -307,7 +321,7 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 .border-gradient-main:active { /* same with primary-300 */ }
 ```
 
-`gradient-fill-main` / `gradient-fill-lime` — gradient fills with overlay-based hover states:
+`gradient-fill-main` / `gradient-fill-accent` — gradient fills with overlay-based hover states:
 ```css
 .gradient-fill-main { background: var(--gradient-main) border-box; }
 .gradient-fill-main:hover {
@@ -355,10 +369,10 @@ The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` 
 **Context:** Users with vestibular disorders or motion sensitivity need a way to disable animations. `prefers-reduced-motion: reduce` is the OS-level signal.
 
 **Approach:** All animated components use Tailwind's `motion-reduce:` variant to disable motion:
-- **Continuous animations** (`animate-pulse`, `animate-spin`): `motion-reduce:animate-none` stops the animation entirely.
+- **Continuous animations** (`animate-pulse`, `animate-button-chase-*`, indeterminate progress): `motion-reduce:animate-none` stops the animation entirely.
 - **One-shot transitions** (`transition-[clip-path]`, `transition-transform`): `motion-reduce:transition-none` makes state changes instant.
 
-**Key files:** `skeleton.tsx`, `spinner.tsx`, `status-dot.tsx` (continuous); `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` (one-shot)
+**Key files:** `skeleton.tsx`, `status-dot.tsx`, `button.tsx` (loading chase), `progress-bar.tsx` (indeterminate) — continuous; `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `tooltip.tsx`, `table.tsx`, `tabs.tsx` — one-shot.
 
 **Rule:** Every new component with animation must include the appropriate `motion-reduce:` variant. Continuous animations use `animate-none`; transitions use `transition-none`.
 
@@ -549,6 +563,10 @@ The component is intentionally unstyled — no CVA variants, no opinionated colo
 
 **When to use dual context:** When a compound component has orthogonal concerns at different nesting levels. Orientation applies at the container level; state applies at the item level. A single context would conflate the two, and prop drilling through intermediate components (`StepperList`) would be fragile.
 
+**Connector completed state:** `<StepperConnector completed />` renders `data-completed=""` and fills the connector cyan (`bg-accent`). Consumers pass the prop between two consecutive completed steps to show progress. The connector does not derive `completed` from adjacent items — it would require either DOM inspection (fragile) or a third context — so the prop stays explicit at the call site.
+
+**Indicator auto-Check:** When the surrounding `StepperItem` has `state="completed"`, `StepperIndicator` renders a Phosphor `<Check weight="bold" />` icon instead of its `children`. Consumers who pass numeric labels get the swap for free; consumers who need a custom completed glyph can render their own component inside `StepperItem` and inspect `state` externally (the same state value they pass into the item is already in their hands).
+
 ### ProgressBar Description Pattern
 
 **Context:** A ProgressBar optionally has a description below the track. When present, the component needs a wrapper div for layout, and the description must be linked to the progressbar via `aria-describedby`.
@@ -567,6 +585,24 @@ Copy button uses a two-layer stack:
 
 Hover state uses `bg-foreground/10` for visibility in both light and dark themes.
 
+### Alert
+
+**Alert `alert-bg-*` classes:** The four variant backgrounds are CSS classes in `tokens.css` rather than Tailwind utilities because the gradient stops use `oklch(from var(--token) l c h / opacity)` syntax which Tailwind's scanner cannot extract from class strings. Each class renders a 180deg gradient layered on `var(--background)` — 18% opacity at the top, 6% at the baseline. The single gradient works in both themes because the underlying `--background` swaps per theme; no `.theme-dark` override block is needed. To add a new variant: add the class in `tokens.css` and add a key to the component's `VARIANT_BG_CLASS` map.
+
+### Button
+
+The Button is the only DS component that renders a brand "signature" element — the cyan LED dot — that isn't part of the consumer-provided content.
+
+**LED render logic.** The LED `<span data-led>` renders at rest when `!iconLeft && variant !== 'ghost'`. When iconLeft is provided on a non-ghost variant, iconLeft takes the LED's leading slot (with the variant's resting glow filter on filled variants). When the variant is `ghost`, no LED renders even without an icon — ghost is the quiet escape hatch. During loading, none of this matters — the chase replaces whatever was in the leading slot (see "Loading animation" below).
+
+**Loading animation.** When `loading={true}` and the variant is not `ghost`, the leading slot renders `<span data-led-chase>` containing two dots that animate in anti-phase via `animate-button-chase-a` and `animate-button-chase-b` (keyframes in `tokens.css`). The chase displaces both the static LED and any consumer-provided iconLeft for the duration of the loading state. The two dots share the variant's existing LED color mapping (cyan / white / dark per variant). `prefers-reduced-motion: reduce` parks both dots at opacity 1 so the loading state stays visible without motion. On the `ghost` variant, no chase renders — `aria-busy` and `cursor-wait` are the only loading signals.
+
+**Focus ring uses outline, not box-shadow.** Variant chassis use stacked `box-shadow` for the bevel (inset highlights + drop shadow + halo for semantic variants). A focus ring drawn via `box-shadow` would replace the bevel during focus. Using native `outline` keeps the two visual channels separate — the bevel persists when focused, and the cyan outline sits at 2px offset around the chassis.
+
+**Disabled visual flatten.** Every variant's `disabled:` classes collapse the chassis to `bg-neutral-900` with a faint inset bevel, regardless of the variant's resting chassis color. The LED dims via `opacity` inheritance and stops glowing because its `bg-` color is also overridden through `disabled:text-white/30`. This unifies disabled state — a disabled destructive button reads the same as a disabled primary, which is the correct semantics (both are inert).
+
+**`asChild` limitation.** When `asChild` is true, the rendered element is the consumer's child via `cloneElement`. The LED and icon content are NOT carried over — `asChild` exists for "link styled as button", not "rich content button". Consumers who need a link with an LED should compose `buttonVariants({...})` manually onto their link element and add the LED span themselves.
+
 ---
 
 ## Testing Philosophy
@@ -579,7 +615,7 @@ Design system components are visual by nature — most of their code maps props 
 
 | Category | Example | Why |
 |----------|---------|-----|
-| Interactive behavior | Loading state shows spinner, hides icons | Logic that can silently break |
+| Interactive behavior | Loading state runs LED chase, hides icons | Logic that can silently break |
 | Accessibility | `aria-busy` when loading, `disabled` attribute | Invisible to visual review |
 | Polymorphism | `asChild` renders an `<a>` instead of `<button>` | Non-obvious DOM behavior |
 | Prop forwarding | `aria-label`, `className` merging | Contract with consumers |
