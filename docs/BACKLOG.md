@@ -104,6 +104,18 @@ Ideas and scope creep captured for later consideration.
 **Description:** Outline disabled in dark mode keeps a transparent chassis (no `dark:disabled:bg-X`) while every other variant flattens to `bg-neutral-900`. Inconsistent with "Disabled flattens" principle. Fix by adding `dark:disabled:bg-neutral-900` to the Outline variant — small dark-mode behavior change, kept out of the light-mode chunk scope.
 **Priority:** Low
 
+### 2026-05-27 — Pagination active-state recolor
+
+**Source:** Wave-1 spec § 5.1; pulled out of chunk 5 to keep both chunks reviewable
+**Description:** Apply the wave-1 § 5.1 change table to Pagination — `text-primary-*` → cyan accent on number color, hover, and ellipsis; active number becomes outlined chip (`bg-muted dark:bg-neutral-900` + `border border-accent` + `text-accent`); number button size drops to 26×26 (nav arrows stay 32×32). Own short chunk: `skin/pagination-recolor` off `skin/paraplu`.
+**Priority:** High (blocks the visual cohesion of the wave — pagination is the last component still rendering primary-blue active state)
+
+### 2026-05-27 — Rounded-full audit
+
+**Source:** Decision #86 cascade
+**Description:** SKIN-PRINCIPLES § 4 amendment ("round-by-design only, never round-by-convention") flags three remaining components on the reserved list that share the convention-only justification Tabs pill just lost: Switch track (currently `rounded-full` — shipped in chunk 4), MultiSelect tag chips (chunks 6+ territory, unshipped), Stepper indicators (chunk 7 territory, unshipped). Audit each and either keep `rounded-full` with a new semantic justification or move to `rounded-[2px]` to match the Tabs pill treatment. Single chunk: `skin/rounded-full-audit` off `skin/paraplu`.
+**Priority:** Medium (does not block the wave but completes the principle work started in chunk 5)
+
 ---
 
 ## Completed / Rejected
@@ -152,5 +164,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-26 — Typography reset across 6 components (Decision #83: Alert variant label, Badge, Pagination numbers, Table headers → Departure Mono UC; Breadcrumb, Tabs triggers → Inter Semibold sentence case; Anybody removed from all interactive label roles)
 - [x] 2026-05-27 — Text-input chassis reset (Decision #84: flat-slot chassis for Input/Textarea/Select/Combobox/MultiSelect — `bg-background dark:bg-surface` + 1px `border-edge`, cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled; FormField switched from `text-error-600` to semantic `text-error`)
 - [x] 2026-05-27 — Chunk 4 boolean/range chassis reset (Decision #85: Checkbox/RadioGroup/Switch/Slider on flat-hairline chassis; Switch + Slider get bevel + cyan thumb-glow on hover/focus per Direction C; all cyan-checked states use `--accent`; disabled flattens to muted-sink chassis; compound `disabled:data-[state=checked]:*` variants for specificity; Slider uses `data-[disabled]:*` because Radix renders Thumb/Range as `<span>`)
+- [x] 2026-05-27 — Chunk 5 active-state recolor + TabsList chrome polish (Tabs + Breadcrumb): `primary-*` → cyan `--accent` on active/hover; pill indicator → `bg-accent/15` tinted; underline track + indicator collapse to 1px hairline (both sizes); pill list adds 1px `border-edge` hairline + moves to `rounded-[2px]`; pill triggers + sliding indicator + OverflowTrigger pill branch all move to `rounded-[2px]`; Tabs focus → outline-accent pattern (Decision #82 alignment); Tabs disabled → semantic flatten (Decision #84 alignment); Breadcrumb current page → `text-accent`; Breadcrumb separator → `text-foreground/25`. SKIN-PRINCIPLES § 2 + § 4 amended.
 
 </details>

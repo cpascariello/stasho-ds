@@ -751,11 +751,11 @@ import {
 | `Breadcrumb` | `<nav>` | Wrapper with `aria-label="Breadcrumb"` |
 | `BreadcrumbList` | `<ol>` | Ordered list with flex layout, Inter Medium sentence case |
 | `BreadcrumbItem` | `<li>` | List item wrapper |
-| `BreadcrumbLink` | `<a>` / Slot | Navigation link with hover color transition |
-| `BreadcrumbSeparator` | `<li>` | Visual separator (`/` default), `aria-hidden="true"` |
-| `BreadcrumbPage` | `<span>` | Current page with `aria-current="page"`, muted color |
+| `BreadcrumbLink` | `<a>` / Slot | Navigation link with cyan hover color transition |
+| `BreadcrumbSeparator` | `<li>` | Visual separator (`/` default), `aria-hidden="true"`, quiet at 25% foreground |
+| `BreadcrumbPage` | `<span>` | Current page with `aria-current="page"`, full cyan accent |
 
-**Visual style:** `font-sans font-medium text-sm` on the list (Inter Medium sentence case). Links use `text-foreground` with `hover:text-primary-600` (dark: `primary-400`). Separators and current page use `text-muted`. No CVA — no variants.
+**Visual style:** `font-sans font-medium text-sm` on the list (Inter Medium sentence case). Links use `text-foreground` with `hover:text-accent`. Separators use `text-foreground/25` to recede so the cyan current page reads cleanly. Current page (`BreadcrumbPage`) uses `text-accent` as the focal point of the trail. Same-hex rule — cyan renders identically in light and dark. No CVA — no variants.
 
 ### Button
 
@@ -1414,7 +1414,7 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 
 ### Tabs
 
-Radix UI Tabs with DS styling, sliding active indicator, and text nudge micro-animation. Composable API — Radix Root is re-exported directly; List wraps the indicator logic. Underline variant uses a 4px baseline at 40% `edge` opacity with a 4px solid primary indicator that slides to the active tab.
+Radix UI Tabs with DS styling, sliding active indicator, and text nudge micro-animation. Composable API — Radix Root is re-exported directly; List wraps the indicator logic. Underline variant uses a 1px hairline track at 40% `edge` opacity with a 1px solid cyan accent indicator that slides to the active tab.
 
 ```tsx
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@aleph-front/ds/tabs";
@@ -1453,7 +1453,7 @@ Tab triggers accept arbitrary children — badges, subscripts, icons:
 
 #### Pill Variant
 
-A segmented-control style with a sliding solid pill indicator. Pass `variant="pill"` to `TabsList`:
+A segmented-control style framed by a 1px `--edge` hairline with a sliding tinted-cyan indicator. Pass `variant="pill"` to `TabsList`:
 
 ```tsx
 <Tabs defaultValue="nodes">
@@ -1484,7 +1484,7 @@ Pass `size="sm"` to `TabsList` for a compact variant. Works with both underline 
 | | md (default) | sm |
 |---|---|---|
 | **Underline trigger** | `px-4 py-3 text-sm` | `px-3 py-1.5 text-sm` |
-| **Underline border** | `border-b-4`, indicator `h-1` | `border-b-2`, indicator `h-0.5` |
+| **Underline border** | `border-b`, indicator `h-px` | `border-b`, indicator `h-px` |
 | **Pill trigger** | `px-5 py-1.5 text-sm` | `px-3 py-1 text-xs` |
 | **Pill container** | `p-1` | `p-0.5` |
 
@@ -1529,9 +1529,11 @@ When many tabs exceed the available width, `overflow="collapse"` on `TabsList` a
 
 `maxVisible` activates the same overflow code path as `overflow="collapse"` — passing it alone is enough; you don't need to also pass `overflow`. When both are set, the **stricter** limit wins: visible = `min(widthFit, maxVisible)`. Hidden tabs go into the dropdown either way.
 
-**Styling (underline):** `font-sans font-semibold text-sm` triggers (Inter Semibold sentence case). 4px baseline at 40% `edge` opacity, 4px solid primary sliding indicator. Active/hover text uses `primary-600` / `dark:primary-400`.
+**Styling (underline):** `font-sans font-semibold text-sm` triggers (Inter Semibold sentence case). 1px hairline track at 40% `edge` opacity, 1px solid cyan accent (`bg-accent`) sliding indicator. Active/hover text uses `text-accent`. Active trigger is nudged up 2px (`-translate-y-0.5`) so the text rests above the indicator bar.
 
-**Styling (pill):** Rounded container `bg-muted` (brand-tinted). Active indicator `bg-primary-600` / `dark:bg-primary-500`. Triggers `text-muted-foreground` inactive, `text-white` active, compact `px-5 py-1.5 text-sm`.
+**Styling (pill):** `rounded-[2px] bg-muted` container framed by a 1px `border-edge` hairline. Active indicator is a tinted cyan fill (`bg-accent/15`), rounded `[2px]` to match the list shape. Triggers `text-muted-foreground` inactive, `text-accent` active and on hover, compact `px-5 py-1.5 text-sm`.
+
+**Focus:** native `outline-2 outline-accent outline-offset-2` (matches Button). **Disabled:** `text-foreground/30` + `cursor-not-allowed` (semantic flatten, no `opacity-20`). **Same-hex rule:** cyan `--accent` (`#00E1FA`) renders identically in light and dark — no `dark:` variants needed.
 
 **Exports:** `Tabs` (Root), `TabsList`, `TabsTrigger`, `TabsContent`, `TabsListProps`, `TabsSize`, `TabsVariant`
 
