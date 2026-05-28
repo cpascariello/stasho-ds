@@ -8,21 +8,22 @@ const switchVariants = cva(
     "peer inline-flex shrink-0 cursor-pointer",
     "items-center rounded-[2px]",
     "border border-edge bg-muted dark:bg-neutral-900",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
+    "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.10)]",
+    "dark:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.06),inset_0_-1px_0_rgba(0,0,0,0.4)]",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
-    "disabled:bg-muted dark:disabled:bg-background",
-    "disabled:border-edge/50 disabled:shadow-none",
+    "disabled:bg-edge dark:disabled:bg-background",
+    "disabled:border-edge-hover dark:disabled:border-edge/50 disabled:[box-shadow:none]",
     "disabled:cursor-not-allowed",
-    "disabled:data-[state=checked]:border-edge/50",
+    "disabled:data-[state=checked]:border-edge-hover dark:disabled:data-[state=checked]:border-edge/50",
     "data-[state=checked]:border-accent/30",
     "transition-colors",
   ].join(" "),
   {
     variants: {
       size: {
-        xs: "h-4 w-7",
-        sm: "h-5 w-9",
-        md: "h-6 w-11",
+        xs: "h-[18px] w-8",
+        sm: "h-[22px] w-10",
+        md: "h-[26px] w-[47px]",
       },
     },
     defaultVariants: {
@@ -45,9 +46,9 @@ const thumbVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-3 data-[state=checked]:translate-x-[12px]",
-        sm: "size-4 data-[state=checked]:translate-x-[16px]",
-        md: "size-5 data-[state=checked]:translate-x-[20px]",
+        xs: "size-3 data-[state=checked]:translate-x-[16px]",
+        sm: "size-4 data-[state=checked]:translate-x-[20px]",
+        md: "size-5 data-[state=checked]:translate-x-[23px]",
       },
     },
     defaultVariants: {
