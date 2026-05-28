@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #96 — 2026-05-28
+
+**Context:** Switch component felt off in two ways — light + dark had a different feel because of the heavy shared bevel, and the thumb-to-stroke gap was visibly tight. Disabled also didn't read as disabled in light mode because rest was already `bg-muted`.
+**Decision:** Three coupled changes:
+1. **Geometry:** track outer = thumb + 6 (4px breathing + 2px border). New dims: xs 18×32, sm 22×40, md 26×47. Thumbs unchanged (12/16/20). Per-size checked translate follows `outer - thumb - 4` (xs 16, sm 20, md 23). Amends Decision #92's "thumb + 4" formula (the +4 was outer dim, which left only 1px visible breathing).
+2. **Light-mode bevel:** `inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.10)` — bright soft top + faint bottom. Dark bevel unchanged. Switch is the only track in the shared-bevel trio (Switch/Slider/ProgressBar) with a same-tone-as-page fill in light mode, so it can't lean on the dark-mode bevel proportions.
+3. **Disabled sink:** light track drops from `bg-muted` (rest) to `bg-edge` (disabled) with border `border-edge-hover`; mirrors the dark "sink one ladder step" pattern.
+**Rationale:** All three are visibility refinements that bring Switch in line with how the rest of the system reads in light mode without changing the public API or the thumb-matches-Checkbox rule (Decision #92, preserved).
+**Alternatives considered:** (1) Drop the border to get 2px breathing without growing the track — rejected, the stroke is part of the visual contract. (2) Invert the bevel direction (top dark, bottom light) for a true "depressed slot" reading — rejected, would force a coupled change to Slider/ProgressBar without a clear win. (3) `opacity: 0.4` for disabled — rejected, lets cyan bleed through in disabled+on.
+
+---
+
 ## Decision #95 — 2026-05-27
 
 **Context:** Once stasho started consuming the Abyssal Void skin in anger, two visibility complaints surfaced. (1) Cards (`bg-surface` = `oklch(0.16 0.003 273)` on a `#07080a` page with `border-edge` at 8% alpha) barely lifted off the background — adjacent cards in a 2×2 grid read as one ambiguous slab. The same problem hit every component using `bg-surface dark:bg-surface` + `border-edge`: Select / Combobox / MultiSelect triggers and popovers, Input / Textarea, Dialog, Table, Badge, Tabs, Checkbox / RadioGroup / Switch, Stepper. (2) The Decision #81 button redesign collapsed the size ladder to xs/sm/md — there was no remaining size step for hero CTAs / landing-page primary actions, so the design system pushed app surfaces toward `md` even where the layout had room and the action wanted more weight.
