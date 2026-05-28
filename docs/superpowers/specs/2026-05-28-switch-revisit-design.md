@@ -19,11 +19,13 @@ Three issues observed in the live Abyssal Void Switch:
 
 Track outer = thumb + 6 (4px breathing + 2px border).
 
-| size | track outer (h&times;w) | thumb | translate (off → on) | ratio |
+| size | track outer (h&times;w) | thumb | translate (off → on, px) | ratio |
 | --- | --- | --- | --- | --- |
-| xs | 18&times;32 | 12 | 0.5 → 16px | 1.78 |
-| sm | 22&times;40 | 16 | 0.5 → 20px | 1.82 |
-| md | 26&times;47 | 20 | 0.5 → 23px | 1.81 |
+| xs | 18&times;32 | 12 | 2 → 16 | 1.78 |
+| sm | 22&times;40 | 16 | 2 → 20 | 1.82 |
+| md | 26&times;47 | 20 | 2 → 23 | 1.81 |
+
+Off-state translate of 2px is expressed in Tailwind as `translate-x-0.5`. Origin is the inner-box top-left (after the 1px border), so the thumb sits 3px from the outer track edge in both off (left) and on (right) — 1px border + 2px breathing.
 
 Thumbs unchanged at 12/16/20 — preserves Decision #92's "thumb matches Checkbox/Radio at same size variant" rule. Ratios stay in the 1.75-1.83 band.
 
