@@ -10,7 +10,7 @@
 
 **Source spec:** `docs/superpowers/specs/2026-05-28-switch-revisit-design.md`
 
-**Integration branch:** `skin/paraplu` (Abyssal Void skin). Chunk branch: `skin/switch-revisit`.
+**Branch:** `skin/switch-revisit` (off `main` — the Abyssal Void integration branch `skin/paraplu` shipped in `80b242c` on 2026-05-27, so new DS chunks go off main).
 
 ---
 
@@ -34,46 +34,17 @@
 
 **Files:** none (git only)
 
-- [ ] **Step 1: Push main first**
+- [ ] **Step 1: Create the chunk branch off main**
 
-Per CLAUDE.md, unpushed main commits cause divergence after squash-merge. The spec commit is on main.
+The pre-push hook blocks direct pushes to main, so the spec + plan commits that landed on local main during the brainstorm session need to travel with the chunk. Cherry-pick them after branching.
 
-Run:
 ```bash
-git push origin main
-```
-Expected: `main → main` push succeeds (`4612ca7` lands on origin).
-
-- [ ] **Step 2: Sync the integration worktree (or create one)**
-
-Check if a worktree already exists for `skin/paraplu`:
-```bash
-git worktree list
+git fetch origin
+git checkout -b skin/switch-revisit origin/main
+git cherry-pick <spec-sha> <plan-sha>   # bring spec + plan from local main onto the chunk
 ```
 
-If no `skin/paraplu` worktree appears, create one (parallel to the main repo):
-```bash
-git fetch origin skin/paraplu
-git worktree add ../stasho-ds-skin-paraplu skin/paraplu
-```
-
-If it exists, change into it and pull:
-```bash
-cd <skin-paraplu-worktree-path>
-git checkout skin/paraplu
-git pull --ff-only origin skin/paraplu
-```
-
-- [ ] **Step 3: Create the chunk branch off skin/paraplu**
-
-From inside the `skin/paraplu` worktree:
-```bash
-git checkout -b skin/switch-revisit
-```
-
-Expected: `Switched to a new branch 'skin/switch-revisit'`.
-
-All subsequent edits happen in this worktree on this branch.
+Worktree is optional — only needed if you want to keep the main worktree on `main` for parallel work. After the chunk PR squash-merges to main, reset local main back to `origin/main` to drop the orphan spec/plan commits.
 
 ---
 
@@ -428,21 +399,20 @@ Confirm the four bullets above are all done. If any are missing, complete them n
 
 ---
 
-## Task 12: PR into skin/paraplu and clean up
+## Task 12: PR into main and clean up
 
 **Files:** none (git only)
 
 - [ ] **Step 1: Push the chunk branch**
 
-From the worktree on `skin/switch-revisit`:
 ```bash
 git push -u origin skin/switch-revisit
 ```
 
-- [ ] **Step 2: Open PR targeting skin/paraplu**
+- [ ] **Step 2: Open PR targeting main**
 
 ```bash
-gh pr create --base skin/paraplu --title "feat(switch): visibility refresh — breathing, light bevel, disabled sink (Decision #96)" --body "$(cat <<'EOF'
+gh pr create --base main --title "feat(switch): visibility refresh — breathing, light bevel, disabled sink (Decision #96)" --body "$(cat <<'EOF'
 ## Summary
 - 2px symmetric breathing inside the 1px border (new dims: xs 32×18, sm 40×22, md 47×26)
 - Light-mode bevel tuned to bright highlight + faint shadow (dark unchanged)
@@ -464,17 +434,19 @@ EOF
 gh pr merge <number> --squash --delete-branch
 ```
 
-- [ ] **Step 4: Sync the integration branch in the worktree**
+- [ ] **Step 4: Sync main + reset local main**
 
 ```bash
-git checkout skin/paraplu
-git pull --ff-only origin skin/paraplu
+git checkout main
+git pull --ff-only origin main
+# If local main had unpushed spec/plan commits (cherry-picked into the chunk):
+# they're now redundant — reset to origin/main to clean up.
+git reset --hard origin/main
 ```
 
-- [ ] **Step 5: Delete the local chunk branch**
+- [ ] **Step 5: Delete the local chunk branch + any worktree**
 
 ```bash
 git branch -D skin/switch-revisit
+git worktree remove <worktree-path> --force   # only if a worktree was created
 ```
-
-The integration worktree stays — `skin/paraplu` won't merge to main until the full skin is shipped.
