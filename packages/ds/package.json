@@ -1,6 +1,6 @@
 {
   "name": "@stasho/ds",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "stasho design system",
   "type": "module",
   "license": "MIT",
@@ -24,6 +24,7 @@
   "exports": {
     "./alert": "./src/components/alert/alert.tsx",
     "./button": "./src/components/button/button.tsx",
+    "./icon-button": "./src/components/button/icon-button.tsx",
     "./checkbox": "./src/components/checkbox/checkbox.tsx",
     "./input": "./src/components/input/input.tsx",
     "./textarea": "./src/components/textarea/textarea.tsx",
