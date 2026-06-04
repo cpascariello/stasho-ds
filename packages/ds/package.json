@@ -41,6 +41,7 @@
     "./combobox": "./src/components/combobox/combobox.tsx",
     "./slider": "./src/components/slider/slider.tsx",
     "./radio-group": "./src/components/radio-group/radio-group.tsx",
+    "./selectable-card": "./src/components/selectable-card/selectable-card.tsx",
     "./ui/skeleton": "./src/components/ui/skeleton.tsx",
     "./multi-select": "./src/components/multi-select/multi-select.tsx",
     "./pagination": "./src/components/pagination/pagination.tsx",

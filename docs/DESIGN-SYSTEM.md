@@ -24,6 +24,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
 | [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@stasho/ds/radio-group` |
+| [SelectableCard](#selectablecard) | Card-shaped picker (single/multi group + standalone action card) | `@stasho/ds/selectable-card` |
 | [Select](#select) | Dropdown selector with flat options prop | `@stasho/ds/select` |
 | [Skeleton](#skeleton) | Animated loading placeholder | `@stasho/ds/ui/skeleton` |
 | [Slider](#slider) | Range input, single or two-thumb mode | `@stasho/ds/slider` |
@@ -998,6 +999,45 @@ import { RadioGroup, RadioGroupItem } from "@stasho/ds/radio-group";
 **Animation:** Dot reveals with a clip-path circle transition (200ms, centered origin). Uses Radix `forceMount` to keep indicator in DOM.
 
 **Visual style:** Flat-slot chassis matching Checkbox — rest fill is `bg-background` (light) / `bg-surface` (dark) with 1px `border-edge` → `border-accent` on checked; indicator dot is `bg-accent`. Disabled flattens chassis (muted-sink) and dims the dot via descendant rule (`disabled:[&_span]:bg-foreground/30`) — `peer-disabled:` doesn't apply because Radix nests Indicator as a child of Item.
+
+### SelectableCard
+
+Card-shaped picker family. Three exports share one `selectableCardVariants` CVA (mirrors RadioGroup + RadioGroupItem, and the IconButton/Button cva-sharing precedent). The group is built on Radix UI `ToggleGroup`.
+
+```tsx
+import {
+  SelectableCardGroup,
+  SelectableCard,
+  ActionCard,
+} from "@stasho/ds/selectable-card";
+
+// Single-select group (radiogroup semantics)
+<SelectableCardGroup type="single" defaultValue="nextjs" className="grid gap-3 sm:grid-cols-2">
+  <SelectableCard value="nextjs">Next.js</SelectableCard>
+  <SelectableCard value="vite">Vite</SelectableCard>
+</SelectableCardGroup>
+
+// Multi-select group (toggle-button semantics)
+<SelectableCardGroup type="multiple" onValueChange={setTargets}>
+  <SelectableCard value="web">Web</SelectableCard>
+  <SelectableCard value="api">API</SelectableCard>
+</SelectableCardGroup>
+
+// Standalone action card (no selected state, no checkmark)
+<ActionCard onClick={advanceStep}>Import from GitHub</ActionCard>
+```
+
+**SelectableCardGroup props:** passthrough of Radix `ToggleGroup.Root` — `type` (`single`/`multiple`), `value`, `defaultValue`, `onValueChange`, `disabled`, `orientation` (default `horizontal`), `loop`, `className`. Controlled and uncontrolled both free. Forwards ref to `<div>`.
+
+**SelectableCard props:** `value` (required), `disabled`, `padding` (sm/md/lg, default md), `className`, `children`. Forwards ref to `<button>`. Renders a `data-state`-driven checkmark badge.
+
+**ActionCard props:** `ButtonHTMLAttributes` (`onClick`, `disabled`, …), `padding` (sm/md/lg, default md), `className`, `children`. `type` defaults to `"button"`. No `data-state` styling, no checkmark. Forwards ref to `<button>`.
+
+**Accessibility (Radix-native, mode-dependent):** `type="single"` items are a radiogroup (`role="radio"` / `aria-checked`); `type="multiple"` items are toggle buttons (`role="button"` / `aria-pressed`). Both expose `data-state="on"/"off"`, so the CVA selected styling and the checkmark are mode-agnostic. Roving tabindex, arrow-key navigation, Enter/Space activation, group- and item-level `disabled` all come from Radix. `ActionCard` is a native `<button>` whose accessible name comes from its visible text.
+
+**Selected affordance (SelectableCard only):** two signals on `data-[state=on]` — `border-accent` + faint `bg-accent/5` tint, plus a Phosphor `<Check weight="bold" />` badge (`absolute top-3 right-3`, `opacity-0` → `opacity-100`). `ActionCard` renders neither.
+
+**Visual style:** Baseline lifted from the app's former `MethodCard` so there's no regression — `rounded-2xl border border-edge bg-surface`, `hover:border-edge-hover`, `focus-visible:outline-accent`. Selected/focus highlight uses `accent` (cyan), the DS-standard interactive color, not the app's `primary-*` blue.
 
 ### Switch
 
