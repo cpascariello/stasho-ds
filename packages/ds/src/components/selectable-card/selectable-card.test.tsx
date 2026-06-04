@@ -45,40 +45,42 @@ describe("SelectableCardGroup (single)", () => {
       </SelectableCardGroup>,
     );
 
-  it("renders all cards as toggle buttons", () => {
+  // Radix ToggleGroup type="single" renders items as role="radio" / aria-checked
+  // (a radiogroup) — verified against radix-ui@1.4.3; mirrors radio-group.test.tsx.
+  it("renders all cards as radios", () => {
     renderSingle();
-    expect(screen.getAllByRole("button")).toHaveLength(3);
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
   });
 
-  it("selects defaultValue on mount (aria-pressed)", () => {
+  it("selects defaultValue on mount", () => {
     renderSingle({ defaultValue: "vite" });
-    const cards = screen.getAllByRole("button");
-    expect(cards[1]!).toHaveAttribute("aria-pressed", "true");
-    expect(cards[0]!).toHaveAttribute("aria-pressed", "false");
+    const cards = screen.getAllByRole("radio");
+    expect(cards[1]!).toBeChecked();
+    expect(cards[0]!).not.toBeChecked();
   });
 
   it("selects one and deselects siblings on click", async () => {
     const user = userEvent.setup();
     renderSingle({ defaultValue: "nextjs" });
-    const cards = screen.getAllByRole("button");
+    const cards = screen.getAllByRole("radio");
     await user.click(cards[1]!);
-    expect(cards[0]!).toHaveAttribute("aria-pressed", "false");
-    expect(cards[1]!).toHaveAttribute("aria-pressed", "true");
+    expect(cards[0]!).not.toBeChecked();
+    expect(cards[1]!).toBeChecked();
   });
 
   it("calls onValueChange with the chosen value", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     renderSingle({ onValueChange: onChange });
-    await user.click(screen.getAllByRole("button")[2]!);
+    await user.click(screen.getAllByRole("radio")[2]!);
     expect(onChange).toHaveBeenCalledWith("astro");
   });
 
-  it("shows the checkmark only on the selected card", () => {
+  it("shows data-state=on only on the selected card (drives the checkmark)", () => {
     renderSingle({ defaultValue: "nextjs" });
-    // Every SelectableCard renders a check element; visibility is driven by
-    // data-[state=on] on its closest button ancestor.
-    const cards = screen.getAllByRole("button");
+    // data-state is present in both modes; the checkmark visibility + cva
+    // selected styling key off it via the [[data-state=on]_&] selector.
+    const cards = screen.getAllByRole("radio");
     expect(cards[0]!).toHaveAttribute("data-state", "on");
     expect(cards[1]!).toHaveAttribute("data-state", "off");
   });
@@ -92,7 +94,7 @@ describe("SelectableCardGroup (single)", () => {
         </SelectableCard>
       </SelectableCardGroup>,
     );
-    const cards = screen.getAllByRole("button");
+    const cards = screen.getAllByRole("radio");
     expect(cards[0]!).not.toBeDisabled();
     expect(cards[1]!).toBeDisabled();
   });
