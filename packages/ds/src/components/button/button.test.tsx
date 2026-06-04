@@ -172,4 +172,29 @@ describe("Button", () => {
       ).toBeTruthy();
     });
   });
+
+  describe("link variant", () => {
+    it("does NOT render an LED on link variant", () => {
+      render(<Button variant="link">Refresh</Button>);
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led]")).toBeNull();
+    });
+
+    it("does NOT render the chase when loading on link variant", () => {
+      render(
+        <Button variant="link" loading>
+          Refresh
+        </Button>,
+      );
+      const button = screen.getByRole("button");
+      expect(button.querySelector("[data-led-chase]")).toBeNull();
+    });
+
+    it("applies link styling (text-primary, underline on hover)", () => {
+      render(<Button variant="link">Refresh</Button>);
+      const button = screen.getByRole("button");
+      expect(button.className).toContain("text-primary");
+      expect(button.className).toContain("hover:underline");
+    });
+  });
 });
