@@ -54,4 +54,53 @@ const ActionCard = forwardRef<HTMLButtonElement, ActionCardProps>(
 );
 ActionCard.displayName = "ActionCard";
 
-export { ActionCard, selectableCardVariants, type ActionCardProps };
+type SelectableCardGroupProps = ComponentPropsWithoutRef<
+  typeof ToggleGroupPrimitive.Root
+>;
+
+const SelectableCardGroup = forwardRef<
+  HTMLDivElement,
+  SelectableCardGroupProps
+>(({ className, ...rest }, ref) => (
+  <ToggleGroupPrimitive.Root ref={ref} className={className} {...rest} />
+));
+SelectableCardGroup.displayName = "SelectableCardGroup";
+
+type SelectableCardProps = ComponentPropsWithoutRef<
+  typeof ToggleGroupPrimitive.Item
+> &
+  CardPadding;
+
+const SelectableCard = forwardRef<HTMLButtonElement, SelectableCardProps>(
+  ({ padding, className, children, ...rest }, ref) => (
+    <ToggleGroupPrimitive.Item
+      ref={ref}
+      className={cn(selectableCardVariants({ padding }), className)}
+      {...rest}
+    >
+      <span
+        data-testid="selectable-card-check"
+        aria-hidden="true"
+        className={cn(
+          "absolute right-3 top-3 text-accent",
+          "opacity-0 transition-opacity",
+          "[[data-state=on]_&]:opacity-100",
+        )}
+      >
+        <Check weight="bold" />
+      </span>
+      {children}
+    </ToggleGroupPrimitive.Item>
+  ),
+);
+SelectableCard.displayName = "SelectableCard";
+
+export {
+  ActionCard,
+  SelectableCard,
+  SelectableCardGroup,
+  selectableCardVariants,
+  type ActionCardProps,
+  type SelectableCardProps,
+  type SelectableCardGroupProps,
+};
