@@ -11,7 +11,7 @@ import { cn } from "@ac/lib/cn";
 
 const selectableCardVariants = cva(
   [
-    "relative rounded-2xl border border-edge bg-surface text-left",
+    "relative rounded-lg border border-edge bg-surface text-left",
     "transition-[colors,box-shadow]",
     "hover:border-edge-hover",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",

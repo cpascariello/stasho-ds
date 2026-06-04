@@ -128,3 +128,25 @@ describe("SelectableCardGroup (multiple)", () => {
     expect(onChange).toHaveBeenLastCalledWith(["a", "b"]);
   });
 });
+
+// SKIN-PRINCIPLES.md radius table: "Cards earn 2px" → rounded-lg, matching the
+// DS Card. Lock it so the card never drifts back to a bubble radius.
+describe("skin compliance (card radius)", () => {
+  it("ActionCard uses rounded-lg, not rounded-2xl", () => {
+    render(<ActionCard>Go</ActionCard>);
+    const cls = screen.getByRole("button", { name: "Go" }).className;
+    expect(cls).toContain("rounded-lg");
+    expect(cls).not.toContain("rounded-2xl");
+  });
+
+  it("SelectableCard uses rounded-lg, not rounded-2xl", () => {
+    render(
+      <SelectableCardGroup type="single">
+        <SelectableCard value="a">A</SelectableCard>
+      </SelectableCardGroup>,
+    );
+    const cls = screen.getByRole("radio").className;
+    expect(cls).toContain("rounded-lg");
+    expect(cls).not.toContain("rounded-2xl");
+  });
+});
