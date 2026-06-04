@@ -101,6 +101,14 @@ const buttonVariants = cva(
           "dark:hover:bg-white/[0.04] dark:hover:text-white",
           "dark:disabled:text-white/30 dark:disabled:bg-transparent",
         ].join(" "),
+        link: [
+          // chrome-less inline text action: text-primary, underline on hover, no LED, no padding (zeroed per size below)
+          "bg-transparent font-normal underline-offset-2 text-primary",
+          "hover:underline active:translate-y-0",
+          "dark:text-accent",
+          "disabled:text-foreground/30 disabled:no-underline disabled:hover:no-underline",
+          "dark:disabled:text-white/30",
+        ].join(" "),
       },
       size: {
         xs: "py-[6px] px-3 text-[11px] gap-1.5",
@@ -115,6 +123,10 @@ const buttonVariants = cva(
       { variant: "outline", size: "sm", class: "py-[6px] px-[13px]" },
       { variant: "outline", size: "md", class: "py-[8px] px-[17px]" },
       { variant: "outline", size: "lg", class: "py-[12px] px-[23px]" },
+      { variant: "link", size: "xs", class: "p-0" },
+      { variant: "link", size: "sm", class: "p-0" },
+      { variant: "link", size: "md", class: "p-0" },
+      { variant: "link", size: "lg", class: "p-0" },
     ],
     defaultVariants: {
       variant: "primary",
@@ -152,6 +164,8 @@ const ledColorClass: Record<Variant, string> = {
   outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
   // ghost: LED is never rendered for ghost, so this entry is a sentinel.
   ghost: "",
+  // link: LED is never rendered for link, so this entry is a sentinel.
+  link: "",
 };
 
 // iconLeft glow treatment per variant — applied to the wrapper span.
@@ -163,6 +177,7 @@ const iconGlowClass: Record<Variant, string> = {
   success: "text-success-foreground",
   outline: "text-primary dark:text-accent [filter:drop-shadow(0_0_4px_currentColor)]",
   ghost: "text-foreground/60 dark:text-white/60",
+  link: "text-primary dark:text-accent",
 };
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
@@ -199,8 +214,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     const leadingSlot = (() => {
-      // Loading replaces everything in the leading slot (except on ghost).
-      if (loading && v !== "ghost") {
+      // Loading replaces everything in the leading slot (except on ghost/link).
+      if (loading && v !== "ghost" && v !== "link") {
         return (
           <span
             data-led-chase
@@ -241,8 +256,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         );
       }
-      // Resting state with static LED (non-ghost variants).
-      if (v !== "ghost") {
+      // Resting state with static LED (non-ghost/link variants).
+      if (v !== "ghost" && v !== "link") {
         return (
           <span
             data-led
