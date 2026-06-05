@@ -8,6 +8,12 @@ type SortDirection = "asc" | "desc";
 
 export type Column<T> = {
   header: string;
+  /**
+   * Stable React key for the column. Defaults to `header`. Set this when two
+   * columns share a header (e.g. multiple header-less icon/action columns,
+   * where `header` is `""`) so cell keys don't collide.
+   */
+  id?: string;
   accessor: (row: T) => ReactNode;
   sortable?: boolean;
   sortValue?: (row: T) => string | number;
@@ -163,7 +169,7 @@ export function Table<T>({
           <tr className="bg-muted/50">
             {columns.map((col, i) => (
               <th
-                key={col.header}
+                key={col.id ?? col.header}
                 className={cn(
                   "px-4 py-3 font-mono font-normal uppercase tracking-widest text-[11px] text-muted-foreground",
                   alignClass[col.align ?? "left"],
@@ -241,7 +247,7 @@ export function Table<T>({
               >
                 {columns.map((col) => (
                   <td
-                    key={col.header}
+                    key={col.id ?? col.header}
                     className={cn(
                       "px-4 py-3 text-sm",
                       alignClass[col.align ?? "left"],
