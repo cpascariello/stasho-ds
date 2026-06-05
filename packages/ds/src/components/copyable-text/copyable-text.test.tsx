@@ -153,4 +153,78 @@ describe("CopyableText", () => {
       expect(ref.current).toBeInstanceOf(HTMLElement);
     });
   });
+
+  describe("fluid mode", () => {
+    it("renders head and tail as separate text nodes", () => {
+      render(<CopyableText text={LONG_TEXT} fluid endChars={6} />);
+      expect(
+        screen.getByText("0x1234567890abcdef1234567890abcdef12"),
+      ).toBeTruthy();
+      expect(screen.getByText("345678")).toBeTruthy();
+    });
+
+    it("shows the full untruncated string (no ellipsis)", () => {
+      const { container } = render(
+        <CopyableText text={LONG_TEXT} fluid endChars={6} />,
+      );
+      expect(container.textContent).toBe(LONG_TEXT);
+      expect(container.textContent).not.toContain("...");
+    });
+
+    it("uses flex + w-full on the wrapper", () => {
+      const { container } = render(<CopyableText text={LONG_TEXT} fluid />);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("w-full");
+      expect(cls).not.toContain("inline-flex");
+    });
+
+    it("uses inline-flex on the wrapper by default", () => {
+      const { container } = render(<CopyableText text={LONG_TEXT} />);
+      expect(container.firstElementChild?.className).toContain("inline-flex");
+    });
+
+    it("sets title to the full text in fluid mode", () => {
+      render(<CopyableText text={LONG_TEXT} fluid />);
+      expect(screen.getByTitle(LONG_TEXT)).toBeTruthy();
+    });
+
+    it("does not set a title in fixed mode", () => {
+      render(<CopyableText text={LONG_TEXT} />);
+      expect(screen.queryByTitle(LONG_TEXT)).toBeNull();
+    });
+
+    it("renders full text without splitting when text.length <= endChars", () => {
+      render(<CopyableText text="0x1a2b" fluid endChars={10} />);
+      expect(screen.getByText("0x1a2b")).toBeTruthy();
+    });
+
+    it("copies the full text in fluid mode", async () => {
+      const user = userEvent.setup();
+      render(<CopyableText text={LONG_TEXT} fluid />);
+      const spy = vi
+        .spyOn(navigator.clipboard, "writeText")
+        .mockResolvedValue(undefined);
+      await user.click(
+        screen.getByRole("button", { name: "Copy to clipboard" }),
+      );
+      expect(spy).toHaveBeenCalledWith(LONG_TEXT);
+    });
+
+    it("wraps the head/tail region in a link when fluid + external href", () => {
+      render(
+        <CopyableText
+          text={LONG_TEXT}
+          fluid
+          endChars={6}
+          href="https://example.com"
+        />,
+      );
+      const textLink = screen
+        .getAllByRole("link")
+        .find((l) => l.textContent === LONG_TEXT);
+      expect(textLink).toBeTruthy();
+      expect(textLink?.getAttribute("href")).toBe("https://example.com");
+      expect(textLink?.getAttribute("target")).toBe("_blank");
+    });
+  });
 });
