@@ -29,6 +29,26 @@ export default function CopyableTextPage() {
         </div>
       </DemoSection>
 
+      <DemoSection title="Fluid (width-aware)">
+        <div className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            Drag the right edge of each box to resize. Shows the full string when
+            there&apos;s room; truncates (fixed tail, flexing head) as it narrows.
+          </p>
+          <div className="resize-x overflow-hidden border border-edge bg-surface p-3 min-w-[160px] max-w-full w-[420px]">
+            <CopyableText text={HASH} fluid endChars={6} />
+          </div>
+          <div className="resize-x overflow-hidden border border-edge bg-surface p-3 min-w-[160px] max-w-full w-[300px]">
+            <CopyableText
+              text="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              fluid
+              endChars={6}
+              href="https://etherscan.io/address/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            />
+          </div>
+        </div>
+      </DemoSection>
+
       <DemoSection title="Custom Truncation">
         <div className="space-y-3">
           <div>
