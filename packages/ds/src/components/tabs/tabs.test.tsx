@@ -343,7 +343,7 @@ describe("Tabs size prop", () => {
     const list = screen.getByRole("tablist");
     expect(list).toHaveAttribute("data-variant", "pill");
     expect(list).toHaveAttribute("data-size", "sm");
-    expect(list.className).toContain("rounded-[2px]");
+    expect(list.className).toContain("rounded-sm");
   });
 
   it("combines size='sm' with overflow='collapse'", () => {
@@ -393,7 +393,7 @@ describe("Tabs pill variant", () => {
     renderPillTabs();
     const list = screen.getByRole("tablist");
     expect(list.className).not.toContain("border-b");
-    expect(list.className).toContain("rounded-[2px]");
+    expect(list.className).toContain("rounded-sm");
   });
 
   it("renders tablist with group class for pill variant", () => {
@@ -426,7 +426,7 @@ describe("Tabs pill variant", () => {
     );
     const list = screen.getByRole("tablist");
     expect(list).toHaveClass("custom-pill");
-    expect(list).toHaveClass("rounded-[2px]");
+    expect(list).toHaveClass("rounded-sm");
   });
 });
 

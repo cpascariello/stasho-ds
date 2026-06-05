@@ -115,7 +115,7 @@ const StepperIndicator = forwardRef<HTMLDivElement, StepperIndicatorProps>(
         ref={ref}
         data-state={state}
         className={cn(
-          "relative flex size-8 items-center justify-center rounded-[2px]",
+          "relative flex size-8 items-center justify-center rounded-sm",
           "font-sans text-sm font-semibold",
           "border border-edge text-foreground/45 bg-transparent",
           "data-[state=active]:border-accent data-[state=active]:text-accent-500 dark:data-[state=active]:text-accent",

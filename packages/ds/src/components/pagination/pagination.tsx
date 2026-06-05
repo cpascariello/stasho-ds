@@ -80,7 +80,7 @@ type PaginationProps = Omit<HTMLAttributes<HTMLElement>, "onChange"> & {
 
 const NAV_BUTTON = [
   "inline-flex items-center justify-center",
-  "size-8 rounded-none",
+  "size-8 rounded-sm",
   "text-foreground/60 hover:text-accent-500 dark:hover:text-accent",
   "transition-colors cursor-pointer",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
@@ -90,7 +90,7 @@ const NAV_DISABLED = "text-foreground/30 cursor-not-allowed";
 
 const PAGE_BUTTON = [
   "inline-flex items-center justify-center",
-  "size-[26px] rounded-none",
+  "size-[26px] rounded-sm",
   "font-mono text-sm",
   "text-foreground/60 hover:text-accent-500 dark:hover:text-accent",
   "transition-colors cursor-pointer",
