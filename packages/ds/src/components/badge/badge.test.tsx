@@ -221,9 +221,9 @@ describe("Badge", () => {
       expect(container.firstElementChild?.textContent).toBe("active");
     });
 
-    it("applies rounded-[2px]", () => {
+    it("applies rounded-sm", () => {
       const { container } = render(<Badge>Label</Badge>);
-      expect(container.firstElementChild?.className).toContain("rounded-[2px]");
+      expect(container.firstElementChild?.className).toContain("rounded-sm");
     });
   });
 

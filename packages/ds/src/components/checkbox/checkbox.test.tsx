@@ -87,10 +87,10 @@ describe("Checkbox", () => {
     expect(screen.getByRole("checkbox").className).toContain("size-5");
   });
 
-  it("all sizes carry rounded-none", () => {
+  it("all sizes carry rounded-sm", () => {
     for (const size of ["xs", "sm", "md"] as const) {
       const { unmount } = render(<Checkbox size={size} />);
-      expect(screen.getByRole("checkbox").className).toContain("rounded-none");
+      expect(screen.getByRole("checkbox").className).toContain("rounded-sm");
       unmount();
     }
   });

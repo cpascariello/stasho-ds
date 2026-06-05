@@ -26,9 +26,9 @@ const checkboxVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-3.5 rounded-none",
-        sm: "size-4 rounded-none",
-        md: "size-5 rounded-none",
+        xs: "size-3.5 rounded-sm",
+        sm: "size-4 rounded-sm",
+        md: "size-5 rounded-sm",
       },
     },
     defaultVariants: {

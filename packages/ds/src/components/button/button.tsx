@@ -12,7 +12,7 @@ import { cn } from "@ac/lib/cn";
 const buttonVariants = cva(
   [
     "inline-flex items-center font-body font-bold leading-none",
-    "rounded-none border-0 text-white",
+    "rounded-sm border-0 text-white",
     "transition-[background,box-shadow,transform] duration-150 ease-out",
     "active:translate-y-px",
     "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
