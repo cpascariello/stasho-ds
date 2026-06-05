@@ -82,13 +82,13 @@ const buttonVariants = cva(
           "dark:disabled:[box-shadow:inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.3)]",
         ].join(" "),
         outline: [
-          // light (base): primary-blue text + border, flat chassis when disabled
-          "bg-transparent text-primary border border-[rgba(0,64,255,0.55)]",
-          "hover:border-primary",
+          // light (base): neutral foreground text + border (white would be invisible on a light surface), flat chassis when disabled
+          "bg-transparent text-foreground border border-[rgba(20,15,40,0.25)]",
+          "hover:border-foreground",
           "disabled:text-foreground/30 disabled:border-[rgba(20,15,40,0.15)] disabled:bg-muted",
-          // dark (overrides — current shipped behavior preserved)
-          "dark:text-accent dark:border-[rgba(0,225,250,0.4)]",
-          "dark:hover:border-accent",
+          // dark (overrides): white chrome — outline is neutral, NOT accent (supersedes the outline half of Decision #82)
+          "dark:text-white dark:border-white/40",
+          "dark:hover:border-white",
           "dark:disabled:text-white/30 dark:disabled:border-white/10 dark:disabled:bg-transparent",
         ].join(" "),
         ghost: [
@@ -161,7 +161,7 @@ const ledColorClass: Record<Variant, string> = {
   destructive: "bg-white text-white [box-shadow:0_0_8px_currentColor]",
   warning: "bg-warning-foreground text-warning-foreground",
   success: "bg-success-foreground text-success-foreground",
-  outline: "bg-primary/35 text-primary dark:bg-accent/50 dark:text-accent",
+  outline: "bg-foreground/35 text-foreground dark:bg-white/50 dark:text-white",
   // ghost: LED is never rendered for ghost, so this entry is a sentinel.
   ghost: "",
   // link: LED is never rendered for link, so this entry is a sentinel.
@@ -175,7 +175,7 @@ const iconGlowClass: Record<Variant, string> = {
   destructive: "text-white",
   warning: "text-warning-foreground",
   success: "text-success-foreground",
-  outline: "text-primary dark:text-accent [filter:drop-shadow(0_0_4px_currentColor)]",
+  outline: "text-foreground dark:text-white",
   ghost: "text-foreground/60 dark:text-white/60",
   link: "text-primary dark:text-accent",
 };

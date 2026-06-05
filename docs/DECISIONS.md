@@ -18,6 +18,17 @@ Each entry includes:
 
 ---
 
+## Decision #99 — 2026-06-05
+
+**Context:** The consuming app's project-Overview redesign flagged that the cyan Button `outline` variant reads as "blue" against the deep-black canvas and competes with the brand-blue Primary CTA. The operator chose to pull Button Outline out of the accent system entirely — neutral white chrome — reversing the outline half of Decision #82.
+**Decision:** Button `outline` becomes neutral chrome in both modes. **Dark:** `text-white` + `border-white/40` (hover `border-white`); the resting LED disc and the iconLeft slot drop accent → white (`ledColorClass.outline` / `iconGlowClass.outline`), and the outline icon drops its cyan `drop-shadow` glow (matches § 5 "Outline and ghost drop both the halo AND the LED glow"). **Light:** `text-foreground` + `border-[rgba(20,15,40,0.25)]` (hover `border-foreground`) — white would be invisible on a light surface. Links, focus ring, active states keep `--accent` (unchanged). SKIN-PRINCIPLES.md updated: § Color role map (accent no longer lists "outline border") and the Same-hex rule's outline-chrome example (now #99, was #82).
+**Rationale:** Aligns outline with the dominant "no accent-tinted chrome — chrome is white-at-low-opacity, accents only where they carry meaning" rule (§ Geometry / § Chrome). An outline button is interactive, but its "live" signal is still carried by the cyan focus ring; the border + text are chrome. Removing the outline carve-out tightens the accent role map and keeps the single "this is live" cyan signal undiluted.
+**Alternatives considered:** (1) White chrome but keep a cyan LED pip (outline retained in the LED layer only) — rejected by the operator for a fully-neutral outline. (2) Keep outline cyan (status quo, #82) — rejected. (3) App-level override in the consumer — rejected; banned by the consumer's "all UI from the DS" rule, so the change belongs in the DS.
+**Supersedes:** the outline-chrome half of Decision #82 (the `text-accent`/`border-accent` Button-Outline carve-out). The rest of #82 (focus ring `outline-2 outline-accent`, disabled flatten) stands.
+**Files:** `packages/ds/src/components/button/button.tsx` (`outline` variant + `ledColorClass.outline` + `iconGlowClass.outline`); `docs/SKIN-PRINCIPLES.md` (§ Color role map + Same-hex rule example).
+
+---
+
 ## Decision #98 — 2026-06-05
 
 **Context:** `CopyableText` only did static, character-count middle truncation in an `inline-flex` wrapper that shrink-wrapped to the fixed string. We wanted a "long" mode that reacts to its container — full hash/address when there's room, truncated as the box narrows.
