@@ -129,7 +129,7 @@ describe("SelectableCardGroup (multiple)", () => {
   });
 });
 
-// SKIN-PRINCIPLES.md radius table: "Cards earn 2px" → rounded-lg, matching the
+// SKIN-PRINCIPLES.md radius table: "Cards earn 6px" → rounded-lg, matching the
 // DS Card. Lock it so the card never drifts back to a bubble radius.
 describe("skin compliance (card radius)", () => {
   it("ActionCard uses rounded-lg, not rounded-2xl", () => {
