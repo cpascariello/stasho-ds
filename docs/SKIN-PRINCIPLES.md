@@ -32,8 +32,8 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 ### Same-hex rule
 **Rule:** Accent tokens (`--primary`, `--accent`, `--success`, `--warning`, `--error`) hold the same hex value in `:root` and `.theme-dark`.
 **Why:** Saturated colors at mid-to-low lightness read identically across modes (Radix / Geist convention). Drift between dark and light variants creates a system that feels like two skins glued together.
-**How:** Only surface/background/foreground tokens differ between modes. Never create `--primary-dark` / `--primary-light` siblings. The rule applies to **filled chassis fills and glows** — Primary's chassis uses the same gradient (`primary-400 → primary-500`) in both modes, and saturated semantic chassis hold their hex. It does NOT bind **outline chrome** (border + text), which can shift to a contrast-paired accent in light mode (e.g., Button Outline uses `text-accent`/`border-accent` in dark mode but `text-primary`/`border-primary` in light, per Decision #82). For body text where AA contrast against light surfaces is a risk, use a scale step (`text-primary-700 dark:text-primary-300`) rather than a different hex.
-**Source:** Decisions #77, #78, #82.
+**How:** Only surface/background/foreground tokens differ between modes. Never create `--primary-dark` / `--primary-light` siblings. The rule applies to **filled chassis fills and glows** — Primary's chassis uses the same gradient (`primary-400 → primary-500`) in both modes, and saturated semantic chassis hold their hex. It does NOT bind **outline chrome** (border + text), which can differ between modes (e.g., Button Outline uses `text-white`/`border-white/40` in dark mode but neutral `text-foreground`/`border-[rgba(20,15,40,0.25)]` in light, per Decision #99 — previously a contrast-paired accent per Decision #82). For body text where AA contrast against light surfaces is a risk, use a scale step (`text-primary-700 dark:text-primary-300`) rather than a different hex.
+**Source:** Decisions #77, #78, #82, #99.
 
 ### Semantic color mapping
 **Rule:** Each accent has one job. Don't redirect them.
@@ -41,7 +41,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 | Token | Role |
 |---|---|
 | `--primary` `#0040FF` | The brand action. The thing the user came to do. |
-| `--accent` `#00E1FA` | "This is live / active / listening." The signal pulse. Used as LED, focus ring, link, and outline border. |
+| `--accent` `#00E1FA` | "This is live / active / listening." The signal pulse. Used as LED, focus ring, and link (Button Outline chrome is neutral white, not accent, as of Decision #99). |
 | `--error` `#FF3D00` | Destructive / abort / down. The one heat note in an otherwise cold palette. |
 | `--warning` `#ffc53d` | Caution. Pending consequences. |
 | `--success` `#2BD58E` | Confirm / complete / nominal. |
