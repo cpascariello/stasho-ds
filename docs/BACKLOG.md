@@ -15,6 +15,12 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-06-05 — CopyableText fluid: centered-middle + DS Tooltip variants
+
+**Source:** Deferred while implementing fluid CopyableText (Decision #98)
+**Description:** Two ideas considered and deferred for the `fluid` mode: (1) a JS-measured *centered* middle truncation that keeps the ellipsis dead-center and fills width exactly (accurate with the monospace face, but needs a `ResizeObserver`); (2) a DS Tooltip reveal variant in place of the native `title` (on-brand, instant, styled, but pulls in Radix Tooltip + a provider requirement). Revisit if a callsite needs centered truncation or a styled hover reveal.
+**Priority:** Low
+
 ### 2026-03-01 — Theme persistence across page reloads
 
 **Source:** Identified during accessibility audit

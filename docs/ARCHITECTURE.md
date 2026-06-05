@@ -588,6 +588,15 @@ Copy button uses a two-layer stack:
 
 Hover state uses `bg-foreground/10` for visibility in both light and dark themes.
 
+### CopyableText fluid truncation
+
+The `fluid` prop swaps static truncation for width-aware truncation using a **pure-CSS two-span flexbox** — no measurement, no `ResizeObserver`. This was chosen over a JS-measured *centered* middle truncation (which the monospace face would make accurate) specifically to avoid resize listeners (Decision #98).
+
+- `fluid` is a cva variant that toggles the wrapper between `inline-flex` (false) and `flex w-full` (true); `inline-flex` was moved out of the cva base so exactly one display class is emitted per render (no `tailwind-merge` conflict).
+- `renderTextContent(text, fluid, startChars, endChars)` branches: fixed → `truncateMiddle`; fluid → a head span (`flex-initial min-w-0 overflow-hidden text-ellipsis whitespace-nowrap`, holding `text.slice(0, -endChars)`) + a pinned tail span (`flex-none whitespace-nowrap`, holding `text.slice(-endChars)`). When `text.length <= endChars` it returns the full text with no split.
+- The text wrapper (span, or the `<a>` when `href` is set) gets `flex min-w-0 flex-1` in fluid mode so the head can shrink and ellipsize; the copy/link buttons carry `shrink-0`.
+- `title={text}` is set on the text element **only** in fluid mode, and **unconditionally** — pure CSS can't detect whether truncation actually occurred, so the title always carries the full value (a harmless echo when the string fully fits).
+
 ### Alert
 
 **Alert `alert-bg-*` classes:** The four variant backgrounds are CSS classes in `tokens.css` rather than Tailwind utilities because the gradient stops use `oklch(from var(--token) l c h / opacity)` syntax which Tailwind's scanner cannot extract from class strings. Each class renders a 180deg gradient layered on `var(--background)` — 18% opacity at the top, 6% at the baseline. The single gradient works in both themes because the underlying `--background` swaps per theme; no `.theme-dark` override block is needed. To add a new variant: add the class in `tokens.css` and add a key to the component's `VARIANT_BG_CLASS` map.
