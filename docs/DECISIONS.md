@@ -18,6 +18,20 @@ Each entry includes:
 
 ---
 
+## Decision #100 — 2026-06-05
+
+**Context:** The sharp 0px corner was the core of Abyssal Void's brutalist geometry (§ 1 Identity, § 4 `0/0/2/4` ladder). The operator decided to retire it — "4px minimum, hard floor — I was wrong about the 0px" — and, in the same pass, adopt the softer 1px hairline from the brainstorm mockups as the DS default and unify the three card surfaces (Card, SelectableCard, Dialog) under one surface language.
+**Decision:** Three connected moves.
+1. **Radius hard floor `4 / 6 / 8`.** Nothing is sharper than 4px. Tokens become `--radius-sm`/`--radius-md` = `4px`, `--radius-lg` = `6px` (object surfaces), `--radius-xl` = `8px` (modals). Every functional surface that was `rounded-none` (0) or `rounded-[2px]` (2) is swept to `rounded-sm` (4): button, input, textarea, select/combobox/multiselect (triggers + menus + items + chips + indicators), badge, checkbox, switch (track + thumb), tabs (pill + list + indicator + overflow menu/items), pagination, stepper, alert, tooltip, slider tooltip, copyable-text buttons, dialog close, skeleton. Cards (`rounded-lg`) and Dialog (`rounded-xl`) follow the token automatically. The `rounded-full` round-by-design set is unchanged (StatusDot, Slider thumb/track/range, RadioGroup item, ProgressBar track/fill, Button/Loader LED dots).
+2. **Softer `--edge`, one concept across modes.** Dark `rgba(255,255,255,0.10)` / hover `0.20` (was `0.16` / `0.24`). Light flips from solid `oklch(0.87…)` / `oklch(0.80…)` to translucent `rgba(0,0,0,0.14)` / hover `0.22`, so `--edge` means "foreground at low alpha" in both modes. 1px width unchanged.
+3. **Unified card surface + Dialog hairline.** The card surface is one language: `bg-surface` + 1px `border-edge` + tier radius. Dialog gains `border border-edge` (at radius 8) — it is no longer border-less.
+**Rationale:** The operator judged the sharp corner too aggressive; a 4px floor keeps the system restrained ("instrument," not "rounded app") while dropping the brutalist edge. The `4/6/8` "tight" ladder (+2 per tier) was chosen over `4/8/12` (even) and `4/8/16` (generous) for the most restrained tier separation. Floating non-modal chrome (dropdowns, tooltips, toasts) sits at the 4px control floor, not the 6px object tier — radius tracks role, not elevation, matching the prior precedent where popovers shared their trigger's radius. The softer edge matches the approved mockups; making light translucent removes the one place `--edge` meant two unrelated things.
+**Alternatives considered:** (A) Soft floor keeping 0px on functional controls (retire only the 2px step) — rejected; operator wanted 0px gone entirely. (B) `4/8/12` or `4/8/16` ladders — rejected as too "rounded app." (C) Floating surfaces at the 6px object tier — rejected; keeps the dropdown↔trigger seam continuous. (D) Dialog stays border-less (Decision #87) — rejected; it left the modal as the lone exception to the unified surface.
+**Supersedes:** the `0/0/2/4` ladder (Decision #78 geometry clause); the border-less-Dialog rule (Decision #87); the per-component `rounded-[2px]` placements (Decisions #86 Tabs pill, #88 Switch/Stepper, #90 Badge, #91 MultiSelect chips) now collapse into the single `rounded-sm` floor. The `rounded-full` round-by-design reservations (#89 Slider thumb, #90 RadioGroup item) stand.
+**Files:** `packages/ds/src/styles/tokens.css` (radius scale + light/dark `--edge` + pill safelist); ~18 swept components; `packages/ds/src/components/dialog/dialog.tsx` (hairline); `docs/SKIN-PRINCIPLES.md` (§ 1 + § 4), `docs/DESIGN-SYSTEM.md`, `docs/ARCHITECTURE.md`.
+
+---
+
 ## Decision #99 — 2026-06-05
 
 **Context:** The consuming app's project-Overview redesign flagged that the cyan Button `outline` variant reads as "blue" against the deep-black canvas and competes with the brand-blue Primary CTA. The operator chose to pull Button Outline out of the accent system entirely — neutral white chrome — reversing the outline half of Decision #82.

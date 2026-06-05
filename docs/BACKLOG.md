@@ -15,6 +15,12 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-06-05 — Interactive Card variant (Card ↔ ActionCard convergence)
+
+**Source:** Deferred while unifying the card family (Decision #100). The radius-floor + unification work scoped out card *anatomy*.
+**Description:** Give plain `Card` an optional clickable/interactive mode (hover `border-edge-hover` + `focus-visible:outline-accent`, optional elevation on hover) so a static Card and a clickable `ActionCard` converge on one component instead of two. Also covers the broader card-anatomy ideas (composition slots: CardHeader/Content/Footer, a media slot). Note: the CLAUDE.md SelectableCard `rounded-2xl` doc drift was resolved by Decision #100 (code + docs now `rounded-lg` = 6px).
+**Priority:** Low
+
 ### 2026-06-05 — CopyableText fluid: centered-middle + DS Tooltip variants
 
 **Source:** Deferred while implementing fluid CopyableText (Decision #98)
