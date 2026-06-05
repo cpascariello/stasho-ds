@@ -211,7 +211,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
             "motion-reduce:transition-none",
             isPill
               ? cn(
-                  "relative z-10 rounded-[2px]",
+                  "relative z-10 rounded-sm",
                   isSmall ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm",
                 )
               : isSmall
@@ -227,7 +227,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
         <DropdownMenu.Content
           className={cn(
             "z-50 min-w-[8rem]",
-            "rounded-none bg-popover-bg border border-popover-border shadow",
+            "rounded-sm bg-popover-bg border border-popover-border shadow",
             "p-1",
             "motion-reduce:transition-none",
           )}
@@ -252,7 +252,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 });
               }}
               className={cn(
-                "flex w-full items-center rounded-none px-3 py-2",
+                "flex w-full items-center rounded-sm px-3 py-2",
                 "text-sm text-foreground cursor-pointer select-none",
                 "outline-none",
                 "hover:bg-muted focus-visible:bg-muted",
@@ -360,7 +360,7 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
           "group relative flex",
           isPill
             ? [
-                "rounded-[2px] bg-muted border border-edge",
+                "rounded-sm bg-muted border border-edge",
                 isSmall ? "p-0.5" : "p-1",
                 !isCollapse && "inline-flex",
               ]
@@ -387,7 +387,7 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
             isPill
               ? [
                   isSmall ? "inset-y-0.5" : "inset-y-1",
-                  "rounded-[2px] bg-accent/15",
+                  "rounded-sm bg-accent/15",
                   ready ? "opacity-100" : "opacity-0",
                   ready
                     ? "transition-[transform,width,opacity] duration-200 ease-out"
@@ -435,7 +435,7 @@ const TabsTrigger = forwardRef<
         "group-data-[size=sm]:text-sm group-data-[size=sm]:gap-1.5",
         // Pill variant overrides (via group data attribute on TabsList)
         "group-data-[variant=pill]:relative group-data-[variant=pill]:z-10",
-        "group-data-[variant=pill]:rounded-[2px]",
+        "group-data-[variant=pill]:rounded-sm",
         "group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5",
         "group-data-[variant=pill]:text-sm",
         "group-data-[variant=pill]:text-muted-foreground",

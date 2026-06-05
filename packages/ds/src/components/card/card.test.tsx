@@ -48,7 +48,7 @@ describe("Card", () => {
     expect(cls).not.toContain("border-edge");
   });
 
-  it("applies rounded-lg (2px under Abyssal scale)", () => {
+  it("applies rounded-lg (6px under Abyssal scale)", () => {
     const { container } = render(<Card>Test</Card>);
     expect(container.firstElementChild?.className).toContain("rounded-lg");
   });

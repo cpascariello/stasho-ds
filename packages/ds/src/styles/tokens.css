@@ -119,11 +119,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Departure Mono", ui-monospace, monospace;
 
-  /* Radius vocabulary (Abyssal Void — 0/0/2/4, full reserved for round-by-design) */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 2px;
-  --radius-xl: 4px;
+  /* Radius vocabulary (Abyssal Void — 4/6/8 hard floor, full reserved for round-by-design) */
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
 }
 
 /* ──────────────────────────────────────────────
@@ -148,8 +148,8 @@
   --muted-foreground: oklch(0.55 0.014 270);
   --surface: oklch(0.94 0.009 270);
   --surface-foreground: oklch(0.22 0.015 270);
-  --edge: oklch(0.87 0.013 270);
-  --edge-hover: oklch(0.80 0.015 270);
+  --edge: rgba(0, 0, 0, 0.14);
+  --edge-hover: rgba(0, 0, 0, 0.22);
   --popover-bg: var(--surface);
   --popover-border: var(--edge);
 
@@ -180,8 +180,8 @@
   --muted-foreground: oklch(0.62 0.012 273);
   --surface: oklch(0.18 0.005 273);
   --surface-foreground: #f3f3f3;
-  --edge: rgba(255, 255, 255, 0.16);
-  --edge-hover: rgba(255, 255, 255, 0.24);
+  --edge: rgba(255, 255, 255, 0.10);
+  --edge-hover: rgba(255, 255, 255, 0.20);
   --popover-bg: var(--surface);
   --popover-border: var(--edge);
 
@@ -223,7 +223,7 @@
    detected from source files. This directive feeds
    them directly into the candidate list.
    ────────────────────────────────────────────── */
-@source inline("group-data-[variant=pill]:relative group-data-[variant=pill]:z-10 group-data-[variant=pill]:rounded-[2px] group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5 group-data-[variant=pill]:text-sm group-data-[variant=pill]:text-muted-foreground group-data-[variant=pill]:translate-y-0 group-data-[variant=pill]:hover:text-accent-500 dark:group-data-[variant=pill]:hover:text-accent group-data-[variant=pill]:data-[state=active]:text-accent-500 dark:group-data-[variant=pill]:data-[state=active]:text-accent group-data-[variant=pill]:data-[state=active]:translate-y-0");
+@source inline("group-data-[variant=pill]:relative group-data-[variant=pill]:z-10 group-data-[variant=pill]:rounded-sm group-data-[variant=pill]:px-5 group-data-[variant=pill]:py-1.5 group-data-[variant=pill]:text-sm group-data-[variant=pill]:text-muted-foreground group-data-[variant=pill]:translate-y-0 group-data-[variant=pill]:hover:text-accent-500 dark:group-data-[variant=pill]:hover:text-accent group-data-[variant=pill]:data-[state=active]:text-accent-500 dark:group-data-[variant=pill]:data-[state=active]:text-accent group-data-[variant=pill]:data-[state=active]:translate-y-0");
 
 /* ──────────────────────────────────────────────
    Utilities: gradient border effects

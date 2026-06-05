@@ -218,9 +218,9 @@ If either answer is "no," promote the token:
 
 ### Surface Radius Vocabulary
 
-Floating-panel surfaces follow the radius vocabulary: Card uses `rounded-[2px]`, Dialog uses `rounded-[4px]`, and dropdowns/popovers (Select, Combobox, MultiSelect) use `rounded-none` — matching their square triggers. Within a single composition, surface radii should match what the trigger or container in front of them uses.
+Floating-panel surfaces follow the radius vocabulary (`4/6/8` hard floor, Decision #100): Card / SelectableCard use `rounded-lg` (6px), Dialog uses `rounded-xl` (8px), and dropdowns/popovers (Select, Combobox, MultiSelect, Tooltip) use `rounded-sm` (4px) — matching their controls. The three card-like surfaces (Card, SelectableCard, Dialog) share one surface language — `bg-surface` + 1px `border-edge` + tier radius — so the modal is just the surface base at radius 8 with elevation. Within a single composition, surface radii should match what the trigger or container in front of them uses.
 
-**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-[2px]", ...)`, `packages/ds/src/components/dialog/dialog.tsx` (`rounded-[4px]`).
+**Reference:** `packages/ds/src/components/card/card.tsx` — `cva("rounded-lg", ...)`; `packages/ds/src/components/dialog/dialog.tsx` (`rounded-xl border border-edge`).
 
 ### Font Loading Boundary
 
@@ -262,7 +262,7 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 
 **Layer 3 bridge entries for semantic accents.** `@theme inline` now surfaces `--color-success`, `--color-warning`, `--color-error` (plus `-foreground` pairs) alongside the existing `--color-primary` / `--color-accent`. Consumers get `bg-success`, `text-warning`, `border-error`, etc. as first-class Tailwind utilities — no inline `style={{ color: 'var(--success)' }}` required.
 
-**Radius scale (Layer 1).** The radius vocabulary is `0 / 0 / 2 / 4`. `--radius-sm` and `--radius-md` are both literally `0`, `--radius-lg` is `2px`, `--radius-xl` is `4px`. When a small non-zero radius is needed (Card 2px, Dialog 4px), use a literal arbitrary value (`rounded-[2px]`, `rounded-[4px]`) rather than an out-of-scale Tailwind step — this keeps the scale honest. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements only — never round-by-convention. After Decision #88 the reserved list is: StatusDot, Slider thumb (kept for now — flagged for the rounded-full audit chunk), ProgressBar tracks, MultiSelect tag chips. Switch track + thumb and Stepper indicators moved to `rounded-[2px]` in wave-1.
+**Radius scale (Layer 1).** The radius vocabulary is `4 / 6 / 8` — a hard floor (Decision #100). `--radius-sm` and `--radius-md` are both `4px`, `--radius-lg` is `6px` (cards), `--radius-xl` is `8px` (modals). The 0px corner was retired: every surface that was `rounded-none` or `rounded-[2px]` is swept to `rounded-sm`, so the whole scale is token-driven — reach for `rounded-sm` / `rounded-lg` / `rounded-xl`, never literal `rounded-[Npx]`. **Mechanism:** the token edit alone moves cards (`rounded-lg` → 6px) and dialogs (`rounded-xl` → 8px) because those classes resolve `var(--radius-*)`; controls had to be swept by hand because `rounded-none` (hardcoded `0`) and `rounded-[2px]` (literal) ignore the tokens. After the sweep, `rounded-sm` resolves `var(--radius-sm)` = 4px. `rounded-full` (Tailwind default `9999px`) is reserved for round-by-design elements only — StatusDot, Slider thumb/track/range, RadioGroup item, ProgressBar track, Button/Loader LED dots — never round-by-convention.
 
 ### Theme Switching
 

@@ -221,8 +221,8 @@ Accents (`primary`/`accent`/`success`/`warning`/`error`) resolve to the **same h
 | `muted-foreground` | `text-muted-foreground` | `oklch(0.55 0.014 270)` | `oklch(0.62 0.012 273)` | Subdued text, labels |
 | `surface` | `bg-surface` | `oklch(0.94 0.009 270)` | `oklch(0.18 0.005 273)` | Elevated surfaces (cards, form fields) |
 | `surface-foreground` | `text-surface-foreground` | `oklch(0.22 0.015 270)` | `#f3f3f3` | Text on elevated surfaces |
-| `edge` | `border-edge` | `oklch(0.87 0.013 270)` | `rgba(255,255,255,0.16)` | Borders, dividers |
-| `edge-hover` | `border-edge-hover` | `oklch(0.80 0.015 270)` | `rgba(255,255,255,0.24)` | Hover state borders |
+| `edge` | `border-edge` | `rgba(0,0,0,0.14)` | `rgba(255,255,255,0.10)` | Borders, dividers (translucent in both modes, Decision #100) |
+| `edge-hover` | `border-edge-hover` | `rgba(0,0,0,0.22)` | `rgba(255,255,255,0.20)` | Hover state borders |
 
 ### Surface Ladders
 
@@ -326,16 +326,16 @@ All headings use `font-heading` (Anybody) at weight 900, uppercase, with tighter
 
 ## Radius
 
-Vocabulary is **0 / 0 / 2 / 4** — brutalist by default, with `rounded-full` reserved for elements that are round by design.
+Vocabulary is **4 / 6 / 8** — a hard floor (Decision #100). Nothing is sharper than 4px; `rounded-full` stays reserved for elements that are round by design.
 
 | Tailwind class | CSS variable | Value | Use for |
 |----------------|--------------|-------|---------|
-| `rounded-none` / `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `0` | Buttons, inputs, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts |
-| `rounded-lg` | `--radius-lg` | `2px` | Cards |
-| `rounded-xl` | `--radius-xl` | `4px` | Modals (Dialog) |
-| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks |
+| `rounded-sm` / `rounded-md` | `--radius-sm`, `--radius-md` | `4px` | Buttons, inputs, selects, chips, popover dropdowns (Tooltip, Select, Combobox, MultiSelect, Tabs overflow), badges, alerts, checkbox, switch, pagination, stepper |
+| `rounded-lg` | `--radius-lg` | `6px` | Cards, SelectableCards |
+| `rounded-xl` | `--radius-xl` | `8px` | Modals (Dialog) |
+| `rounded-full` | (Tailwind default) | `9999px` | StatusDot, Slider thumb, RadioGroup item, ProgressBar track |
 
-The 2px and 4px steps live at `rounded-lg` / `rounded-xl` so the entire scale is named — no arbitrary `rounded-[2px]` / `rounded-[4px]` values are needed in consumer code. Tailwind's `rounded-sm` and `rounded-md` both resolve to `0` and are interchangeable with `rounded-none`. `rounded-full` is reserved for elements that are round by design (never by convention). Switch track + thumb moved to `rounded-[2px]` in wave-1 (Decision #88); Stepper indicators likewise. Slider thumb stays `rounded-full` with a principled aperture justification (Decision #89). MultiSelect chips moved to `rounded-[2px]` (Decision #91) — convention-only "soft/removable" argument did not survive audit; chips join the wave's "contained group" family. See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
+The whole scale is named — reach for `rounded-sm` / `rounded-lg` / `rounded-xl`, not arbitrary `rounded-[Npx]` literals. Tailwind's `rounded-sm` and `rounded-md` both resolve to the `4px` floor and are interchangeable. The 0px corner was retired (Decision #100): every surface that was `rounded-none` (0) or `rounded-[2px]` (2) — buttons, inputs, dropdowns, badges, switch, checkbox, tabs pill, stepper, MultiSelect chips, etc. — now sits at the 4px floor via `rounded-sm`. `rounded-full` remains reserved for round-by-design (never by convention). See SKIN-PRINCIPLES § 4 "Surface radii by role" for the role → class mapping.
 
 ---
 
@@ -434,7 +434,7 @@ Available as Tailwind utility classes. Neutral drops at three elevations — no 
 </div>
 
 {/* Popover dropdown */}
-<div className="bg-popover-bg border border-popover-border rounded-none p-1 shadow">
+<div className="bg-popover-bg border border-popover-border rounded-sm p-1 shadow">
   Dropdown content
 </div>
 
@@ -790,7 +790,7 @@ CVA-based instrument-panel button with 7 variants, 4 sizes, icon slots, loading/
 import { Button } from "@stasho/ds/button";
 ```
 
-**Visual style:** Square corners (`rounded-none`), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) carry an outer halo at rest for "electric" energy. Primary and Secondary stay halo-less at rest and gain a chassis-matching outer halo on hover (per Decision #82, SKIN-PRINCIPLES § Filled chassis).
+**Visual style:** 4px corners (`rounded-sm`, hard floor per Decision #100), no border on filled variants, `font-body` (Inter) at weight 700, sentence case, `line-height: 1`. Each filled variant has a beveled chassis (inset top-highlight + bottom-shadow). Saturated semantic chassis (destructive/warning/success) carry an outer halo at rest for "electric" energy. Primary and Secondary stay halo-less at rest and gain a chassis-matching outer halo on hover (per Decision #82, SKIN-PRINCIPLES § Filled chassis).
 
 #### Variants
 
@@ -893,7 +893,7 @@ import { Input } from "@stasho/ds/input";
 
 **Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default)
 
-**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none` (brutalist per skin vocabulary). No bevel, no gradient. Hover = no change (I-beam affordance is sufficient for pure text inputs).
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-sm` (4px floor per skin vocabulary). No bevel, no gradient. Hover = no change (I-beam affordance is sufficient for pure text inputs).
 
 **Focus:** Hairline swaps to `border-accent-700` (light, for AA on white) / `border-accent` (dark). No ring, no halo.
 
@@ -903,7 +903,7 @@ import { Input } from "@stasho/ds/input";
 
 ### Textarea
 
-Multi-line text input. Same API as Input, `rounded-none`, flat-slot chassis, vertical resize.
+Multi-line text input. Same API as Input, `rounded-sm`, flat-slot chassis, vertical resize.
 
 ```tsx
 import { Textarea } from "@stasho/ds/textarea";
@@ -915,7 +915,7 @@ import { Textarea } from "@stasho/ds/textarea";
 
 **Defaults:** `rows={4}`, `resize-y`, `size="md"`
 
-**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-none`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error` and keeps it through hover and focus (`hover:border-error focus-visible:border-error`). Disabled chassis sinks one step (`bg-muted` light, `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, placeholder to `text-muted-foreground/50`, cursor to `not-allowed`.
+**Visuals:** Same flat-slot chassis as Input (`bg-background`/`bg-surface` fill, 1px `border-edge` hairline, `rounded-sm`). Focus swaps hairline to `border-accent-700` (light) / `border-accent` (dark). Error swaps hairline to `border-error` and keeps it through hover and focus (`hover:border-error focus-visible:border-error`). Disabled chassis sinks one step (`bg-muted` light, `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, placeholder to `text-muted-foreground/50`, cursor to `not-allowed`.
 
 ### FormField
 
@@ -961,7 +961,7 @@ import { Checkbox } from "@stasho/ds/checkbox";
 
 **Props:** `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `error`, `size` (xs/sm/md), `className`. Forwards ref to `<button>`.
 
-**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). All sizes use `rounded-none` (vocabulary alignment per Decision #90 — `rounded` / `rounded-md` resolved to 0px under the Abyssal scale).
+**Sizes:** `xs` (14px) · `sm` (16px) · `md` (20px, default). All sizes use `rounded-sm` (4px hard floor per Decision #100 — `rounded-sm` / `rounded-md` resolve to 4px under the Abyssal scale).
 
 **Animation:** Check icon reveals with a clip-path circle transition (200ms, bottom-left origin following stroke direction). Uses Radix `forceMount` to keep indicator in DOM. Check glyph is Phosphor `<Check weight="bold" />` (Decision #90 — replaces the prior hand-rolled SVG; matches Stepper completed indicator per Decision #88).
 
@@ -1037,7 +1037,7 @@ import {
 
 **Selected affordance (SelectableCard only):** two signals on `data-[state=on]` — `border-accent` + faint `bg-accent/5` tint, plus a Phosphor `<Check weight="bold" />` badge (`absolute top-3 right-3`, `opacity-0` → `opacity-100`). `ActionCard` renders neither.
 
-**Visual style:** Baseline lifted from the app's former `MethodCard` so there's no regression — `rounded-2xl border border-edge bg-surface`, `hover:border-edge-hover`, `focus-visible:outline-accent`. Selected/focus highlight uses `accent` (cyan), the DS-standard interactive color, not the app's `primary-*` blue.
+**Visual style:** Baseline lifted from the app's former `MethodCard` so there's no regression — `rounded-lg border border-edge bg-surface` (6px object-surface tier, Decision #100), `hover:border-edge-hover`, `focus-visible:outline-accent`. Selected/focus highlight uses `accent` (cyan), the DS-standard interactive color, not the app's `primary-*` blue.
 
 ### Switch
 
@@ -1061,7 +1061,7 @@ import { Switch } from "@stasho/ds/switch";
 
 **Sizes:** `xs` (32×18px track, 12px thumb) · `sm` (40×22px track, 16px thumb) · `md` (47×26px track, 20px thumb, default). Thumb sizes match Checkbox/Radio at the same step (sm = 16, md = 20) per Decision #92. Track outer = thumb + 6 (4px symmetric breathing + 2px border) per Decision #96 — amends the earlier "thumb + 4" formula that yielded only 1px visible breathing. Track ratio is 1.78–1.82 across all sizes (within the 1.75–1.83 band).
 
-**Visuals:** Square track (`rounded-[2px]`) with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` square thumb (`rounded-[2px]`); on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state. The rest of the chassis (bevel, cyan on-state, hover/focus glow, disabled flatten) is unchanged from the original chunk 4 implementation.
+**Visuals:** Track (`rounded-sm`, 4px floor per Decision #100) with inset bevel (top-highlight `rgba(255,255,255,0.06)`, bottom-shadow `rgba(0,0,0,0.4)`) per SKIN-PRINCIPLES § 5. Off = `bg-muted dark:bg-neutral-900` track + neutral `bg-edge` thumb (`rounded-sm`); on = same track + cyan `bg-accent` thumb. Thumb glows on hover/focus of the parent (`box-shadow: 0 0 5px var(--accent), 0 0 10px rgba(0,225,250,0.6)`) via named group `group/sw` — solid cyan at rest per Direction C. Focus uses `outline-2 outline-accent outline-offset-2` on the track. Disabled flattens chassis (no bevel) and dims thumb to `bg-foreground/30` regardless of on/off state. The rest of the chassis (bevel, cyan on-state, hover/focus glow, disabled flatten) is unchanged from the original chunk 4 implementation.
 
 ### Select
 
@@ -1091,7 +1091,7 @@ import { Select } from "@stasho/ds/select";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance).
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-sm`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance).
 
 **Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
@@ -1099,7 +1099,7 @@ import { Select } from "@stasho/ds/select";
 
 **Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
+**Dropdown:** `rounded-sm`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Badge
 
@@ -1153,7 +1153,7 @@ import { badgeVariants } from "@stasho/ds/badge";
 <span className={badgeVariants({ fill: "outline", variant: "success", size: "sm" })}>Active</span>
 ```
 
-**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-[2px]` (contained-marker radius per SKIN-PRINCIPLES § 4 chip-row split — Decision #90). No gradients. Solid fill is a single saturated semantic background + `text-neutral-950` (info uses `bg-accent` cyan; default uses `bg-muted` + `text-foreground`). Outline fill is `bg-{token}/15` + 1px `border-{token}/40` + `text-{token}-500 dark:text-{token}` (light-mode `-500` carve-out generalized across all four semantic variants per Decision #88). Default outline drops to `bg-transparent border-edge text-foreground/70`.
+**Visual style:** `font-mono uppercase tracking-wider` (Departure Mono, CSS-forced uppercase regardless of consumer string), `rounded-sm` (4px contained-marker radius at the hard floor per SKIN-PRINCIPLES § 4 — Decision #100). No gradients. Solid fill is a single saturated semantic background + `text-neutral-950` (info uses `bg-accent` cyan; default uses `bg-muted` + `text-foreground`). Outline fill is `bg-{token}/15` + 1px `border-{token}/40` + `text-{token}-500 dark:text-{token}` (light-mode `-500` carve-out generalized across all four semantic variants per Decision #88). Default outline drops to `bg-transparent border-edge text-foreground/70`.
 
 ### Card
 
@@ -1188,7 +1188,7 @@ import { Card } from "@stasho/ds/card";
 
 Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
 
-**Visual style:** `rounded-lg` (2px under the Abyssal scale), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
+**Visual style:** `rounded-lg` (6px under the Abyssal scale, Decision #100), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
 
 ### CopyableText
 
@@ -1301,7 +1301,7 @@ import {
 
 **Exports:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogClose`, `DialogTitle`, `DialogDescription`, `DialogHeader`, `DialogFooter`, `DialogContentProps`
 
-**Visual style:** `bg-surface` content with `rounded-xl` (4px under the Abyssal scale), no border, no drop shadow — the content separates from page via the frosted overlay alone. Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral, frosted.
+**Visual style:** `bg-surface` content with `rounded-xl` (8px under the Abyssal scale, Decision #100) and a 1px `border-edge` hairline — Dialog joins the unified card surface language; the hairline crisps the boundary against the frosted overlay (no longer border-less, Decision #100 supersedes #87). No drop shadow at rest. Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral, frosted.
 
 **Props (DialogContent):**
 
@@ -1498,7 +1498,7 @@ Wrap your app (or a subtree) with `TooltipProvider`, then compose tooltips:
 <TooltipContent side="left" />
 ```
 
-**Styling:** Popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground text-sm shadow-sm px-3 py-1.5`. Same chassis as Select / Combobox / MultiSelect / Tabs overflow dropdowns — re-themable through `--popover-bg` / `--popover-border`. Radix animation attributes (`fade-in-0 zoom-in-95` on enter; reverse on close) unchanged.
+**Styling:** Popover surface — `bg-popover-bg border border-popover-border rounded-sm text-foreground text-sm shadow-sm px-3 py-1.5`. Same chassis as Select / Combobox / MultiSelect / Tabs overflow dropdowns — re-themable through `--popover-bg` / `--popover-border`. Radix animation attributes (`fade-in-0 zoom-in-95` on enter; reverse on close) unchanged.
 
 ### Tabs
 
@@ -1619,7 +1619,7 @@ When many tabs exceed the available width, `overflow="collapse"` on `TabsList` a
 
 **Styling (underline):** `font-sans font-semibold text-sm` triggers (Inter Semibold sentence case). 1px hairline track at 40% `edge` opacity, 1px solid cyan accent (`bg-accent`) sliding indicator. Active/hover text uses `text-accent`. Active trigger is nudged up 2px (`-translate-y-0.5`) so the text rests above the indicator bar.
 
-**Styling (pill):** `rounded-[2px] bg-muted` container framed by a 1px `border-edge` hairline. Active indicator is a tinted cyan fill (`bg-accent/15`), rounded `[2px]` to match the list shape. Triggers `text-muted-foreground` inactive, `text-accent` active and on hover, compact `px-5 py-1.5 text-sm`.
+**Styling (pill):** `rounded-sm bg-muted` container framed by a 1px `border-edge` hairline. Active indicator is a tinted cyan fill (`bg-accent/15`), rounded `sm` (4px, Decision #100) to match the list shape. Triggers `text-muted-foreground` inactive, `text-accent` active and on hover, compact `px-5 py-1.5 text-sm`.
 
 **Focus:** native `outline-2 outline-accent outline-offset-2` (matches Button). **Disabled:** `text-foreground/30` + `cursor-not-allowed` (semantic flatten, no `opacity-20`). **Same-hex rule:** cyan `--accent` (`#00E1FA`) renders identically in light and dark — no `dark:` variants needed.
 
@@ -1644,7 +1644,7 @@ import { Skeleton } from "@stasho/ds/ui/skeleton";
 <Skeleton className="size-12 rounded-full" /> {/* Avatar */}
 ```
 
-Uses `animate-pulse bg-muted rounded-none`. Hidden from accessibility tree via `aria-hidden="true"`. Respects `prefers-reduced-motion` via `motion-reduce:animate-none`.
+Uses `animate-pulse bg-muted rounded-sm`. Hidden from accessibility tree via `aria-hidden="true"`. Respects `prefers-reduced-motion` via `motion-reduce:animate-none`.
 
 ### Loader
 
@@ -1705,7 +1705,7 @@ import { Combobox } from "@stasho/ds/combobox";
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
-**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Chevron rotates on open.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-sm`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Chevron rotates on open.
 
 **Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
@@ -1715,7 +1715,7 @@ import { Combobox } from "@stasho/ds/combobox";
 
 **Disabled:** Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
+**Dropdown:** `rounded-sm`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected shows check icon.
 
 ### Slider
 
@@ -1748,7 +1748,7 @@ import { Slider } from "@stasho/ds/slider";
 
 **Sizes:** `sm` (6px track, 12px thumb) · `md` (8px track, 14px thumb, default)
 
-**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-popover-bg border border-popover-border rounded-none text-foreground`, sharing the chunk-6 popover token with Tooltip and the four dropdown surfaces (Decision #87).
+**Tooltip:** `showTooltip` shows each thumb's current value on hover. Styled as a flat popover surface — `bg-popover-bg border border-popover-border rounded-sm text-foreground`, sharing the chunk-6 popover token with Tooltip and the four dropdown surfaces (Decision #87).
 
 **Visual style:** Track carries inset bevel (`inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`) on `bg-muted dark:bg-neutral-900` per SKIN-PRINCIPLES § 5. Range fill is `bg-accent`. Thumb is a 1.5px `border-accent` ring on a `bg-background` interior (aperture — the dark interior differentiates the thumb from the cyan range fill; the ring carries the brand color). On hover, the interior fills `bg-accent` and an outer halo lights up (`box-shadow: 0 0 6px var(--accent), 0 0 12px rgba(0,225,250,0.5)`) — a documented carve-out from "hover intensifies, doesn't repaint" because the thumb is directly grabbed (Decision #89). Focus uses `outline-2 outline-accent outline-offset-2` + the same halo; the ring stays open on focus alone. Disabled flattens the ring to `border-foreground/30` (interior stays `bg-background`) and the range to `bg-foreground/30`; uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (not a button), so `:disabled` pseudo-class doesn't apply. The compound `data-[disabled]:hover:bg-background` keeps the disabled chassis static under hover.
 
@@ -1791,7 +1791,7 @@ import { MultiSelect } from "@stasho/ds/multi-select";
 
 **Selection:** Clicking an item toggles it (adds or removes). Dropdown stays open after selection for multi-toggle. Checkbox visuals on each item indicate selected state.
 
-**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-none`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
+**Visuals:** Flat-slot chassis — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline. `rounded-sm`. Hover brightens hairline to `border-edge-hover` (dropdown trigger affordance). Trigger uses `<div role="button">` (not `<button>`) to allow nested dismiss buttons without HTML nesting violations.
 
 **Focus:** Hairline swaps to `border-accent-700` (light) / `border-accent` (dark). No halo.
 
@@ -1799,7 +1799,7 @@ import { MultiSelect } from "@stasho/ds/multi-select";
 
 **Disabled:** Uses `aria-disabled:` variants (trigger is a `<div role="button">`, not a native `<input>`). Chassis sinks one step (`bg-muted` light / `bg-background` dark), hairline at `border-edge/50`, value at 30% opacity, `cursor-not-allowed`.
 
-**Dropdown:** `rounded-none`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected items show filled checkbox: `border-accent bg-accent text-accent-foreground` (cyan, 1px hairline, 0px radius — matches Checkbox/Radio cyan-checked treatment).
+**Dropdown:** `rounded-sm`, `bg-popover-bg`, `border border-popover-border`, `shadow`. Items highlight with `bg-muted`. Disabled items use `text-foreground/30 cursor-not-allowed`. Selected items show filled checkbox: `border-accent bg-accent text-accent-foreground` (cyan, 1px hairline, 4px radius — matches Checkbox/Radio cyan-checked treatment).
 
 ### ProgressBar
 
@@ -1884,7 +1884,7 @@ import {
 | `StepperDescription` | `<span>` | Step subtitle, inherits `data-state` |
 | `StepperConnector` | `<li>` | Line between steps, `aria-hidden`, inherits `data-orientation` |
 
-**Indicator style:** Square `rounded-[2px]` `size-8` hairline-edge chassis with Inter Semibold text. Inactive: `border border-edge text-foreground/45 bg-transparent`. Active: cyan hairline + persistent halo (`box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)`) + `text-accent-500 dark:text-accent`. Completed: solid cyan chip (`bg-accent`) with dark check glyph (`text-neutral-950`) — `StepperIndicator` auto-renders `<Check weight="bold" />` replacing `{children}` when the surrounding `StepperItem` has `state="completed"`.
+**Indicator style:** `rounded-sm` (4px floor, Decision #100) `size-8` hairline-edge chassis with Inter Semibold text. Inactive: `border border-edge text-foreground/45 bg-transparent`. Active: cyan hairline + persistent halo (`box-shadow: 0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)`) + `text-accent-500 dark:text-accent`. Completed: solid cyan chip (`bg-accent`) with dark check glyph (`text-neutral-950`) — `StepperIndicator` auto-renders `<Check weight="bold" />` replacing `{children}` when the surrounding `StepperItem` has `state="completed"`.
 
 **Connector style:** 1px hairline (`h-px` horizontal / `w-px` vertical) `bg-edge` default. Pass `completed` prop to fill `bg-accent` between two consecutive completed steps:
 

@@ -13,7 +13,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 - **Aesthetic:** dark, scientific, abstract. The system feels like a control surface for something serious — research equipment, deep-sea probes, spacecraft consoles.
 - **Mental model:** the user is operating an instrument panel. Components are switches, gauges, readouts, indicators — not friendly stickers or marketing cards.
 - **Energy:** voltage / signal. Cyan `#00E1FA` is the system's constant pulse — the indicator that something is live, active, listening. Semantic colors are alarms (blood-orange = abort, amber = caution, teal-green = nominal).
-- **Geometry:** committed and brutalist, but restrained. Sharp 0px corners on functional surfaces. No decoration. No noise. No grain. Mass comes from saturation, not from texture.
+- **Geometry:** committed and restrained. A 4px radius floor (`4/6/8` ladder, Decision #100) — tight corners, no decoration, no noise, no grain. Mass comes from saturation, not from texture.
 - **Voice:** spare and factual. Sentence case in UI, uppercase in telemetry. No exclamation points, no emoji, no marketing adjectives.
 
 ### What it isn't
@@ -21,7 +21,7 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 - **Not friendly** — no soft curves, no pastel palette, no smiling iconography.
 - **Not consumer** — not aimed at "delight"; aimed at clarity for someone who knows what they're doing.
 - **Not gradient-heavy** — gradients exist (primary chassis, semantic halos) but are functional, not decorative. No "rainbow" or "vibrant" backgrounds.
-- **Not rounded** — pill buttons, bubble cards, and rounded inputs read as a different system entirely.
+- **Not bubbly** — the 4px floor and `4/6/8` ladder keep corners tight; pill buttons (`rounded-full`) and large bubble radii read as a different system entirely.
 - **Not textured** — no grain, no noise, no patterned fills. Decoration is rejected entirely (`fx-grain` was removed for this reason — Decision #79).
 - **Not headline-driven** — buttons are pressable hardware controls, not page headers. Avoid heading-weight typography on interactive elements.
 
@@ -120,30 +120,31 @@ For full rationale behind any rule, follow the linked decision (`#N` in `docs/DE
 
 ## 4 · Geometry
 
-### 0/0/2/4 radius vocabulary
-**Rule:** Sharp by default. Cards earn 2px. Modals earn 4px. Anything more is wrong for this skin.
+### 4/6/8 radius floor
+**Rule:** Nothing is sharper than 4px. Functional controls sit at the 4px floor, object surfaces earn 6px, modals earn 8px. `rounded-full` stays reserved for round-by-design.
 
 | Element | Radius |
 |---|---|
-| Buttons, inputs, selects, dropdowns, toasts | `0` |
-| Badges, Cards | `2px` |
-| Modals, dialogs | `4px` |
+| Buttons, inputs, selects, dropdowns, tooltips, toasts, badges | `4px` |
+| Cards, SelectableCards | `6px` |
+| Modals, dialogs | `8px` |
 
-**Why:** The 0/0/2/4 ladder pushes the brutalist character at every interactive surface, and reserves rounding for the few elements where it carries meaning (cards as physical objects, modals as floating overlays).
-**Source:** Decision #78.
+**Why:** The 0px brutalist corner was retired (Decision #100) — the operator judged it too aggressive. A 4px floor keeps the system tight and instrument-like without the sharp edge, and the +2 tier steps (`4/6/8`) give object surfaces and modals a legible identity without tipping into "rounded app." Floating non-modal chrome sits at the control floor (4), not the object tier — radius tracks role, not elevation.
+**Source:** Decisions #78 (original ladder), #100 (hard floor).
 
 ### Surface radii by role
 
 | Role | Tailwind class | Pixels | Components |
 |---|---|---|---|
-| Popovers | `rounded-none` | 0px | Tooltip, Select/Combobox/MultiSelect dropdowns, Tabs overflow DropdownMenu |
-| Modals | `rounded-xl` | 4px | Dialog |
-| Cards | `rounded-lg` | 2px | Card |
-| Contained markers | `rounded-[2px]` | 2px | Badge |
-| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, RadioGroup item, ProgressBar tracks |
+| Controls | `rounded-sm` | 4px | Button, Input, Textarea, Select/Combobox/MultiSelect triggers, Checkbox, Switch, Pagination, Stepper |
+| Popovers / chrome | `rounded-sm` | 4px | Tooltip, Slider tooltip, Select/Combobox/MultiSelect dropdowns, Tabs overflow DropdownMenu, Alert |
+| Contained markers | `rounded-sm` | 4px | Badge, Tabs pill, MultiSelect chips |
+| Cards | `rounded-lg` | 6px | Card, SelectableCard, ActionCard |
+| Modals | `rounded-xl` | 8px | Dialog |
+| Round-by-design | `rounded-full` | — | StatusDot, Slider thumb, RadioGroup item, ProgressBar track |
 
-Tooltip is a popover, not a card — the radius reflects its role. The Abyssal radius scale maps `rounded-sm / rounded-md` to 0px, `rounded-lg` to 2px, `rounded-xl` to 4px; reach for the semantic class that matches the intended pixel value rather than guessing from shadcn-era defaults.
-**Source:** Decision #87.
+The Abyssal radius scale maps `rounded-sm` / `rounded-md` to 4px, `rounded-lg` to 6px, `rounded-xl` to 8px; reach for the semantic class that matches the intended tier rather than a literal `rounded-[Npx]`. Tooltip is a popover, not a card — it sits at the control floor with its trigger.
+**Source:** Decisions #87, #100.
 
 ### `full` is for round-by-design only
 **Rule:** `rounded-full` is reserved for elements where roundness is the semantic, not decoration:
@@ -155,7 +156,7 @@ Tooltip is a popover, not a card — the radius reflects its role. The Abyssal r
 
 **Why:** Once you allow `rounded-full` on a button or input, the entire vocabulary collapses — every component starts asking "but should I be round?". The reserved list keeps the rule legible. The list is "round-by-design only, never round-by-convention" — entries need a semantic reason for the round shape, not a precedent from other DSs.
 **How:** Adding a new element to this list requires a decision in `docs/DECISIONS.md`.
-**Source:** Decisions #86 (Tabs pill removed), #88 (Switch track + thumb removed; Stepper indicators removed), #89 (Slider thumb kept on `rounded-full` with principled aperture justification), #90 (RadioGroup item added — was always round-by-design but never listed), #91 (MultiSelect chips removed — convention-only justification did not survive audit).
+**Source:** Decisions #86 (Tabs pill removed), #88 (Switch track + thumb removed; Stepper indicators removed), #89 (Slider thumb kept on `rounded-full` with principled aperture justification), #90 (RadioGroup item added — was always round-by-design but never listed), #91 (MultiSelect chips removed — convention-only justification did not survive audit), #100 (hard floor — the `rounded-[2px]` placements from #86/#88/#90/#91 collapse to the 4px `rounded-sm` floor; the `rounded-full` round-by-design reservations stand).
 
 ### Hairline borders, never thick
 **Rule:** 1px borders. No `border-2`, no `border-3`.
@@ -259,7 +260,7 @@ These are the patterns we've discovered while building components for this skin.
 ### Popover surface tokens
 **Rule:** All floating surfaces that aren't modals share a single popover token: `bg-popover-bg border border-popover-border`. The token resolves through `--surface` / `--edge`, so retheming the popover identity flows through one declaration.
 **Why:** Tooltip + Slider tooltip + four dropdown surfaces all carrying inline `bg-surface border border-edge` would drift into six subtly different popovers over time. One token, one re-theme seam.
-**How:** `--popover-bg: var(--surface)` and `--popover-border: var(--edge)` in both `:root` and `.theme-dark`; bridged through `--color-popover-bg` / `--color-popover-border` in the Tailwind `@theme inline` block so `bg-popover-bg` / `border-popover-border` are utility classes. Popover Content gets `rounded-none` per the radii table.
+**How:** `--popover-bg: var(--surface)` and `--popover-border: var(--edge)` in both `:root` and `.theme-dark`; bridged through `--color-popover-bg` / `--color-popover-border` in the Tailwind `@theme inline` block so `bg-popover-bg` / `border-popover-border` are utility classes. Popover Content gets `rounded-sm` (4px floor) per the radii table.
 **Source:** Decision #87.
 
 ### Switch thumb mirrors Checkbox at the same size step

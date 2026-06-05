@@ -162,7 +162,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
           onClick={handleCopy}
           className={cn(
             "relative inline-flex items-center justify-center",
-            "rounded-none cursor-pointer shrink-0",
+            "rounded-sm cursor-pointer shrink-0",
             "hover:bg-foreground/10 transition-colors",
             btnCn,
           )}
@@ -207,7 +207,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "inline-flex items-center justify-center rounded-none shrink-0",
+              "inline-flex items-center justify-center rounded-sm shrink-0",
               "text-muted-foreground hover:text-foreground",
               "hover:bg-foreground/10 transition-colors",
               btnCn,

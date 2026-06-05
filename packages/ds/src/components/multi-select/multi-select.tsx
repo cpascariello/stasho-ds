@@ -10,7 +10,7 @@ const triggerVariants = cva(
     "inline-flex items-center gap-1.5",
     "w-full font-sans text-foreground",
     "bg-background dark:bg-surface",
-    "border border-edge rounded-none",
+    "border border-edge rounded-sm",
     "hover:border-edge-hover",
     "focus-visible:outline-none",
     "focus-visible:border-accent-700 dark:focus-visible:border-accent",
@@ -35,7 +35,7 @@ const triggerVariants = cva(
 
 const tagVariants = cva(
   [
-    "inline-flex items-center gap-1 rounded-[2px] bg-muted",
+    "inline-flex items-center gap-1 rounded-sm bg-muted",
     "text-foreground max-w-32 select-none",
   ].join(" "),
   {
@@ -165,7 +165,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       aria-label={`Remove ${opt.label}`}
                       onClick={(e) => removeTag(e, opt.value)}
                       className={cn(
-                        "shrink-0 rounded-[2px]",
+                        "shrink-0 rounded-sm",
                         "hover:bg-foreground/10 transition-colors",
                         size === "sm" ? "size-3.5" : "size-4",
                       )}
@@ -195,7 +195,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 aria-label="Clear all"
                 onClick={clearAll}
                 className={cn(
-                  "shrink-0 rounded-[2px]",
+                  "shrink-0 rounded-sm",
                   "text-muted-foreground",
                   "hover:text-foreground transition-colors",
                   size === "sm" ? "size-4" : "size-5",
@@ -232,7 +232,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
           <Popover.Content
             className={cn(
               "z-50 w-[var(--radix-popover-trigger-width)]",
-              "overflow-hidden rounded-none",
+              "overflow-hidden rounded-sm",
               "bg-popover-bg border border-popover-border shadow",
             )}
             sideOffset={4}
@@ -268,7 +268,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                       onSelect={() => toggle(option.value)}
                       className={cn(
                         "relative flex items-center gap-2",
-                        "rounded-none px-3 py-2",
+                        "rounded-sm px-3 py-2",
                         "text-sm text-foreground",
                         "cursor-pointer select-none",
                         "outline-none",
@@ -281,7 +281,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                         className={cn(
                           "flex size-4 shrink-0 items-center",
                           "justify-center",
-                          "rounded-none border transition-colors",
+                          "rounded-sm border transition-colors",
                           selected
                             ? "border-accent bg-accent text-accent-foreground"
                             : "border-edge bg-surface",

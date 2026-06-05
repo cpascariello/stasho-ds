@@ -5,7 +5,7 @@ import { cn } from "@ac/lib/cn";
 const badgeVariants = cva(
   [
     "inline-flex items-center justify-center gap-1.5",
-    "rounded-[2px] font-mono uppercase tracking-wider",
+    "rounded-sm font-mono uppercase tracking-wider",
     "whitespace-nowrap select-none",
   ].join(" "),
   {
