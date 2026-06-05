@@ -90,7 +90,7 @@ const NAV: NavEntry[] = [
 const LINK_ACTIVE =
   "bg-accent/15 text-accent-500 dark:text-accent font-medium";
 const LINK_IDLE =
-  "text-muted-foreground hover:text-foreground hover:bg-muted";
+  "text-muted-foreground hover:text-accent-500 dark:hover:text-accent hover:bg-muted";
 
 function NavLink({
   item,
