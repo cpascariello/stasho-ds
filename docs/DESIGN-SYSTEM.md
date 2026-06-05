@@ -1218,6 +1218,24 @@ import { CopyableText } from "@stasho/ds/copyable-text";
 <CopyableText text="0x1a2b3c" />
 ```
 
+#### Fluid (width-aware)
+
+By default the component does static, character-count truncation and shrink-wraps to that string (`inline-flex`). Pass `fluid` to make it react to its container instead: it fills the available width (`flex w-full`), shows the **full** string when there's room, and truncates as the box narrows.
+
+```tsx
+{/* Fills its parent; full string when roomy, truncates when squeezed */}
+<CopyableText text={hash} fluid />
+
+{/* endChars sets the pinned tail length (default 4) */}
+<CopyableText text={hash} fluid endChars={6} />
+```
+
+- **Truncation style:** fixed tail, flexing head. The last `endChars` characters are always pinned; the head truncates with a native ellipsis and the ellipsis drifts left as the box narrows.
+- **`startChars` is ignored** in fluid mode (the head flexes freely). `endChars` is the only truncation knob.
+- **Reveal:** the full value is exposed via the native `title` attribute (hover tooltip). Copy still copies the complete string.
+- **Layout requirement:** give the component a constrained-width parent. In a flex parent, that parent needs `min-w-0` for the component to narrow below its content width. Cap the width with `className` (e.g. `max-w-[320px]`) if you don't want it to take the full row.
+- Pure CSS — no measurement, no resize listeners.
+
 #### With External Link
 
 ```tsx

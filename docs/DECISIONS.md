@@ -18,6 +18,15 @@ Each entry includes:
 
 ---
 
+## Decision #98 — 2026-06-05
+
+**Context:** `CopyableText` only did static, character-count middle truncation in an `inline-flex` wrapper that shrink-wrapped to the fixed string. We wanted a "long" mode that reacts to its container — full hash/address when there's room, truncated as the box narrows.
+**Decision:** Add a `fluid` boolean prop (default `false`). In fluid mode the component fills its container (`flex w-full`) and truncates via a **pure-CSS two-span flexbox**: the last `endChars` characters are pinned (fixed tail, `flex-none`) and the head (`text.slice(0, -endChars)`) flexes with `min-w-0 overflow-hidden text-ellipsis`, so the ellipsis drifts left as it shrinks. `startChars` is ignored in fluid mode. The hidden characters are revealed via the native `title` attribute, set unconditionally in fluid mode. Fixed-mode behavior, props, and callsites are unchanged.
+**Rationale:** The monospace face would make a JS-measured *centered* middle truncation accurate, but it needs a `ResizeObserver`. The fixed-tail two-span delivers the same "full when roomy, truncated when squeezed" outcome with zero JS, no new dependencies, and no resize listeners — fitting the skin's no-over-engineering bias. Native `title` avoids pulling Radix Tooltip + a provider requirement into the component; detecting "only when truncated" purely is impossible without the same overflow check the pure-CSS approach was chosen to avoid, so the title is always set (a harmless echo of the visible text when it fully fits).
+**Alternatives considered:** (A) JS-measured centered middle truncation — rejected for the `ResizeObserver` cost. (2) DS Tooltip reveal — deferred as heavier (Radix + provider). (3) No reveal at all — rejected; the hidden characters need a recovery path beyond the copy button. Both deferred ideas are logged in BACKLOG.
+
+---
+
 ## Decision #97 — 2026-06-04
 
 **Context:** The consuming app (stasho-app) had one remaining `no-raw-button` lint exemption — `projects/new`'s `MethodCard`, a card-shaped *action* button whose `onClick` advances a wizard step. `Card` is a presentational `<div>` (not accessible as a click target) and `Button` is a CTA pill, so there was no DS primitive for it. Scope was expanded from a minimal action-card to a full selection family because grouped card-pickers (single-select framework/plan/target, multi-select toggles) are anticipated soon.

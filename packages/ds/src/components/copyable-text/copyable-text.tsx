@@ -7,25 +7,28 @@ import {
   useRef,
   useState,
   type HTMLAttributes,
+  type ReactNode,
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowUpRight, Copy } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
 
-const copyableTextVariants = cva(
-  "inline-flex items-center font-mono select-none",
-  {
-    variants: {
-      size: {
-        sm: "text-xs gap-1",
-        md: "text-sm gap-1.5",
-      },
+const copyableTextVariants = cva("items-center font-mono select-none", {
+  variants: {
+    size: {
+      sm: "text-xs gap-1",
+      md: "text-sm gap-1.5",
     },
-    defaultVariants: {
-      size: "md",
+    fluid: {
+      true: "flex w-full",
+      false: "inline-flex",
     },
   },
-);
+  defaultVariants: {
+    size: "md",
+    fluid: false,
+  },
+});
 
 const iconSize: Record<"sm" | "md", string> = {
   sm: "size-3.5",
@@ -50,6 +53,26 @@ function truncateMiddle(
   return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;
 }
 
+function renderTextContent(
+  text: string,
+  fluid: boolean,
+  startChars: number,
+  endChars: number,
+): ReactNode {
+  if (!fluid) return truncateMiddle(text, startChars, endChars);
+  if (text.length <= endChars) return text;
+  return (
+    <>
+      <span className="min-w-0 flex-initial overflow-hidden text-ellipsis whitespace-nowrap">
+        {text.slice(0, -endChars)}
+      </span>
+      <span className="flex-none whitespace-nowrap">
+        {text.slice(-endChars)}
+      </span>
+    </>
+  );
+}
+
 type CopyableTextProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> &
   VariantProps<typeof copyableTextVariants> & {
     text: string;
@@ -66,6 +89,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
       endChars = 4,
       href,
       size = "md",
+      fluid = false,
       className,
       ...rest
     },
@@ -80,24 +104,30 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
       };
     }, []);
 
-    const handleCopy = useCallback((e: React.MouseEvent) => {
-      e.stopPropagation();
-      void navigator.clipboard.writeText(text).then(() => {
-        setCopied(true);
-        if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => setCopied(false), 1500);
-      });
-    }, [text]);
+    const handleCopy = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        void navigator.clipboard.writeText(text).then(() => {
+          setCopied(true);
+          if (timerRef.current) clearTimeout(timerRef.current);
+          timerRef.current = setTimeout(() => setCopied(false), 1500);
+        });
+      },
+      [text],
+    );
 
     const resolvedSize = size ?? "md";
     const iconCn = iconSize[resolvedSize];
     const btnCn = buttonSize[resolvedSize];
+    const isFluid = fluid ?? false;
+    const content = renderTextContent(text, isFluid, startChars, endChars);
+    const titleAttr = isFluid ? text : undefined;
 
     return (
       <span
         ref={ref}
         className={cn(
-          copyableTextVariants({ size }),
+          copyableTextVariants({ size, fluid }),
           href && "text-accent-500 dark:text-accent",
           className,
         )}
@@ -106,62 +136,69 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
         {href ? (
           <a
             href={href}
+            title={titleAttr}
             {...(isExternalUrl(href)
               ? { target: "_blank", rel: "noopener noreferrer" }
               : {})}
             onClick={(e) => e.stopPropagation()}
-            className="cursor-pointer hover:underline"
+            className={cn(
+              "cursor-pointer hover:underline",
+              isFluid && "flex min-w-0 flex-1 overflow-hidden",
+            )}
           >
-            {truncateMiddle(text, startChars, endChars)}
+            {content}
           </a>
         ) : (
-          <span className="cursor-default">
-            {truncateMiddle(text, startChars, endChars)}
+          <span
+            title={titleAttr}
+            className={cn("cursor-default", isFluid && "flex min-w-0 flex-1")}
+          >
+            {content}
           </span>
         )}
 
         <button
-            type="button"
-            onClick={handleCopy}
+          type="button"
+          onClick={handleCopy}
+          className={cn(
+            "relative inline-flex items-center justify-center",
+            "rounded-none cursor-pointer shrink-0",
+            "hover:bg-foreground/10 transition-colors",
+            btnCn,
+          )}
+          aria-label={copied ? "Copied" : "Copy to clipboard"}
+        >
+          <Copy
+            weight="bold"
             className={cn(
-              "relative inline-flex items-center justify-center",
-              "rounded-none cursor-pointer",
-              "hover:bg-foreground/10 transition-colors",
-              btnCn,
+              iconCn,
+              "text-muted-foreground",
+              "transition-opacity duration-100",
+              "motion-reduce:transition-none",
+              copied && "opacity-0",
             )}
-            aria-label={copied ? "Copied" : "Copy to clipboard"}
+            aria-hidden="true"
+          />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={cn(
+              iconCn,
+              "text-muted-foreground absolute",
+              "[stroke-dasharray:20] [stroke-dashoffset:20]",
+              "transition-[stroke-dashoffset] duration-300 delay-75 ease-out",
+              "motion-reduce:transition-none",
+              copied && "[stroke-dashoffset:0]",
+            )}
+            aria-hidden="true"
           >
-            <Copy
-              weight="bold"
-              className={cn(
-                iconCn,
-                "text-muted-foreground",
-                "transition-opacity duration-100",
-                "motion-reduce:transition-none",
-                copied && "opacity-0",
-              )}
-              aria-hidden="true"
-            />
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={cn(
-                iconCn,
-                "text-muted-foreground absolute",
-                "[stroke-dasharray:20] [stroke-dashoffset:20]",
-                "transition-[stroke-dashoffset] duration-300 delay-75 ease-out",
-                "motion-reduce:transition-none",
-                copied && "[stroke-dashoffset:0]",
-              )}
-              aria-hidden="true"
-            >
-              <polyline points="4 12 9 17 20 6" />
-            </svg>
-          </button>
+            <polyline points="4 12 9 17 20 6" />
+          </svg>
+        </button>
 
         {href && isExternalUrl(href) ? (
           <a
@@ -170,18 +207,14 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "inline-flex items-center justify-center rounded-none",
+              "inline-flex items-center justify-center rounded-none shrink-0",
               "text-muted-foreground hover:text-foreground",
               "hover:bg-foreground/10 transition-colors",
               btnCn,
             )}
             aria-label="Open in new tab"
           >
-            <ArrowUpRight
-              weight="bold"
-              className={iconCn}
-              aria-hidden="true"
-            />
+            <ArrowUpRight weight="bold" className={iconCn} aria-hidden="true" />
           </a>
         ) : null}
       </span>
