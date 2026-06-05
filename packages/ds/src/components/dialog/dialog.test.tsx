@@ -95,6 +95,13 @@ describe("Dialog", () => {
     expect(screen.queryByLabelText("Close")).toBeNull();
   });
 
+  it("content panel carries the border-edge hairline", () => {
+    render(<TestDialog />);
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.className).toContain("border");
+    expect(dialog.className).toContain("border-edge");
+  });
+
   it("merges className on content panel", () => {
     render(
       <Dialog defaultOpen>
