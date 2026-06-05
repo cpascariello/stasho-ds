@@ -56,7 +56,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           {locked ? null : (
             <DialogPrimitive.Close
               className={cn(
-                "absolute top-4 right-4 rounded-none",
+                "absolute top-4 right-4 rounded-sm",
                 "text-muted-foreground transition-colors hover:text-foreground",
                 "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
               )}
