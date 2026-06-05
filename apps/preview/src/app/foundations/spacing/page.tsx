@@ -24,6 +24,13 @@ const BREAKPOINTS = [
   { name: "2xl", px: "1536px" },
 ] as const;
 
+const RADIUS_SCALE = [
+  { cls: "rounded-sm", px: "4px", role: "Controls — buttons, inputs, dropdowns, badges" },
+  { cls: "rounded-lg", px: "6px", role: "Object surfaces — cards" },
+  { cls: "rounded-xl", px: "8px", role: "Modals — dialogs" },
+  { cls: "rounded-full", px: "—", role: "Round-by-design — dots, thumbs, radio" },
+] as const;
+
 export default function SpacingPage() {
   return (
     <div>
@@ -84,20 +91,23 @@ export default function SpacingPage() {
 
         <section>
           <h3 className="text-lg font-bold mb-4">Border Radius</h3>
-          <div className="flex flex-wrap gap-4">
-            {(
-              [
-                "rounded-sm",
-                "rounded",
-                "rounded-md",
-                "rounded-lg",
-                "rounded-xl",
-                "rounded-full",
-              ] as const
-            ).map((cls) => (
+          <p className="text-sm text-muted-foreground mb-4 max-w-prose">
+            Hard floor at 4px — nothing is sharper (Decision #100). The
+            <code className="font-mono text-accent"> 4 / 6 / 8 </code>
+            ladder maps to semantic classes; <code className="font-mono">rounded-sm</code>
+            {" / "}<code className="font-mono">rounded-md</code> both resolve to the 4px
+            floor. <code className="font-mono">rounded-full</code> is reserved for
+            round-by-design only.
+          </p>
+          <div className="flex flex-wrap gap-6">
+            {RADIUS_SCALE.map(({ cls, px, role }) => (
               <div key={cls} className="text-center">
                 <div className={`w-16 h-16 bg-primary ${cls}`} />
-                <p className="text-xs text-muted-foreground mt-2">{cls}</p>
+                <p className="font-mono text-sm mt-3">{cls}</p>
+                <p className="font-mono text-xs text-accent">{px}</p>
+                <p className="text-xs text-muted-foreground mt-1 max-w-28">
+                  {role}
+                </p>
               </div>
             ))}
           </div>
