@@ -35,7 +35,7 @@ export default function CopyableTextPage() {
             Drag the right edge of each box to resize. Shows the full string when
             there&apos;s room; truncates (fixed tail, flexing head) as it narrows.
           </p>
-          <div className="resize-x overflow-hidden border border-edge bg-surface p-3 min-w-[160px] max-w-full w-[420px]">
+          <div className="resize-x overflow-hidden border border-edge bg-surface p-3 min-w-[160px] max-w-full w-[460px]">
             <CopyableText text={HASH} fluid endChars={6} />
           </div>
           <div className="resize-x overflow-hidden border border-edge bg-surface p-3 min-w-[160px] max-w-full w-[300px]">
