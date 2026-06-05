@@ -6,7 +6,7 @@ const textareaVariants = cva(
   [
     "w-full font-sans text-foreground",
     "bg-background dark:bg-surface",
-    "border border-edge rounded-none",
+    "border border-edge rounded-sm",
     "placeholder:text-muted-foreground",
     "focus-visible:outline-none",
     "focus-visible:border-accent-700 dark:focus-visible:border-accent",
