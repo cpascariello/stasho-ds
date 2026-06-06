@@ -365,4 +365,35 @@ describe("Table", () => {
     await user.click(screen.getByText("Name").closest("th")!);
     expect(onSortChange).toHaveBeenCalledWith("Name", "asc");
   });
+
+  it("active row keeps the accent fill and does not take the muted-hover class", () => {
+    render(
+      <Table
+        columns={columns}
+        data={data}
+        keyExtractor={(r) => r.id}
+        activeKey="2"
+        onRowClick={vi.fn()}
+      />,
+    );
+    const activeRow = screen.getAllByRole("row")[2]!; // header is [0]; id "2" is [2]
+    expect(activeRow.className).toContain("bg-accent/15");
+    expect(activeRow.className).toContain("hover:bg-accent/20");
+    expect(activeRow.className).not.toContain("hover:bg-muted/50");
+  });
+
+  it("non-active clickable row takes the muted hover, not the accent fill", () => {
+    render(
+      <Table
+        columns={columns}
+        data={data}
+        keyExtractor={(r) => r.id}
+        activeKey="2"
+        onRowClick={vi.fn()}
+      />,
+    );
+    const otherRow = screen.getAllByRole("row")[1]!; // id "1"
+    expect(otherRow.className).toContain("hover:bg-muted/50");
+    expect(otherRow.className).not.toContain("bg-accent/15");
+  });
 });

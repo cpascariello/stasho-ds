@@ -221,43 +221,40 @@ export function Table<T>({
               </td>
             </tr>
           ) : (
-            sortedData.map((row) => (
-              <tr
-                key={keyExtractor(row)}
-                className={cn(
-                  "border-b border-edge transition-all",
-                  activeKey === keyExtractor(row)
-                    ? "bg-accent/15 shadow-[inset_3px_0_0_var(--accent)]"
-                    : "even:bg-muted/30",
-                  "hover:bg-muted/50",
-                  onRowClick &&
-                    "cursor-pointer hover:shadow-[inset_3px_0_0_var(--accent)]",
-                )}
-                aria-current={
-                  activeKey === keyExtractor(row) ? "true" : undefined
-                }
-                style={{ transitionDuration: "var(--duration-fast)" }}
-                tabIndex={onRowClick ? 0 : undefined}
-                onClick={onRowClick ? () => onRowClick(row) : undefined}
-                onKeyDown={
-                  onRowClick
-                    ? (e) => handleRowKeyDown(e, row)
-                    : undefined
-                }
-              >
-                {columns.map((col) => (
-                  <td
-                    key={col.id ?? col.header}
-                    className={cn(
-                      "px-4 py-3 text-sm",
-                      alignClass[col.align ?? "left"],
-                    )}
-                  >
-                    {col.accessor(row)}
-                  </td>
-                ))}
-              </tr>
-            ))
+            sortedData.map((row) => {
+              const isActive = activeKey === keyExtractor(row);
+              return (
+                <tr
+                  key={keyExtractor(row)}
+                  className={cn(
+                    "border-b border-edge transition-all",
+                    isActive
+                      ? "bg-accent/15 shadow-[inset_3px_0_0_var(--accent)] hover:bg-accent/20"
+                      : "even:bg-muted/30 hover:bg-muted/50",
+                    onRowClick && "cursor-pointer",
+                  )}
+                  aria-current={isActive ? "true" : undefined}
+                  style={{ transitionDuration: "var(--duration-fast)" }}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  onKeyDown={
+                    onRowClick ? (e) => handleRowKeyDown(e, row) : undefined
+                  }
+                >
+                  {columns.map((col) => (
+                    <td
+                      key={col.id ?? col.header}
+                      className={cn(
+                        "px-4 py-3 text-sm",
+                        alignClass[col.align ?? "left"],
+                      )}
+                    >
+                      {col.accessor(row)}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>
