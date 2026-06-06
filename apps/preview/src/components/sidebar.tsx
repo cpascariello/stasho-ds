@@ -88,9 +88,9 @@ const NAV: NavEntry[] = [
 ];
 
 const LINK_ACTIVE =
-  "bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-200 font-medium";
+  "bg-accent/15 text-accent-500 dark:text-accent font-medium";
 const LINK_IDLE =
-  "text-muted-foreground hover:text-foreground hover:bg-muted";
+  "text-muted-foreground hover:text-accent-500 dark:hover:text-accent hover:bg-muted";
 
 function NavLink({
   item,
@@ -134,7 +134,7 @@ function CollapsibleGroup({
         onClick={() => setOpen((v) => !v)}
         className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${
           hasActiveChild
-            ? "text-primary-700 dark:text-primary-200 font-medium"
+            ? "text-accent-500 dark:text-accent font-medium"
             : LINK_IDLE
         }`}
         style={{ transitionDuration: "var(--duration-fast)" }}
