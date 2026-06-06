@@ -22,6 +22,7 @@
     "directory": "packages/ds"
   },
   "exports": {
+    "./accordion": "./src/components/accordion/accordion.tsx",
     "./alert": "./src/components/alert/alert.tsx",
     "./button": "./src/components/button/button.tsx",
     "./icon-button": "./src/components/button/icon-button.tsx",
