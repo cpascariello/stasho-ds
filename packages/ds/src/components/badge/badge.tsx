@@ -22,8 +22,11 @@ const badgeVariants = cva(
         outline: "border",
       },
       size: {
-        sm: "px-3 py-0.5 text-[10px]",
-        md: "px-4 py-1 text-xs",
+        // Explicit line-height + min-height so icon-only badges match the
+        // height of text badges (a lone icon otherwise yields a shorter
+        // line-box than text, and the inherited line-height is non-deterministic).
+        sm: "px-3 py-0.5 text-[10px] leading-[14px] min-h-5",
+        md: "px-4 py-1 text-xs leading-[16px] min-h-[26px]",
       },
     },
     compoundVariants: [
