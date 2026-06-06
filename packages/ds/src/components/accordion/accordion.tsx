@@ -57,7 +57,7 @@ const AccordionContent = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...rest }, ref) => (
-  <AccordionPrimitive.Content ref={ref} className="overflow-hidden" {...rest}>
+  <AccordionPrimitive.Content ref={ref} {...rest}>
     <div
       className={cn(
         "pb-4 text-sm leading-relaxed text-muted-foreground",

@@ -64,4 +64,40 @@ describe("Accordion", () => {
     await user.click(trigger);
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
   });
+
+  it("opens the defaultValue item on mount", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Question B</AccordionTrigger>
+          <AccordionContent>Answer B</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    expect(screen.getByText("Answer A")).toBeDefined();
+  });
+
+  it("keeps multiple items open (type=multiple)", async () => {
+    const user = userEvent.setup();
+    render(
+      <Accordion type="multiple">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Question B</AccordionTrigger>
+          <AccordionContent>Answer B</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    await user.click(screen.getByRole("button", { name: "Question A" }));
+    await user.click(screen.getByRole("button", { name: "Question B" }));
+    expect(screen.getByText("Answer A")).toBeDefined();
+    expect(screen.getByText("Answer B")).toBeDefined();
+  });
 });
