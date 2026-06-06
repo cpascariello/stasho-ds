@@ -204,6 +204,27 @@ describe("Badge", () => {
     });
   });
 
+  describe("consistent height (icon-only matches text)", () => {
+    it("sm carries an explicit line-height + min-height", () => {
+      const { container } = render(<Badge size="sm">L</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("leading-[14px]");
+      expect(cls).toContain("min-h-5");
+    });
+
+    it("md carries an explicit line-height + min-height", () => {
+      const { container } = render(<Badge size="md">L</Badge>);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("leading-[16px]");
+      expect(cls).toContain("min-h-[26px]");
+    });
+
+    it("an icon-only badge keeps the text badge's min-height class", () => {
+      const { container } = render(<Badge size="sm" iconLeft={<svg />} />);
+      expect(container.firstElementChild?.className).toContain("min-h-5");
+    });
+  });
+
   describe("base styles", () => {
     it("applies mono font and uppercase", () => {
       const { container } = render(<Badge>Label</Badge>);
