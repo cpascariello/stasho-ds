@@ -45,6 +45,7 @@ const AccordionTrigger = forwardRef<
           "size-4 shrink-0 text-accent-500 dark:text-accent",
           "transition-transform duration-200",
           "group-data-[state=open]:rotate-180",
+          "group-data-[state=closed]:group-hover:translate-y-[3px]",
           "motion-reduce:transition-none",
         )}
       />
@@ -57,10 +58,21 @@ const AccordionContent = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...rest }, ref) => (
-  <AccordionPrimitive.Content ref={ref} {...rest}>
+  <AccordionPrimitive.Content
+    ref={ref}
+    className={cn(
+      "group overflow-hidden",
+      "motion-safe:data-[state=open]:animate-accordion-down",
+      "motion-safe:data-[state=closed]:animate-accordion-up",
+    )}
+    {...rest}
+  >
     <div
       className={cn(
         "pb-4 text-sm leading-relaxed text-muted-foreground",
+        "opacity-0 -translate-y-1 transition-[opacity,transform] duration-200 ease-out",
+        "group-data-[state=open]:opacity-100 group-data-[state=open]:translate-y-0",
+        "motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0",
         className,
       )}
     >

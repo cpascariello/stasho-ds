@@ -81,6 +81,58 @@ describe("Accordion", () => {
     expect(screen.getByText("Answer A")).toBeDefined();
   });
 
+  it("content carries the motion-safe-gated open/close animation classes", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    // The Radix Content element is the parent of the rendered answer text.
+    const inner = screen.getByText("Answer A");
+    const content = inner.parentElement as HTMLElement;
+    expect(content.className).toContain("overflow-hidden");
+    // motion-safe gating (not motion-reduce:animate-none): a data-[state] attribute
+    // selector out-specifies motion-reduce:animate-none, so the animation must be
+    // gated INTO motion-safe rather than disabled OUT via motion-reduce.
+    expect(content.className).toContain("motion-safe:data-[state=open]:animate-accordion-down");
+    expect(content.className).toContain("motion-safe:data-[state=closed]:animate-accordion-up");
+  });
+
+  it("answer content carries the fade/settle classes", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    const inner = screen.getByText("Answer A");
+    expect(inner.className).toContain("group-data-[state=open]:opacity-100");
+    expect(inner.className).toContain("transition-[opacity,transform]");
+    expect(inner.className).toContain("motion-reduce:transition-none");
+  });
+
+  it("caret carries the closed-hover nudge class", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    // Caret is the trigger's last element child (the CaretDown svg).
+    const trigger = screen.getByRole("button", { name: "Question A" });
+    const caret = trigger.lastElementChild as HTMLElement;
+    expect(caret.getAttribute("class")).toContain(
+      "group-data-[state=closed]:group-hover:translate-y-[3px]",
+    );
+  });
+
   it("keeps multiple items open (type=multiple)", async () => {
     const user = userEvent.setup();
     render(

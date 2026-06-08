@@ -8,6 +8,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 
 | Component | Purpose | Import |
 |-----------|---------|--------|
+| [Accordion](#accordion) | Collapsible disclosure sections (FAQ), single/multiple | `@stasho/ds/accordion` |
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@stasho/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@stasho/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
@@ -67,6 +68,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 
 | Need | Use | Not |
 |------|-----|-----|
+| Collapsible Q&A / disclosure sections | **Accordion** — single (`collapsible`) or multiple open, slide+settle motion | Tabs — Accordion stacks vertically and can show several panels at once |
 | Content section | **Card** `variant="default"` — `bg-surface`, borderless | Plain div — Card provides consistent surface fill and theming |
 | Transparent grouping (no chrome) | **Card** `variant="ghost"` — no border, no background | Card default — ghost avoids visual nesting when cards are inside cards |
 | Location in page hierarchy | **Breadcrumb** — semantic nav/ol, `asChild` for router links | Plain text links — Breadcrumb handles separators and aria |
@@ -671,6 +673,50 @@ Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay s
 ---
 
 ## Components
+
+### Accordion
+
+Collapsible disclosure sections (FAQ, settings groups) built on Radix Accordion. Composable 4-part API; single or multiple open at once.
+
+```tsx
+import {
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
+} from "@stasho/ds/accordion";
+
+// Single — one open at a time, collapsible so all can close
+<Accordion type="single" collapsible defaultValue="item-0">
+  <AccordionItem value="item-0">
+    <AccordionTrigger>Do you offer refunds?</AccordionTrigger>
+    <AccordionContent>Yes — a full refund within 30 days.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is there a free tier?</AccordionTrigger>
+    <AccordionContent>Free forever for solo projects.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Multiple — any number open simultaneously
+<Accordion type="multiple">
+  ...
+</Accordion>
+```
+
+**Parts:**
+
+| Part | Element | Purpose |
+|------|---------|---------|
+| `Accordion` | Radix `Root` | Carries `type` (`"single"` \| `"multiple"`), `collapsible`, `defaultValue`/`value` |
+| `AccordionItem` | `<div>` | One section, `border-b border-edge`, requires `value` |
+| `AccordionTrigger` | `<button>` in `<h3>` header | Question row; Inter Semibold, cyan on hover, caret on the right |
+| `AccordionContent` | Radix `Content` | Answer panel; height-animated wrapper around the inner text |
+
+**Type:** `type="single"` (with optional `collapsible` so the open item can re-close) keeps one panel open; `type="multiple"` lets several stay open. Controlled (`value`/`onValueChange`) and uncontrolled (`defaultValue`) both supported via Radix.
+
+**Motion:**
+- **Open/close** — the panel slides from/to `height: 0` via the `accordion-down` / `accordion-up` keyframes riding Radix's `--radix-accordion-content-height`; the inner answer fades + settles (`opacity` + 4px `translate-y`) on `group-data-[state=open]`.
+- **Caret** — rotates 180° when open; on hover of a closed row it dips 3px (`group-data-[state=closed]:group-hover:translate-y-[3px]`) to preview the open direction.
+- **Trigger text** — shifts to cyan (`hover:text-accent`) on hover; focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`).
+- **Reduced motion** — all motion is disabled under `prefers-reduced-motion`: the height animation is gated *into* `motion-safe:` (so under `reduce` no animation rule exists), and the fade/settle + caret use `motion-reduce:transition-none`. Content still opens and closes, just instantly.
 
 ### Alert
 
