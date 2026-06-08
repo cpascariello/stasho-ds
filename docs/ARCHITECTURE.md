@@ -455,6 +455,37 @@ const Checkbox = forwardRef<HTMLButtonElement, Props>(
 
 **Notes:** This pattern eliminates any need for JS animation libraries. The `data-state` attribute is the contract between Radix and CSS — no React state or refs needed for the animation itself.
 
+### Radix Height Animation (Accordion)
+
+**Context:** The Accordion panel needs to slide open/closed, but the content height is dynamic and unknown at author time. Radix unmounts `Accordion.Content` on close, so a plain CSS height transition has nothing to animate from/to.
+
+**Approach:** Radix exposes the measured panel height as the CSS variable `--radix-accordion-content-height` on the Content element. Two keyframes in `tokens.css` animate `height` between `0` and that variable, and the Content opts in via `data-state`:
+
+```css
+@keyframes accordion-down { from { height: 0 } to { height: var(--radix-accordion-content-height) } }
+@keyframes accordion-up   { from { height: var(--radix-accordion-content-height) } to { height: 0 } }
+```
+
+```tsx
+<AccordionPrimitive.Content
+  className="group overflow-hidden
+    data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up
+    motion-reduce:animate-none"
+>
+  <div className="... opacity-0 -translate-y-1 transition-[opacity,transform]
+    group-data-[state=open]:opacity-100 group-data-[state=open]:translate-y-0
+    motion-reduce:transition-none ...">
+    {children}
+  </div>
+</AccordionPrimitive.Content>
+```
+
+**Two-layer motion:** the height keyframe lives on the Content element (it animates the outer box); the fade + settle lives on the inner `<div>` and is driven off the Content's state via `group` + `group-data-[state=open]`. Separating the two means the box can collapse to `0` height while the text independently fades — they share the same 200ms window but are different properties on different elements.
+
+**Reduced motion:** `motion-reduce:animate-none` (height) + `motion-reduce:transition-none` (fade/settle) make open/close instant. In jsdom the keyframes don't load, so `animationName` resolves to `none` and Radix unmounts on close exactly as in production — behavioral tests stay valid.
+
+**Key files:** `packages/ds/src/components/accordion/accordion.tsx`, `packages/ds/src/styles/tokens.css` (`accordion-down`/`accordion-up` keyframes).
+
 ### Test Environment for Radix Components
 
 **Context:** Radix Select uses DOM APIs not available in jsdom (PointerEvent, ResizeObserver, DOMRect, scrollIntoView).
