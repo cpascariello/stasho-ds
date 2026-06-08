@@ -64,5 +64,67 @@ const LogoFull = forwardRef<SVGSVGElement, LogoProps>(
 
 LogoFull.displayName = "LogoFull";
 
-export { Logo, LogoFull };
+/**
+ * stasho wordmark only, no icon (placeholder — visual rebrand deferred).
+ * Inherits color from parent via `currentColor`.
+ */
+const LogoWordmark = forwardRef<SVGSVGElement, LogoProps>(
+  ({ className, ...rest }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 1122 229"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("shrink-0", className)}
+      {...rest}
+    >
+      {/* Wordmark: "stasho" (placeholder — visual rebrand deferred) */}
+      <text
+        x="0"
+        y="180"
+        fill="currentColor"
+        fontFamily="inherit"
+        fontSize="200"
+        fontWeight="600"
+      >
+        stasho
+      </text>
+    </svg>
+  ),
+);
+
+LogoWordmark.displayName = "LogoWordmark";
+
+/**
+ * stasho letter mark "s", for collapsed / compact placements (placeholder —
+ * visual rebrand deferred). Inherits color from parent via `currentColor`.
+ */
+const LogoLetter = forwardRef<SVGSVGElement, LogoProps>(
+  ({ className, ...rest }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 120 229"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("shrink-0", className)}
+      {...rest}
+    >
+      {/* Letter "s" (placeholder — visual rebrand deferred) */}
+      <text
+        x="0"
+        y="180"
+        fill="currentColor"
+        fontFamily="inherit"
+        fontSize="200"
+        fontWeight="600"
+      >
+        s
+      </text>
+    </svg>
+  ),
+);
+
+LogoLetter.displayName = "LogoLetter";
+
+export { Logo, LogoFull, LogoWordmark, LogoLetter };
 export type { LogoProps };
