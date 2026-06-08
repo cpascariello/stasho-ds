@@ -15,6 +15,12 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-06-08 — Publish workflow: bump Node 20 action pins
+
+**Source:** Surfaced during the v0.9.0 publish run — `publish.yml`'s `actions/checkout` and `actions/setup-node` run on Node 20, which GitHub deprecates **2026-06-16** (forced to Node 24 after). Publishing still works today.
+**Description:** Bump the pinned `actions/checkout` and `actions/setup-node` SHAs in `.github/workflows/publish.yml` (and check `ci.yml`) to versions that run on Node 24, before the deadline. Re-pin to SHA with version comments; re-scan with `zizmor`.
+**Priority:** Medium (hard deadline 2026-06-16)
+
 ### 2026-06-05 — Interactive Card variant (Card ↔ ActionCard convergence)
 
 **Source:** Deferred while unifying the card family (Decision #100). The radius-floor + unification work scoped out card *anatomy*.
