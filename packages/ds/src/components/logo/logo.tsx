@@ -64,5 +64,71 @@ const LogoFull = forwardRef<SVGSVGElement, LogoProps>(
 
 LogoFull.displayName = "LogoFull";
 
-export { Logo, LogoFull };
+/**
+ * stasho wordmark only, no icon (placeholder logotype, rebrand still deferred).
+ * Set in Anybody 800 italic to match the brand headings; the consuming app must
+ * load Anybody or it falls back to sans-serif. viewBox is fitted to "stasho" at
+ * that cut. Inherits color from parent via `currentColor`.
+ */
+const LogoWordmark = forwardRef<SVGSVGElement, LogoProps>(
+  ({ className, ...rest }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 654 229"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("shrink-0", className)}
+      {...rest}
+    >
+      <text
+        x="0"
+        y="180"
+        fill="currentColor"
+        fontFamily="Anybody, sans-serif"
+        fontSize="200"
+        fontWeight="800"
+        fontStyle="italic"
+      >
+        stasho
+      </text>
+    </svg>
+  ),
+);
+
+LogoWordmark.displayName = "LogoWordmark";
+
+/**
+ * stasho letter mark "s", for collapsed / compact placements (placeholder
+ * logotype, rebrand still deferred). Set in Anybody 800 italic to match the
+ * brand headings; the consuming app must load Anybody or it falls back to
+ * sans-serif. Inherits color from parent via `currentColor`.
+ */
+const LogoLetter = forwardRef<SVGSVGElement, LogoProps>(
+  ({ className, ...rest }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 119 229"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn("shrink-0", className)}
+      {...rest}
+    >
+      <text
+        x="0"
+        y="180"
+        fill="currentColor"
+        fontFamily="Anybody, sans-serif"
+        fontSize="200"
+        fontWeight="800"
+        fontStyle="italic"
+      >
+        s
+      </text>
+    </svg>
+  ),
+);
+
+LogoLetter.displayName = "LogoLetter";
+
+export { Logo, LogoFull, LogoWordmark, LogoLetter };
 export type { LogoProps };
