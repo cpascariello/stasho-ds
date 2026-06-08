@@ -65,7 +65,7 @@ Ideas and scope creep captured for later consideration.
 **Description:** Build remaining UI components. Badge, StatusDot, Card, Skeleton, Table, Tooltip are done. Remaining:
 - ~~Modal / Dialog~~ — done (see completed)
 - ~~Tabs~~ — done (see completed)
-- Accordion / Collapsible — expand/collapse sections
+- ~~Accordion / Collapsible~~ — done (Radix-based FAQ disclosure + slide/settle motion, Decision #101)
 - ~~Alert / Banner~~ — done (see completed)
 - Avatar — user image with fallback initials
 - ~~Pagination~~ — done (see completed)
