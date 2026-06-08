@@ -81,7 +81,7 @@ describe("Accordion", () => {
     expect(screen.getByText("Answer A")).toBeDefined();
   });
 
-  it("content carries the open/close animation + reduced-motion classes", () => {
+  it("content carries the motion-safe-gated open/close animation classes", () => {
     render(
       <Accordion type="single" collapsible defaultValue="a">
         <AccordionItem value="a">
@@ -93,10 +93,12 @@ describe("Accordion", () => {
     // The Radix Content element is the parent of the rendered answer text.
     const inner = screen.getByText("Answer A");
     const content = inner.parentElement as HTMLElement;
-    expect(content.className).toContain("data-[state=open]:animate-accordion-down");
-    expect(content.className).toContain("data-[state=closed]:animate-accordion-up");
     expect(content.className).toContain("overflow-hidden");
-    expect(content.className).toContain("motion-reduce:animate-none");
+    // motion-safe gating (not motion-reduce:animate-none): a data-[state] attribute
+    // selector out-specifies motion-reduce:animate-none, so the animation must be
+    // gated INTO motion-safe rather than disabled OUT via motion-reduce.
+    expect(content.className).toContain("motion-safe:data-[state=open]:animate-accordion-down");
+    expect(content.className).toContain("motion-safe:data-[state=closed]:animate-accordion-up");
   });
 
   it("answer content carries the fade/settle classes", () => {

@@ -716,7 +716,7 @@ import {
 - **Open/close** — the panel slides from/to `height: 0` via the `accordion-down` / `accordion-up` keyframes riding Radix's `--radix-accordion-content-height`; the inner answer fades + settles (`opacity` + 4px `translate-y`) on `group-data-[state=open]`.
 - **Caret** — rotates 180° when open; on hover of a closed row it dips 3px (`group-data-[state=closed]:group-hover:translate-y-[3px]`) to preview the open direction.
 - **Trigger text** — shifts to cyan (`hover:text-accent`) on hover; focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`).
-- **Reduced motion** — all height/transition/transform motion is disabled under `prefers-reduced-motion` (`motion-reduce:animate-none` / `motion-reduce:transition-none`); content still opens and closes, just without animation.
+- **Reduced motion** — all motion is disabled under `prefers-reduced-motion`: the height animation is gated *into* `motion-safe:` (so under `reduce` no animation rule exists), and the fade/settle + caret use `motion-reduce:transition-none`. Content still opens and closes, just instantly.
 
 ### Alert
 

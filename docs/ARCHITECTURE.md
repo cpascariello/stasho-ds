@@ -459,9 +459,14 @@ const Checkbox = forwardRef<HTMLButtonElement, Props>(
 
 **Context:** The Accordion panel needs to slide open/closed, but the content height is dynamic and unknown at author time. Radix unmounts `Accordion.Content` on close, so a plain CSS height transition has nothing to animate from/to.
 
-**Approach:** Radix exposes the measured panel height as the CSS variable `--radix-accordion-content-height` on the Content element. Two keyframes in `tokens.css` animate `height` between `0` and that variable, and the Content opts in via `data-state`:
+**Approach:** Radix exposes the measured panel height as the CSS variable `--radix-accordion-content-height` on the Content element. Two keyframes in `tokens.css` animate `height` between `0` and that variable, the animation is **registered as a Tailwind utility via `@theme`**, and the Content opts in via a `data-[state=…]:` variant:
 
 ```css
+/* tokens.css */
+@theme {
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up: accordion-up 200ms ease-out;
+}
 @keyframes accordion-down { from { height: 0 } to { height: var(--radix-accordion-content-height) } }
 @keyframes accordion-up   { from { height: var(--radix-accordion-content-height) } to { height: 0 } }
 ```
@@ -469,8 +474,8 @@ const Checkbox = forwardRef<HTMLButtonElement, Props>(
 ```tsx
 <AccordionPrimitive.Content
   className="group overflow-hidden
-    data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up
-    motion-reduce:animate-none"
+    motion-safe:data-[state=open]:animate-accordion-down
+    motion-safe:data-[state=closed]:animate-accordion-up"
 >
   <div className="... opacity-0 -translate-y-1 transition-[opacity,transform]
     group-data-[state=open]:opacity-100 group-data-[state=open]:translate-y-0
@@ -480,11 +485,15 @@ const Checkbox = forwardRef<HTMLButtonElement, Props>(
 </AccordionPrimitive.Content>
 ```
 
-**Two-layer motion:** the height keyframe lives on the Content element (it animates the outer box); the fade + settle lives on the inner `<div>` and is driven off the Content's state via `group` + `group-data-[state=open]`. Separating the two means the box can collapse to `0` height while the text independently fades — they share the same 200ms window but are different properties on different elements.
+**Why `@theme`, not a plain `.animate-accordion-*` class:** a Tailwind variant (`data-[state=open]:`) only composes with a utility Tailwind *owns*. A hand-written `.animate-accordion-down` CSS class is invisible to the variant engine, so `data-[state=open]:animate-accordion-down` is silently **never generated** — the class lands in the DOM but no rule matches `[data-state=open]`, and the panel snaps open with no animation. Registering the animation in `@theme` makes `animate-accordion-*` a real utility, so the variant composes. (Contrast `animate-button-chase-*`, which are plain classes applied *bare* — bare application works; variant composition does not.)
 
-**Reduced motion:** `motion-reduce:animate-none` (height) + `motion-reduce:transition-none` (fade/settle) make open/close instant. In jsdom the keyframes don't load, so `animationName` resolves to `none` and Radix unmounts on close exactly as in production — behavioral tests stay valid.
+**Why `motion-safe:` gating, not `motion-reduce:animate-none`:** the `data-[state=open]:` variant compiles to `…[data-state=open]` — an attribute selector with specificity `(0,2,0)`, which **out-specifies** `motion-reduce:animate-none` `(0,1,0)`. So `motion-reduce:animate-none` would *lose* and the animation would still play under reduced motion. Gating the animation *into* `motion-safe:` instead means the rule lives entirely inside `@media (prefers-reduced-motion: no-preference)` and simply doesn't exist under `reduce` — no cascade battle. This is specific to **keyframe animations** driven by `data-[state]:`; transitions (e.g. the inner-div fade) stay on `motion-reduce:transition-none` because `transition-property: none` governs a different property and never conflicts.
 
-**Key files:** `packages/ds/src/components/accordion/accordion.tsx`, `packages/ds/src/styles/tokens.css` (`accordion-down`/`accordion-up` keyframes).
+**Two-layer motion:** the height animation lives on the Content element (it animates the outer box); the fade + settle lives on the inner `<div>` and is driven off the Content's state via `group` + `group-data-[state=open]`. Separating the two means the box height animates while the text independently fades — same 200ms window, different properties on different elements.
+
+**jsdom:** the keyframes/`@theme` utilities don't load in jsdom, so `getComputedStyle(content).animationName` resolves to `none` and Radix unmounts on close exactly as in production — behavioral tests stay valid. Class-presence tests assert the `motion-safe:data-[state=…]:animate-accordion-*` strings; the *composed CSS* is verified at build time by grepping the static export.
+
+**Key files:** `packages/ds/src/components/accordion/accordion.tsx`, `packages/ds/src/styles/tokens.css` (`@theme --animate-accordion-*` + `accordion-down`/`accordion-up` keyframes).
 
 ### Test Environment for Radix Components
 

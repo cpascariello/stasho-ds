@@ -379,6 +379,17 @@
 
 /* ── Accordion open/close (height) ───────────── */
 
+/* Registered as real Tailwind utilities so the `data-[state=...]:` variant can
+   compose (a plain `.animate-accordion-*` CSS class can't carry a Tailwind
+   variant). Applied in the component as `motion-safe:data-[state=open]:…` — the
+   `data-[state]` attribute selector out-specifies `motion-reduce:animate-none`,
+   so reduced motion is honored by gating the animation INTO motion-safe rather
+   than disabling it OUT, which sidesteps the specificity conflict entirely. */
+@theme {
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up: accordion-up 200ms ease-out;
+}
+
 @keyframes accordion-down {
   from { height: 0; }
   to   { height: var(--radix-accordion-content-height); }
@@ -387,12 +398,4 @@
 @keyframes accordion-up {
   from { height: var(--radix-accordion-content-height); }
   to   { height: 0; }
-}
-
-.animate-accordion-down { animation: accordion-down 200ms ease-out; }
-.animate-accordion-up   { animation: accordion-up   200ms ease-out; }
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-accordion-down,
-  .animate-accordion-up { animation: none; }
 }

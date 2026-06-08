@@ -62,8 +62,8 @@ const AccordionContent = forwardRef<
     ref={ref}
     className={cn(
       "group overflow-hidden",
-      "data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up",
-      "motion-reduce:animate-none",
+      "motion-safe:data-[state=open]:animate-accordion-down",
+      "motion-safe:data-[state=closed]:animate-accordion-up",
     )}
     {...rest}
   >
