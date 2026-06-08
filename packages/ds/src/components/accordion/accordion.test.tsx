@@ -81,6 +81,39 @@ describe("Accordion", () => {
     expect(screen.getByText("Answer A")).toBeDefined();
   });
 
+  it("content carries the open/close animation + reduced-motion classes", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    // The Radix Content element is the parent of the rendered answer text.
+    const inner = screen.getByText("Answer A");
+    const content = inner.parentElement as HTMLElement;
+    expect(content.className).toContain("data-[state=open]:animate-accordion-down");
+    expect(content.className).toContain("data-[state=closed]:animate-accordion-up");
+    expect(content.className).toContain("overflow-hidden");
+    expect(content.className).toContain("motion-reduce:animate-none");
+  });
+
+  it("answer content carries the fade/settle classes", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    const inner = screen.getByText("Answer A");
+    expect(inner.className).toContain("group-data-[state=open]:opacity-100");
+    expect(inner.className).toContain("transition-[opacity,transform]");
+    expect(inner.className).toContain("motion-reduce:transition-none");
+  });
+
   it("keeps multiple items open (type=multiple)", async () => {
     const user = userEvent.setup();
     render(

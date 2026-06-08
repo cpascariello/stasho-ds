@@ -57,10 +57,21 @@ const AccordionContent = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...rest }, ref) => (
-  <AccordionPrimitive.Content ref={ref} {...rest}>
+  <AccordionPrimitive.Content
+    ref={ref}
+    className={cn(
+      "group overflow-hidden",
+      "data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up",
+      "motion-reduce:animate-none",
+    )}
+    {...rest}
+  >
     <div
       className={cn(
         "pb-4 text-sm leading-relaxed text-muted-foreground",
+        "opacity-0 -translate-y-1 transition-[opacity,transform] duration-200 ease-out",
+        "group-data-[state=open]:opacity-100 group-data-[state=open]:translate-y-0",
+        "motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0",
         className,
       )}
     >
