@@ -65,25 +65,26 @@ const LogoFull = forwardRef<SVGSVGElement, LogoProps>(
 LogoFull.displayName = "LogoFull";
 
 /**
- * stasho wordmark only, no icon (placeholder — visual rebrand deferred).
+ * stasho wordmark only, no icon (placeholder logotype, rebrand still deferred).
+ * Set in the Anybody webfont; the consuming app must load Anybody (weight 600)
+ * or it falls back to sans-serif. viewBox is fitted to "stasho" at Anybody 600.
  * Inherits color from parent via `currentColor`.
  */
 const LogoWordmark = forwardRef<SVGSVGElement, LogoProps>(
   ({ className, ...rest }, ref) => (
     <svg
       ref={ref}
-      viewBox="0 0 1122 229"
+      viewBox="0 0 730 229"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       className={cn("shrink-0", className)}
       {...rest}
     >
-      {/* Wordmark: "stasho" (placeholder — visual rebrand deferred) */}
       <text
         x="0"
         y="180"
         fill="currentColor"
-        fontFamily="inherit"
+        fontFamily="Anybody, sans-serif"
         fontSize="200"
         fontWeight="600"
       >
@@ -96,25 +97,26 @@ const LogoWordmark = forwardRef<SVGSVGElement, LogoProps>(
 LogoWordmark.displayName = "LogoWordmark";
 
 /**
- * stasho letter mark "s", for collapsed / compact placements (placeholder —
- * visual rebrand deferred). Inherits color from parent via `currentColor`.
+ * stasho letter mark "s", for collapsed / compact placements (placeholder
+ * logotype, rebrand still deferred). Set in the Anybody webfont; the consuming
+ * app must load Anybody (weight 600) or it falls back to sans-serif.
+ * Inherits color from parent via `currentColor`.
  */
 const LogoLetter = forwardRef<SVGSVGElement, LogoProps>(
   ({ className, ...rest }, ref) => (
     <svg
       ref={ref}
-      viewBox="0 0 120 229"
+      viewBox="0 0 125 229"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       className={cn("shrink-0", className)}
       {...rest}
     >
-      {/* Letter "s" (placeholder — visual rebrand deferred) */}
       <text
         x="0"
         y="180"
         fill="currentColor"
-        fontFamily="inherit"
+        fontFamily="Anybody, sans-serif"
         fontSize="200"
         fontWeight="600"
       >
