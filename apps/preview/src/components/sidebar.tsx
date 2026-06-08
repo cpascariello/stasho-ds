@@ -41,6 +41,7 @@ const NAV: NavEntry[] = [
       {
         group: "Data Display",
         items: [
+          { label: "Accordion", href: "/components/accordion" },
           { label: "Badge", href: "/components/badge" },
           { label: "Card", href: "/components/card" },
           { label: "CopyableText", href: "/components/copyable-text" },
