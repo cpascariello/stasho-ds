@@ -45,6 +45,7 @@ const AccordionTrigger = forwardRef<
           "size-4 shrink-0 text-accent-500 dark:text-accent",
           "transition-transform duration-200",
           "group-data-[state=open]:rotate-180",
+          "group-data-[state=closed]:group-hover:translate-y-[3px]",
           "motion-reduce:transition-none",
         )}
       />

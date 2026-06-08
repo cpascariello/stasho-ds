@@ -114,6 +114,23 @@ describe("Accordion", () => {
     expect(inner.className).toContain("motion-reduce:transition-none");
   });
 
+  it("caret carries the closed-hover nudge class", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    // Caret is the trigger's last element child (the CaretDown svg).
+    const trigger = screen.getByRole("button", { name: "Question A" });
+    const caret = trigger.lastElementChild as HTMLElement;
+    expect(caret.getAttribute("class")).toContain(
+      "group-data-[state=closed]:group-hover:translate-y-[3px]",
+    );
+  });
+
   it("keeps multiple items open (type=multiple)", async () => {
     const user = userEvent.setup();
     render(
