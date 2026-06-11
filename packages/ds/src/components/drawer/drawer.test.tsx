@@ -45,7 +45,40 @@ describe("Drawer", () => {
     const user = userEvent.setup();
     renderDrawer("left");
     await user.click(screen.getByText("Open"));
-    expect(screen.getByRole("dialog").className).toContain("inset-y-0");
+    const content = screen.getByRole("dialog");
+    expect(content.className).toContain("inset-y-0");
+    expect(content.className).toContain("left-0");
+  });
+
+  it("applies side=right styling", async () => {
+    const user = userEvent.setup();
+    renderDrawer("right");
+    await user.click(screen.getByText("Open"));
+    expect(screen.getByRole("dialog").className).toContain("right-0");
+  });
+
+  it("links title via aria-labelledby", async () => {
+    const user = userEvent.setup();
+    renderDrawer();
+    await user.click(screen.getByText("Open"));
+    const dialog = screen.getByRole("dialog");
+    const labelId = dialog.getAttribute("aria-labelledby");
+    expect(labelId).toBeTruthy();
+    expect(document.getElementById(labelId!)).toBe(
+      screen.getByText("Deployment"),
+    );
+  });
+
+  it("links description via aria-describedby", async () => {
+    const user = userEvent.setup();
+    renderDrawer();
+    await user.click(screen.getByText("Open"));
+    const dialog = screen.getByRole("dialog");
+    const descId = dialog.getAttribute("aria-describedby");
+    expect(descId).toBeTruthy();
+    expect(document.getElementById(descId!)).toBe(
+      screen.getByText("Detail for one deployment."),
+    );
   });
 
   it("closes on Escape via controlled onOpenChange", async () => {
