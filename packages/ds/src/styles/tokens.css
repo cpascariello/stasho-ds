@@ -399,3 +399,48 @@
   from { height: var(--radix-accordion-content-height); }
   to   { height: 0; }
 }
+
+/* ── Drawer slide in/out (per side) ────────────── */
+
+/* Same mechanism as the Accordion utilities above: registered in @theme so
+   the `data-[state=...]:` variant composes, and applied in the component as
+   `motion-safe:data-[state=…]:animate-drawer-*` so reduced motion is honored
+   by gating the animation INTO motion-safe. */
+@theme {
+  --animate-drawer-in-bottom: drawer-in-bottom 300ms ease-out;
+  --animate-drawer-out-bottom: drawer-out-bottom 300ms ease-in;
+  --animate-drawer-in-left: drawer-in-left 300ms ease-out;
+  --animate-drawer-out-left: drawer-out-left 300ms ease-in;
+  --animate-drawer-in-right: drawer-in-right 300ms ease-out;
+  --animate-drawer-out-right: drawer-out-right 300ms ease-in;
+}
+
+@keyframes drawer-in-bottom {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes drawer-out-bottom {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+@keyframes drawer-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes drawer-out-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+@keyframes drawer-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes drawer-out-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
