@@ -193,7 +193,9 @@ type OverflowTriggerProps = {
 
 const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
   ({ isPill, isSmall, hiddenTabs, hasActiveHidden, visible }, ref) => (
-    <DropdownMenu.Root>
+    // Non-modal: Radix's modal scroll-lock pads <body> for the missing
+    // scrollbar, visibly shifting/squeezing the page on mobile viewports.
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button
           ref={ref}
