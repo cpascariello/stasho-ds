@@ -15,12 +15,6 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
-### 2026-06-08 — Publish workflow: bump Node 20 action pins
-
-**Source:** Surfaced during the v0.9.0 publish run — `publish.yml`'s `actions/checkout` and `actions/setup-node` run on Node 20, which GitHub deprecates **2026-06-16** (forced to Node 24 after). Publishing still works today.
-**Description:** Bump the pinned `actions/checkout` and `actions/setup-node` SHAs in `.github/workflows/publish.yml` (and check `ci.yml`) to versions that run on Node 24, before the deadline. Re-pin to SHA with version comments; re-scan with `zizmor`.
-**Priority:** Medium (hard deadline 2026-06-16)
-
 ### 2026-06-05 — Interactive Card variant (Card ↔ ActionCard convergence)
 
 **Source:** Deferred while unifying the card family (Decision #100). The radius-floor + unification work scoped out card *anatomy*.
@@ -177,5 +171,6 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-27 — Switch follow-ups: size ladder revisit + boolean focus pattern principle (Decision #92: Switch thumb sizes match Checkbox/Radio at sm/md = 16/20, xs stays 12 for breathing; tracks proportional 1.75–1.83 ratio = `h-4 w-7` / `h-5 w-9` / `h-6 w-11`; symmetric 2px breathing both ends. Focus pattern documented as principle in SKIN-PRINCIPLES § 6 "Boolean focus pattern split by surface count" — single-surface controls use border-swap, multi-element controls with separately-rendered focal element use external outline; no code change for focus pattern, docs-only as per the backlog item)
 - [x] 2026-05-27 — Skin coverage finish (Decision #93 — full-sweep audit closes the wave): CopyableText link `text-primary-500 dark:text-primary-300` → `text-accent-500 dark:text-accent` (§ 2 Color link role); Table activeKey row + row-click hover `bg-primary-600/10` + `inset-shadow primary` → `bg-accent/15` + `inset-shadow accent` (Decision #86/#88 active-state sweep, last pre-skin leak); ui/Spinner removed outright (contradicted § 6 "Loading pulses, never spins"; zero internal consumers; pre-1.0 package; "Replace, don't deprecate"); class-name cleanups `rounded-md`/`rounded-sm` → `rounded-none` on copyable-text copy + external buttons, tabs DropdownMenu item, skeleton (all already resolved to 0px under Abyssal scale — names now honest). DESIGN-SYSTEM.md Spinner section removed + loading taxonomy updated to LED chase. ARCHITECTURE.md motion-reduce key files updated.
 - [x] 2026-05-27 — Visibility refresh: dark `--surface` 0.16 → 0.18, dark `--edge` 8% → 16% (Decision #95). Cards + dropdowns + every other component on the surface/edge tokens lift off the page; lg button size restored (15px / py-13 / px-24 / LED size-2 / icon size-4) as opt-in for hero CTAs while md stays the default. SKIN-PRINCIPLES § 3 "Hairline borders" rule depinned from the literal alpha value — now references `--edge` only.
+- [x] 2026-06-17 — Bump workflow actions off the Node-20 runtime (hard deadline 2026-06-16): `actions/checkout` 4.3.1→6.0.3, `actions/setup-node` 4.4.0→6.4.0, SHA-pinned with version comments in both `publish.yml` and `ci.yml`; `ci.yml` moved off floating `@v4` tags and hardened (`permissions: contents: read` + `persist-credentials: false`). `actionlint` + `zizmor` clean. `node-version: 22` toolchain pin unchanged.
 
 </details>
