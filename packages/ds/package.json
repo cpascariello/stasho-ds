@@ -1,6 +1,6 @@
 {
   "name": "@stasho/ds",
-  "version": "0.1.0",
+  "version": "0.14.0",
   "description": "stasho design system",
   "type": "module",
   "license": "MIT",
@@ -49,10 +49,15 @@
     "./copyable-text": "./src/components/copyable-text/copyable-text.tsx",
     "./dialog": "./src/components/dialog/dialog.tsx",
     "./drawer": "./src/components/drawer/drawer.tsx",
+    "./empty-state": "./src/components/empty-state/empty-state.tsx",
     "./logo": "./src/components/logo/logo.tsx",
     "./progress-bar": "./src/components/progress-bar/progress-bar.tsx",
     "./stepper": "./src/components/stepper/stepper.tsx",
     "./loader": "./src/components/loader/loader.tsx",
+    "./popover": "./src/components/popover/popover.tsx",
+    "./dropdown-menu": "./src/components/dropdown-menu/dropdown-menu.tsx",
+    "./sidebar": "./src/components/sidebar/sidebar.tsx",
+    "./header": "./src/components/header/header.tsx",
     "./lib/cn": "./src/lib/cn.ts",
     "./styles/tokens.css": "./src/styles/tokens.css"
   },

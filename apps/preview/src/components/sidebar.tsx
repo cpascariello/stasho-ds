@@ -55,6 +55,7 @@ const NAV: NavEntry[] = [
           { label: "Alert", href: "/components/alert" },
           { label: "Dialog", href: "/components/dialog" },
           { label: "Drawer", href: "/components/drawer" },
+          { label: "EmptyState", href: "/components/empty-state" },
           { label: "Loader", href: "/components/loader" },
           { label: "ProgressBar", href: "/components/progress-bar" },
           { label: "Skeleton", href: "/components/skeleton" },
@@ -83,6 +84,20 @@ const NAV: NavEntry[] = [
           { label: "Slider", href: "/components/slider" },
           { label: "Switch", href: "/components/switch" },
           { label: "Textarea", href: "/components/textarea" },
+        ],
+      },
+      {
+        group: "Layout",
+        items: [
+          { label: "Header", href: "/components/header" },
+          { label: "Sidebar", href: "/components/sidebar" },
+        ],
+      },
+      {
+        group: "Overlay",
+        items: [
+          { label: "DropdownMenu", href: "/components/dropdown-menu" },
+          { label: "Popover", href: "/components/popover" },
         ],
       },
     ],

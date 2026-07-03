@@ -18,15 +18,20 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@stasho/ds/copyable-text` |
 | [Dialog](#dialog) | Modal with composable 8-part API, lock mode | `@stasho/ds/dialog` |
+| [DropdownMenu](#dropdownmenu) | Trigger-anchored action menu, non-modal by default | `@stasho/ds/dropdown-menu` |
+| [EmptyState](#emptystate) | Centered zero-item placeholder with action slot | `@stasho/ds/empty-state` |
 | [FormField](#formfield) | Label + helper + error wrapper with auto-wired a11y | `@stasho/ds/form-field` |
+| [Header](#header) | App-shell top bar: skip-link, breadcrumb slot, right slot | `@stasho/ds/header` |
 | [Input](#input) | Text input with 2 sizes, borderless flat styling | `@stasho/ds/input` |
 | [Loader](#loader) | Standalone dual-dot cyan chase for inline loading | `@stasho/ds/loader` |
 | [Logo](#logo) | Brand mark (icon + full wordmark variants) | `@stasho/ds/logo` |
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
+| [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
 | [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@stasho/ds/radio-group` |
 | [SelectableCard](#selectablecard) | Card-shaped picker (single/multi group + standalone action card) | `@stasho/ds/selectable-card` |
 | [Select](#select) | Dropdown selector with flat options prop | `@stasho/ds/select` |
+| [Sidebar](#sidebar) | Collapsible app-shell navigation rail | `@stasho/ds/sidebar` |
 | [Skeleton](#skeleton) | Animated loading placeholder | `@stasho/ds/ui/skeleton` |
 | [Slider](#slider) | Range input, single or two-thumb mode | `@stasho/ds/slider` |
 | [StatusDot](#statusdot) | Health status circle with pulse animation | `@stasho/ds/status-dot` |
@@ -51,6 +56,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Inline loading indicator (button action) | **Button `loading` prop** — animates the LED into a two-dot chase (Decision #81 / § 6 "Loading pulses, never spins") | Standalone Loader — for in-button loading the chase belongs inside the button |
 | Standalone loading indicator (outside a button) | **Loader** — extracts Button's chase as a primitive, optional inline label (Decision #94) | Rotating spinner — § 6 "Loading pulses, never spins" |
 | Determinate/indeterminate progress | **ProgressBar** — 3 sizes, optional description, value clamping | Skeleton / Loader — ProgressBar shows measurable progress |
+| Zero-item / empty view | **EmptyState** — icon + title + description + action slot, centered | Skeleton — EmptyState is "nothing here", Skeleton is "loading" |
 
 ### Selection & Input
 
@@ -75,6 +81,10 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Switching between content panels | **Tabs** — underline or pill variant, keyboard navigation | Buttons + conditional rendering — Tabs manages state, a11y, and indicators |
 | Paginated data navigation | **Pagination** — fixed-slot layout, no layout shift | Custom prev/next buttons — Pagination handles ellipsis, boundaries, and aria |
 | Multi-step workflow indicator | **Stepper** — composable 7-part compound, horizontal/vertical, unstyled | Breadcrumb — Stepper tracks progress state, Breadcrumb tracks location |
+| App-shell navigation rail | **Sidebar** — collapsible, localStorage-persisted, icon tooltips when collapsed | Tabs — Sidebar is top-level app nav; Tabs switch panels within a view |
+| App-shell top bar | **Header** — sticky, skip-link, breadcrumb slot + right utility slot | Breadcrumb alone — Header frames the whole bar |
+| Trigger-anchored floating panel | **Popover** — interactive content, outside-click/Escape dismiss | Tooltip — Popover holds interactive content; Tooltip is passive text |
+| Trigger-anchored action menu | **DropdownMenu** — non-modal, keyboard nav, item highlight states | Popover — DropdownMenu is a list of actions; Popover is freeform content |
 
 ## Design Methodology
 
@@ -1944,6 +1954,89 @@ import {
 **Orientation:** `Stepper` accepts `orientation` (`"horizontal"` | `"vertical"`, default `"horizontal"`). Propagates as `data-orientation` to `StepperConnector` and layout classes on `StepperList`.
 
 **Connectors are siblings:** `StepperConnector` must be a sibling of `StepperItem` in the list — not a child. Both render as `<li>`.
+
+---
+
+### EmptyState
+
+Centered placeholder for a zero-item view. Promoted to encapsulate the ad-hoc empty column the app hand-rolls.
+
+```tsx
+import { EmptyState } from "@stasho/ds/empty-state";
+import { Button } from "@stasho/ds/button";
+import { FolderOpen, Plus } from "@phosphor-icons/react";
+
+<EmptyState
+  icon={<FolderOpen weight="duotone" />}
+  title="No projects yet"
+  description="Import a repository to deploy your first project."
+  action={<Button iconLeft={<Plus />}>New project</Button>}
+/>
+```
+
+**Props:** `title` (required `ReactNode`), `description?`, `icon?`, `action?` (one or two buttons). Centered column: `text-foreground` heading + `text-muted-foreground` description/icon. `title` and `children` are omitted from the spread `HTMLAttributes` — the layout is prescriptive, so pass content through the named slots (Decision #103).
+
+### Popover
+
+Floating panel anchored to a trigger, on Radix Popover. Promoted from the app (Decision #104).
+
+```tsx
+import {
+  Popover, PopoverTrigger, PopoverContent, PopoverClose, PopoverAnchor,
+} from "@stasho/ds/popover";
+
+<Popover>
+  <PopoverTrigger asChild><Button>Open</Button></PopoverTrigger>
+  <PopoverContent side="bottom" align="end">…</PopoverContent>
+</Popover>
+```
+
+**Surface:** `border-edge` on `bg-background`, `shadow-lg`, `pop` motion (fade + 95% zoom, `motion-safe:`). Defaults `side="top"`, `align="start"`, `sideOffset={8}`. Portalled; outside-click + Escape dismiss.
+
+### DropdownMenu
+
+Trigger-anchored action menu on Radix DropdownMenu. Promoted from the app (Decision #104).
+
+```tsx
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuGroup,
+} from "@stasho/ds/dropdown-menu";
+```
+
+**Non-modal by default:** `DropdownMenu` renders `<Root modal={false}>` — Radix's modal scroll-lock pads the body for the missing scrollbar and visibly shifts the page (Decision #172). Items carry `data-[highlighted]` hover + `data-[disabled]` states; `pop` motion; `min-w-[12rem]` content.
+
+### Sidebar
+
+Collapsible app-shell navigation rail. Promoted from the app as a primitive family (Decision #104) — app routing lives in the compositions that consume it (`GlobalSidebar`, `ProjectSidebar`).
+
+```tsx
+import {
+  Sidebar, useSidebarContext, SidebarHeader, SidebarNav, SidebarSection,
+  SidebarItem, SidebarFooter, SidebarCollapseToggle,
+} from "@stasho/ds/sidebar";
+```
+
+**Collapse:** controlled (`collapsed` + `onCollapsedChange`) or uncontrolled (`defaultCollapsed`, optional `storageKey` for localStorage persistence). Collapsed mode narrows to `w-14`, hides labels, and reveals them as right-side tooltips on `SidebarItem` hover. `SidebarItem` is prop/slot-driven: `icon`, `label`, `href`, `active`, `onClick`, `target`/`rel`. Subcomponents must render inside `<Sidebar>` (`useSidebarContext` throws otherwise).
+
+### Header
+
+App-shell top bar. Promoted from the app (Decision #104) — the utility cluster and app copy stay in the app composition.
+
+```tsx
+import {
+  Header, HeaderBreadcrumb, HeaderBreadcrumbSegment,
+} from "@stasho/ds/header";
+
+<Header rightSlot={<HeaderUtilityCluster />}>
+  <HeaderBreadcrumb>
+    <HeaderBreadcrumbSegment asChild><Link href="/projects">Projects</Link></HeaderBreadcrumbSegment>
+    <HeaderBreadcrumbSegment current>my-app</HeaderBreadcrumbSegment>
+  </HeaderBreadcrumb>
+</Header>
+```
+
+**Structure:** sticky, `h-16`, keyboard skip-link (`#main`), a `min-w-0 flex-1` content slot for breadcrumbs, and a `shrink-0` `rightSlot`. `HeaderBreadcrumbSegment` takes `asChild` (Radix `Slot.Root`) for framework links and `current` for `aria-current="page"`.
 
 ---
 
