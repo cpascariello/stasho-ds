@@ -86,6 +86,20 @@ const NAV: NavEntry[] = [
           { label: "Textarea", href: "/components/textarea" },
         ],
       },
+      {
+        group: "Layout",
+        items: [
+          { label: "Header", href: "/components/header" },
+          { label: "Sidebar", href: "/components/sidebar" },
+        ],
+      },
+      {
+        group: "Overlay",
+        items: [
+          { label: "DropdownMenu", href: "/components/dropdown-menu" },
+          { label: "Popover", href: "/components/popover" },
+        ],
+      },
     ],
   },
 ];

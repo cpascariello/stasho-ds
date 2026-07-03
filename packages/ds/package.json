@@ -54,6 +54,10 @@
     "./progress-bar": "./src/components/progress-bar/progress-bar.tsx",
     "./stepper": "./src/components/stepper/stepper.tsx",
     "./loader": "./src/components/loader/loader.tsx",
+    "./popover": "./src/components/popover/popover.tsx",
+    "./dropdown-menu": "./src/components/dropdown-menu/dropdown-menu.tsx",
+    "./sidebar": "./src/components/sidebar/sidebar.tsx",
+    "./header": "./src/components/header/header.tsx",
     "./lib/cn": "./src/lib/cn.ts",
     "./styles/tokens.css": "./src/styles/tokens.css"
   },
