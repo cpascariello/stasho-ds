@@ -49,6 +49,7 @@
     "./copyable-text": "./src/components/copyable-text/copyable-text.tsx",
     "./dialog": "./src/components/dialog/dialog.tsx",
     "./drawer": "./src/components/drawer/drawer.tsx",
+    "./empty-state": "./src/components/empty-state/empty-state.tsx",
     "./logo": "./src/components/logo/logo.tsx",
     "./progress-bar": "./src/components/progress-bar/progress-bar.tsx",
     "./stepper": "./src/components/stepper/stepper.tsx",

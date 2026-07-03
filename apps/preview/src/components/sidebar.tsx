@@ -55,6 +55,7 @@ const NAV: NavEntry[] = [
           { label: "Alert", href: "/components/alert" },
           { label: "Dialog", href: "/components/dialog" },
           { label: "Drawer", href: "/components/drawer" },
+          { label: "EmptyState", href: "/components/empty-state" },
           { label: "Loader", href: "/components/loader" },
           { label: "ProgressBar", href: "/components/progress-bar" },
           { label: "Skeleton", href: "/components/skeleton" },
