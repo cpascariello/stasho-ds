@@ -29,9 +29,8 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
       <DialogPrimitive.Overlay
         className={cn(
           "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm",
-          "data-[state=open]:animate-in data-[state=open]:fade-in-0",
-          "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
-          "motion-reduce:animate-none",
+          "motion-safe:data-[state=open]:animate-overlay-in",
+          "motion-safe:data-[state=closed]:animate-overlay-out",
         )}
       />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -39,9 +38,8 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           ref={ref}
           className={cn(
             "relative w-full max-w-md rounded-xl border border-edge bg-surface p-6",
-            "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
-            "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-            "motion-reduce:animate-none",
+            "motion-safe:data-[state=open]:animate-pop-in",
+            "motion-safe:data-[state=closed]:animate-pop-out",
             className,
           )}
           {...(locked

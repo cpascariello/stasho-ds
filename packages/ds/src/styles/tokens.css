@@ -444,3 +444,39 @@
   from { transform: translateX(0); }
   to   { transform: translateX(100%); }
 }
+
+/* ── Overlay fade + pop (fade + 95% zoom) ──────── */
+
+/* Same @theme-registered-utility mechanism as Accordion/Drawer above so the
+   `data-[state=...]:` variant composes and reduced motion is honored by gating
+   the animation INTO motion-safe. `overlay-*` is the frosted-scrim fade shared
+   by the Dialog and Drawer overlays; `pop-*` is the fade + 95% zoom shared by
+   Dialog content and Tooltip. Replaces the inert tw-animate-css class strings
+   (`animate-in`/`fade-in-0`/`zoom-in-95`) those components used to carry — the
+   DS has no tw-animate-css, so those resolved to nothing. */
+@theme {
+  --animate-overlay-in: overlay-in 200ms ease-out;
+  --animate-overlay-out: overlay-out 150ms ease-in;
+  --animate-pop-in: pop-in 200ms ease-out;
+  --animate-pop-out: pop-out 150ms ease-in;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pop-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}
