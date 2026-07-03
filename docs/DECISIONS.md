@@ -18,6 +18,34 @@ Each entry includes:
 
 ---
 
+## Decision #104 — 2026-07-03
+
+**Context:** The app carried four component families in-app as explicit DS-promotion candidates under a scoped override of its "all UI from `@stasho/ds`" rule (app Decisions #54/#59), reachable only via ast-grep carve-outs. Wave 2026-07-03-backlog-wave-6 promotes the app-decoupled primitive subset of `sidebar/`, `header/`, `popover/`, `dropdown-menu/` into the DS (app-side spec/plan: `2026-07-03-ds-shell-promotion`). This entry records the DS-side receipt.
+**Decision:** Add four subpath exports — `@stasho/ds/popover`, `@stasho/ds/dropdown-menu`, `@stasho/ds/sidebar`, `@stasho/ds/header` — shipped in `@stasho/ds@0.14.0`. Popover and DropdownMenu move whole; the 7 sidebar primitive files and 3 header primitive files each consolidate into one `.tsx` per subpath (DS single-file convention — `sidebar/sidebar.tsx`, `header/header.tsx`) exporting every part + `*Props`. Mechanical rewrites on copy: Radix per-primitive imports (`@radix-ui/react-*`) consolidate onto the unified `radix-ui@1.4.3` package (`Slot` → `Slot.Root`); internal imports use the `@ac/*` alias (`@ac/lib/cn`, `@ac/components/tooltip/tooltip`, `@ac/components/logo/logo`); the DropdownMenu `modal={false}` default is preserved (app Decision #172 — Radix's modal scroll-lock pads the body and shifts the page). No API changes: the promoted primitives already receive routing/active-state/handlers as props, so app-router coupling stays in the app compositions (`global-sidebar`, `project-sidebar`, `project-pill`, `mobile-sidebar`, `header-utility-cluster`, etc.) that re-import from `@stasho/ds/*`. `notifications/` was **not** promoted (bespoke app quota-toast surface, awaiting a separate DS toast primitive). Each family lands as its own commit with a test and a preview story (new "Layout" + "Overlay" nav groups).
+**Rationale:** The primitives had zero app coupling and zero inter-family dependencies (the old "DropdownMenu before Header" ordering constraint died with `HeaderProjectSwitcher`, app Decision #60), so they ship in one release, adopted in one app PR — no staging. Single-file consolidation because no existing DS export targets an index barrel; uniformity wins over preserving the app's multi-file layout. Radix consolidation keeps the DS on one Radix package and lets the app drop its per-primitive `@radix-ui/react-popover` / `@radix-ui/react-dropdown-menu` deps.
+**Alternatives considered:** Three staged releases (per the app backlog's dependency ordering) — rejected, the ordering constraint is obsolete and staging triples the cross-repo round-trip for no benefit. Keep multi-file + point the export at an `index.ts` — rejected, would be the lone barrel export in the DS. Promote `notifications/` too — rejected, it's an app surface, not a reusable primitive.
+**Files:** `packages/ds/src/components/{popover,dropdown-menu,sidebar,header}/*.tsx` (+ tests); `packages/ds/package.json` (exports); `apps/preview/src/app/components/{popover,dropdown-menu,sidebar,header}/page.tsx`; `apps/preview/src/components/sidebar.tsx` (nav).
+
+---
+
+## Decision #103 — 2026-07-03
+
+**Context:** The app hand-rolls a centered "zero items" column (icon + title + description + action button) in several places (projects list, notification bell, deployment filters). A reusable EmptyState was an open item (app BACKLOG "2026-03-18 - DS: EmptyState component").
+**Decision:** Add `@stasho/ds/empty-state` — a `title` (required `ReactNode`), optional `description`, optional `icon`, and an `action` slot for one or two buttons, laid out as a centered column (`flex flex-col items-center gap-4 px-6 py-12 text-center`). Heading uses `font-heading font-bold text-lg text-foreground`; description + icon use `text-muted-foreground`; the action row is `flex flex-wrap justify-center gap-3`. `title` and `children` are omitted from the spread `HTMLAttributes` (title clashes with the HTML attribute, à la Alert; children is disallowed to keep the layout prescriptive). Shipped in `@stasho/ds@0.14.0` with a test and a preview story (Feedback group).
+**Rationale:** Encapsulates a repeated app pattern behind a semantic-token surface. Prescriptive slots (no children pass-through) keep the vertical rhythm consistent across callsites, which an open children slot would let drift.
+**Files:** `packages/ds/src/components/empty-state/empty-state.tsx` (+ test); `packages/ds/package.json`; `apps/preview/src/app/components/empty-state/page.tsx`; `apps/preview/src/components/sidebar.tsx`.
+
+---
+
+## Decision #102 — 2026-07-03
+
+**Context:** Dialog, Tooltip, and the Drawer overlay carried `tw-animate-css` class strings (`animate-in` / `fade-in-0` / `zoom-in-95` / `…-out`) inherited from the upstream fork. The DS has no `tw-animate-css`, so those classes resolve to nothing — the components snapped open with no motion (app BACKLOG "2026-06-12 - DS: Dialog/Tooltip carry inert animation classes"). The same inert strings sat on the app's soon-to-be-promoted `popover`/`dropdown-menu` (the app has no `tw-animate-css` either, so they never animated there).
+**Decision:** Port all of these to real `@theme --animate-*` keyframes using the Accordion/Drawer mechanism (registered so the `data-[state=…]:` variant composes, applied `motion-safe:` so reduced motion is honored by gating *into* motion-safe rather than disabling out). Two keyframe pairs: `overlay-in`/`overlay-out` (opacity fade, for the Dialog + Drawer scrims) and `pop-in`/`pop-out` (opacity + 95% scale, for Dialog content, Tooltip, Popover, and DropdownMenu content). All four floating surfaces now share the one `pop` motion; both scrims share `overlay`.
+**Rationale:** Porting over deleting because the Drawer already animated (its panel keyframes shipped in PR #32) while a Dialog stacked above it did not — a visible glitch. Unifying every overlay/popover surface on two keyframe pairs keeps the motion vocabulary consistent and removes phantom (inert) classes. `motion-safe:` gating matches the established Accordion/Drawer reduced-motion pattern.
+**Files:** `packages/ds/src/styles/tokens.css` (keyframes); `packages/ds/src/components/{dialog,tooltip,drawer,popover,dropdown-menu}/*.tsx`.
+
+---
+
 ## Decision #101 — 2026-06-08
 
 **Context:** The Accordion shipped as a Radix-based FAQ primitive (`@stasho/ds/accordion`, PR #29) but was a "ghost" — open/close snapped with no animation (Radix's `--radix-accordion-content-height` unused), and it had no preview page, no nav entry, and no DESIGN-SYSTEM / CLAUDE documentation. Brainstorming chose the motion treatment and resolved to close the doc gap in the same pass.
