@@ -196,7 +196,7 @@ export function SidebarSection({
           href={titleHref}
           onClick={onTitleClick}
           className={cn(
-            "flex items-center gap-0.5 px-2 pb-1 pt-2",
+            "flex items-center gap-0.5 rounded-sm px-2 pb-1 pt-2",
             "text-[10px] font-semibold uppercase tracking-wider text-foreground/50",
             "transition-colors duration-150 hover:text-foreground",
             "focus-visible:outline-none focus-visible:ring-2",
