@@ -655,6 +655,16 @@ The Button is the only DS component that renders a brand "signature" element —
 
 **`asChild` limitation.** When `asChild` is true, the rendered element is the consumer's child via `cloneElement`. The LED and icon content are NOT carried over — `asChild` exists for "link styled as button", not "rich content button". Consumers who need a link with an LED should compose `buttonVariants({...})` manually onto their link element and add the LED span themselves.
 
+### ProjectSwitcher — cmdk manual filtering
+
+**Context:** ProjectSwitcher is the DS's **second cmdk consumer** (Combobox was first). Combobox and MultiSelect both let cmdk's built-in `Command` filter/rank their flat option list. ProjectSwitcher can't: its items are pre-grouped, and the group is the unit of relevance — a query that matches one child of a group should surface the *whole* group (siblings included), not just the matching row.
+
+**Approach:** `<Command shouldFilter={false}>` turns off cmdk's internal scorer entirely, and the component does its own two-pass filter on every keystroke: a group is kept in full when its own label OR any child's label/keywords match; a solo item is kept only when it individually matches. Both passes reuse the same `itemMatches()` predicate for solos and group children.
+
+**Key files:** `packages/ds/src/components/project-switcher/project-switcher.tsx`
+
+**Notes:** cmdk's default scorer re-ranks matched rows by score, which would reorder the caller's list on every keystroke — unacceptable when the caller's group/item order is meaningful (e.g. most-recently-active project first). More fundamentally, "a group survives whole when any child matches" is not expressible as a per-item score at all — cmdk scores rows independently, it has no concept of a group surviving because of a sibling. `shouldFilter={false}` is therefore not a style preference, it's required by the group-survival requirement. Contrast with Combobox/MultiSelect, which have no grouping and are well served by cmdk's default fuzzy scoring.
+
 ---
 
 ## Testing Philosophy
