@@ -9,7 +9,11 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react";
-import { CaretDoubleLeft, CaretDoubleRight } from "@phosphor-icons/react";
+import {
+  CaretDoubleLeft,
+  CaretDoubleRight,
+  CaretRight,
+} from "@phosphor-icons/react";
 import { LogoLetter, LogoWordmark } from "@ac/components/logo/logo";
 import {
   Tooltip,
@@ -167,12 +171,16 @@ export function SidebarNav({
 
 export interface SidebarSectionProps {
   title?: string;
+  titleHref?: string;
+  onTitleClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
   children: ReactNode;
   className?: string;
 }
 
 export function SidebarSection({
   title,
+  titleHref,
+  onTitleClick,
   children,
   className,
 }: SidebarSectionProps) {
@@ -183,7 +191,24 @@ export function SidebarSection({
       aria-label={title ?? "Section"}
       className={cn("flex flex-col gap-1", className)}
     >
-      {title && !collapsed && (
+      {title && !collapsed && titleHref && (
+        <a
+          href={titleHref}
+          onClick={onTitleClick}
+          className={cn(
+            "flex items-center gap-0.5 px-2 pb-1 pt-2",
+            "text-[10px] font-semibold uppercase tracking-wider text-foreground/50",
+            "transition-colors duration-150 hover:text-foreground",
+            "focus-visible:outline-none focus-visible:ring-2",
+            "focus-visible:ring-accent focus-visible:ring-offset-2",
+            "motion-reduce:transition-none",
+          )}
+        >
+          {title}
+          <CaretRight size={10} aria-hidden="true" />
+        </a>
+      )}
+      {title && !collapsed && !titleHref && (
         <div className="px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-foreground/50">
           {title}
         </div>

@@ -2021,6 +2021,8 @@ import {
 
 **Collapse:** controlled (`collapsed` + `onCollapsedChange`) or uncontrolled (`defaultCollapsed`, optional `storageKey` for localStorage persistence). Collapsed mode narrows to `w-14`, hides labels, and reveals them as right-side tooltips on `SidebarItem` hover. `SidebarItem` is prop/slot-driven: `icon`, `label`, `href`, `active`, `onClick`, `target`/`rel`. Subcomponents must render inside `<Sidebar>` (`useSidebarContext` throws otherwise).
 
+**`SidebarSection` linkable title:** `title` alone renders a static, non-interactive heading (default). Pass `titleHref` (+ optional `onTitleClick`) to render the heading as an anchor with a trailing caret affordance instead — same typography, hover/focus-visible states in `accent`. Both variants hide when the sidebar is collapsed.
+
 ### Header
 
 App-shell top bar. Promoted from the app (Decision #104) — the utility cluster and app copy stay in the app composition.

@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Sidebar, SidebarCollapseToggle, SidebarItem } from "./sidebar";
+import {
+  Sidebar,
+  SidebarCollapseToggle,
+  SidebarItem,
+  SidebarSection,
+} from "./sidebar";
 
 describe("SidebarItem", () => {
   it("renders an anchor without target/rel by default", () => {
@@ -34,6 +39,75 @@ describe("SidebarItem", () => {
     const link = screen.getByRole("link", { name: /docs/i });
     expect(link.getAttribute("target")).toBe("_blank");
     expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+  });
+});
+
+describe("SidebarSection title", () => {
+  it("renders a static title with no link role", () => {
+    render(
+      <Sidebar>
+        <SidebarSection title="Recent">
+          <li>row</li>
+        </SidebarSection>
+      </Sidebar>,
+    );
+    expect(screen.getByText("Recent")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /recent/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders a linked title when titleHref is provided", () => {
+    render(
+      <Sidebar>
+        <SidebarSection title="my-repo" titleHref="/projects/repo/my-repo">
+          <li>row</li>
+        </SidebarSection>
+      </Sidebar>,
+    );
+    const link = screen.getByRole("link", { name: /my-repo/i });
+    expect(link.getAttribute("href")).toBe("/projects/repo/my-repo");
+  });
+
+  it("fires onTitleClick when the linked title is clicked", async () => {
+    const user = userEvent.setup();
+    const onTitleClick = vi.fn();
+    render(
+      <Sidebar>
+        <SidebarSection
+          title="my-repo"
+          titleHref="/projects/repo/my-repo"
+          onTitleClick={onTitleClick}
+        >
+          <li>row</li>
+        </SidebarSection>
+      </Sidebar>,
+    );
+    await user.click(screen.getByRole("link", { name: /my-repo/i }));
+    expect(onTitleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides the title in both the static and linked variants when collapsed", () => {
+    const { rerender } = render(
+      <Sidebar collapsed>
+        <SidebarSection title="Recent">
+          <li>row</li>
+        </SidebarSection>
+      </Sidebar>,
+    );
+    expect(screen.queryByText("Recent")).not.toBeInTheDocument();
+
+    rerender(
+      <Sidebar collapsed>
+        <SidebarSection title="my-repo" titleHref="/projects/repo/my-repo">
+          <li>row</li>
+        </SidebarSection>
+      </Sidebar>,
+    );
+    expect(screen.queryByText("my-repo")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /my-repo/i }),
+    ).not.toBeInTheDocument();
   });
 });
 
