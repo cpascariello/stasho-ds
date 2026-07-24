@@ -28,6 +28,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
 | [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
+| [ProjectSwitcher](#projectswitcher) | Grouped, searchable sidebar project switcher | `@stasho/ds/project-switcher` |
 | [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@stasho/ds/radio-group` |
 | [SelectableCard](#selectablecard) | Card-shaped picker (single/multi group + standalone action card) | `@stasho/ds/selectable-card` |
 | [Select](#select) | Dropdown selector with flat options prop | `@stasho/ds/select` |
@@ -85,6 +86,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | App-shell top bar | **Header** — sticky, skip-link, breadcrumb slot + right utility slot | Breadcrumb alone — Header frames the whole bar |
 | Trigger-anchored floating panel | **Popover** — interactive content, outside-click/Escape dismiss | Tooltip — Popover holds interactive content; Tooltip is passive text |
 | Trigger-anchored action menu | **DropdownMenu** — non-modal, keyboard nav, item highlight states | Popover — DropdownMenu is a list of actions; Popover is freeform content |
+| Sidebar project/workspace switcher with search | **ProjectSwitcher** — grouped display-ready items, group-first search, `collapsed` icon-only trigger | Combobox — flat options only, no group-survival search behavior |
 
 ## Design Methodology
 
@@ -2037,6 +2039,46 @@ import {
 ```
 
 **Structure:** sticky, `h-16`, keyboard skip-link (`#main`), a `min-w-0 flex-1` content slot for breadcrumbs, and a `shrink-0` `rightSlot`. `HeaderBreadcrumbSegment` takes `asChild` (Radix `Slot.Root`) for framework links and `current` for `aria-current="page"`.
+
+### ProjectSwitcher
+
+Grouped, searchable sidebar switcher for jumping between projects. Wraps cmdk + Radix Popover (same stack as Combobox/MultiSelect) with a **display-ready-items API** — the consumer passes pre-composed `groups`/`solos` with labels and optional `keywords` already resolved, and the component renders them verbatim with no knowledge of what a "project" or "workspace" is. Designed for the app's repo-group sidebar (stasho-app Decision #280) — a repo can host several sibling workspace projects, so groups are how those are presented; the DS component only knows groups-of-items and items.
+
+```tsx
+import { ProjectSwitcher } from "@stasho/ds/project-switcher";
+
+<ProjectSwitcher
+  currentId="proj_123"
+  triggerLabel="my-app"
+  groups={[
+    {
+      id: "repo:acme/mono-shop",
+      label: "acme/mono-shop",
+      items: [
+        { id: "proj_123", label: "frontend" },
+        { id: "proj_456", label: "backend", keywords: ["api"] },
+      ],
+    },
+  ]}
+  solos={[{ id: "proj_789", label: "my-portfolio" }]}
+  onSelect={(id) => router.push(`/projects/${id}`)}
+  onViewAll={() => router.push("/projects")}
+  onNewProject={() => router.push("/projects/new")}
+/>
+
+{/* Icon-only trigger for a collapsed sidebar rail — aria-label stays for a11y */}
+<ProjectSwitcher collapsed {...rest} />
+```
+
+**Props:** `groups` (`ProjectSwitcherGroup[]` — `{ id, label, items }`), `solos` (`ProjectSwitcherItem[]` — `{ id, label, keywords? }`), `currentId`, `triggerLabel` (required — also the `collapsed` trigger's `aria-label`), `collapsed?`, `onSelect(id)`, `onViewAll()`, `onNewProject()`, `searchPlaceholder?` (default "Search projects…"), `emptyMessage?` (default "No matches"), `viewAllLabel?` (default "View all projects"), `newProjectLabel?` (default "New project"), `className?`. Forwards ref to the trigger `<button>`. Named exports: `ProjectSwitcher`, `ProjectSwitcherProps`, `ProjectSwitcherGroup`, `ProjectSwitcherItem`.
+
+**Group `id` vs `label`:** the group `id` is the stable React/selection key — group `label` is not unique (e.g. an encrypted-name placeholder can collide across groups), so matching on label would misbehave.
+
+**Search:** group-first, manual filtering (`Command shouldFilter={false}`) rather than cmdk's built-in scorer. A group survives **whole** when its own label or any child item's label/keywords match the query; matching a single child does not hide its siblings. Solos filter individually by label/keywords. This is deliberate: cmdk's fuzzy scorer would re-rank rows by score and break the caller's deterministic group/item order, and the "group survives whole" rule can't be expressed through per-item scoring at all — see ARCHITECTURE.md for the full rationale.
+
+**Trigger:** expanded shows `triggerLabel` (truncated) + a caret; `collapsed` shrinks to an icon-only square button (`SquaresFour`) that keeps `triggerLabel` as both `aria-label` and a `title` tooltip.
+
+**Footer actions:** "View all" and "New project" rows are always rendered below a separator, regardless of search state or match count, with customizable labels.
 
 ---
 
