@@ -130,6 +130,8 @@
    Layer 2: Semantic Surface Tokens (theme-dependent)
    ────────────────────────────────────────────── */
 :root {
+  /* Native UI (scrollbars, form-control chrome) must render light with the theme. */
+  color-scheme: light;
   --background: oklch(0.99 0.005 270);
   --foreground: oklch(0.22 0.015 270);
 
@@ -162,6 +164,8 @@
 }
 
 .theme-dark {
+  /* Native UI (scrollbars, form-control chrome) must render dark with the theme. */
+  color-scheme: dark;
   --background: #07080a;
   --foreground: #f3f3f3;
 
