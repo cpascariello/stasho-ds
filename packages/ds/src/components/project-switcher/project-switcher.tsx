@@ -178,6 +178,7 @@ const ProjectSwitcher = forwardRef<HTMLButtonElement, ProjectSwitcherProps>(
                 value={query}
                 onValueChange={setQuery}
                 placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
                 className={cn(
                   "w-full border-b border-edge bg-transparent px-4 py-2.5",
                   "text-sm text-foreground placeholder:text-muted-foreground",
