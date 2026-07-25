@@ -57,6 +57,7 @@ if (typeof globalThis.DOMRect === "undefined") {
   } as unknown as typeof DOMRect;
 }
 
+import { type ComponentProps } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -79,7 +80,7 @@ const SOLOS = [
 ];
 
 function renderSwitcher(
-  overrides: Partial<React.ComponentProps<typeof ProjectSwitcher>> = {},
+  overrides: Partial<ComponentProps<typeof ProjectSwitcher>> = {},
 ) {
   const handlers = {
     onSelect: vi.fn(),
@@ -209,5 +210,42 @@ describe("ProjectSwitcher", () => {
     await user.type(screen.getByRole("combobox"), "pasta");
     await user.keyboard("{Enter}");
     expect(handlers.onSelect).toHaveBeenCalledWith("p-pasta");
+  });
+
+  it("keyboard: ArrowDown moves off the auto-highlighted first match", async () => {
+    // "t" matches both solos (por*t*folio, pas*t*a) but no group member, so
+    // the visible rows are the two solos in order: my-portfolio, pasta-drop.
+    // cmdk auto-highlights the first match (my-portfolio), so ONE ArrowDown
+    // lands on pasta-drop before Enter fires. This pins highlight traversal
+    // across the solo/footer boundary.
+    const user = userEvent.setup();
+    const handlers = renderSwitcher();
+    await user.click(screen.getByRole("button"));
+    await user.type(screen.getByRole("combobox"), "t");
+    expect(screen.getByText("my-portfolio")).toBeDefined();
+    expect(screen.getByText("pasta-drop")).toBeDefined();
+    expect(screen.queryByText("web")).toBeNull();
+    await user.keyboard("{ArrowDown}{Enter}");
+    expect(handlers.onSelect).toHaveBeenCalledWith("p-pasta");
+  });
+
+  it("labels the search input with an explicit aria-label", async () => {
+    const user = userEvent.setup();
+    renderSwitcher();
+    await user.click(screen.getByRole("button"));
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-label",
+      "Search projects…",
+    );
+  });
+
+  it("aria-label follows the searchPlaceholder override", async () => {
+    const user = userEvent.setup();
+    renderSwitcher({ searchPlaceholder: "Find a workspace" });
+    await user.click(screen.getByRole("button"));
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-label",
+      "Find a workspace",
+    );
   });
 });

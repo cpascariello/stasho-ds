@@ -160,9 +160,12 @@ export function SidebarNav({
   return (
     <nav
       aria-label={ariaLabel}
-      className={cn("flex-1 overflow-y-auto p-2", className)}
+      className={cn(
+        "flex flex-1 flex-col gap-1 overflow-y-auto p-2",
+        className,
+      )}
     >
-      <ul className="flex flex-col gap-1">{children}</ul>
+      {children}
     </nav>
   );
 }

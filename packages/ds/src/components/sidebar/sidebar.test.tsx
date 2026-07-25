@@ -5,6 +5,7 @@ import {
   Sidebar,
   SidebarCollapseToggle,
   SidebarItem,
+  SidebarNav,
   SidebarSection,
 } from "./sidebar";
 
@@ -108,6 +109,56 @@ describe("SidebarSection title", () => {
     expect(
       screen.queryByRole("link", { name: /my-repo/i }),
     ).not.toBeInTheDocument();
+  });
+});
+
+describe("SidebarNav structure", () => {
+  it("emits valid HTML: no <ul> has a non-<li> direct child", () => {
+    const { container } = render(
+      <Sidebar>
+        <SidebarNav>
+          <a href="/back">Back</a>
+          <SidebarSection>
+            <SidebarItem
+              icon={<span />}
+              label="Overview"
+              href="#overview"
+            />
+          </SidebarSection>
+          <SidebarSection title="Account">
+            <SidebarItem icon={<span />} label="Settings" href="#settings" />
+          </SidebarSection>
+        </SidebarNav>
+      </Sidebar>,
+    );
+
+    // The nav itself must not be a <ul> that swallows sections/links as
+    // invalid non-<li> children (the shell-promotion regression).
+    const nav = container.querySelector("nav");
+    expect(nav?.tagName).toBe("NAV");
+    expect(nav?.querySelector(":scope > ul")).toBeNull();
+
+    // Every <ul> in the tree may only contain <li> element children.
+    for (const ul of container.querySelectorAll("ul")) {
+      for (const child of ul.children) {
+        expect(child.tagName).toBe("LI");
+      }
+    }
+  });
+
+  it("preserves the role=group section semantics", () => {
+    render(
+      <Sidebar>
+        <SidebarNav>
+          <SidebarSection title="Account">
+            <SidebarItem icon={<span />} label="Settings" href="#settings" />
+          </SidebarSection>
+        </SidebarNav>
+      </Sidebar>,
+    );
+    expect(
+      screen.getByRole("group", { name: "Account" }),
+    ).toBeInTheDocument();
   });
 });
 
