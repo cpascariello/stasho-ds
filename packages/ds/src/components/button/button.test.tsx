@@ -192,6 +192,37 @@ describe("Button", () => {
       expect(link.querySelector("[data-led]")).toBeNull();
     });
 
+    it("does NOT render LED on asChild link variant", () => {
+      render(
+        <Button asChild variant="link">
+          <a href="/test">Link</a>
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "Link" });
+      expect(link.querySelector("[data-led]")).toBeNull();
+    });
+
+    // Multi-child labels land inside the label span, which has no gap of its
+    // own — [gap:inherit] passes the root's per-size flex gap through so
+    // text↔icon spacing survives the wrapping.
+    it("inherits the root gap for multi-child labels", () => {
+      render(
+        <Button asChild variant="primary">
+          <a href="/test">
+            verify
+            <svg data-testid="icon" />
+          </a>
+        </Button>,
+      );
+      const link = screen.getByRole("link");
+      const icon = screen.getByTestId("icon");
+      const label = Array.from(link.querySelectorAll("span")).find(
+        (el) => el.textContent === "verify" && el.contains(icon),
+      );
+      expect(label).toBeTruthy();
+      expect(label?.className).toContain("[gap:inherit]");
+    });
+
     it("renders the loading chase on asChild non-ghost variants", () => {
       render(
         <Button asChild loading>

@@ -283,10 +283,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const content = (
       <>
         {leadingSlot}
-        {/* The leading-none wrapper is load-bearing for height parity: the
-            root's own leading-none loses to a later line-height rule, so a
-            bare text node renders a taller line box than a <button>'s. */}
-        <span className="inline-flex items-center leading-none">{label}</span>
+        {/* Height parity by construction: empirically (consuming app), both
+            button and anchor roots compute line-height 1.5, and a bare text
+            node renders a ~6px taller line box than this leading-none wrapper.
+            [gap:inherit] passes the root's per-size flex gap through to
+            multi-child labels (text + inline icon); single-child labels are
+            unaffected — same wrapper serves both the <button> and asChild
+            paths. */}
+        <span className="inline-flex items-center leading-none [gap:inherit]">
+          {label}
+        </span>
         {!loading && iconRight ? (
           <span
             aria-hidden="true"
@@ -311,6 +317,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {
           className: classes,
           ref,
+          "aria-busy": loading || undefined,
           ...rest,
         },
         content,
