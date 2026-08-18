@@ -154,6 +154,54 @@ describe("Button", () => {
       expect(link.tagName).toBe("A");
       expect(link.getAttribute("href")).toBe("/test");
     });
+
+    // Height parity with the <button> path: the raw child children used to
+    // render without the leading-none wrapper or the LED, making asChild
+    // buttons taller and LED-less next to their siblings.
+    it("wraps the child's label in the leading-none span", () => {
+      render(
+        <Button asChild variant="primary">
+          <a href="/test">Link</a>
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "Link" });
+      const label = Array.from(link.querySelectorAll("span")).find(
+        (el) => el.textContent === "Link",
+      );
+      expect(label).toBeTruthy();
+      expect(label?.className).toContain("leading-none");
+    });
+
+    it.each(filledLedVariants)("renders LED on asChild %s variant", (variant) => {
+      render(
+        <Button asChild variant={variant}>
+          <a href="/test">Link</a>
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "Link" });
+      expect(link.querySelector("[data-led]")).toBeTruthy();
+    });
+
+    it("does NOT render LED on asChild ghost variant", () => {
+      render(
+        <Button asChild variant="ghost">
+          <a href="/test">Link</a>
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "Link" });
+      expect(link.querySelector("[data-led]")).toBeNull();
+    });
+
+    it("renders the loading chase on asChild non-ghost variants", () => {
+      render(
+        <Button asChild loading>
+          <a href="/test">Link</a>
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "Link" });
+      expect(link.querySelector("[data-led-chase]")).toBeTruthy();
+      expect(link.querySelector("[data-led]")).toBeNull();
+    });
   });
 
   describe("className merging", () => {
