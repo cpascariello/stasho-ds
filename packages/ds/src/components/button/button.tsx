@@ -273,11 +273,25 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return null;
     })();
 
+    // asChild lends the chassis to the child element (an anchor, usually), so
+    // the label to wrap is the child's children, not the child itself.
+    const label =
+      asChild && isValidElement(children)
+        ? (children.props as { children?: ReactNode }).children
+        : children;
+
     const content = (
       <>
         {leadingSlot}
-        <span className="inline-flex items-center leading-none">
-          {children}
+        {/* Height parity by construction: empirically (consuming app), both
+            button and anchor roots compute line-height 1.5, and a bare text
+            node renders a ~6px taller line box than this leading-none wrapper.
+            [gap:inherit] passes the root's per-size flex gap through to
+            multi-child labels (text + inline icon); single-child labels are
+            unaffected — same wrapper serves both the <button> and asChild
+            paths. */}
+        <span className="inline-flex items-center leading-none [gap:inherit]">
+          {label}
         </span>
         {!loading && iconRight ? (
           <span
@@ -294,11 +308,20 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (asChild && isValidElement(children)) {
-      return cloneElement(children as ReactElement<Record<string, unknown>>, {
-        className: classes,
-        ref,
-        ...rest,
-      });
+      // Same inner structure as the <button> path (LED + label wrapper), so an
+      // asChild button is pixel-identical to its siblings — previously the raw
+      // child children rendered without either, making asChild buttons ~6px
+      // taller and LED-less.
+      return cloneElement(
+        children as ReactElement<Record<string, unknown>>,
+        {
+          className: classes,
+          ref,
+          "aria-busy": loading || undefined,
+          ...rest,
+        },
+        content,
+      );
     }
 
     return (
