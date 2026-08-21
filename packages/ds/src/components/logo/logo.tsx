@@ -67,14 +67,30 @@ LogoFull.displayName = "LogoFull";
 /**
  * stasho wordmark only, no icon (placeholder logotype, rebrand still deferred).
  * Set in Anybody 800 italic to match the brand headings; the consuming app must
- * load Anybody or it falls back to sans-serif. viewBox is fitted to "stasho" at
- * that cut. Inherits color from parent via `currentColor`.
+ * load Anybody or it falls back to sans-serif. Inherits color from parent via
+ * `currentColor`.
+ *
+ * The wordmark is live `<text>`, so its width is decided by whichever faces the
+ * consuming app actually loaded — not by anything this component controls. The
+ * viewBox must therefore clear the WIDEST realistic rendering: overflow clips a
+ * glyph, while underflow only leaves benign trailing space. Measured at
+ * font-size 200, `font-stretch: normal` (Chromium, 2026-08-21): Anybody 800/900
+ * italic 848.9, Anybody 800 upright 833.1, Anybody 700 italic 777.6, generic
+ * sans-serif fallback ~650. 880 clears the widest with headroom.
+ *
+ * Two known ways past 880, both requiring a consumer to opt in: Anybody ships a
+ * `wdth` 75..125 axis, and `font-stretch` inherits into SVG `<text>` — at
+ * `wdth` 125 this measures 1046. Nothing sets it today; the numbers above
+ * assume `wdth` 100.
+ *
+ * The previous 654 was fitted to the generic sans-serif FALLBACK, not to
+ * Anybody, and clipped the trailing "o" by ~30% wherever Anybody loaded.
  */
 const LogoWordmark = forwardRef<SVGSVGElement, LogoProps>(
   ({ className, ...rest }, ref) => (
     <svg
       ref={ref}
-      viewBox="0 0 654 229"
+      viewBox="0 0 880 229"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       className={cn("shrink-0", className)}
@@ -102,12 +118,17 @@ LogoWordmark.displayName = "LogoWordmark";
  * logotype, rebrand still deferred). Set in Anybody 800 italic to match the
  * brand headings; the consuming app must load Anybody or it falls back to
  * sans-serif. Inherits color from parent via `currentColor`.
+ *
+ * Same live-`<text>` sizing rule as LogoWordmark above — the viewBox clears the
+ * widest realistic rendering. Measured at font-size 200 (Chromium, 2026-08-21):
+ * Anybody 800/900 italic "s" 157.9. 164 clears it with ~3.9% headroom. The
+ * previous 119 clipped the single glyph by ~33%.
  */
 const LogoLetter = forwardRef<SVGSVGElement, LogoProps>(
   ({ className, ...rest }, ref) => (
     <svg
       ref={ref}
-      viewBox="0 0 119 229"
+      viewBox="0 0 164 229"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       className={cn("shrink-0", className)}
