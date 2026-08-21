@@ -83,6 +83,34 @@ describe("LogoWordmark", () => {
     render(<LogoWordmark aria-label="Stasho" />);
     expect(screen.getByLabelText("Stasho")).toBeTruthy();
   });
+
+  // The wordmark is live <text>, so the viewBox has to clear the widest font
+  // the mark can render in — jsdom has no layout engine, so the width below is
+  // a browser measurement (Chromium, font-size 200) pinned as a constant.
+  // Narrowing past the widest clips a glyph; widening only adds trailing space.
+  // The second assertion pins the PREMISE: 848.9 is only the right number while
+  // the type spec below is unchanged, so changing the spec fails here and
+  // forces a re-measure rather than silently invalidating the constant.
+  it("has a viewBox wide enough for the widest rendering of 'stasho'", () => {
+    render(<LogoWordmark data-testid="logo-wordmark" />);
+    const svg = screen.getByTestId("logo-wordmark");
+    const [, , width] = svg.getAttribute("viewBox")!.split(" ").map(Number);
+    // Anybody 800/900 italic — the widest of the faces the mark renders in.
+    expect(width).toBeGreaterThanOrEqual(848.9);
+
+    const text = svg.querySelector("text")!;
+    expect({
+      family: text.getAttribute("font-family"),
+      size: text.getAttribute("font-size"),
+      weight: text.getAttribute("font-weight"),
+      style: text.getAttribute("font-style"),
+    }).toEqual({
+      family: "Anybody, sans-serif",
+      size: "200",
+      weight: "800",
+      style: "italic",
+    });
+  });
 });
 
 describe("LogoLetter", () => {
@@ -106,5 +134,26 @@ describe("LogoLetter", () => {
   it("forwards aria-label", () => {
     render(<LogoLetter aria-label="Stasho" />);
     expect(screen.getByLabelText("Stasho")).toBeTruthy();
+  });
+
+  it("has a viewBox wide enough for the widest rendering of 's'", () => {
+    render(<LogoLetter data-testid="logo-letter" />);
+    const svg = screen.getByTestId("logo-letter");
+    const [, , width] = svg.getAttribute("viewBox")!.split(" ").map(Number);
+    // Anybody 800/900 italic "s" — see LogoWordmark's note above.
+    expect(width).toBeGreaterThanOrEqual(157.9);
+
+    const text = svg.querySelector("text")!;
+    expect({
+      family: text.getAttribute("font-family"),
+      size: text.getAttribute("font-size"),
+      weight: text.getAttribute("font-weight"),
+      style: text.getAttribute("font-style"),
+    }).toEqual({
+      family: "Anybody, sans-serif",
+      size: "200",
+      weight: "800",
+      style: "italic",
+    });
   });
 });
