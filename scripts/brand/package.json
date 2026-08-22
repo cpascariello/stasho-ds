@@ -1,0 +1,7 @@
+{
+  "name": "@stasho/brand-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Regenerates the brand marks. Not part of the published package.",
+  "dependencies": { "playwright": "^1.62.1" }
+}
