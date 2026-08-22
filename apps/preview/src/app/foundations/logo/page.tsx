@@ -15,10 +15,31 @@ const SIZES = [
 const MARK_SIZES = [16, 24, 32, 48, 64, 96] as const;
 
 const FAVICON_FILES = [
-  { file: "favicon.ico", label: "16 / 32 / 48" },
-  { file: "apple-touch-icon.png", label: "180" },
-  { file: "stasho-mark-void-192.png", label: "192" },
-  { file: "stasho-mark-void-512.png", label: "512" },
+  // .ico can't be rendered by <img> reliably, so preview the 32px PNG it packs
+  {
+    file: "favicon.ico",
+    preview: "stasho-mark-void-32.png",
+    label: "16 / 32 / 48",
+    px: 32,
+  },
+  {
+    file: "apple-touch-icon.png",
+    preview: "apple-touch-icon.png",
+    label: "180",
+    px: 64,
+  },
+  {
+    file: "stasho-mark-void-192.png",
+    preview: "stasho-mark-void-192.png",
+    label: "192",
+    px: 64,
+  },
+  {
+    file: "stasho-mark-void-512.png",
+    preview: "stasho-mark-void-512.png",
+    label: "512",
+    px: 64,
+  },
 ] as const;
 
 type MarkPaletteKey = keyof typeof MARK_PALETTES;
@@ -93,14 +114,12 @@ export default function LogoPage() {
         <section>
           <h3 className="text-lg font-bold mb-2">Brand Color</h3>
           <p className="text-sm text-muted-foreground mb-6">
-            Apply any text color to tint the logo.
+            Apply any text color to tint the logo. Cyan (<code>accent</code>) is
+            the brand signal; <code>primary</code> is reserved for the CTA.
           </p>
           <div className="flex items-center gap-8">
-            <Logo className="size-12 text-primary-600" aria-hidden="true" />
-            <LogoFull
-              className="h-10 w-auto text-primary-600"
-              aria-hidden="true"
-            />
+            <Logo className="size-12 text-accent" aria-hidden="true" />
+            <LogoFull className="h-10 w-auto text-accent" aria-hidden="true" />
           </div>
         </section>
 
@@ -193,19 +212,29 @@ export default function LogoPage() {
             Generated from the same outlines. The <code>.ico</code> packs 16,
             32 and 48px; <code>apple-touch-icon.png</code> is 180px.
           </p>
-          <div className="flex flex-wrap items-end gap-6">
-            {FAVICON_FILES.map(({ file, label }) => (
-              <a
-                key={file}
-                href={`/brand/${file}`}
-                download
-                className="flex flex-col items-center gap-2 text-xs text-primary dark:text-accent underline"
-              >
-                <span className="text-muted-foreground no-underline">
+          <div className="flex flex-wrap items-end gap-8">
+            {FAVICON_FILES.map(({ file, label, preview, px }) => (
+              <div key={file} className="flex flex-col items-center gap-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/brand/${preview}`}
+                  alt={`stasho favicon at ${label}`}
+                  width={px}
+                  height={px}
+                  className="rounded-sm border border-edge"
+                  style={{ width: px, height: px }}
+                />
+                <span className="text-xs text-muted-foreground font-mono">
                   {label}
                 </span>
-                {file}
-              </a>
+                <a
+                  href={`/brand/${file}`}
+                  download
+                  className="text-xs text-primary dark:text-accent underline font-mono"
+                >
+                  {file}
+                </a>
+              </div>
             ))}
           </div>
         </section>

@@ -578,18 +578,18 @@ Two SVG components for the Aleph Cloud brand mark. Both use `fill="currentColor"
 import { Logo, LogoFull } from "@stasho/ds/logo";
 
 {/* Icon mark only */}
-<Logo className="size-10" aria-label="Aleph Cloud" />
+<Logo className="size-10" aria-label="stasho" />
 
 {/* Icon + "Aleph Cloud" wordmark */}
-<LogoFull className="h-8 w-auto" aria-label="Aleph Cloud" />
+<LogoFull className="h-8 w-auto" aria-label="stasho" />
 ```
 
 ### Variants
 
 | Component | Content | Aspect ratio |
 |-----------|---------|-------------|
-| `Logo` | Icon mark (two circles + two arcs) | 1:1 — size with `size-*` |
-| `LogoFull` | Icon mark + "Aleph Cloud" wordmark | ~6:1 — set height with `h-*`, use `w-auto` |
+| `Logo` | Icon mark — the wordmark's "s" | 1:1 — size with `size-*` |
+| `LogoFull` | Badge disc + "stasho" wordmark lockup | ~6:1 — set height with `h-*`, use `w-auto` |
 | `LogoMark` | Badge: the wordmark's "s" as outlines on a filled square | 1:1 — size with `size-*`; `rounded-full` for a badge |
 
 ### Badge mark (`LogoMark`)
@@ -615,8 +615,9 @@ Downloadable SVG, PNG and `favicon.ico` exports are on the preview site's
 
 ### Theming
 
-`Logo` and `LogoFull` use `currentColor`, so they respond to the parent's text color
-(`LogoMark` does not — see above):
+`Logo`, `LogoWordmark` and `LogoLetter` use `currentColor`, so they respond to the
+parent's text color. `LogoFull`'s wordmark does too, but its badge disc carries a
+fixed palette (`palette="void"` by default). `LogoMark` is fixed throughout — see above:
 
 ```tsx
 {/* Inherits default foreground color */}

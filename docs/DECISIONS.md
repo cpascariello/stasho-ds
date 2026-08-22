@@ -18,6 +18,30 @@ Each entry includes:
 
 ---
 
+## Decision #107 — 2026-08-22
+
+**Context:** With `LogoMark` shipped (#106), the rest of the logotype was audited and found stale: `Logo` and `LogoFull` still drew **Aleph Cloud's** mark, inherited from the `@aleph-front/ds` fork, despite a doc comment calling it "stasho icon mark". `LogoFull`'s wordmark was worse — `fontFamily="inherit"` at weight 600, so it rendered in whatever font the parent used, upright, not Anybody 900 italic. Neither is used anywhere in stasho-app; both were visible only on the preview site.
+
+**Decision:** Rebuild the whole logotype from the verified outlines.
+
+- `Logo` — the "s" on a 512 square, sharing `LogoMark`'s geometry but transparent and inheriting `currentColor`.
+- `LogoFull` — a **badge + wordmark lockup**: a filled disc carrying the mark, plus the wordmark in `currentColor`. Gains a `palette` prop (default `void`).
+- `LogoWordmark` / `LogoLetter` — converted from live `<text>` to outlines, at byte-identical viewBoxes and glyph positions.
+
+**Rationale:**
+
+- **The Aleph mark had to go regardless** — it is not our brand, and the doc comment asserting otherwise is the same false-comment failure that propagated the wrong diagnosis in #105.
+- **Outlines everywhere kills the font dependency.** Live `<text>` made every mark render differently depending on whether the *consuming* app had loaded Anybody — which is precisely how the viewBoxes came to be fitted to the fallback face and clipped the trailing glyph for months. Per-glyph pen positions were read from the browser (`getStartPositionOfChar`) so kerning matches what live text produced.
+- **Nothing moves.** `LogoWordmark` and `LogoLetter` DO render in production (landing header, Sidebar collapsed/expanded), so the outlines were placed at the exact coordinates the text occupied and verified at 4× against the old rendering: **zero pixels flipped** between ink and ground, max channel delta 79/255, confined to antialiased edges.
+- **A letter icon beside its own word stutters.** With the icon now an "s", `Logo` + wordmark read as "s stasho". A filled disc reads as a deliberate lockup instead. Circle, not rounded square, because the mark's 14% ring was solved against the inscribed circle. The default `void` disc merges into our dark canvas (leaving a cyan "s" beside the wordmark) and appears as a badge on light grounds — both intended, with `palette="cyan"` for a disc that shows on either.
+- **Accessible name preserved.** The `<text>` content was the accessible fallback; outlines have none. Every mark now renders a `<title>` defaulting to "stasho", overridable, or removable with `title={null}`. Both live consumers already passed `aria-label`, so this is strictly an improvement.
+
+**Tests:** the two viewBox tests that pinned a browser-measured width constant (because live text could render in any face) are replaced by an exact guard — no path point may escape the viewBox — which needs no font and no pinned measurement. Writing it surfaced a real parser bug: `SVGPathPen` collapses horizontal runs to `H`, a one-number command, so splitting path numbers into x/y pairs silently swaps the axes from that point on; the helper now parses per command.
+
+**Alternatives considered:** deleting `Logo`/`LogoFull` outright (viable — nothing uses them — but a badge lockup is a real asset worth having); keeping the Aleph paths and fixing only the font (rejected, wrong brand); leaving the wordmark as live text (rejected — it is the exact fragility this removes).
+
+---
+
 ## Decision #106 — 2026-08-22
 
 **Context:** stasho-app needed a self-contained badge for its GitHub App avatar and favicons. A 72-candidate study (lowercase vs uppercase, five crop depths vs four containment rings, four palettes) settled on the wordmark's lowercase "s", contained, with a 14% ring of air.
