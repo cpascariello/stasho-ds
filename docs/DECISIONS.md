@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #108 — 2026-08-22
+
+**Context:** #107 rebuilt `LogoFull` as a badge-disc + wordmark lockup, to stop the icon-plus-word reading as "s stasho". Shown in the preview, the operator rejected it: *"I'm not a fan. Let's remove the badge from the full logo. Full logo should be simple 'stasho'."*
+
+**Decision:** **`LogoFull` is deleted.** With the badge gone it would render exactly what `LogoWordmark` already renders, and two exported names for one mark is the kind of duplication that later gets edited on one side only. The full logo IS the wordmark.
+
+**Rationale:** the underlying problem is that our icon is a *letter*. Any icon+wordmark lockup therefore repeats the word's own initial, and the two ways out — accept the stutter, or introduce a filled badge — were both tried and both rejected. Rather than keep a third variation alive as an alias, remove it: `LogoWordmark` for the logotype, `Logo` for a standalone mark, `LogoMark` where the mark must carry its own ground. Safe to remove — `LogoFull` was used nowhere in stasho-app, only on the preview page.
+
+**Consequence:** removing an export is a breaking change for any consumer that imported `LogoFull`. There are none today; the migration is a rename to `LogoWordmark`, which takes the same props.
+
+---
+
 ## Decision #107 — 2026-08-22
 
 **Context:** With `LogoMark` shipped (#106), the rest of the logotype was audited and found stale: `Logo` and `LogoFull` still drew **Aleph Cloud's** mark, inherited from the `@aleph-front/ds` fork, despite a doc comment calling it "stasho icon mark". `LogoFull`'s wordmark was worse — `fontFamily="inherit"` at weight 600, so it rendered in whatever font the parent used, upright, not Anybody 900 italic. Neither is used anywhere in stasho-app; both were visible only on the preview site.
