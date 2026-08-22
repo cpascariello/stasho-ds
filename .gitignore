@@ -9,3 +9,11 @@ out/
 .DS_Store
 .playwright-mcp/
 .superpowers/
+
+# brand pipeline scratch (regenerated; see scripts/brand/README.md)
+scripts/brand/node_modules/
+scripts/brand/out/
+scripts/brand/*.woff2
+scripts/brand/glyph*.json
+scripts/brand/family-paths.json
+scripts/brand/package-lock.json
