@@ -24,7 +24,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Header](#header) | App-shell top bar: skip-link, breadcrumb slot, right slot | `@stasho/ds/header` |
 | [Input](#input) | Text input with 2 sizes, borderless flat styling | `@stasho/ds/input` |
 | [Loader](#loader) | Standalone dual-dot cyan chase for inline loading | `@stasho/ds/loader` |
-| [Logo](#logo) | Brand mark (icon + full wordmark variants) | `@stasho/ds/logo` |
+| [Logo](#logo) | Brand mark (icon, full wordmark, and badge variants) | `@stasho/ds/logo` · `@stasho/ds/logo-mark` |
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
 | [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
@@ -590,10 +590,33 @@ import { Logo, LogoFull } from "@stasho/ds/logo";
 |-----------|---------|-------------|
 | `Logo` | Icon mark (two circles + two arcs) | 1:1 — size with `size-*` |
 | `LogoFull` | Icon mark + "Aleph Cloud" wordmark | ~6:1 — set height with `h-*`, use `w-auto` |
+| `LogoMark` | Badge: the wordmark's "s" as outlines on a filled square | 1:1 — size with `size-*`; `rounded-full` for a badge |
+
+### Badge mark (`LogoMark`)
+
+Imported separately, from `@stasho/ds/logo-mark`:
+
+```tsx
+import { LogoMark } from "@stasho/ds/logo-mark";
+
+<LogoMark palette="void" className="size-10 rounded-full" aria-label="stasho" />
+```
+
+Four fixed palettes — `void` (default, cyan on near-black), `cyan`, `deep`, `mono`.
+
+`LogoMark` is the one brand component that does **not** follow the theme. It carries
+its own background because it gets rasterised and uploaded where our CSS never runs
+(GitHub App avatar, favicons, social cards), so it must render identically everywhere.
+It is also real outlines rather than live `<text>`, so it does not depend on the
+consuming app having loaded Anybody — see Decision #106.
+
+Downloadable SVG, PNG and `favicon.ico` exports are on the preview site's
+`/foundations/logo` page.
 
 ### Theming
 
-The logos use `currentColor`, so they respond to the parent's text color:
+`Logo` and `LogoFull` use `currentColor`, so they respond to the parent's text color
+(`LogoMark` does not — see above):
 
 ```tsx
 {/* Inherits default foreground color */}

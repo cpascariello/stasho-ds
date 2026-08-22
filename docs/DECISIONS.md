@@ -18,6 +18,25 @@ Each entry includes:
 
 ---
 
+## Decision #106 — 2026-08-22
+
+**Context:** stasho-app needed a self-contained badge for its GitHub App avatar and favicons. A 72-candidate study (lowercase vs uppercase, five crop depths vs four containment rings, four palettes) settled on the wordmark's lowercase "s", contained, with a 14% ring of air.
+
+**Decision:** Ship `LogoMark` (`@stasho/ds/logo-mark`) — the "s" as **real outlines**, on a filled square, in four fixed-hex palettes (`void` / `cyan` / `deep` / `mono`). Static SVG + PNG + `favicon.ico` exports live in `apps/preview/public/brand/` and are downloadable from the Logo foundations page.
+
+**Rationale:**
+
+- **Outlines, not `<text>`.** Google Fonts serves Anybody with `font-style: normal` only — no italic face exists, so the browser synthesises the slant. `LogoWordmark`/`LogoLetter` render live `<text>` and therefore depend on the consuming app having loaded Anybody; that dependency is exactly what left their viewBoxes fitted to the *fallback* font and clipping for months (stasho-app Decision #391, this repo's #105). An exported avatar must not inherit that risk. The path was produced with fontTools from the served woff2 (`wdth` instantiated to 100), then sheared by **0.25** — the exact synthetic-oblique transform Chromium applies, found by fitting against the browser's own render and **verified at 0.000% pixel difference** on both `s` and `S`.
+- **Air measured against the circle, not the square.** Platforms crop avatars round, and the inscribed circle cuts closest exactly where a slanted "s" reaches furthest. The scale was solved numerically — render, find the ink pixel furthest from centre, rescale — so the 14% ring is real clearance from the *badge* edge, not square margin that a round crop would eat.
+- **Fixed hexes, not tokens — a deliberate exception to Decision #2.** Every other brand color here is OKLCH so it can be manipulated per theme. This mark is different in kind: it is rasterised into PNG and ICO files and uploaded to surfaces where our CSS never runs (GitHub, favicons, social cards). It must render identically everywhere, so the palette is literal. `void`'s cyan `#22d3ee` and ground `#07080a` are sampled from the logo stasho-app already ships, keeping continuity with the current avatar. `deep`'s `#00004e` is the rendered sRGB of `--color-primary-900`.
+- **Carries its own ground, so it does not follow the theme** — the opposite of `Logo`/`LogoFull`, which inherit `currentColor`. Both behaviours are correct for their use: line art adapts, a badge cannot.
+
+**Alternatives considered:** live `<text>` in the SVG (rejected — reintroduces the font dependency the outlines exist to remove, and a downloaded SVG would render in a fallback face on any machine without Anybody); theme tokens for the palette (rejected per above); shipping the raster assets inside the npm package (rejected — the package stays source-only per its `files` field; the component carries the vector, the preview site carries the downloads).
+
+**Verification:** the generated 512px void PNG is pixel-identical to the study tile that was chosen (zero delta in ink position, size and radius). Palette regressions are pinned by literal per-palette test cases — asserting against `MARK_PALETTES` itself would have passed even with a ground/letter swap, confirmed by mutating one palette and watching the suite fail.
+
+---
+
 ## Decision #105 — 2026-07-24
 
 **Context:** stasho-app Decision #280 designed a repo-aware sidebar switcher for grouped sibling-workspace projects (deliverable 2 of #278) and specced its consumer-facing shape as a DS primitive rather than an app-local component, per the app's "all UI from `@stasho/ds`" rule. This entry records the DS-side receipt of that spec, shipped as `@stasho/ds/project-switcher`.

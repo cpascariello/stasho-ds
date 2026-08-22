@@ -2,6 +2,7 @@
 
 import { PageHeader } from "@preview/components/page-header";
 import { Logo, LogoFull } from "@stasho/ds/logo";
+import { LogoMark, MARK_PALETTES } from "@stasho/ds/logo-mark";
 
 const SIZES = [
   { label: "xs", className: "size-6" },
@@ -10,6 +11,17 @@ const SIZES = [
   { label: "lg", className: "size-14" },
   { label: "xl", className: "size-20" },
 ] as const;
+
+const MARK_SIZES = [16, 24, 32, 48, 64, 96] as const;
+
+const FAVICON_FILES = [
+  { file: "favicon.ico", label: "16 / 32 / 48" },
+  { file: "apple-touch-icon.png", label: "180" },
+  { file: "stasho-mark-void-192.png", label: "192" },
+  { file: "stasho-mark-void-512.png", label: "512" },
+] as const;
+
+type MarkPaletteKey = keyof typeof MARK_PALETTES;
 
 const FULL_SIZES = [
   { label: "sm", className: "h-6 w-auto" },
@@ -23,7 +35,7 @@ export default function LogoPage() {
     <div>
       <PageHeader
         title="Logo"
-        description="stasho brand mark and full logo. Uses currentColor — adapts to any text color or theme."
+        description="stasho brand marks. The line-art logo follows currentColor; the badge mark carries fixed brand colors so it survives export."
       />
       <div className="space-y-12">
         {/* Icon mark */}
@@ -92,6 +104,112 @@ export default function LogoPage() {
           </div>
         </section>
 
+        {/* Badge mark */}
+        <section>
+          <h3 className="text-lg font-bold mb-2">Badge Mark</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            The wordmark&apos;s &quot;s&quot; as real outlines inside a filled
+            square. Unlike the logo above it does <strong>not</strong> follow
+            the theme — it carries its own ground, because it gets exported to
+            PNG and uploaded where our CSS never runs (GitHub App avatar,
+            favicon, social cards). Round it with{" "}
+            <code>className=&quot;rounded-full&quot;</code> for a badge.
+          </p>
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+            {(Object.keys(MARK_PALETTES) as MarkPaletteKey[]).map((palette) => (
+              <div key={palette} className="flex flex-col gap-3">
+                <LogoMark
+                  palette={palette}
+                  className="w-full rounded-md border border-edge"
+                  aria-label={`stasho badge mark, ${palette}`}
+                />
+                <LogoMark
+                  palette={palette}
+                  className="size-12 rounded-full border border-edge"
+                  aria-hidden="true"
+                />
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-mono">{palette}</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {MARK_PALETTES[palette].bg} / {MARK_PALETTES[palette].fg}
+                  </span>
+                  <span className="flex gap-2 text-xs">
+                    <a
+                      className="text-primary dark:text-accent underline"
+                      href={`/brand/stasho-mark-${palette}.svg`}
+                      download
+                    >
+                      SVG
+                    </a>
+                    <a
+                      className="text-primary dark:text-accent underline"
+                      href={`/brand/stasho-mark-${palette}-512.png`}
+                      download
+                    >
+                      PNG 512
+                    </a>
+                    <a
+                      className="text-primary dark:text-accent underline"
+                      href={`/brand/stasho-mark-${palette}-128.png`}
+                      download
+                    >
+                      128
+                    </a>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* At real size */}
+        <section>
+          <h3 className="text-lg font-bold mb-2">At Real Size</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            The mark is scaled so its farthest point sits 14% inside the frame,
+            measured against the inscribed <em>circle</em> — so the ring of air
+            survives a platform cropping it round.
+          </p>
+          <div className="flex items-end gap-6">
+            {MARK_SIZES.map((size) => (
+              <div key={size} className="flex flex-col items-center gap-2">
+                <LogoMark
+                  className="rounded-full border border-edge"
+                  style={{ width: size, height: size }}
+                  aria-hidden="true"
+                />
+                <span className="text-xs text-muted-foreground font-mono">
+                  {size}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Favicon */}
+        <section>
+          <h3 className="text-lg font-bold mb-2">Favicon</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            Generated from the same outlines. The <code>.ico</code> packs 16,
+            32 and 48px; <code>apple-touch-icon.png</code> is 180px.
+          </p>
+          <div className="flex flex-wrap items-end gap-6">
+            {FAVICON_FILES.map(({ file, label }) => (
+              <a
+                key={file}
+                href={`/brand/${file}`}
+                download
+                className="flex flex-col items-center gap-2 text-xs text-primary dark:text-accent underline"
+              >
+                <span className="text-muted-foreground no-underline">
+                  {label}
+                </span>
+                {file}
+              </a>
+            ))}
+          </div>
+        </section>
+
         {/* Usage */}
         <section>
           <h3 className="text-lg font-bold mb-2">Usage</h3>
@@ -107,6 +225,15 @@ export default function LogoPage() {
             </p>
             <p>
               {'<LogoFull className="h-8 w-auto" aria-label="stasho" />'}
+            </p>
+            <p className="mt-3">
+              <span className="text-primary-400">import</span>
+              {" { LogoMark } "}
+              <span className="text-primary-400">from</span>
+              {' "@stasho/ds/logo-mark"'}
+            </p>
+            <p className="mt-3">
+              {'<LogoMark palette="void" className="size-10 rounded-full" />'}
             </p>
           </div>
         </section>
