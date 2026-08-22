@@ -51,6 +51,7 @@
     "./drawer": "./src/components/drawer/drawer.tsx",
     "./empty-state": "./src/components/empty-state/empty-state.tsx",
     "./logo": "./src/components/logo/logo.tsx",
+    "./logo-mark": "./src/components/logo/logo-mark.tsx",
     "./progress-bar": "./src/components/progress-bar/progress-bar.tsx",
     "./stepper": "./src/components/stepper/stepper.tsx",
     "./loader": "./src/components/loader/loader.tsx",

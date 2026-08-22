@@ -6,6 +6,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "stasho Design System",
   description: "Token preview for @stasho/ds",
+  // Generated from the same outlines as LogoMark — see foundations/logo.
+  icons: {
+    icon: [
+      { url: "/brand/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/brand/stasho-mark-void-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: { url: "/brand/apple-touch-icon.png", sizes: "180x180" },
+  },
 };
 
 export default function RootLayout({
