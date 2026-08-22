@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@preview/components/page-header";
-import { Logo, LogoFull } from "@stasho/ds/logo";
+import { Logo, LogoWordmark } from "@stasho/ds/logo";
 import { LogoMark, MARK_PALETTES } from "@stasho/ds/logo-mark";
 
 const SIZES = [
@@ -44,13 +44,6 @@ const FAVICON_FILES = [
 
 type MarkPaletteKey = keyof typeof MARK_PALETTES;
 
-const FULL_SIZES = [
-  { label: "sm", className: "h-6 w-auto" },
-  { label: "md", className: "h-8 w-auto" },
-  { label: "lg", className: "h-10 w-auto" },
-  { label: "xl", className: "h-14 w-auto" },
-] as const;
-
 export default function LogoPage() {
   return (
     <div>
@@ -78,25 +71,6 @@ export default function LogoPage() {
           </div>
         </section>
 
-        {/* Full logo */}
-        <section>
-          <h3 className="text-lg font-bold mb-2">Full Logo</h3>
-          <p className="text-sm text-muted-foreground mb-6">
-            Icon mark + &quot;stasho&quot; wordmark. Set the height and use{" "}
-            <code>w-auto</code> for the correct aspect ratio.
-          </p>
-          <div className="space-y-6">
-            {FULL_SIZES.map(({ label, className }) => (
-              <div key={label} className="flex items-center gap-4">
-                <span className="w-8 text-xs text-muted-foreground font-mono text-right">
-                  {label}
-                </span>
-                <LogoFull className={className} aria-hidden="true" />
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* On dark surface */}
         <section>
           <h3 className="text-lg font-bold mb-2">On Dark Surface</h3>
@@ -106,7 +80,7 @@ export default function LogoPage() {
           </p>
           <div className="rounded-2xl bg-neutral-900 p-8 flex items-center gap-8 text-white">
             <Logo className="size-12" aria-hidden="true" />
-            <LogoFull className="h-10 w-auto" aria-hidden="true" />
+            <LogoWordmark className="h-10 w-auto" aria-hidden="true" />
           </div>
         </section>
 
@@ -119,7 +93,7 @@ export default function LogoPage() {
           </p>
           <div className="flex items-center gap-8">
             <Logo className="size-12 text-accent" aria-hidden="true" />
-            <LogoFull className="h-10 w-auto text-accent" aria-hidden="true" />
+            <LogoWordmark className="h-10 w-auto text-accent" aria-hidden="true" />
           </div>
         </section>
 
@@ -245,7 +219,7 @@ export default function LogoPage() {
           <div className="rounded-2xl bg-muted/50 p-6 font-mono text-sm space-y-1.5 text-muted-foreground">
             <p>
               <span className="text-primary-400">import</span>
-              {" { Logo, LogoFull } "}
+              {" { Logo, LogoWordmark } "}
               <span className="text-primary-400">from</span>
               {' "@stasho/ds/logo"'}
             </p>
@@ -253,7 +227,7 @@ export default function LogoPage() {
               {'<Logo className="size-10" aria-label="stasho" />'}
             </p>
             <p>
-              {'<LogoFull className="h-8 w-auto" aria-label="stasho" />'}
+              {'<LogoWordmark className="h-8 w-auto" aria-label="stasho" />'}
             </p>
             <p className="mt-3">
               <span className="text-primary-400">import</span>

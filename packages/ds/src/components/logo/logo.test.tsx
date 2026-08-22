@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Logo, LogoFull, LogoLetter, LogoWordmark } from "./logo";
+import { Logo, LogoLetter, LogoWordmark } from "./logo";
 
 /**
  * Bounding box over every point in an absolute-command path. Control points
@@ -65,7 +65,6 @@ function pathExtents(d: string) {
   };
 }
 
-
 describe("Logo", () => {
   it("renders an svg element", () => {
     render(<Logo data-testid="logo" />);
@@ -87,32 +86,6 @@ describe("Logo", () => {
 
   it("forwards aria-label", () => {
     render(<Logo aria-label="stasho" />);
-    expect(screen.getByLabelText("stasho")).toBeTruthy();
-  });
-});
-
-describe("LogoFull", () => {
-  it("renders an svg element", () => {
-    render(<LogoFull data-testid="logo-full" />);
-    const svg = screen.getByTestId("logo-full");
-    expect(svg.tagName).toBe("svg");
-  });
-
-  it("uses currentColor for fill", () => {
-    render(<LogoFull data-testid="logo-full" />);
-    const svg = screen.getByTestId("logo-full");
-    expect(svg.getAttribute("fill")).toBe("currentColor");
-  });
-
-  it("forwards className", () => {
-    render(<LogoFull data-testid="logo-full" className="h-10 w-auto" />);
-    const svg = screen.getByTestId("logo-full");
-    expect(svg.classList.contains("h-10")).toBe(true);
-    expect(svg.classList.contains("w-auto")).toBe(true);
-  });
-
-  it("forwards aria-label", () => {
-    render(<LogoFull aria-label="stasho" />);
     expect(screen.getByLabelText("stasho")).toBeTruthy();
   });
 });
@@ -237,7 +210,6 @@ describe("LogoLetter", () => {
 describe("logotype is font-independent", () => {
   it.each([
     ["Logo", Logo],
-    ["LogoFull", LogoFull],
     ["LogoWordmark", LogoWordmark],
     ["LogoLetter", LogoLetter],
   ])("%s draws outlines and no <text>", (_name, Component) => {
@@ -253,7 +225,6 @@ describe("logotype is font-independent", () => {
 
   it("keeps the viewBoxes the <text> versions used, so nothing resizes", () => {
     const cases = [
-      [<LogoFull key="f" data-testid="f" />, "f", "0 0 1383 229"],
       [<LogoWordmark key="w" data-testid="w" />, "w", "0 0 880 229"],
       [<LogoLetter key="l" data-testid="l" />, "l", "0 0 164 229"],
     ] as const;
@@ -263,26 +234,4 @@ describe("logotype is font-independent", () => {
     }
   });
 
-  it("LogoFull locks a filled badge up with the wordmark", () => {
-    render(<LogoFull data-testid="f" />);
-    const svg = screen.getByTestId("f");
-    // a disc, not a bare letter: "s stasho" reads as a stutter without it
-    const disc = svg.querySelector("circle");
-    expect(disc?.getAttribute("fill")).toBe("#07080a");
-    expect(svg.querySelectorAll("path")).toHaveLength(2);
-    // badge glyph carries the palette; the wordmark inherits currentColor
-    const [badge, wordmark] = svg.querySelectorAll("path");
-    expect(badge?.getAttribute("fill")).toBe("#22d3ee");
-    expect(wordmark?.getAttribute("fill")).toBeNull();
-  });
-
-  it("LogoFull takes a badge palette without touching the wordmark", () => {
-    render(<LogoFull data-testid="f" palette="cyan" />);
-    const svg = screen.getByTestId("f");
-    expect(svg.querySelector("circle")?.getAttribute("fill")).toBe("#22d3ee");
-    expect(svg.querySelectorAll("path")[0]?.getAttribute("fill")).toBe(
-      "#07080a",
-    );
-    expect(svg.querySelectorAll("path")[1]?.getAttribute("fill")).toBeNull();
-  });
 });
