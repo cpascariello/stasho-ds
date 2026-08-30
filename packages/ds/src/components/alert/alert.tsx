@@ -28,6 +28,18 @@ const VARIANT_BG_CLASS: Record<AlertVariant, string> = {
   success: "alert-bg-success",
 };
 
+// Mirrors the root's `duration-200` exit transition; the fallback timer below
+// resolves a dismissal whose `transitionend` never arrives.
+const EXIT_DURATION_MS = 200;
+const EXIT_FALLBACK_MS = EXIT_DURATION_MS + 50;
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+  );
+}
+
 const alertVariants = cva(
   [
     "relative overflow-hidden rounded-sm border",
@@ -99,6 +111,8 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
     const [isDismissing, setIsDismissing] = useState(false);
     const [progressActive, setProgressActive] = useState(false);
     const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+    const fallbackRef = useRef<ReturnType<typeof setTimeout>>(null);
+    const dismissedRef = useRef(false);
     const resolvedVariant: AlertVariant = variant ?? "warning";
 
     const label = VARIANT_LABELS[resolvedVariant];
@@ -110,24 +124,38 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
         setProgressActive(true);
       });
 
-      timerRef.current = setTimeout(() => {
-        setIsDismissing(true);
-      }, dismissAfter);
+      timerRef.current = setTimeout(startDismiss, dismissAfter);
 
       return () => {
         if (timerRef.current) clearTimeout(timerRef.current);
       };
     }, [dismissAfter, onDismiss]);
 
-    function handleDismiss() {
+    useEffect(() => {
+      return () => {
+        if (fallbackRef.current) clearTimeout(fallbackRef.current);
+      };
+    }, []);
+
+    function finishDismiss() {
+      if (dismissedRef.current) return;
+      dismissedRef.current = true;
+      if (fallbackRef.current) clearTimeout(fallbackRef.current);
+      onDismiss?.();
+    }
+
+    function startDismiss() {
       if (timerRef.current) clearTimeout(timerRef.current);
       setIsDismissing(true);
+      if (prefersReducedMotion()) {
+        finishDismiss();
+        return;
+      }
+      fallbackRef.current = setTimeout(finishDismiss, EXIT_FALLBACK_MS);
     }
 
     function handleTransitionEnd() {
-      if (isDismissing && onDismiss) {
-        onDismiss();
-      }
+      if (isDismissing) finishDismiss();
     }
 
     return (
@@ -168,7 +196,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
         {onDismiss ? (
           <button
             type="button"
-            onClick={handleDismiss}
+            onClick={startDismiss}
             className={cn(
               "absolute top-2 right-2 cursor-pointer",
               labelVariants({ variant }),
