@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Alert } from "./alert";
@@ -6,7 +6,21 @@ import { Alert } from "./alert";
 describe("Alert", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
+
+  function stubReducedMotion(matches: boolean) {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn().mockReturnValue({ matches }),
+    );
+  }
+
+  function dispatchTransitionEnd(container: HTMLElement) {
+    const root = container.firstElementChild as HTMLElement;
+    root.dispatchEvent(new Event("transitionend", { bubbles: true }));
+  }
 
   it("renders children", () => {
     render(<Alert variant="warning">Something happened</Alert>);
@@ -66,10 +80,109 @@ describe("Alert", () => {
     );
 
     await user.click(screen.getByLabelText("Dismiss"));
+    expect(onDismiss).not.toHaveBeenCalled();
 
     // Simulate transitionend since jsdom doesn't fire it
-    const root = container.firstElementChild as HTMLElement;
-    root.dispatchEvent(new Event("transitionend", { bubbles: true }));
+    dispatchTransitionEnd(container);
+
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("calls onDismiss immediately under prefers-reduced-motion", () => {
+    stubReducedMotion(true);
+    const onDismiss = vi.fn();
+    render(
+      <Alert variant="warning" onDismiss={onDismiss}>
+        Msg
+      </Alert>,
+    );
+
+    fireEvent.click(screen.getByLabelText("Dismiss"));
+
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("does not call onDismiss on click alone when motion is allowed", () => {
+    stubReducedMotion(false);
+    const onDismiss = vi.fn();
+    const { container } = render(
+      <Alert variant="warning" onDismiss={onDismiss}>
+        Msg
+      </Alert>,
+    );
+
+    fireEvent.click(screen.getByLabelText("Dismiss"));
+    expect(onDismiss).not.toHaveBeenCalled();
+
+    dispatchTransitionEnd(container);
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("calls onDismiss once when reduced-motion and a later transitionend both occur", () => {
+    stubReducedMotion(true);
+    const onDismiss = vi.fn();
+    const { container } = render(
+      <Alert variant="warning" onDismiss={onDismiss}>
+        Msg
+      </Alert>,
+    );
+
+    fireEvent.click(screen.getByLabelText("Dismiss"));
+    dispatchTransitionEnd(container);
+
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("calls onDismiss via the fallback timer when transitionend never fires", () => {
+    vi.useFakeTimers();
+    const onDismiss = vi.fn();
+    render(
+      <Alert variant="warning" onDismiss={onDismiss}>
+        Msg
+      </Alert>,
+    );
+
+    fireEvent.click(screen.getByLabelText("Dismiss"));
+    expect(onDismiss).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("calls onDismiss once when transitionend fires before the fallback timer", () => {
+    vi.useFakeTimers();
+    const onDismiss = vi.fn();
+    const { container } = render(
+      <Alert variant="warning" onDismiss={onDismiss}>
+        Msg
+      </Alert>,
+    );
+
+    fireEvent.click(screen.getByLabelText("Dismiss"));
+    dispatchTransitionEnd(container);
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(onDismiss).toHaveBeenCalledOnce();
+  });
+
+  it("calls onDismiss under prefers-reduced-motion when dismissAfter expires", () => {
+    stubReducedMotion(true);
+    vi.useFakeTimers();
+    const onDismiss = vi.fn();
+    render(
+      <Alert variant="warning" onDismiss={onDismiss} dismissAfter={3000}>
+        Msg
+      </Alert>,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
 
     expect(onDismiss).toHaveBeenCalledOnce();
   });
@@ -88,11 +201,9 @@ describe("Alert", () => {
     });
 
     // Simulate transitionend for exit animation
-    const root = container.firstElementChild as HTMLElement;
-    root.dispatchEvent(new Event("transitionend", { bubbles: true }));
+    dispatchTransitionEnd(container);
 
     expect(onDismiss).toHaveBeenCalledOnce();
-    vi.useRealTimers();
   });
 
   it("does not render progress bar without dismissAfter", () => {
@@ -145,6 +256,5 @@ describe("Alert", () => {
     vi.advanceTimersByTime(5000);
 
     expect(onDismiss).not.toHaveBeenCalled();
-    vi.useRealTimers();
   });
 });
