@@ -2285,7 +2285,7 @@ import { NumberInput } from "@stasho/ds/number-input";
 
 **Props:** all standard `input[type=number]` attributes (`min`, `max`, `step`, `defaultValue`, `value`, `onChange`, etc., `size` excluded from the native attribute set) plus `size` (`"sm"` | `"md"`, default `"md"`) and `error` (boolean, default `false`). Forwards ref to the native `<input>`.
 
-**Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default) — matches Input's padding scale.
+**Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default) — matches Input's vertical padding scale (horizontal spacing differs: `pl-*` on the input plus a fixed `pr-1` stepper column).
 
 **Visuals:** Flat-slot chassis on the wrapper `<div>` — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline, `rounded-sm`. The native input is borderless and transparent inside it; browser default spinner arrows are hidden in favor of a Phosphor `CaretUp`/`CaretDown` pair on the trailing edge. The steppers are not keyboard-focusable (`tabIndex={-1}`) — arrow keys on the focused input already step natively; the buttons are a pointer affordance with `aria-label`s for click/tap.
 

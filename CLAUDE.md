@@ -245,8 +245,8 @@ Feature implementation details are **not inlined here** — they change every re
 - Phosphor Icons for UI chrome and consumer use
 
 **Form controls**
-- Button — 7 variants, xs–lg, instrument chassis + cyan LED, dual-dot loading chase (#81, #82, #95, #99)
-- Input / Textarea — flat-slot chassis, cyan hairline focus, error rail (#84); shared `field-chassis` class constants across Input/Textarea/Select/Combobox/MultiSelect (#110)
+- Button — 7 variants, xs–lg, instrument chassis + cyan LED, dual-dot loading chase (#81, #82, #95, #99, #110)
+- Input / Textarea — flat-slot chassis, cyan hairline focus, error rail (#84); shared `field-chassis` class constants across Input/Textarea/Select/Combobox/MultiSelect/NumberInput (#110)
 - NumberInput — wrapper-chassis flat slot, native `stepUp`/`stepDown` clamping, hidden spinners + Phosphor caret pair, sm/md (#110)
 - Checkbox / RadioGroup — flat-slot chassis, 14/16/20 size ladder (#85, #90)
 - Switch — thumb matches Checkbox at sm/md, per-mode bevel (#92, #96)

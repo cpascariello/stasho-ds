@@ -294,7 +294,7 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 
 **Not every constant applies everywhere:** MultiSelect's trigger is a `role="button"` `<div>`, not a native form control, so the native `:disabled` pseudo-class that `fieldDisabled` targets doesn't fire on it — MultiSelect keeps its own `aria-disabled:` class cluster rather than consuming `fieldDisabled`.
 
-**Key files:** `packages/ds/src/lib/field-chassis.ts`, consumed by `input.tsx`, `textarea.tsx`, `select.tsx`, `combobox.tsx`, `multi-select.tsx`.
+**Key files:** `packages/ds/src/lib/field-chassis.ts`, consumed by `input.tsx`, `textarea.tsx`, `select.tsx`, `combobox.tsx`, `multi-select.tsx`, `number-input.tsx`.
 
 **When to use:** When a class string is genuinely byte-identical across 3+ components (not merely similar) and represents one visual concern (a chassis, a focus treatment). Don't reach for this pattern for one-off or near-identical strings — verify sameness before extracting.
 
