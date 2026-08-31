@@ -87,6 +87,10 @@ describe("NumberInput", () => {
     render(<NumberInput aria-label="Quantity" error />);
     const wrapper = screen.getByRole("spinbutton").parentElement;
     expect(wrapper?.className).toContain("border-error");
+    // Guards the focus-within precedence fix: the rest-state focus-within
+    // accent classes must not survive tailwind-merge once error is set,
+    // or the cyan ring would beat the error rail while the input is focused.
+    expect(wrapper?.className).not.toContain("focus-within:border-accent-700");
   });
 
   it("renders both sizes", () => {
