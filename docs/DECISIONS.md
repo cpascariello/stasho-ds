@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #109 — 2026-08-31
+
+**Context:** First `/template-check` against `claude-project-template` (effective baseline `007d75a`, the commit nearest this repo's 2026-02-26 bootstrap; 27 template commits since). Eight adoptable changes were assessed; the operator chose four.
+
+**Decision:** Adopt (1) the **capability index** — CLAUDE.md's ~200-line Current Features section replaced by a grouped one-line-per-capability map citing decision numbers, detail deferred to DESIGN-SYSTEM.md / ARCHITECTURE.md / DECISIONS.md; (2) **`/dio:ship` as the finishing path** — the manual 7-step sequence in CLAUDE.md replaced by a pointer to the skill, integration-branch rules kept as project-specific overrides; (3) **workflow tiers + same-session default** — Small/Medium/Large ceremony ladder, brainstorm→plan→implement in one session, splits reserved for multi-day Large work (supersedes the mandatory separate-session workflow); (4) **sync-up as a repo skill** (`.claude/skills/sync-up/SKILL.md`) with a local-branch scan step, adapted to keep the priority-table backlog format. `.template-version` baseline set to template HEAD `beaa8c5`.
+
+**Rationale:** The Current Features section had grown to ~5,000 words loaded into every turn — per-component paragraphs duplicating DESIGN-SYSTEM.md, which the merge checklist already keeps current (verified: every component has a DESIGN-SYSTEM.md section before deleting). The ship skill was installed but CLAUDE.md still inlined the manual steps it replaces. The separate-session rule predates large context windows and taxed every Medium-sized DS chunk with a session handoff. The branch scan catches worktree work invisible from main.
+
+**Alternatives considered (declined for now):** `.claude/rules/plans.md` plan-status frontmatter, BACKLOG triage sections + workstream registry, "verification must reach the change" section, brainstorm upgrades, lead/adversary/fixer roles. Declined items won't resurface — future `/template-check` diffs from `beaa8c5`.
+
+---
+
 ## Decision #108 — 2026-08-22
 
 **Context:** #107 rebuilt `LogoFull` as a badge-disc + wordmark lockup, to stop the icon-plus-word reading as "s stasho". Shown in the preview, the operator rejected it: *"I'm not a fan. Let's remove the badge from the full logo. Full logo should be simple 'stasho'."*
