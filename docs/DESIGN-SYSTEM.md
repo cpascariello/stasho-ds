@@ -26,6 +26,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Loader](#loader) | Standalone dual-dot cyan chase for inline loading | `@stasho/ds/loader` |
 | [Logo](#logo) | Brand mark (icon, full wordmark, and badge variants) | `@stasho/ds/logo` · `@stasho/ds/logo-mark` |
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
+| [NumberInput](#numberinput) | Numeric input with stepper buttons | `@stasho/ds/number-input` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
 | [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
 | [ProjectSwitcher](#projectswitcher) | Grouped, searchable sidebar project switcher | `@stasho/ds/project-switcher` |
@@ -70,6 +71,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | On/off preference or setting | **Switch** — visual toggle metaphor | Checkbox — Switch communicates "live toggle" better |
 | Mutually exclusive options | **RadioGroup** — visible options, no dropdown | Select — use RadioGroup when ≤5 options and screen space allows |
 | Numeric range | **Slider** — visual, supports two-thumb range mode | Input — unless precise numeric entry is needed |
+| Precise numeric value entry | **NumberInput** — native `min`/`max`/`step` clamping, stepper buttons | Slider — Slider is for approximate/visual range selection, not exact values |
 
 ### Layout & Navigation
 
@@ -2263,6 +2265,38 @@ import { ProjectSwitcher } from "@stasho/ds/project-switcher";
 
 **Footer actions:** "View all" and "New project" rows are always rendered below a separator, regardless of search state or match count, with customizable labels.
 
+### NumberInput
+
+Numeric input with stepper buttons, `min`/`max`/`step` clamping handled by the native input, and a flat-slot chassis matching Input/Textarea.
+
+```tsx
+import { NumberInput } from "@stasho/ds/number-input";
+
+<NumberInput size="md" defaultValue={1} aria-label="Quantity" />
+<NumberInput size="sm" defaultValue={1} aria-label="Small" />
+<NumberInput defaultValue={0} min={0} max={10} step={1} aria-label="Bounded" />
+<NumberInput error defaultValue={1} aria-label="Invalid" />
+<NumberInput disabled defaultValue={1} aria-label="Disabled" />
+
+<FormField label="Quantity" helperText="Between 1 and 20">
+  <NumberInput defaultValue={1} min={1} max={20} />
+</FormField>
+```
+
+**Props:** all standard `input[type=number]` attributes (`min`, `max`, `step`, `defaultValue`, `value`, `onChange`, etc., `size` excluded from the native attribute set) plus `size` (`"sm"` | `"md"`, default `"md"`) and `error` (boolean, default `false`). Forwards ref to the native `<input>`.
+
+**Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default) — matches Input's padding scale.
+
+**Visuals:** Flat-slot chassis on the wrapper `<div>` — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline, `rounded-sm`. The native input is borderless and transparent inside it; browser default spinner arrows are hidden in favor of a Phosphor `CaretUp`/`CaretDown` pair on the trailing edge. The steppers are not keyboard-focusable (`tabIndex={-1}`) — arrow keys on the focused input already step natively; the buttons are a pointer affordance with `aria-label`s for click/tap.
+
+**Stepping:** Clicking a caret calls the native `stepUp()`/`stepDown()` on the input (so `min`/`max`/`step` clamping is the browser's, not reimplemented) and dispatches a synthetic `change` event so React's `onChange` fires.
+
+**Focus:** Wrapper hairline swaps to `border-accent-700` (light) / `border-accent` (dark) via `focus-within:` (the chassis lives on the wrapper, not the input itself).
+
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid` on the input. Error wins over focus in the class list (tailwind-merge last-wins).
+
+**Disabled:** Wrapper sinks one step (`bg-muted` light / `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, cursor to `not-allowed`. Steppers disable alongside the input and dim to `text-foreground/30`.
+
 ---
 
 ## Token File Reference
@@ -2341,6 +2375,7 @@ Run `npm run dev` and visit http://localhost:3000. Sidebar navigation organized 
 | `/components/form-field` | Label, helper text, error |
 | `/components/input` | Sizes and states |
 | `/components/multi-select` | Pre-selected, overflow, sizes, states, FormField |
+| `/components/number-input` | Sizes, min/max/step, states, FormField |
 | `/components/radio-group` | Sizes, states, controlled, FormField |
 | `/components/select` | Sizes, states, controlled, FormField |
 | `/components/slider` | Sizes, tooltip, range, custom step, states, FormField |

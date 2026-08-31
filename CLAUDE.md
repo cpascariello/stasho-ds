@@ -231,7 +231,7 @@ Feature implementation details are **not inlined here** — they change every re
 
 **Platform**
 - npm workspaces monorepo (`packages/ds` + `apps/preview`), source-level subpath exports (`@stasho/ds/*`)
-- Next.js static-export preview app: responsive sidebar nav, route per component, dark default + light toggle
+- Next.js static-export preview app: responsive sidebar nav, route per component, dark default + light toggle, theme choice persisted to `localStorage` with pre-paint `<head>` script to avoid flash (#110)
 - CI: lint + typecheck + test + build on PRs and main pushes; npm publish of raw TS source on GitHub Release
 
 **Tokens & theming**
@@ -246,7 +246,8 @@ Feature implementation details are **not inlined here** — they change every re
 
 **Form controls**
 - Button — 7 variants, xs–lg, instrument chassis + cyan LED, dual-dot loading chase (#81, #82, #95, #99)
-- Input / Textarea — flat-slot chassis, cyan hairline focus, error rail (#84)
+- Input / Textarea — flat-slot chassis, cyan hairline focus, error rail (#84); shared `field-chassis` class constants across Input/Textarea/Select/Combobox/MultiSelect (#110)
+- NumberInput — wrapper-chassis flat slot, native `stepUp`/`stepDown` clamping, hidden spinners + Phosphor caret pair, sm/md (#110)
 - Checkbox / RadioGroup — flat-slot chassis, 14/16/20 size ladder (#85, #90)
 - Switch — thumb matches Checkbox at sm/md, per-mode bevel (#92, #96)
 - Select / Combobox / MultiSelect — flat-slot triggers, popover-token dropdowns; MultiSelect tags + clear-all (#84, #87)
