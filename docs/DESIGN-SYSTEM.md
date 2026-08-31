@@ -703,6 +703,166 @@ Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay s
 </div>
 ```
 
+### Form Layout
+
+`FormField` wires label, helper text, and error state onto exactly one child — compose it around `Input`, `Select`, `Textarea`, or `NumberInput`, then close with a submit row (`Button` primary + ghost cancel).
+
+```tsx
+import { FormField } from "@stasho/ds/form-field";
+import { Input } from "@stasho/ds/input";
+import { Select } from "@stasho/ds/select";
+import { Textarea } from "@stasho/ds/textarea";
+import { NumberInput } from "@stasho/ds/number-input";
+import { Button } from "@stasho/ds/button";
+
+<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+  <FormField label="Name" required>
+    <Input placeholder="Project name" />
+  </FormField>
+
+  <FormField label="Region" required error={errors.region}>
+    <Select placeholder="Choose a region" options={regions} />
+  </FormField>
+
+  <FormField label="Instance count">
+    <NumberInput min={1} max={20} defaultValue={1} />
+  </FormField>
+
+  <FormField label="Description" helperText="Shown on the project overview">
+    <Textarea rows={4} placeholder="What is this project for?" />
+  </FormField>
+
+  <div className="flex justify-end gap-3">
+    <Button type="button" variant="ghost">Cancel</Button>
+    <Button type="submit">Save changes</Button>
+  </div>
+</form>
+```
+
+`FormField` only accepts a single child — don't pass `error` to both `FormField` and the child input, `FormField` injects `error`/`aria-invalid` into it via `cloneElement`.
+
+### Data Table Page
+
+Group related tables under `Tabs`, and drive `Table` in controlled-sort mode when it's rendering one page of a larger, externally paginated dataset — `data` gets the current page slice, `sortColumn`/`sortDirection`/`onSortChange` own the sort, and the parent re-sorts the full dataset before slicing.
+
+```tsx
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@stasho/ds/tabs";
+import { Table, type Column } from "@stasho/ds/table";
+import { Pagination } from "@stasho/ds/pagination";
+
+const columns: Column<Node>[] = [
+  { header: "Name", accessor: (r) => r.name, sortable: true, sortValue: (r) => r.name },
+  { header: "CPU", accessor: (r) => `${r.cpu}%`, sortable: true, sortValue: (r) => r.cpu, align: "right" },
+];
+
+function NodesTab({ allNodes }: { allNodes: Node[] }) {
+  const pageSize = 10;
+  const [page, setPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState("Name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const sorted = applySort(allNodes, columns, sortColumn, sortDirection);
+  const pageItems = sorted.slice((page - 1) * pageSize, page * pageSize);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Table
+        columns={columns}
+        data={pageItems}
+        keyExtractor={(r) => r.id}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        onSortChange={(col, dir) => {
+          setSortColumn(col);
+          setSortDirection(dir);
+          setPage(1);
+        }}
+      />
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(allNodes.length / pageSize)}
+        onPageChange={setPage}
+      />
+    </div>
+  );
+}
+
+<Tabs defaultValue="nodes">
+  <TabsList>
+    <TabsTrigger value="nodes">Nodes</TabsTrigger>
+    <TabsTrigger value="vms">VMs</TabsTrigger>
+  </TabsList>
+  <TabsContent value="nodes">
+    <NodesTab allNodes={nodes} />
+  </TabsContent>
+  <TabsContent value="vms">{/* ... */}</TabsContent>
+</Tabs>
+```
+
+`sortColumn` matches a column's `header` string, and `onSortChange` receives that same string back — `applySort` above is your own comparator, not a DS export.
+
+### Settings Panel
+
+`Card` groups related settings; each toggle row is a `FormField`-wrapped `Switch`, and a `Slider` handles a ranged value the same way.
+
+```tsx
+import { Card } from "@stasho/ds/card";
+import { FormField } from "@stasho/ds/form-field";
+import { Switch } from "@stasho/ds/switch";
+import { Slider } from "@stasho/ds/slider";
+
+<Card title="Notifications">
+  <div className="flex flex-col gap-5">
+    <FormField label="Email notifications">
+      <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
+    </FormField>
+    <FormField label="Push notifications">
+      <Switch checked={pushEnabled} onCheckedChange={setPushEnabled} />
+    </FormField>
+    <FormField label="Alert volume" helperText="How loud alert sounds play">
+      <Slider defaultValue={[60]} showTooltip />
+    </FormField>
+  </div>
+</Card>
+```
+
+### Empty / Loading State
+
+Cover the three states a list view moves through: `EmptyState` with an action `Button` for zero data, `Skeleton` rows while fetching, and `CopyableText` for identifiers once rows arrive.
+
+```tsx
+import { EmptyState } from "@stasho/ds/empty-state";
+import { Skeleton } from "@stasho/ds/ui/skeleton";
+import { CopyableText } from "@stasho/ds/copyable-text";
+import { Button } from "@stasho/ds/button";
+import { FolderOpen, Plus } from "@phosphor-icons/react";
+
+{loading ? (
+  <div className="flex flex-col gap-2">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <Skeleton key={i} className="h-10 w-full" />
+    ))}
+  </div>
+) : nodes.length === 0 ? (
+  <EmptyState
+    icon={<FolderOpen weight="duotone" />}
+    title="No nodes yet"
+    description="Deploy a node to see it listed here."
+    action={<Button iconLeft={<Plus />}>Deploy node</Button>}
+  />
+) : (
+  <div className="flex flex-col gap-2">
+    {nodes.map((node) => (
+      <div key={node.id} className="flex items-center justify-between px-4 py-2">
+        <span className="text-sm text-foreground">{node.name}</span>
+        <CopyableText text={node.id} size="sm" />
+      </div>
+    ))}
+  </div>
+)}
+```
+
 ---
 
 ## Components
