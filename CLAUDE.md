@@ -74,7 +74,7 @@ Some work spans many chunks over multiple sessions (e.g. a full skin redesign). 
 - After each chunk merge, sync the integration branch in the worktree: `git checkout skin/paraplu && git pull --ff-only origin skin/paraplu`.
 - When the whole integration is ready, treat the integration branch itself as a normal feature branch: PR it into main, squash-merge.
 - CI (`.github/workflows/ci.yml`) only runs on PRs to `main`. Chunk PRs into an integration branch rely on local `npm run check` — that's the safety net.
-- Active integration branches: `skin/paraplu` (Abyssal Void skin, Decision #79).
+- Active integration branches: none currently. (`skin/paraplu` shipped to main 2026-05-27 and its branch is deleted.)
 
 **Before merging:** Update ALL docs before squash merging to main.
 - `docs/DESIGN-SYSTEM.md` -- add/update tokens, components, hooks, or patterns
