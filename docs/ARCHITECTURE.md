@@ -274,6 +274,8 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 
 **Adding more themes:** Use the same `@custom-variant` pattern (e.g., `@custom-variant contrast (&:where(.theme-contrast, .theme-contrast *))`). Add corresponding CSS custom property blocks in `tokens.css`.
 
+**Persisting the choice (preview app only):** `ThemeSwitcher` writes the resolved theme to `localStorage["stasho-preview-theme"]` inside `try`/`catch` (storage can throw in private-mode browsing — the switcher just doesn't persist rather than crashing). A pre-paint inline `<script>` is inlined directly in `apps/preview/src/app/layout.tsx`'s `<head>` — not loaded via `<script src>`, which would arrive after (or in parallel with, but unpredictably relative to) first paint — reading that key synchronously and stripping `theme-dark` off `<html>` when the stored value is `"light"` (the SSR markup always ships with `theme-dark` present, so light is the only branch that needs a DOM write). This runs before hydration, avoiding a flash of the wrong theme that a `useEffect`-based approach would show for one frame.
+
 ### CVA Variant Pattern
 
 **Context:** Need type-safe component variants without CSS-in-JS or manual class string management.
@@ -283,6 +285,18 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 **Key files:** `packages/ds/src/components/button/button.tsx`, `packages/ds/src/lib/cn.ts`
 
 **Adding a new variant:** Add an entry to the `variants` object inside the `cva()` call. The variant key becomes the prop value (e.g., `variant="ghost"` → add `ghost: "..."` to the variant map). TypeScript infers the new prop value automatically.
+
+### Shared Chassis Constants (`field-chassis.ts`)
+
+**Context:** Input, Textarea, Select, Combobox, and MultiSelect independently carried the same literal Tailwind class strings for their flat-slot chassis (rest fill + hairline border + radius), focus (cyan hairline pair), error rail, disabled sink, and — for the three dropdown triggers — hover cue. Five components each editing five near-identical strings is how a token change (e.g. the Decision #95 `--edge` alpha bump) misses a sibling.
+
+**Approach:** `packages/ds/src/lib/field-chassis.ts` exports five plain string constants — `fieldChassis`, `fieldFocus`, `fieldError`, `fieldDisabled`, `fieldTriggerHover` — not a component or a hook. Each consuming component composes the constants it needs into its own `cva()` base array or ternary, exactly where the literal string used to sit. This is a plain dedup, not a new abstraction: no shared component was introduced because the five consumers don't share a DOM shape (Input/Textarea render a bare form element directly; Select/Combobox/MultiSelect render a trigger wrapping child content), so a polymorphic wrapper would cost more than the duplication it removes.
+
+**Not every constant applies everywhere:** MultiSelect's trigger is a `role="button"` `<div>`, not a native form control, so the native `:disabled` pseudo-class that `fieldDisabled` targets doesn't fire on it — MultiSelect keeps its own `aria-disabled:` class cluster rather than consuming `fieldDisabled`.
+
+**Key files:** `packages/ds/src/lib/field-chassis.ts`, consumed by `input.tsx`, `textarea.tsx`, `select.tsx`, `combobox.tsx`, `multi-select.tsx`, `number-input.tsx`.
+
+**When to use:** When a class string is genuinely byte-identical across 3+ components (not merely similar) and represents one visual concern (a chassis, a focus treatment). Don't reach for this pattern for one-off or near-identical strings — verify sameness before extracting.
 
 ### Data-Attribute Variant Propagation
 

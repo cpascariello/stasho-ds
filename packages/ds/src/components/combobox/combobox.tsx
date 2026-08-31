@@ -4,20 +4,22 @@ import { Command } from "cmdk";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown, Check } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
+import {
+  fieldChassis,
+  fieldDisabled,
+  fieldError,
+  fieldFocus,
+  fieldTriggerHover,
+} from "@ac/lib/field-chassis";
 
 const triggerVariants = cva(
   [
     "inline-flex items-center justify-between",
     "w-full font-sans text-foreground",
-    "bg-background dark:bg-surface",
-    "border border-edge rounded-sm",
-    "hover:border-edge-hover",
-    "focus-visible:outline-none",
-    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
-    "disabled:bg-muted dark:disabled:bg-background",
-    "disabled:border-edge/50",
-    "disabled:text-foreground/30",
-    "disabled:cursor-not-allowed",
+    fieldChassis,
+    fieldTriggerHover,
+    fieldFocus,
+    fieldDisabled,
     "transition-colors",
   ].join(" "),
   {
@@ -87,8 +89,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
           aria-invalid={error || undefined}
           className={cn(
             triggerVariants({ size }),
-            error &&
-              "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+            error && fieldError,
             !selectedLabel &&
               (disabled ? "text-muted-foreground/50" : "text-muted-foreground"),
             className,

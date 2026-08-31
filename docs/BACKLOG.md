@@ -27,30 +27,12 @@ Ideas and scope creep captured for later consideration.
 **Description:** Two ideas considered and deferred for the `fluid` mode: (1) a JS-measured *centered* middle truncation that keeps the ellipsis dead-center and fills width exactly (accurate with the monospace face, but needs a `ResizeObserver`); (2) a DS Tooltip reveal variant in place of the native `title` (on-brand, instant, styled, but pulls in Radix Tooltip + a provider requirement). Revisit if a callsite needs centered truncation or a styled hover reveal.
 **Priority:** Low
 
-### 2026-03-01 — Theme persistence across page reloads
-
-**Source:** Identified during accessibility audit
-**Description:** Theme selection resets on page reload. Persist to `localStorage` and apply before first paint (inline `<script>` in `<head>`) to avoid flash of wrong theme.
-**Priority:** Medium
-
-### 2026-03-01 — Font loading strategy
-
-**Source:** Identified during accessibility audit
-**Description:** External font loading (Typekit, Google Fonts) blocks render and has no fallback strategy. Consider `font-display: swap`, preconnect hints, or self-hosting critical fonts.
-**Priority:** Low
-
-### 2026-03-01 — Form control base class deduplication
-
-**Source:** Identified during accessibility audit
-**Description:** Input, Textarea, and Select share identical base styles (shadow-brand, focus ring, error border, dark mode bg). Extract shared form control base classes to reduce duplication.
-**Priority:** Low
-
 ### 2026-02-27 — Form components (remaining)
 
 **Source:** Identified while reviewing component coverage
 **Description:** Build remaining form components using the token system and CVA architecture. Checkbox, RadioGroup, Switch, Select, Combobox, and Slider are done. Remaining:
 - File Upload — drag-and-drop or click-to-upload area
-- Number Input / Stepper — numeric input with +/- buttons
+- ~~Number Input / Stepper — numeric input with +/- buttons~~ — done (see completed)
 **Priority:** Medium
 
 ### 2026-02-27 — Component library (remaining)
@@ -66,12 +48,6 @@ Ideas and scope creep captured for later consideration.
 - ~~Progress~~ — done (see completed)
 - ~~Breadcrumb~~ — done (see completed)
 **Priority:** High
-
-### 2026-03-14 — Composition recipes for DESIGN-SYSTEM.md
-
-**Source:** Identified during DESIGN-SYSTEM.md improvement pass
-**Description:** Expand the Patterns section with more composition recipes: form layout (FormField + inputs), data table page (Table + Pagination + Tabs), settings panel (Switch + Slider + Card), empty state (Skeleton + CopyableText). Show how components compose together for common product UI patterns.
-**Priority:** Low
 
 ### 2026-03-17 — Scheduler API endpoint reference
 
@@ -108,12 +84,6 @@ Ideas and scope creep captured for later consideration.
 
 **Source:** Identified while writing Abyssal Void docs
 **Description:** Switch accent-colored body text from raw `text-accent` to a contrast-aware scale step (`text-accent-700 dark:text-accent-300`) once a real cyan-text moment lands in a consumer app. The same-hex rule is right for fills/borders/indicators; inline body text needs a darker step on light surfaces for AA contrast.
-**Priority:** Low
-
-### 2026-05-26 — Dark-mode Outline disabled chassis
-
-**Source:** Identified during Button light-mode chunk (Decision #82)
-**Description:** Outline disabled in dark mode keeps a transparent chassis (no `dark:disabled:bg-X`) while every other variant flattens to `bg-neutral-900`. Inconsistent with "Disabled flattens" principle. Fix by adding `dark:disabled:bg-neutral-900` to the Outline variant — small dark-mode behavior change, kept out of the light-mode chunk scope.
 **Priority:** Low
 
 ---
@@ -172,5 +142,11 @@ Ideas and scope creep captured for later consideration.
 - [x] 2026-05-27 — Skin coverage finish (Decision #93 — full-sweep audit closes the wave): CopyableText link `text-primary-500 dark:text-primary-300` → `text-accent-500 dark:text-accent` (§ 2 Color link role); Table activeKey row + row-click hover `bg-primary-600/10` + `inset-shadow primary` → `bg-accent/15` + `inset-shadow accent` (Decision #86/#88 active-state sweep, last pre-skin leak); ui/Spinner removed outright (contradicted § 6 "Loading pulses, never spins"; zero internal consumers; pre-1.0 package; "Replace, don't deprecate"); class-name cleanups `rounded-md`/`rounded-sm` → `rounded-none` on copyable-text copy + external buttons, tabs DropdownMenu item, skeleton (all already resolved to 0px under Abyssal scale — names now honest). DESIGN-SYSTEM.md Spinner section removed + loading taxonomy updated to LED chase. ARCHITECTURE.md motion-reduce key files updated.
 - [x] 2026-05-27 — Visibility refresh: dark `--surface` 0.16 → 0.18, dark `--edge` 8% → 16% (Decision #95). Cards + dropdowns + every other component on the surface/edge tokens lift off the page; lg button size restored (15px / py-13 / px-24 / LED size-2 / icon size-4) as opt-in for hero CTAs while md stays the default. SKIN-PRINCIPLES § 3 "Hairline borders" rule depinned from the literal alpha value — now references `--edge` only.
 - [x] 2026-06-17 — Bump workflow actions off the Node-20 runtime (hard deadline 2026-06-16): `actions/checkout` 4.3.1→6.0.3, `actions/setup-node` 4.4.0→6.4.0, SHA-pinned with version comments in both `publish.yml` and `ci.yml`; `ci.yml` moved off floating `@v4` tags and hardened (`permissions: contents: read` + `persist-credentials: false`). `actionlint` + `zizmor` clean. `node-version: 22` toolchain pin unchanged.
+- [x] 2026-08-31 — Dark-mode Outline disabled chassis (Decision #110): Button Outline variant's `dark:disabled:*` cluster gains `dark:disabled:bg-neutral-900`, matching every other variant's flatten.
+- [x] 2026-08-31 — Form control base class deduplication (Decision #110): `packages/ds/src/lib/field-chassis.ts` extracts `fieldChassis`/`fieldFocus`/`fieldError`/`fieldDisabled`/`fieldTriggerHover` string constants, consumed by Input/Textarea/Select/Combobox/MultiSelect (MultiSelect keeps its `aria-disabled:` cluster component-side — role="button" div, not a native control). Behavior-preserving, zero test edits.
+- [x] 2026-08-31 — Number Input component (Decision #110, `@stasho/ds/number-input`): wrapper-chassis flat slot around a native `type="number"` input, native `stepUp()`/`stepDown()` + synthetic `change` event dispatch for React onChange, hidden native spinners, Phosphor caret stepper pair, sm/md, FormField-compatible.
+- [x] 2026-08-31 — Theme persistence across page reloads (Decision #110): `ThemeSwitcher` writes `stasho-preview-theme` to `localStorage`; pre-paint inline `<head>` script removes `theme-dark` before first paint when stored value is "light". Minimal vitest infra added to `apps/preview`.
+- [x] 2026-08-31 — Composition recipes for DESIGN-SYSTEM.md (Decision #110): four recipes added to § Patterns — Form Layout, Data Table Page, Settings Panel, Empty/Loading State — props verified against component source.
+- [x] 2026-08-31 — Font loading strategy — already resolved: `apps/preview/src/app/layout.tsx` already carries `preconnect` hints ahead of the Google Fonts stylesheet and both Google Fonts and self-hosted Departure Mono load with `display=swap`/`font-display: swap`. No code change; item closed as a finding-of-fact (Decision #110).
 
 </details>

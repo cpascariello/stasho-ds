@@ -140,6 +140,16 @@ describe("Button", () => {
       const button = screen.getByRole("button");
       expect((button as HTMLButtonElement).disabled).toBe(true);
     });
+
+    it("applies dark-mode disabled chassis to outline variant", () => {
+      render(
+        <Button variant="outline" disabled>
+          Disabled
+        </Button>,
+      );
+      const button = screen.getByRole("button");
+      expect(button.className).toContain("dark:disabled:bg-neutral-900");
+    });
   });
 
   describe("asChild", () => {

@@ -89,7 +89,7 @@ const buttonVariants = cva(
           // dark (overrides): white chrome — outline is neutral, NOT accent (supersedes the outline half of Decision #82)
           "dark:text-white dark:border-white/40",
           "dark:hover:border-white",
-          "dark:disabled:text-white/30 dark:disabled:border-white/10 dark:disabled:bg-transparent",
+          "dark:disabled:text-white/30 dark:disabled:border-white/10 dark:disabled:bg-neutral-900",
         ].join(" "),
         ghost: [
           // light (base): foreground text, surface hover

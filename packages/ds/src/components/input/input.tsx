@@ -1,20 +1,21 @@
 import { forwardRef, type InputHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@ac/lib/cn";
+import {
+  fieldChassis,
+  fieldDisabled,
+  fieldError,
+  fieldFocus,
+} from "@ac/lib/field-chassis";
 
 const inputVariants = cva(
   [
     "w-full font-sans text-foreground",
-    "bg-background dark:bg-surface",
-    "border border-edge rounded-sm",
+    fieldChassis,
     "placeholder:text-muted-foreground",
-    "focus-visible:outline-none",
-    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
-    "disabled:bg-muted dark:disabled:bg-background",
-    "disabled:border-edge/50",
-    "disabled:text-foreground/30",
+    fieldFocus,
+    fieldDisabled,
     "disabled:placeholder:text-muted-foreground/50",
-    "disabled:cursor-not-allowed",
     "transition-colors",
   ].join(" "),
   {
@@ -42,8 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         className={cn(
           inputVariants({ size }),
-          error &&
-            "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+          error && fieldError,
           className,
         )}
         aria-invalid={error || undefined}

@@ -26,6 +26,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Loader](#loader) | Standalone dual-dot cyan chase for inline loading | `@stasho/ds/loader` |
 | [Logo](#logo) | Brand mark (icon, full wordmark, and badge variants) | `@stasho/ds/logo` · `@stasho/ds/logo-mark` |
 | [MultiSelect](#multiselect) | Searchable multi-selection with tags | `@stasho/ds/multi-select` |
+| [NumberInput](#numberinput) | Numeric input with stepper buttons | `@stasho/ds/number-input` |
 | [Pagination](#pagination) | Controlled page navigation with fixed-slot layout | `@stasho/ds/pagination` |
 | [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
 | [ProjectSwitcher](#projectswitcher) | Grouped, searchable sidebar project switcher | `@stasho/ds/project-switcher` |
@@ -70,6 +71,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | On/off preference or setting | **Switch** — visual toggle metaphor | Checkbox — Switch communicates "live toggle" better |
 | Mutually exclusive options | **RadioGroup** — visible options, no dropdown | Select — use RadioGroup when ≤5 options and screen space allows |
 | Numeric range | **Slider** — visual, supports two-thumb range mode | Input — unless precise numeric entry is needed |
+| Precise numeric value entry | **NumberInput** — native `min`/`max`/`step` clamping, stepper buttons | Slider — Slider is for approximate/visual range selection, not exact values |
 
 ### Layout & Navigation
 
@@ -701,6 +703,166 @@ Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay s
   <div className="w-2 h-2 rounded-full bg-success-500" />
   <span className="text-sm text-muted-foreground">All systems operational</span>
 </div>
+```
+
+### Form Layout
+
+`FormField` wires label, helper text, and error state onto exactly one child — compose it around `Input`, `Select`, `Textarea`, or `NumberInput`, then close with a submit row (`Button` primary + ghost cancel).
+
+```tsx
+import { FormField } from "@stasho/ds/form-field";
+import { Input } from "@stasho/ds/input";
+import { Select } from "@stasho/ds/select";
+import { Textarea } from "@stasho/ds/textarea";
+import { NumberInput } from "@stasho/ds/number-input";
+import { Button } from "@stasho/ds/button";
+
+<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+  <FormField label="Name" required>
+    <Input placeholder="Project name" />
+  </FormField>
+
+  <FormField label="Region" required error={errors.region}>
+    <Select placeholder="Choose a region" options={regions} />
+  </FormField>
+
+  <FormField label="Instance count">
+    <NumberInput min={1} max={20} defaultValue={1} />
+  </FormField>
+
+  <FormField label="Description" helperText="Shown on the project overview">
+    <Textarea rows={4} placeholder="What is this project for?" />
+  </FormField>
+
+  <div className="flex justify-end gap-3">
+    <Button type="button" variant="ghost">Cancel</Button>
+    <Button type="submit">Save changes</Button>
+  </div>
+</form>
+```
+
+`FormField` only accepts a single child — don't pass `error` to both `FormField` and the child input, `FormField` injects `error`/`aria-invalid` into it via `cloneElement`.
+
+### Data Table Page
+
+Group related tables under `Tabs`, and drive `Table` in controlled-sort mode when it's rendering one page of a larger, externally paginated dataset — `data` gets the current page slice, `sortColumn`/`sortDirection`/`onSortChange` own the sort, and the parent re-sorts the full dataset before slicing.
+
+```tsx
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@stasho/ds/tabs";
+import { Table, type Column } from "@stasho/ds/table";
+import { Pagination } from "@stasho/ds/pagination";
+
+const columns: Column<Node>[] = [
+  { header: "Name", accessor: (r) => r.name, sortable: true, sortValue: (r) => r.name },
+  { header: "CPU", accessor: (r) => `${r.cpu}%`, sortable: true, sortValue: (r) => r.cpu, align: "right" },
+];
+
+function NodesTab({ allNodes }: { allNodes: Node[] }) {
+  const pageSize = 10;
+  const [page, setPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState("Name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const sorted = applySort(allNodes, columns, sortColumn, sortDirection);
+  const pageItems = sorted.slice((page - 1) * pageSize, page * pageSize);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Table
+        columns={columns}
+        data={pageItems}
+        keyExtractor={(r) => r.id}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        onSortChange={(col, dir) => {
+          setSortColumn(col);
+          setSortDirection(dir);
+          setPage(1);
+        }}
+      />
+      <Pagination
+        page={page}
+        totalPages={Math.ceil(allNodes.length / pageSize)}
+        onPageChange={setPage}
+      />
+    </div>
+  );
+}
+
+<Tabs defaultValue="nodes">
+  <TabsList>
+    <TabsTrigger value="nodes">Nodes</TabsTrigger>
+    <TabsTrigger value="vms">VMs</TabsTrigger>
+  </TabsList>
+  <TabsContent value="nodes">
+    <NodesTab allNodes={nodes} />
+  </TabsContent>
+  <TabsContent value="vms">{/* ... */}</TabsContent>
+</Tabs>
+```
+
+`sortColumn` matches a column's `header` string, and `onSortChange` receives that same string back — `applySort` above is your own comparator, not a DS export.
+
+### Settings Panel
+
+`Card` groups related settings; each toggle row is a `FormField`-wrapped `Switch`, and a `Slider` handles a ranged value the same way.
+
+```tsx
+import { Card } from "@stasho/ds/card";
+import { FormField } from "@stasho/ds/form-field";
+import { Switch } from "@stasho/ds/switch";
+import { Slider } from "@stasho/ds/slider";
+
+<Card title="Notifications">
+  <div className="flex flex-col gap-5">
+    <FormField label="Email notifications">
+      <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
+    </FormField>
+    <FormField label="Push notifications">
+      <Switch checked={pushEnabled} onCheckedChange={setPushEnabled} />
+    </FormField>
+    <FormField label="Alert volume" helperText="How loud alert sounds play">
+      <Slider defaultValue={[60]} showTooltip />
+    </FormField>
+  </div>
+</Card>
+```
+
+### Empty / Loading State
+
+Cover the three states a list view moves through: `EmptyState` with an action `Button` for zero data, `Skeleton` rows while fetching, and `CopyableText` for identifiers once rows arrive.
+
+```tsx
+import { EmptyState } from "@stasho/ds/empty-state";
+import { Skeleton } from "@stasho/ds/ui/skeleton";
+import { CopyableText } from "@stasho/ds/copyable-text";
+import { Button } from "@stasho/ds/button";
+import { FolderOpen, Plus } from "@phosphor-icons/react";
+
+{loading ? (
+  <div className="flex flex-col gap-2">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <Skeleton key={i} className="h-10 w-full" />
+    ))}
+  </div>
+) : nodes.length === 0 ? (
+  <EmptyState
+    icon={<FolderOpen weight="duotone" />}
+    title="No nodes yet"
+    description="Deploy a node to see it listed here."
+    action={<Button iconLeft={<Plus />}>Deploy node</Button>}
+  />
+) : (
+  <div className="flex flex-col gap-2">
+    {nodes.map((node) => (
+      <div key={node.id} className="flex items-center justify-between px-4 py-2">
+        <span className="text-sm text-foreground">{node.name}</span>
+        <CopyableText text={node.id} size="sm" />
+      </div>
+    ))}
+  </div>
+)}
 ```
 
 ---
@@ -2103,6 +2265,38 @@ import { ProjectSwitcher } from "@stasho/ds/project-switcher";
 
 **Footer actions:** "View all" and "New project" rows are always rendered below a separator, regardless of search state or match count, with customizable labels.
 
+### NumberInput
+
+Numeric input with stepper buttons, `min`/`max`/`step` clamping handled by the native input, and a flat-slot chassis matching Input/Textarea.
+
+```tsx
+import { NumberInput } from "@stasho/ds/number-input";
+
+<NumberInput size="md" defaultValue={1} aria-label="Quantity" />
+<NumberInput size="sm" defaultValue={1} aria-label="Small" />
+<NumberInput defaultValue={0} min={0} max={10} step={1} aria-label="Bounded" />
+<NumberInput error defaultValue={1} aria-label="Invalid" />
+<NumberInput disabled defaultValue={1} aria-label="Disabled" />
+
+<FormField label="Quantity" helperText="Between 1 and 20">
+  <NumberInput defaultValue={1} min={1} max={20} />
+</FormField>
+```
+
+**Props:** all standard `input[type=number]` attributes (`min`, `max`, `step`, `defaultValue`, `value`, `onChange`, etc., `size` excluded from the native attribute set) plus `size` (`"sm"` | `"md"`, default `"md"`) and `error` (boolean, default `false`). Forwards ref to the native `<input>`.
+
+**Sizes:** `sm` (py-1.5, text-sm) · `md` (py-2, text-base, default) — matches Input's vertical padding scale (horizontal spacing differs: `pl-*` on the input plus a fixed `pr-1` stepper column).
+
+**Visuals:** Flat-slot chassis on the wrapper `<div>` — `bg-background` (light) / `bg-surface` (dark) fill with 1px `border-edge` hairline, `rounded-sm`. The native input is borderless and transparent inside it; browser default spinner arrows are hidden in favor of a Phosphor `CaretUp`/`CaretDown` pair on the trailing edge. The steppers are not keyboard-focusable (`tabIndex={-1}`) — arrow keys on the focused input already step natively; the buttons are a pointer affordance with `aria-label`s for click/tap.
+
+**Stepping:** Clicking a caret calls the native `stepUp()`/`stepDown()` on the input (so `min`/`max`/`step` clamping is the browser's, not reimplemented) and dispatches a synthetic `change` event so React's `onChange` fires.
+
+**Focus:** Wrapper hairline swaps to `border-accent-700` (light) / `border-accent` (dark) via `focus-within:` (the chassis lives on the wrapper, not the input itself).
+
+**Error:** `error={true}` swaps hairline to `border-error`, sets `aria-invalid` on the input. Error wins over focus in the class list (tailwind-merge last-wins).
+
+**Disabled:** Wrapper sinks one step (`bg-muted` light / `bg-background` dark), hairline drops to `border-edge/50`, value text to `text-foreground/30`, cursor to `not-allowed`. Steppers disable alongside the input and dim to `text-foreground/30`.
+
 ---
 
 ## Token File Reference
@@ -2181,6 +2375,7 @@ Run `npm run dev` and visit http://localhost:3000. Sidebar navigation organized 
 | `/components/form-field` | Label, helper text, error |
 | `/components/input` | Sizes and states |
 | `/components/multi-select` | Pre-selected, overflow, sizes, states, FormField |
+| `/components/number-input` | Sizes, min/max/step, states, FormField |
 | `/components/radio-group` | Sizes, states, controlled, FormField |
 | `/components/select` | Sizes, states, controlled, FormField |
 | `/components/slider` | Sizes, tooltip, range, custom step, states, FormField |

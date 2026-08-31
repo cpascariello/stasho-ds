@@ -10,8 +10,14 @@ export function ThemeSwitcher() {
   }, []);
 
   const toggle = useCallback(() => {
+    const next = !document.documentElement.classList.contains("theme-dark");
     document.documentElement.classList.toggle("theme-dark");
-    setDark((prev) => !prev);
+    setDark(next);
+    try {
+      localStorage.setItem("stasho-preview-theme", next ? "dark" : "light");
+    } catch {
+      // localStorage unavailable (e.g. private mode) — theme just won't persist.
+    }
   }, []);
 
   return (

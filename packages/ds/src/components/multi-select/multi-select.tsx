@@ -4,16 +4,24 @@ import { Command } from "cmdk";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown, Check, X } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
+import {
+  fieldChassis,
+  fieldError,
+  fieldFocus,
+  fieldTriggerHover,
+} from "@ac/lib/field-chassis";
 
 const triggerVariants = cva(
   [
     "inline-flex items-center gap-1.5",
     "w-full font-sans text-foreground",
-    "bg-background dark:bg-surface",
-    "border border-edge rounded-sm",
-    "hover:border-edge-hover",
-    "focus-visible:outline-none",
-    "focus-visible:border-accent-700 dark:focus-visible:border-accent",
+    fieldChassis,
+    fieldTriggerHover,
+    fieldFocus,
+    // MultiSelect's trigger is a role="button" div, not a native disabled
+    // control — it uses aria-disabled: instead of the shared fieldDisabled
+    // (disabled:) constant. Kept component-side; see docs/ARCHITECTURE.md
+    // § Shared Chassis Constants (`field-chassis.ts`).
     "aria-disabled:bg-muted dark:aria-disabled:bg-background",
     "aria-disabled:border-edge/50",
     "aria-disabled:text-foreground/30",
@@ -141,8 +149,7 @@ const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
             className={cn(
               triggerVariants({ size }),
               "cursor-pointer",
-              error &&
-                "border-error hover:border-error focus-visible:border-error dark:focus-visible:border-error",
+              error && fieldError,
               !hasSelection &&
                 (disabled
                   ? "text-muted-foreground/50"

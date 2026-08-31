@@ -79,6 +79,7 @@ const NAV: NavEntry[] = [
           { label: "FormField", href: "/components/form-field" },
           { label: "Input", href: "/components/input" },
           { label: "MultiSelect", href: "/components/multi-select" },
+          { label: "Number Input", href: "/components/number-input" },
           { label: "Radio Group", href: "/components/radio-group" },
           { label: "Select", href: "/components/select" },
           { label: "Slider", href: "/components/slider" },
