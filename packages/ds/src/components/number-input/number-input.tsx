@@ -49,7 +49,10 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           "focus-within:border-accent-700 dark:focus-within:border-accent",
           disabled &&
             "bg-muted dark:bg-background border-edge/50 cursor-not-allowed",
-          error && fieldError,
+          error && [
+            fieldError,
+            "focus-within:border-error dark:focus-within:border-error",
+          ],
           sizeClasses[size],
           className,
         )}
