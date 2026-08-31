@@ -24,6 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="theme-dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{if(localStorage.getItem("stasho-preview-theme")==="light")document.documentElement.classList.remove("theme-dark")}catch(e){}',
+          }}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
