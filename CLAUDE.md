@@ -79,14 +79,14 @@ Some work spans many chunks over multiple sessions (e.g. a full skin redesign). 
 **Before merging:** Update ALL docs before squash merging to main.
 - `docs/DESIGN-SYSTEM.md` -- add/update tokens, components, hooks, or patterns
 - `docs/ARCHITECTURE.md` -- add/update patterns for any new architectural decisions, new files, or changed structure
-- `CLAUDE.md` -- update the Current Features list if user-facing behavior changed
+- `CLAUDE.md` -- add a line to the capability index **only if a new capability shipped** (feature detail belongs in DESIGN-SYSTEM.md / ARCHITECTURE.md, not here)
 - `docs/DECISIONS.md` -- log any key decisions made during the feature
 - `docs/BACKLOG.md` -- move completed items to Completed section, add any deferred ideas
 
 **Checklist before merge:**
 1. DESIGN-SYSTEM.md updated with new tokens/components?
 2. ARCHITECTURE.md updated?
-3. CLAUDE.md features updated?
+3. CLAUDE.md capability index updated (only if a new capability shipped)?
 4. DECISIONS.md has implementation decisions?
 5. BACKLOG.md item moved to Completed?
 
@@ -102,50 +102,19 @@ Never interrupt based on file count or commit count.
 
 **Finishing a branch** (overrides the `finishing-a-development-branch` skill options):
 
-1. Run project checks (lint, typecheck, test) — stop if anything fails
-2. Push branch: `git push -u origin <branch>`
-3. Create PR if none exists: `gh pr create --title "..." --body "..."` — pass `--base <integration-branch>` if shipping a chunk into a long-lived integration branch (e.g. `--base skin/paraplu`) rather than into main
-4. Squash-merge: `gh pr merge <number> --squash --delete-branch`
-5. Sync the target branch — if PR targeted main: `git checkout main && git pull --ff-only origin main`. If PR targeted an integration branch, the integration worktree should `git checkout <integration> && git pull --ff-only origin <integration>` instead
-6. Delete local chunk branch: `git branch -D <branch>`
-7. Remove any associated worktrees: `git worktree list` and `git worktree remove <path> --force` for stale entries — never remove the integration branch's worktree until the integration itself merges to main
+**Use `/dio:ship`.** The skill runs the full sequence end-to-end — catch up on main, doc audit against the actual `git diff main...HEAD`, project checks, commit, push, PR, squash-merge, local cleanup — without intermediate confirmation prompts. The steps live in the skill; this section only holds the rules below and the project-specific overrides. If the user says "ship", "ship this", "merge this", or "wrap it up", invoke `/dio:ship` rather than running the steps manually one at a time.
 
 **Never merge locally.** Option 1 ("Merge back to main locally") from the finishing skill is not allowed — hooks block direct pushes to main, and local merges cause SHA divergence after squash-merge. Always go through the PR.
+
+**Project-specific overrides** the `/dio:ship` skill must respect:
+- Integration-branch chunks follow the rules in **Integration branches** above (PR `--base <integration-branch>`, post-merge sync of the integration branch instead of main, local `npm run check` as the CI substitute).
+- Never remove the integration branch's worktree until the integration itself merges to main.
 
 ---
 
 ## Context Recovery
 
-On "sync up" or "catch me up":
-
-1. Read `docs/DECISIONS.md`, `docs/BACKLOG.md`, `docs/ARCHITECTURE.md`, `docs/SKIN-PRINCIPLES.md`
-2. Check for pending plans — list `docs/superpowers/plans/` and read the most recent file. If a plan exists that hasn't been fully implemented, surface it in the summary.
-3. Check git status and recent git log — use **separate parallel Bash calls** (not chained with `&&`), so each matches `Bash(git status*)` / `Bash(git log*)` allow rules and avoids permission prompts
-4. Present the summary as a structured table, not prose paragraphs:
-
-```
-## Sync Up
-
-| Area | Status |
-|------|--------|
-| **Branch** | `main` — clean / 2 uncommitted files |
-| **Last commit** | `abc1234` — Short commit message |
-| **Last decision** | #N — Summary of decision |
-| **Pending plan** | None / `2026-03-12-badge-redesign.md` — Brief summary |
-| **Blockers** | None / description |
-
-### Open Backlog
-
-| Priority | Items |
-|----------|-------|
-| **High** | Item 1, Item 2 |
-| **Medium** | Item 3, Item 4 |
-| **Low** | Item 5 |
-
-Ready to go — what are we working on?
-```
-
-5. State readiness
+On "sync up" or "catch me up", invoke the `sync-up` skill (`.claude/skills/sync-up/SKILL.md`). It reads the project docs, scans branches and plan files, and prints the sync table plus the open backlog.
 
 ---
 
@@ -165,22 +134,30 @@ Ready to go — what are we working on?
 
 ## Skill Integration
 
-Skills (superpowers) are tools, not separate processes. Use them naturally:
+Skills (superpowers) are tools, not separate processes. Match the ceremony to the size of the work — see Workflow Tiers below — and use skills naturally within it:
 
-- **Brainstorming:** Use for non-trivial design work. Flag scope creep during brainstorming.
-- **Planning:** Use `writing-plans` or `EnterPlanMode` for multi-file changes, new features, unclear requirements.
-- **Implementation:** Use `subagent-driven-development` or `executing-plans` for complex implementations.
+- **Brainstorming:** Use for non-trivial design work (Medium and Large tiers). Flag scope creep during brainstorming.
+- **Planning:** Use `writing-plans` or `EnterPlanMode` for Large-tier work — multi-file changes, new features, unclear requirements.
+- **Implementation:** Use `subagent-driven-development` or `executing-plans` for Large-tier plans; smaller tiers skip the plan file.
 - **Debugging state/sync bugs:** Before writing any fix, trace the full data flow (write -> store -> fetch -> parse -> render). Identify all integration points that need coordinated changes. Don't patch one step without understanding the chain.
-- **Post-implementation:** Run build/lint verification, handle git workflow, update ARCHITECTURE.md and DECISIONS.md if new patterns or decisions emerged.
+- **Post-implementation:** Use `/dio:ship` to run the full finishing sequence (doc audit + checks + commit + push + PR + squash-merge + cleanup) end-to-end. Update ARCHITECTURE.md and DECISIONS.md if new patterns or decisions emerged.
+
+### Workflow Tiers
+
+Match the ceremony to the work. When unsure, size up one tier, not down.
+
+- **Small** — a bug fix, copy tweak, or contained change to one or two files with no design unknowns. Branch, do it, ship. No spec, no plan.
+- **Medium** — a feature or refactor spanning a few files, with design choices but no deep unknowns. A short brainstorm if the design isn't obvious; a brief spec only when the *why* is worth preserving past the diff. Brainstorm → plan → implement in the **same session**.
+- **Large** — architectural, security-sensitive, or multi-day cross-layer work (e.g. a full skin redesign). Full brainstorm + spec + plan. The spec is the highest-value artifact — it records the *why* the diff and commit log can't. A separate implementation session is **optional**.
 
 ### Session Workflow
 
-Brainstorming, planning, and implementation happen across separate sessions:
+Default: brainstorm, plan, and implement in **one session**. Context windows are large enough that brainstorm back-and-forth doesn't meaningfully crowd implementation.
 
-1. **Brainstorm + Plan (current session):** Explore design, write the spec to `docs/superpowers/specs/` and the plan to `docs/superpowers/plans/`. This session ends after the plan is written.
-2. **Implement (new session):** Start a fresh session, say "sync up", then execute the plan using `executing-plans` or `subagent-driven-development`. The plan file on disk is the handoff artifact — no brainstorm context carries over.
+Split into a separate implementation session only for Large-tier work whose implementation is a multi-day effort — when a clean execution context earns the handoff seam. When splitting:
 
-Why: brainstorm sessions accumulate rejected ideas, design exploration, and back-and-forth that wastes context window during implementation. A clean session starts with only what matters: the plan + project docs.
+1. **Brainstorm + Plan session:** Explore design, write the spec to `docs/superpowers/specs/` and the plan to `docs/superpowers/plans/`.
+2. **Implement session:** Start fresh, say "sync up", then execute the plan via `executing-plans` or `subagent-driven-development`. The plan file on disk is the handoff artifact — no brainstorm context carries over.
 
 ### Plans Must Include Doc Updates
 
@@ -195,7 +172,7 @@ The final plan task should be:
 - [ ] ARCHITECTURE.md — new patterns, new files, or changed structure
 - [ ] DECISIONS.md — design decisions made during this feature
 - [ ] BACKLOG.md — completed items moved, deferred ideas added
-- [ ] CLAUDE.md — Current Features list if user-facing behavior changed
+- [ ] CLAUDE.md — capability index, only if a new capability shipped
 ```
 
 Copy this checklist verbatim into every plan. Do not paraphrase or summarize — the explicit checklist prevents items from being forgotten.
@@ -235,58 +212,65 @@ packages/ds/src/components/   # DS components (button, input, textarea, form-fie
 packages/ds/src/lib/          # Utilities (cn.ts)
 apps/preview/src/app/         # Next.js pages and layout
 apps/preview/src/components/  # Preview-only UI (sidebar, theme-switcher)
-docs/plans/                   # Design and implementation plans
+docs/superpowers/             # Brainstorm specs + implementation plans
 ```
 
-### Current Features
+### Current Features & Architecture
 
-- npm workspaces monorepo with source-level subpath exports (`@stasho/ds/*`)
-- Three-layer token system (OKLCH color scales 50–950, semantic tokens incl. `--surface` for elevated backgrounds, Tailwind mapping)
-- Abyssal Void skin: electric blue `#0040FF` primary + cyan `#00E1FA` accent + teal-green `#2BD58E` success + amber `#ffc53d` warn + blood-orange `#FF3D00` error, same hex in both modes (Radix step-9 convention)
-- Observatory Mono dark surface ladder (`#07080a → #161718`), faintly violet-tinted off-white light ladder (hue 270)
-- Radius vocabulary 4/6/8 hard floor (Decision #100 — 0px retired): controls `rounded-sm` (4px), cards/SelectableCard `rounded-lg` (6px), Dialog `rounded-xl` (8px); `full` reserved for round-by-design (StatusDot, Slider thumb per Decision #89, RadioGroup item, ProgressBar track). Every former `rounded-none`/`rounded-[2px]` surface (button, input, badge, checkbox, switch, tabs pill, stepper, dropdowns, tooltip, alert, skeleton, etc.) now sits at the 4px floor via `rounded-sm`; the `--radius-*` token edit carries cards (`rounded-lg`→6) + Dialog (`rounded-xl`→8) automatically
-- Typography: Anybody (headings), Inter (body), Departure Mono (telemetry/labels — self-hosted)
-- Light/dark theme switching via `.theme-dark` class with `@custom-variant dark`
-- Button component with 7 variants (primary, secondary, destructive, warning, success, outline, ghost), 3 sizes (xs/sm/md), CVA architecture, instrument-panel chassis with cyan LED signature, full light + dark theme support (Decision #82 — Primary chassis unified across modes as brand-blue, Secondary raised-light/dark-neutral per mode, Outline flips to primary-blue chrome in light, Ghost uses foreground text in light, Disabled flattens to `bg-muted` light / `bg-neutral-900` dark across all variants), hover behavior: filled variants keep chassis static and add a chassis-matching outer halo (Primary: primary-blue 40px; Secondary: neutral 24px light / white 32px dark), iconLeft inherits LED glow at rest, loading state runs a two-dot chase (chase displaces iconLeft) via `animate-button-chase-a` / `animate-button-chase-b` keyframes, focus uses native `outline-accent`
-- cn() utility (clsx + tailwind-merge)
-- Input component with 2 sizes, flat-slot chassis (1px `--edge` hairline on `bg-background`/`bg-surface` fill), cyan hairline focus (`border-accent-700` light / `border-accent` dark), `border-error` error rail, chassis sinks one step on disabled (`bg-muted` light / `bg-background` dark), value at 30% opacity + `cursor-not-allowed` when disabled
-- Textarea component with rows default (4), vertical resize, flat-slot chassis (1px `--edge` hairline on `bg-background`/`bg-surface` fill), cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled, value at 30% opacity + `cursor-not-allowed` when disabled
-- Checkbox component (Radix UI) with 3 sizes (xs/sm/md = 14/16/20 per Decision #90), flat-slot rest chassis (`bg-background dark:bg-surface` + 1px `border-edge` hairline, matches Input per Decision #84), `bg-accent` checked with dark `text-neutral-950` Phosphor `<Check weight="bold" />` glyph (replaces hand-rolled SVG per Decision #90, matches Stepper completed per #88), cyan hairline focus (`border-accent-700` light / `border-accent` dark), `border-error` semantic error token with `data-[state=checked]:border-error` for specificity, flat-sink disabled (`bg-muted` light / `bg-background` dark, `cursor-not-allowed`); compound `disabled:data-[state=checked]:*` rules keep disabled+checked sunk (Decision #85); `rounded-sm` on all sizes (4px hard floor per Decision #100 — `rounded-sm` / `rounded-md` both resolve to 4px under Abyssal scale); clip-path reveal animation
-- RadioGroup component (Radix UI) with 3 sizes (xs/sm/md = 14/16/20 per Decision #90 — cascade from Checkbox per Decision #85 chassis sharing), flat-slot rest chassis (`bg-background dark:bg-surface` + 1px `border-edge` hairline, matches Checkbox), `bg-accent` indicator dot, descendant `disabled:[&_span]:bg-foreground/30` rule dims the dot (Radix nests Indicator as child of Item — `peer-disabled:` doesn't match), group/item-level disabled, clip-path reveal animation, `rounded-full` (round-by-design)
-- SelectableCard family (Radix `ToggleGroup`, Decision #97) — three exports sharing one `selectableCardVariants` cva: `SelectableCardGroup` (wraps `ToggleGroup.Root`, single+multi from `type`, controlled+uncontrolled free), `SelectableCard` (wraps `ToggleGroup.Item`, `data-[state=on]` border-accent + `bg-accent/5` tint + Phosphor `<Check weight="bold" />` badge driven by `[[data-state=on]_&]:opacity-100`, `padding` sm/md/lg), `ActionCard` (standalone `<button type="button">`, same surface cva, no selected state / no checkmark); `rounded-2xl border-edge bg-surface` baseline, `hover:border-edge-hover`, `focus-visible:outline-accent`; Radix-native mode-dependent a11y — single = radiogroup (`role="radio"`/`aria-checked`), multiple = toggle buttons (`role="button"`/`aria-pressed`); shipped ahead of group callsites, only app consumer is `MethodCard` → `ActionCard`
-- Switch component (Radix UI) with 3 sizes (xs/sm/md = track 32×18 / 40×22 / 47×26, thumb 12/16/20 — thumb matches Checkbox/Radio at sm/md per Decision #92, 1.78–1.82 track ratio with 2px symmetric breathing inside the 1px border per Decision #96), track (`rounded-sm`) + thumb (`rounded-sm`) at the 4px floor (Decision #100), tuned per-mode bevel — dark `inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4)`, light `inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.10)` (Decision #96 — light bevel exception, Slider/ProgressBar unchanged), neutral `bg-edge` thumb off / cyan `bg-accent` thumb on, thumb gains glow on hover/focus of parent via `group/sw` named group (Direction C — solid at rest, glow on interaction), `outline-2 outline-accent outline-offset-2` focus on the track (external-outline pattern per SKIN-PRINCIPLES § 6 boolean focus split — multi-element control with separately-rendered focal thumb), flat-sink disabled with light track dropping to `bg-edge` (border `border-edge-hover`) and dark dropping to `bg-background` (border `border-edge/50`), compound `group-disabled/sw:data-[state=checked]:bg-foreground/30` so disabled+on shows grey thumb
-- Select component (Radix UI) with flat options prop, 2 sizes, flat-slot chassis (1px `--edge` hairline), hover brightens hairline to `--edge-hover` (dropdown trigger cue), cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled; portal dropdown uses the popover token (`bg-popover-bg border border-popover-border shadow rounded-sm`); disabled items use flat-sink (`text-foreground/30 cursor-not-allowed`) per Decision #87
-- Combobox component (cmdk + Radix Popover) with searchable dropdown, flat options prop, 2 sizes, flat-slot chassis (1px `--edge` hairline), hover brightens hairline to `--edge-hover` (dropdown trigger cue), cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled, check icon on selected; popover Content uses the popover token (`bg-popover-bg border border-popover-border shadow rounded-sm`); disabled items use flat-sink (`text-foreground/30 cursor-not-allowed`) per Decision #87
-- MultiSelect component (cmdk + Radix Popover) with searchable multi-select dropdown, flat options prop, tags with overflow (maxDisplayedTags=2), per-tag dismiss, clear-all action, checkbox indicators, 2 sizes, flat-slot chassis (1px `--edge` hairline), hover brightens hairline to `--edge-hover` (dropdown trigger cue), cyan hairline focus, `border-error` error rail, chassis sinks one step on disabled, disabled uses `aria-disabled:` variants (trigger is a `<div role="button">`); popover Content uses the popover token (`bg-popover-bg border border-popover-border shadow rounded-sm`); disabled items use flat-sink (`text-foreground/30 cursor-not-allowed`); selected-item inner indicator is `bg-accent border-accent text-accent-foreground` (cyan, 1px hairline, 4px radius — no longer brand-blue) per Decision #87
-- Slider component (Radix Slider) with CVA track/thumb variants, 2 sizes (sm: 12px thumb on 6px track / md: 14px thumb on 8px track), single or range (two-thumb) mode, bevel track (per SKIN-PRINCIPLES § 5) on `bg-muted dark:bg-neutral-900`, cyan range fill, thumb is a 1.5px `border-accent` ring on a `bg-background` interior (aperture — interior contrasts with the cyan range), interior fills `bg-accent` + outer halo lights up on hover (Decision #89 — documented carve-out from "hover intensifies, doesn't repaint" because the thumb is directly grabbed), focus stays open ring + outline + halo, disabled flattens ring to `border-foreground/30` with compound `data-[disabled]:hover:bg-background` keeping the interior dark, error renders blood-orange ring + orange fill on hover (track too thin for visible 1px error border), optional hover tooltip styled as flat popover surface (`bg-popover-bg border border-popover-border rounded-sm text-foreground` — shares the chunk-6 popover token with Tooltip and the four dropdown surfaces, Decision #87), uses `data-[disabled]:*` variants because Radix renders Thumb/Range as `<span>` (the `:disabled` pseudo-class only matches form elements), `rounded-full` thumb is principled (aperture / reticle reading — Decision #89), keyboard accessible
-- FormField wrapper with label, required asterisk, helper text, error message, auto-wired accessibility, auto-injects error/aria-invalid into child; required asterisk and error helper use semantic `--error` token (was `error-600` scale step — Decision #84)
-- Alert component with 4 semantic variants (warning/error/info/success), optional title, dismissible with XCircle button and exit animation, auto-dismiss timer with progress bar, auto-styled links (bold, underline, ↗ icon via ::after), 1px hairline border using semantic tokens (`border-warning`, `border-error`, `border-accent` for info, `border-success`), top→bottom gradient backgrounds at 18% → 6% opacity using `oklch(from var(--token) …)` semantic-token source with dark mode handled by `var(--background)` swap, variant label uses Departure Mono UC tracking-wider with light-mode carve-out (`text-warning-500 dark:text-warning` etc.) for AA contrast, info variant uses cyan accent (not primary-blue) to avoid competing with Button chassis
-- Pagination component with controlled API (`page`/`onPageChange`), configurable `siblingCount` (default 1), `showFirstLast` toggle, fixed-slot `buildPageRange()` function (always `2*siblingCount+5` items, no layout shift), position-keyed slots (no DOM flicker), `aria-disabled` boundary nav, `aria-current="page"` active state, `forwardRef` to `<nav>`, Departure Mono text-sm page numbers and ellipsis, 26×26 numbers + 32×32 nav arrows, tinted-cyan active cell (`bg-accent/15` + `text-accent-500 dark:text-accent`), quiet `text-foreground/60` rest with cyan hover (no bg), wave-1 disabled pattern (`text-foreground/30 cursor-not-allowed`)
-- Breadcrumb component with composable 6-part API (Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage), `asChild` via Radix Slot for framework routing, semantic nav/ol/li markup, custom separator support, cyan accent hover (`hover:text-accent`) and current page (`text-accent` on `BreadcrumbPage`), separator quiet at `text-foreground/25`, Inter Medium 14px sentence case (Decision #86)
-- Badge component with 5 semantic variants (default/success/warning/error/info), 2 fill modes (solid/outline), 2 sizes, optional iconLeft/iconRight slots, Departure Mono UC label face with CSS-forced uppercase (DOM textContent preserves consumer case), 4px radius (`rounded-sm` — contained marker at the hard floor, Decision #100), solid uses flat saturated background + `text-neutral-950` for the four semantic variants (default solid uses `bg-muted text-foreground`, info uses `bg-accent`), outline uses tinted `bg-{token}/15` + 1px `border-{token}/40` + colored text with light-mode `-500` carve-out for all four semantic variants per Decision #88
-- StatusDot component with 5 health status variants (healthy/degraded/error/offline/unknown), pulse animation on healthy, 2 sizes, built-in role="status" and auto aria-label
-- Card component with 2 variants (default/ghost), 3 padding sizes, optional title prop, `rounded-lg` (6px under the Abyssal scale) per Decision #100. Default variant now carries an always-on 1px `border-edge` hairline (Decision #90) — survives nested + light-mode contexts. Ghost variant unchanged (`bg-transparent`, no border).
-- Skeleton loading placeholder with consumer-driven sizing via className
-- Loader component (Decision #94) — standalone dual-dot cyan chase extracted from Button's loading animation; 3 sizes (xs/sm/md) matching Button's LED ladder (`size-1` / `size-[5px]` / `size-1.5`); reuses `animate-button-chase-a` / `animate-button-chase-b` keyframes; optional `children` renders an inline label (`<Loader>Saving…</Loader>`); `role="status"` with `aria-label="Loading"` default when no children, children carry the label when present; always cyan per § 5 "Cyan is the moving signal"; replaces the removed `ui/Spinner` subpath (migration: `import { Loader } from "@stasho/ds/loader"` — animation differs from the old spin)
-- Table component with generic typing, sortable columns (right-aligned columns render the sort icon to the left of header text via inline-flex + flex-row-reverse so text stays flush with body cell right edge), keyboard-accessible sorting (Enter/Space), aria-sort, alternating rows, hover, row click (keyboard Enter), activeKey row highlight (`bg-accent/15` + `inset 3px 0 0 var(--accent)` left-edge indicator — joins the active-state cyan family per Decision #93, was `bg-primary-600/10` pre-skin), `aria-current`, emptyState prop, controlled-sort mode via `sortColumn`/`sortDirection`/`onSortChange` (skip internal sorting and let the parent pre-sort `data` — required when paginating outside the table), Departure Mono UC tracking-widest 11px column headers
-- Tooltip component wrapping Radix UI with composable API (Provider, Root, Trigger, Content); popover-token chassis (`bg-popover-bg border border-popover-border rounded-sm text-foreground shadow-sm`) — matches Select / Combobox / MultiSelect / Tabs overflow dropdowns; fade-in + zoom-in-95 entry animation; same-hex tokens, no per-mode contrast carve-out per Decision #87
-- Tabs component (Radix UI) with composable API (Tabs, TabsList, TabsTrigger, TabsContent), sliding active indicator via MutationObserver, text nudge animation (`-translate-y-0.5` on active), arbitrary trigger children (badges, subscripts), disabled state, keyboard navigation, 2 sizes (`size="sm"|"md"`), underline variant with 1px hairline track at 40% edge opacity + 1px solid cyan accent (`bg-accent`) indicator (Decision #86), pill variant (`variant="pill"`) framed by `rounded-sm bg-muted border border-edge` with tinted cyan (`bg-accent/15`) `rounded-sm` sliding indicator for segmented-control style, overflow collapse (`overflow="collapse"`) with auto-hidden trailing tabs in "..." dropdown menu — DropdownMenu Content uses the popover token (`bg-popover-bg border border-popover-border shadow rounded-sm`) and items use flat-sink disabled (`text-foreground/30 cursor-not-allowed`) per Decision #87; arrow key navigation, menu ARIA roles, cyan active item; `maxVisible={n}` count-based cap (composes with `overflow`; stricter limit wins), indicator slides behind trigger when hidden tab is active, Inter Semibold sentence case triggers (14px on underline md/sm and pill md, 12px on pill sm), cyan hover/active text (`text-accent`), native `outline-2 outline-accent outline-offset-2` focus (matches Button), semantic disabled (`text-foreground/30 cursor-not-allowed`)
-- CopyableText component with middle-ellipsis truncation, copy-to-clipboard with stroke-draw animation (SVG checkmark via stroke-dashoffset), optional external link (ArrowUpRight), clickable text when href is provided, link uses `text-accent-500 dark:text-accent` per § 2 Color link role (was `text-primary-500` pre-skin — Decision #93), 2 sizes (sm/md); optional `fluid` width-aware mode (Decision #98) that fills its container (`flex w-full`), shows the full string when there's room, and truncates via a pure-CSS two-span flexbox (fixed tail = last `endChars`, flexing head with native ellipsis; `startChars` ignored in fluid mode), revealing the full value via native `title`
-- ProgressBar component with determinate (value/max) and indeterminate (omit value) modes, 3 sizes (sm/md/lg), CVA track variants, `ProgressBarDescription` child linked via `aria-describedby`, clamped value, `motion-reduce:animate-none`, custom indeterminate animation keyframes in tokens.css. Fill uses `bg-accent` (cyan) per Decision #90 (was `bg-primary`); track is `bg-muted dark:bg-neutral-900` with Switch/Slider-style inset bevel; no glow on fill (bevel + cyan carries the lit-surface signal per § 6 Direction C amendment).
-- Stepper compound component with composable 7-part API (Stepper, StepperList, StepperItem, StepperIndicator, StepperLabel, StepperDescription, StepperConnector), horizontal/vertical orientation via `StepperContext`, step state propagation (completed/active/inactive) via `StepperItemContext`, `data-state`/`data-orientation` attributes for consumer styling, `aria-current="step"` on active item, semantic `nav > ol > li` markup. Indicator: `rounded-sm` (4px floor, Decision #100) `size-8` hairline-edge chassis with Inter Semibold text; active = cyan hairline + persistent halo (`0 0 6px rgba(0,225,250,0.5), 0 0 14px rgba(0,225,250,0.3)`); completed = solid cyan chip with auto-rendered `<Check />` icon replacing `{children}`. Connector: 1px hairline (`h-px`/`w-px`) `bg-edge` default; pass `completed` prop to fill `bg-accent` between two consecutive completed steps.
-- Dialog component (Radix UI) with composable 8-part API (Dialog, DialogTrigger, DialogContent, DialogClose, DialogTitle, DialogDescription, DialogHeader, DialogFooter); content surface is `bg-surface` with `rounded-xl` (8px under the Abyssal scale) + 1px `border-edge` hairline (joins the unified card surface per Decision #100, no longer border-less — supersedes #87), no drop shadow at rest, frosted overlay (`bg-black/60 backdrop-blur-sm`); close-button focus uses Button outline pattern (`outline-2 outline-accent outline-offset-2`); entry/exit animations (fade + zoom); `locked` prop to prevent all dismiss paths; focus trap. Decision #87.
-- Accordion component (Radix UI) with composable 4-part API (Accordion, AccordionItem, AccordionTrigger, AccordionContent), FAQ disclosure pattern; `type="single"` (+ `collapsible`) or `type="multiple"`, controlled + uncontrolled; `border-b border-edge` items, Inter Semibold trigger with `hover:text-accent` and Button-pattern focus outline; open/close "slide + settle" motion — height animation registered as a `@theme` Tailwind utility (`--animate-accordion-down`/`-up` + `accordion-down`/`accordion-up` keyframes) riding Radix's `--radix-accordion-content-height`, applied via `motion-safe:data-[state=open]:animate-accordion-down` on `AccordionContent`, while the inner answer fades + settles via `group-data-[state=open]` (two-layer); cyan caret rotates 180° on open and dips 3px on closed-row hover (`group-data-[state=closed]:group-hover:translate-y-[3px]`) to preview the open direction; reduced motion honored by gating the height animation into `motion-safe:` and the fade/settle via `motion-reduce:transition-none`. Decision #101
-- Logo components — `Logo` (icon mark, the wordmark's "s"), `LogoWordmark` and `LogoLetter`, SVG with `fill="currentColor"` for automatic theme adaptation; all are real outlines, so they don't depend on the consuming app loading Anybody (Decision #107). There is no icon+wordmark lockup — the full logo IS the wordmark; `LogoMark` (`@stasho/ds/logo-mark`) is the badge variant — real outlines, fixed brand palettes, deliberately theme-independent because it is exported to PNG/ICO (Decision #106)
-- EmptyState component — centered zero-item placeholder (`@stasho/ds/empty-state`): required `title`, optional `description`/`icon`, and an `action` slot for one or two buttons; heading `text-foreground`, description + icon `text-muted-foreground`; `title`/`children` omitted from the spread props. Decision #103
-- Popover component (Radix Popover) — composable `Popover`/`PopoverTrigger`/`PopoverAnchor`/`PopoverContent`/`PopoverClose`; portalled panel with `border-edge` surface, `pop` (fade + 95% zoom) motion, defaults `side="top"`/`align="start"`. Promoted from the app, Decision #104
-- DropdownMenu component (Radix DropdownMenu) — composable `DropdownMenu`/`Trigger`/`Content`/`Item`/`Separator`/`Label`/`Group`/`Portal`; **non-modal by default** (no scroll-lock page shift, app Decision #172), `pop` motion, `data-[highlighted]` + `data-[disabled]` item states. Promoted from the app, Decision #104
-- Sidebar primitive family (`@stasho/ds/sidebar`) — `Sidebar` (+ `useSidebarContext`), `SidebarHeader`, `SidebarNav`, `SidebarSection`, `SidebarItem`, `SidebarFooter`, `SidebarCollapseToggle`; controlled/uncontrolled collapse with optional `storageKey` localStorage persistence, collapsed-mode icon tooltips, active-item state; prop/slot-driven (items take `href` + `onClick`). Promoted from the app, Decision #104
-- Header primitive family (`@stasho/ds/header`) — `Header` (sticky top bar with skip-link, content slot, `rightSlot`), `HeaderBreadcrumb`, `HeaderBreadcrumbSegment` (`asChild` for framework links). Promoted from the app, Decision #104
-- ProjectSwitcher component (cmdk + Radix Popover, second cmdk consumer after Combobox) — grouped, searchable sidebar switcher with a **display-ready-items** API (`groups: ProjectSwitcherGroup[]` = `{ id, label, items }`, `solos: ProjectSwitcherItem[]` = `{ id, label, keywords? }`); consumer pre-composes labels, DS renders verbatim with no project/workspace domain knowledge; group-first manual filtering (`Command shouldFilter={false}`) where a group survives whole when its own label or any child matches (cmdk's default scorer would re-rank rows and can't express group-survival); group `id` (not `label`) is the stable key since labels collide (encrypted-placeholder names); `collapsed` prop renders an icon-only trigger keeping `triggerLabel` as `aria-label`; footer "View all"/"New project" actions always visible with customizable labels. Origin: stasho-app Decision #280. Decision #105
-- Overlay/popover motion — Dialog content, Tooltip, Popover, and DropdownMenu share the `--animate-pop-*` keyframes; Dialog + Drawer scrims share `--animate-overlay-*`; all `motion-safe:` gated (replaced inert `tw-animate-css` class strings). Decision #102
-- Phosphor Icons integration — 7,000+ icons in 6 weights (Thin/Light/Regular/Bold/Fill/Duotone), MIT licensed, used internally for UI chrome (CaretDown, Check, X, CaretUp)
-- All animated components respect prefers-reduced-motion via motion-reduce: variants
-- Preview app with responsive sidebar navigation (desktop fixed + mobile drawer, cyan accent on hover/active per § 2) and route-per-page; defaults to dark theme (`theme-dark` on `<html>`), toggle switches to light
-- Static export for deployment
-- CI workflow (GitHub Actions): lint + typecheck + test + build on PRs and main pushes
-- Publish workflow: triggered by GitHub Release, patches version from git tag, publishes `@stasho/ds` to npm as raw TypeScript source
+Feature implementation details are **not inlined here** — they change every release and would tax every turn. The detail lives in docs, read on demand:
+
+- **`docs/DESIGN-SYSTEM.md`** — consumer-facing: every component's props, variants, and usage. The canonical "what is".
+- **`docs/ARCHITECTURE.md`** — maintainer-facing patterns, hooks, and workarounds.
+- **`docs/SKIN-PRINCIPLES.md`** — the Abyssal Void rules that constrain any styling change.
+- **`docs/DECISIONS.md`** — the *why* behind each feature (numbered log; the index below cites `#N`).
+- **`docs/BACKLOG.md`** — deferred work.
+
+**IMPORTANT:** Before changing behavior in any component or token area, read its section in `docs/DESIGN-SYSTEM.md` (and the cited `docs/DECISIONS.md` entries) first. The index below is a map of *what exists* — not a substitute for those docs.
+
+#### Capability index
+
+**Platform**
+- npm workspaces monorepo (`packages/ds` + `apps/preview`), source-level subpath exports (`@stasho/ds/*`)
+- Next.js static-export preview app: responsive sidebar nav, route per component, dark default + light toggle
+- CI: lint + typecheck + test + build on PRs and main pushes; npm publish of raw TS source on GitHub Release
+
+**Tokens & theming**
+- Three-layer token system: OKLCH scales 50–950 → semantic tokens → Tailwind mapping
+- Abyssal Void skin: electric-blue primary + cyan accent + teal/amber/blood-orange semantics, same hex in both modes (#78)
+- Observatory Mono dark surface ladder + violet-tinted light ladder; `--surface`/`--edge` visibility tuning (#95)
+- Radius vocabulary 4/6/8 hard floor; `rounded-full` reserved for round-by-design (#100, #89)
+- Light/dark switching via `.theme-dark` class + `@custom-variant dark`
+- Typography: Anybody (headings), Inter (body), Departure Mono (telemetry, self-hosted) (#83)
+- Shared overlay/popover motion keyframes (`pop`/`overlay`), all `motion-safe:` gated (#102); every animated component respects prefers-reduced-motion
+- Phosphor Icons for UI chrome and consumer use
+
+**Form controls**
+- Button — 7 variants, xs–lg, instrument chassis + cyan LED, dual-dot loading chase (#81, #82, #95, #99)
+- Input / Textarea — flat-slot chassis, cyan hairline focus, error rail (#84)
+- Checkbox / RadioGroup — flat-slot chassis, 14/16/20 size ladder (#85, #90)
+- Switch — thumb matches Checkbox at sm/md, per-mode bevel (#92, #96)
+- Select / Combobox / MultiSelect — flat-slot triggers, popover-token dropdowns; MultiSelect tags + clear-all (#84, #87)
+- Slider — bevel track, cyan fill, aperture thumb, single/range, optional tooltip (#89)
+- SelectableCard family — SelectableCardGroup / SelectableCard / ActionCard on Radix ToggleGroup (#97)
+- FormField — label/helper/error wrapper with auto-wired accessibility (#84)
+
+**Feedback & status**
+- Alert — 4 variants, dismissible, auto-dismiss with progress, gradient backgrounds (#88)
+- Badge — 5 variants × solid/outline, Departure Mono UC (#88, #90)
+- StatusDot, Skeleton, Loader (standalone dual-dot chase, #94), EmptyState (#103)
+- ProgressBar — determinate/indeterminate, bevel track, cyan fill (#90)
+- Stepper — 7-part compound, horizontal/vertical, cyan halo active (#88)
+
+**Data display & navigation**
+- Card — default (hairline) + ghost variants (#90, #100)
+- Table — generic typing, sortable + controlled-sort, activeKey highlight (#93)
+- Tabs — underline/pill variants, sliding indicator, overflow collapse + maxVisible (#86)
+- Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101)
+- CopyableText — middle-ellipsis + fluid width-aware mode, copy animation (#98)
+
+**Overlays & shell**
+- Tooltip, Popover, DropdownMenu (non-modal default), Dialog (`locked` prop), Drawer (#87, #100, #102, #104)
+- Sidebar + Header primitive families (#104), ProjectSwitcher — grouped searchable cmdk switcher (#105)
+
+**Brand**
+- Logo family — `Logo`, `LogoWordmark`, `LogoLetter`, `LogoMark` badge; all real outlines, no font dependency; downloadable brand assets + favicons (#106–#108)
