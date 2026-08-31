@@ -111,4 +111,20 @@ describe("NumberInput", () => {
     render(<NumberInput ref={ref} aria-label="Quantity" />);
     expect(ref.current).toBeInstanceOf(HTMLInputElement);
   });
+
+  it("negative-margins the stepper column so it doesn't drive row height", () => {
+    render(<NumberInput aria-label="Quantity" />);
+    const stepperColumn = screen.getByRole("button", {
+      name: "Increase value",
+    }).parentElement;
+    expect(stepperColumn?.className).toContain("-my-0.5");
+  });
+
+  it("always renders type=number even if a consumer passes type=text", () => {
+    render(<NumberInput aria-label="Quantity" type="text" />);
+    expect(screen.getByRole("spinbutton", { name: "Quantity" })).toHaveAttribute(
+      "type",
+      "number",
+    );
+  });
 });

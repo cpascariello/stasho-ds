@@ -1,7 +1,7 @@
 import { forwardRef, useRef, type InputHTMLAttributes } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
-import { fieldChassis, fieldError } from "@ac/lib/field-chassis";
+import { fieldChassis } from "@ac/lib/field-chassis";
 
 type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
   size?: "sm" | "md";
@@ -14,7 +14,7 @@ const sizeClasses = {
 };
 
 const stepButtonClasses =
-  "flex items-center justify-center text-foreground/60 hover:text-accent disabled:text-foreground/30 disabled:cursor-not-allowed disabled:hover:text-foreground/30";
+  "flex items-center justify-center cursor-pointer transition-colors text-foreground/60 hover:text-accent disabled:text-foreground/30 disabled:cursor-not-allowed disabled:hover:text-foreground/30";
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   ({ size = "md", error = false, disabled = false, className, ...rest }, ref) => {
@@ -50,7 +50,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           disabled &&
             "bg-muted dark:bg-background border-edge/50 cursor-not-allowed",
           error && [
-            fieldError,
+            "border-error",
             "focus-within:border-error dark:focus-within:border-error",
           ],
           sizeClasses[size],
@@ -59,18 +59,19 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       >
         <input
           ref={setRefs}
-          type="number"
           disabled={disabled}
           className={cn(
             "w-full bg-transparent focus-visible:outline-none",
             "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
             "placeholder:text-muted-foreground",
+            "disabled:placeholder:text-muted-foreground/50",
             disabled && "text-foreground/30 cursor-not-allowed",
           )}
           aria-invalid={error || undefined}
           {...rest}
+          type="number"
         />
-        <div className="flex flex-col pr-1">
+        <div className="flex flex-col pr-1 -my-0.5">
           <button
             type="button"
             tabIndex={-1}

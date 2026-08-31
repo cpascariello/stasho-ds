@@ -20,7 +20,8 @@ const triggerVariants = cva(
     fieldFocus,
     // MultiSelect's trigger is a role="button" div, not a native disabled
     // control — it uses aria-disabled: instead of the shared fieldDisabled
-    // (disabled:) constant. Kept component-side; see task-2-report.md.
+    // (disabled:) constant. Kept component-side; see docs/ARCHITECTURE.md
+    // § Shared Chassis Constants (`field-chassis.ts`).
     "aria-disabled:bg-muted dark:aria-disabled:bg-background",
     "aria-disabled:border-edge/50",
     "aria-disabled:text-foreground/30",
