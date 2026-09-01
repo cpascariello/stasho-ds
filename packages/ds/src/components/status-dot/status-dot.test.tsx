@@ -22,6 +22,16 @@ describe("StatusDot", () => {
     );
   });
 
+  it("renders the accent class and Live label for status=live", () => {
+    render(<StatusDot status="live" />);
+    const dot = screen.getByRole("status");
+    expect(dot.className).toContain("bg-accent-500");
+    expect(dot.className).toContain("dark:bg-accent");
+    expect(dot.className).toContain("animate-pulse");
+    expect(dot.className).toContain("motion-reduce:animate-none");
+    expect(dot).toHaveAttribute("aria-label", "Live");
+  });
+
   it("defaults to Unknown label when status is omitted", () => {
     render(<StatusDot />);
     expect(screen.getByRole("status")).toHaveAttribute(

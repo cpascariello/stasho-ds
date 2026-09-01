@@ -6,6 +6,7 @@ const statusDotVariants = cva("inline-block rounded-full shrink-0", {
   variants: {
     status: {
       healthy: "bg-success-500 animate-pulse motion-reduce:animate-none",
+      live: "bg-accent-500 dark:bg-accent animate-pulse motion-reduce:animate-none",
       degraded: "bg-warning-500",
       error: "bg-error-500",
       offline: "bg-neutral-400",
@@ -27,6 +28,7 @@ type StatusDotProps = HTMLAttributes<HTMLSpanElement> &
 
 const statusLabels: Record<NonNullable<StatusDotProps["status"]>, string> = {
   healthy: "Healthy",
+  live: "Live",
   degraded: "Degraded",
   error: "Error",
   offline: "Offline",
