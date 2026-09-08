@@ -14,12 +14,12 @@ import {
   CaretDoubleRight,
   CaretRight,
 } from "@phosphor-icons/react";
-import { LogoLetter, LogoWordmark } from "@ac/components/logo/logo";
+import { LogoLetter, LogoWordmark } from "../logo/logo";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@ac/components/tooltip/tooltip";
+} from "../tooltip/tooltip";
 import { cn } from "@ac/lib/cn";
 
 /* ── Sidebar (root + context) ──────────────────── */

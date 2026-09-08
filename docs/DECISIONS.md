@@ -28,6 +28,8 @@ Each entry includes:
 
 **Alternatives considered:** (A) `FormField readOnly` prop — rejected, see above. (B) A `DetailCard` wrapper that stacks DetailFields at `gap-4` — rejected as a one-line wrapper with no behavior; the gap is documented instead. (C) Putting the read-only box into `field-chassis.ts` as a sixth constant — rejected because it differs from the editable chassis in fill and has no focus/error/disabled clusters; it lives beside the `Field` component that owns it. (D) Rendering `CopyableText variant="field"` as a `<Field>` wrapping the existing span — rejected; a second wrapper element would split `ref`/`className`/rest between two nodes, while composing the class string keeps the DOM shape identical across variants.
 
+**Addendum (2026-09-08, v0.19.1):** the new cross-file imports (`@ac/components/field/field`, `@ac/lib/field-layout`) failed to resolve in the app: consumers alias `@ac/*` themselves, and the app's alias pointed at a hoisted older copy of the package while the subpath export resolved to a nested 0.19.0 copy. Components now import siblings and lib modules other than `cn` relatively (extensionless), and the same rule was applied to the pre-existing `@ac/lib/field-chassis` and sidebar `@ac/components/*` imports so it holds across the package. See ARCHITECTURE § Import Aliases.
+
 ---
 
 ## Decision #110 — 2026-08-31

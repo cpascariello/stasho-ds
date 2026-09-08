@@ -1,7 +1,7 @@
 import { forwardRef, useRef, type InputHTMLAttributes } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
-import { fieldChassis } from "@ac/lib/field-chassis";
+import { fieldChassis } from "../../lib/field-chassis";
 
 type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
   size?: "sm" | "md";
