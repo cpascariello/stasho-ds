@@ -14,6 +14,35 @@ describe("Card", () => {
     expect(screen.getByText("My Title").tagName).toBe("H3");
   });
 
+  it("title is 16px in the heading face", () => {
+    render(<Card title="My Title">Body</Card>);
+    const cls = screen.getByText("My Title").className;
+    expect(cls).toContain("text-base");
+    expect(cls).toContain("font-heading");
+    expect(cls).not.toContain("text-lg");
+  });
+
+  it("renders the action beside the title and keeps it from shrinking", () => {
+    render(
+      <Card title="Domains" action={<button type="button">Manage</button>}>
+        Body
+      </Card>,
+    );
+    const action = screen.getByRole("button", { name: "Manage" });
+    const row = screen.getByText("Domains").parentElement;
+    expect(row).toBe(action.parentElement?.parentElement);
+    expect(action.parentElement?.className).toContain("shrink-0");
+    expect(screen.getByText("Domains").className).toContain("min-w-0");
+  });
+
+  it("renders the title row for an action with no title", () => {
+    const { container } = render(
+      <Card action={<button type="button">Only</button>}>Body</Card>,
+    );
+    expect(container.querySelector("h3")).toBeNull();
+    expect(screen.getByRole("button", { name: "Only" })).toBeTruthy();
+  });
+
   it("renders as a div", () => {
     const { container } = render(<Card>Test</Card>);
     expect(container.firstElementChild?.tagName).toBe("DIV");

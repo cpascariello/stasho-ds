@@ -18,6 +18,32 @@ Each entry includes:
 
 ---
 
+## Decision #113 — 2026-09-08
+
+**Context:** The app's workspace card mixed values and links in one flowed line (mono CID, a check, "verify", sha, message, age, domain link, "gateway", "View on Aleph Cloud"); the operator's complaint was "I never know where to click". Three affordances were rendered in the app: every link a Button, links underlined at rest, and navigation rows at the foot of the card. Rows won, then three row treatments: hairline rows, a boxed list, accent rows. The boxed list won.
+
+**Decision:** Add `NavList` + `NavRow` (`@stasho/ds/nav-list`). `NavList` is `divide-y divide-edge rounded-sm border border-edge`; `NavRow` is an anchor (or `asChild` a router link) at `px-3 py-2 text-sm font-medium text-foreground hover:bg-muted`, `mono` for hosts, `external` for outbound rows (new tab, noopener, ↗) versus in-app (→). The arrow is inline right after the label, never pinned to the far edge. The rule the primitive encodes: a card's body is read, its foot is clicked.
+
+**Rationale:** Rows separate "clickable" from "readable" by shape rather than by color, which is what the accent-link approach failed at on a dark ground where mono values and mono links look alike. The box makes the group unmistakable at a glance; the inline arrow keeps the label and its affordance one object (an arrow at the far edge of a 480px row read as a separate control). Foreground text rather than accent so N cards on a group overview do not turn into a wall of cyan.
+
+**Alternatives considered:** Underlined accent links at rest (a DS link-variant change; rejected, still text among text). Hairline rows without a box (rejected by the operator: less scannable). Card-wide hover as the click signal (rejected: `edge-hover` is a one-step lift, not a selection signal; and the card is a container, not a target).
+
+**Addendum (same day):** `leading` and `trailing` slots, so a domain list can be a NavList — a `StatusDot` before the host, the status word after the arrow at the row's end — with live rows opening the site and pending rows opening the panel that fixes them. The alternative was a read-only domain list on the Overview card (the operator chose the click).
+
+---
+
+## Decision #112 — 2026-09-08
+
+**Context:** The app's card titles had drifted to three scales: 14px on the project Overview cards, 16px on Settings cards, and 18px on the DS `Card` `title` prop (which the app did not use) and on Dialog/Drawer titles. Each consumer composed its own `<h3>` with `font-heading font-extrabold italic` classes that the app's global heading rule already applied. The operator picked 16px from three rendered options.
+
+**Decision:** `Card`'s `title` renders at `text-base font-heading font-bold` (was `text-lg`), and `Card` gains an `action?: ReactNode` prop rendered on the title row: `flex items-start justify-between gap-2`, the `<h3>` carries `min-w-0`, the action wrapper `shrink-0`. `CardProps` omits the native `title` attribute so a `ReactNode` title type-checks (it had collapsed to `string` through `HTMLAttributes`).
+
+**Rationale:** 16px gives a clean ladder under a 24px page title: card title 16, `DetailField` label 14, helper 12. At 14px the card title and the field label share a size and differ only by face; at 18px three-column card rows wrap two of three titles at 1280px. The action slot exists because every Overview card was rebuilding the same title row to hold a "Manage" or "View all" button, and each rebuild picked its own alignment; with the row owned here, a title wraps before the action does.
+
+**Alternatives considered:** Keeping `text-lg` to match Dialog/Drawer titles — rejected, a modal title is the only heading in its surface, a card title competes with a page title above it. A separate `CardHeader` subcomponent — rejected as a second way to do what a prop does.
+
+---
+
 ## Decision #111 — 2026-09-08
 
 **Context:** The app's Verified Frontends detail cards (publishing key card, DNS tripwire card) needed a read-only label + boxed value + helper stack. The app faked it with a wrapper div carrying the box classes and `[&_button]` descendant overrides that resized and re-skinned CopyableText's copy button. The DS had no read-only field primitive, and FormField's label/helper classes were inline strings that could not be reused without copying.

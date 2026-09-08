@@ -1,6 +1,8 @@
 "use client";
 
 import { Card } from "@stasho/ds/card";
+import { Button } from "@stasho/ds/button";
+import { NavList, NavRow } from "@stasho/ds/nav-list";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 
@@ -21,7 +23,28 @@ export default function CardPage() {
           <Card title="With Title">
             <p className="text-sm">Card content below the heading.</p>
           </Card>
+          <Card
+            title="With title and action"
+            action={
+              <Button variant="ghost" size="sm">
+                Manage
+              </Button>
+            }
+          >
+            <p className="text-sm">The action sits on the title row and never wraps; the title does.</p>
+          </Card>
         </div>
+      </DemoSection>
+      <DemoSection title="With a NavList foot">
+        <Card title="workspace: web" className="max-w-md">
+          <p className="mb-3 text-sm">Body is read; the rows below are clicked.</p>
+          <NavList>
+            <NavRow href="https://myapp.example.com" external mono>
+              myapp.example.com
+            </NavRow>
+            <NavRow href="#">View deployments</NavRow>
+          </NavList>
+        </Card>
       </DemoSection>
       <DemoSection title="Ghost Variant">
         <Card variant="ghost">

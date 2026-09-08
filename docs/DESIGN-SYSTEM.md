@@ -14,6 +14,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
 | [Button](#button) | Action trigger with 7 variants, 4 sizes, cyan LED signature | `@stasho/ds/button` |
 | [Card](#card) | Content container with 2 variants (default/ghost) | `@stasho/ds/card` |
+| [NavList / NavRow](#navlist--navrow) | Boxed list of destinations at the foot of a card | `@stasho/ds/nav-list` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@stasho/ds/copyable-text` |
@@ -661,21 +662,25 @@ Borders, background fills, and tinted-surface utilities (`bg-<token>/15`) stay s
 
 ### Composing a Card
 
+A card has a fixed anatomy (stasho-ds Decisions #111, #112, #113):
+
 ```tsx
-<div className="bg-surface text-surface-foreground rounded-lg border border-edge
-                shadow-sm hover:shadow p-6"
-     style={{ transitionDuration: "var(--duration-fast)" }}>
-  <h3 className="font-heading text-xl font-extrabold italic mb-2">
-    Card Title
-  </h3>
-  <p className="text-muted-foreground leading-relaxed">
-    Card description with muted text.
-  </p>
-  <button className="mt-4 bg-primary text-primary-foreground px-4 py-2 rounded-md">
-    Action
-  </button>
-</div>
+<Card
+  title="Domains"                                   // 16px heading face, the only title scale
+  action={<Button variant="ghost" size="sm">Manage</Button>}  // trailing control on the title row
+>
+  <DetailField label="Content ID" hint="preserved on-chain"> {/* read-only values */}
+    <CopyableText text={cid} variant="field" size="sm" />
+  </DetailField>
+
+  <NavList>                                          {/* the foot: everything clickable */}
+    <NavRow href="https://myapp.example.com" external mono>myapp.example.com</NavRow>
+    <NavRow asChild><Link href="/projects/p1/deployments">View deployments</Link></NavRow>
+  </NavList>
+</Card>
 ```
+
+The body is read, the foot is clicked: no accent links inside body text, no uppercase-tracked eyebrows as field labels (an eyebrow is structure, such as a table header), no hand-written title `<h3>`.
 
 ### Hero Section
 
@@ -1499,11 +1504,36 @@ import { Card } from "@stasho/ds/card";
 <Card title="Node Health">
   <p>Card content below the heading.</p>
 </Card>
+
+<Card title="Domains" action={<Button variant="ghost" size="sm">Manage</Button>}>
+  <p>Title left, action right.</p>
+</Card>
 ```
 
-Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
+Renders an `<h3>` at `text-base font-heading font-bold` with `mb-4` spacing — the one
+card-title scale (Decision #112): a page title sits above it, `DetailField` labels
+(`text-sm`) below. `action` is a trailing control on the title row; it never shrinks or
+wraps, the title does. Pass every card title through this prop rather than composing
+a heading in the consumer.
 
 **Visual style:** `rounded-lg` (6px under the Abyssal scale, Decision #100), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
+
+### NavList / NavRow
+
+A boxed list of destinations for the foot of a card: one hairline-divided row per link, the whole row is the target, the arrow rides inline right after the label (↗ outbound, → in-app). This is how a card says which of its parts are clickable: rows are, the body above them is not (Decision #113).
+
+```tsx
+import { NavList, NavRow } from "@stasho/ds/nav-list";
+
+<NavList>
+  <NavRow href="https://myapp.example.com" external mono>myapp.example.com</NavRow>
+  <NavRow asChild><Link href="/projects/p1/deployments">View deployments</Link></NavRow>
+</NavList>
+```
+
+`external` sets `target="_blank"` + `rel="noopener noreferrer"` and the ↗ arrow; `mono` for hosts and paths; `asChild` lends the chassis and the arrow to a router link; `leading` (a `StatusDot`, an icon) sits before the label and `trailing` (a status word, a count) after the arrow at the row's end in muted text. Rows are `px-3 py-2 text-sm font-medium`, `hover:bg-muted`, accent focus ring.
+
+A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); it never mixes rows with non-clickable lines — a fact that is not a destination belongs in the card body above the list.
 
 ### CopyableText
 
