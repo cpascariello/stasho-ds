@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "@ac/lib/cn";
-import { fieldHelper, fieldLabel, fieldStack } from "@ac/lib/field-layout";
+import { fieldHelper, fieldLabel, fieldStack } from "../../lib/field-layout";
 
 type FormFieldProps = {
   label: string;

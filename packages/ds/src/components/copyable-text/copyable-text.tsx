@@ -12,7 +12,7 @@ import {
 import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowUpRight, Copy } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
-import { fieldBox } from "@ac/components/field/field";
+import { fieldBox } from "../field/field";
 
 const copyableTextVariants = cva("items-center font-mono select-none", {
   variants: {

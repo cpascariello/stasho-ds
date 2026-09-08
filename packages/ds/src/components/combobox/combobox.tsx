@@ -10,7 +10,7 @@ import {
   fieldError,
   fieldFocus,
   fieldTriggerHover,
-} from "@ac/lib/field-chassis";
+} from "../../lib/field-chassis";
 
 const triggerVariants = cva(
   [
