@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #113 — 2026-09-08
+
+**Context:** The app's workspace card mixed values and links in one flowed line (mono CID, a check, "verify", sha, message, age, domain link, "gateway", "View on Aleph Cloud"); the operator's complaint was "I never know where to click". Three affordances were rendered in the app: every link a Button, links underlined at rest, and navigation rows at the foot of the card. Rows won, then three row treatments: hairline rows, a boxed list, accent rows. The boxed list won.
+
+**Decision:** Add `NavList` + `NavRow` (`@stasho/ds/nav-list`). `NavList` is `divide-y divide-edge rounded-sm border border-edge`; `NavRow` is an anchor (or `asChild` a router link) at `px-3 py-2 text-sm font-medium text-foreground hover:bg-muted`, `mono` for hosts, `external` for outbound rows (new tab, noopener, ↗) versus in-app (→). The arrow is inline right after the label, never pinned to the far edge. The rule the primitive encodes: a card's body is read, its foot is clicked.
+
+**Rationale:** Rows separate "clickable" from "readable" by shape rather than by color, which is what the accent-link approach failed at on a dark ground where mono values and mono links look alike. The box makes the group unmistakable at a glance; the inline arrow keeps the label and its affordance one object (an arrow at the far edge of a 480px row read as a separate control). Foreground text rather than accent so N cards on a group overview do not turn into a wall of cyan.
+
+**Alternatives considered:** Underlined accent links at rest (a DS link-variant change; rejected, still text among text). Hairline rows without a box (rejected by the operator: less scannable). Card-wide hover as the click signal (rejected: `edge-hover` is a one-step lift, not a selection signal; and the card is a container, not a target).
+
+---
+
 ## Decision #112 — 2026-09-08
 
 **Context:** The app's card titles had drifted to three scales: 14px on the project Overview cards, 16px on Settings cards, and 18px on the DS `Card` `title` prop (which the app did not use) and on Dialog/Drawer titles. Each consumer composed its own `<h3>` with `font-heading font-extrabold italic` classes that the app's global heading rule already applied. The operator picked 16px from three rendered options.

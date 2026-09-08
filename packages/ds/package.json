@@ -47,6 +47,7 @@
     "./radio-group": "./src/components/radio-group/radio-group.tsx",
     "./selectable-card": "./src/components/selectable-card/selectable-card.tsx",
     "./ui/skeleton": "./src/components/ui/skeleton.tsx",
+    "./nav-list": "./src/components/nav-list/nav-list.tsx",
     "./multi-select": "./src/components/multi-select/multi-select.tsx",
     "./number-input": "./src/components/number-input/number-input.tsx",
     "./pagination": "./src/components/pagination/pagination.tsx",

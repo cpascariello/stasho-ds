@@ -14,6 +14,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
 | [Button](#button) | Action trigger with 7 variants, 4 sizes, cyan LED signature | `@stasho/ds/button` |
 | [Card](#card) | Content container with 2 variants (default/ghost) | `@stasho/ds/card` |
+| [NavList / NavRow](#navlist--navrow) | Boxed list of destinations at the foot of a card | `@stasho/ds/nav-list` |
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@stasho/ds/copyable-text` |
@@ -1512,6 +1513,21 @@ wraps, the title does. Pass every card title through this prop rather than compo
 a heading in the consumer.
 
 **Visual style:** `rounded-lg` (6px under the Abyssal scale, Decision #100), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
+
+### NavList / NavRow
+
+A boxed list of destinations for the foot of a card: one hairline-divided row per link, the whole row is the target, the arrow rides inline right after the label (↗ outbound, → in-app). This is how a card says which of its parts are clickable: rows are, the body above them is not (Decision #113).
+
+```tsx
+import { NavList, NavRow } from "@stasho/ds/nav-list";
+
+<NavList>
+  <NavRow href="https://myapp.example.com" external mono>myapp.example.com</NavRow>
+  <NavRow asChild><Link href="/projects/p1/deployments">View deployments</Link></NavRow>
+</NavList>
+```
+
+`external` sets `target="_blank"` + `rel="noopener noreferrer"` and the ↗ arrow; `mono` for hosts and paths; `asChild` lends the chassis and the arrow to a router link. Rows are `px-3 py-2 text-sm font-medium`, `hover:bg-muted`, accent focus ring.
 
 ### CopyableText
 

@@ -264,6 +264,7 @@ Feature implementation details are **not inlined here** — they change every re
 
 **Data display & navigation**
 - Card — default (hairline) + ghost variants; one 16px title scale + trailing `action` slot (#90, #100, #112)
+- NavList / NavRow — boxed list of destinations at the foot of a card, inline arrows (#113)
 - Table — generic typing, sortable + controlled-sort, activeKey highlight (#93)
 - Tabs — underline/pill variants, sliding indicator, overflow collapse + maxVisible (#86)
 - Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101)
