@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "@ac/lib/cn";
+import { fieldHelper, fieldLabel, fieldStack } from "@ac/lib/field-layout";
 
 type FormFieldProps = {
   label: string;
@@ -40,10 +41,10 @@ function FormField({
     : children;
 
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div className={cn(fieldStack, className)}>
       <label
         htmlFor={inputId}
-        className="text-sm font-medium text-foreground"
+        className={fieldLabel}
       >
         {label}
         {required && (
@@ -54,11 +55,11 @@ function FormField({
       </label>
       {child}
       {error ? (
-        <p id={messageId} role="alert" className="text-xs text-error">
+        <p id={messageId} role="alert" className={cn(fieldHelper, "text-error")}>
           {error}
         </p>
       ) : helperText ? (
-        <p id={messageId} className="text-xs text-muted-foreground">
+        <p id={messageId} className={cn(fieldHelper, "text-muted-foreground")}>
           {helperText}
         </p>
       ) : null}

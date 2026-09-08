@@ -49,6 +49,23 @@ export default function CopyableTextPage() {
         </div>
       </DemoSection>
 
+      <DemoSection title="Field variant">
+        <div className="space-y-4 max-w-2xl">
+          <p className="text-xs text-muted-foreground">
+            Renders inside the read-only Field box with the copy control seated
+            at the right edge as a 22px square. Fluid layout is implied. Use it
+            as the value of a DetailField.
+          </p>
+          <CopyableText text={HASH} variant="field" size="sm" />
+          <CopyableText
+            text="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            variant="field"
+            size="sm"
+            href="https://etherscan.io/address/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+          />
+        </div>
+      </DemoSection>
+
       <DemoSection title="Custom Truncation">
         <div className="space-y-3">
           <div>

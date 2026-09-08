@@ -12,6 +12,7 @@ import {
 import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowUpRight, Copy } from "@phosphor-icons/react";
 import { cn } from "@ac/lib/cn";
+import { fieldBox } from "@ac/components/field/field";
 
 const copyableTextVariants = cva("items-center font-mono select-none", {
   variants: {
@@ -23,12 +24,19 @@ const copyableTextVariants = cva("items-center font-mono select-none", {
       true: "flex w-full",
       false: "inline-flex",
     },
+    variant: {
+      inline: "",
+      field: fieldBox,
+    },
   },
   defaultVariants: {
     size: "md",
     fluid: false,
+    variant: "inline",
   },
 });
+
+type Variant = "inline" | "field";
 
 const iconSize: Record<"sm" | "md", string> = {
   sm: "size-3.5",
@@ -39,6 +47,23 @@ const buttonSize: Record<"sm" | "md", string> = {
   sm: "size-4",
   md: "size-5",
 };
+
+const controlBase =
+  "inline-flex items-center justify-center shrink-0 text-muted-foreground hover:bg-foreground/10 transition-colors";
+
+/**
+ * Inline: a borderless hit area sized by `size`. Field: a 22px square seated
+ * at the box's right edge, on the surface fill with a hairline edge.
+ */
+function controlClasses(variant: Variant, size: "sm" | "md"): string {
+  if (variant === "field") {
+    return cn(
+      controlBase,
+      "size-5.5 rounded-sm border border-edge bg-surface hover:text-foreground",
+    );
+  }
+  return cn(controlBase, "rounded-sm", buttonSize[size]);
+}
 
 function isExternalUrl(url: string): boolean {
   return /^https?:\/\//.test(url) || url.startsWith("//");
@@ -90,6 +115,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
       href,
       size = "md",
       fluid = false,
+      variant = "inline",
       className,
       ...rest
     },
@@ -117,9 +143,10 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
     );
 
     const resolvedSize = size ?? "md";
+    const resolvedVariant = variant ?? "inline";
     const iconCn = iconSize[resolvedSize];
-    const btnCn = buttonSize[resolvedSize];
-    const isFluid = fluid ?? false;
+    const controlCn = controlClasses(resolvedVariant, resolvedSize);
+    const isFluid = resolvedVariant === "field" || (fluid ?? false);
     const content = renderTextContent(text, isFluid, startChars, endChars);
     const titleAttr = isFluid ? text : undefined;
 
@@ -127,7 +154,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
       <span
         ref={ref}
         className={cn(
-          copyableTextVariants({ size, fluid }),
+          copyableTextVariants({ size, fluid: isFluid, variant }),
           href && "text-accent-500 dark:text-accent",
           className,
         )}
@@ -160,19 +187,13 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
         <button
           type="button"
           onClick={handleCopy}
-          className={cn(
-            "relative inline-flex items-center justify-center",
-            "rounded-sm cursor-pointer shrink-0",
-            "hover:bg-foreground/10 transition-colors",
-            btnCn,
-          )}
+          className={cn("relative cursor-pointer", controlCn)}
           aria-label={copied ? "Copied" : "Copy to clipboard"}
         >
           <Copy
             weight="bold"
             className={cn(
               iconCn,
-              "text-muted-foreground",
               "transition-opacity duration-100",
               "motion-reduce:transition-none",
               copied && "opacity-0",
@@ -188,7 +209,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
             strokeLinejoin="round"
             className={cn(
               iconCn,
-              "text-muted-foreground absolute",
+              "absolute",
               "[stroke-dasharray:20] [stroke-dashoffset:20]",
               "transition-[stroke-dashoffset] duration-300 delay-75 ease-out",
               "motion-reduce:transition-none",
@@ -206,12 +227,7 @@ const CopyableText = forwardRef<HTMLSpanElement, CopyableTextProps>(
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className={cn(
-              "inline-flex items-center justify-center rounded-sm shrink-0",
-              "text-muted-foreground hover:text-foreground",
-              "hover:bg-foreground/10 transition-colors",
-              btnCn,
-            )}
+            className={cn("hover:text-foreground", controlCn)}
             aria-label="Open in new tab"
           >
             <ArrowUpRight weight="bold" className={iconCn} aria-hidden="true" />

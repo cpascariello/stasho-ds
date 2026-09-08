@@ -227,4 +227,94 @@ describe("CopyableText", () => {
       expect(textLink?.getAttribute("target")).toBe("_blank");
     });
   });
+
+  describe("field variant", () => {
+    it("keeps the inline rendering by default (no box chassis)", () => {
+      const { container } = render(<CopyableText text={LONG_TEXT} />);
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("inline-flex");
+      expect(cls).not.toContain("border-edge");
+      expect(cls).not.toContain("dark:bg-base-700");
+    });
+
+    it("renders the read-only box chassis and implies fluid layout", () => {
+      const { container } = render(
+        <CopyableText text={LONG_TEXT} variant="field" size="sm" />,
+      );
+      const cls = container.firstElementChild?.className ?? "";
+      for (const token of [
+        "border-edge",
+        "dark:bg-base-700",
+        "w-full",
+        "min-w-0",
+        "px-3",
+        "py-2.5",
+        "text-xs",
+      ]) {
+        expect(cls).toContain(token);
+      }
+      expect(cls).not.toContain("inline-flex");
+      expect(container.textContent).toBe(LONG_TEXT);
+      expect(screen.getByTitle(LONG_TEXT)).toBeTruthy();
+    });
+
+    it("seats a 22px square copy control on the surface fill", () => {
+      render(<CopyableText text={LONG_TEXT} variant="field" size="sm" />);
+      const btn = screen.getByRole("button", { name: "Copy to clipboard" });
+      for (const token of [
+        "size-5.5",
+        "rounded-sm",
+        "border-edge",
+        "bg-surface",
+        "text-muted-foreground",
+        "hover:text-foreground",
+      ]) {
+        expect(btn.className).toContain(token);
+      }
+    });
+
+    it("does not give the inline copy control the field chassis", () => {
+      render(<CopyableText text={LONG_TEXT} size="sm" />);
+      const btn = screen.getByRole("button", { name: "Copy to clipboard" });
+      expect(btn.className).toContain("size-4");
+      expect(btn.className).not.toContain("border-edge");
+      expect(btn.className).not.toContain("bg-surface");
+    });
+
+    it("gives the external-link control the same 22px chassis", () => {
+      render(
+        <CopyableText
+          text={LONG_TEXT}
+          variant="field"
+          size="sm"
+          href="https://example.com"
+        />,
+      );
+      const link = screen.getByRole("link", { name: "Open in new tab" });
+      expect(link.className).toContain("size-5.5");
+      expect(link.className).toContain("border-edge");
+      expect(link.className).toContain("bg-surface");
+    });
+
+    it("copies the full text in field variant", async () => {
+      const user = userEvent.setup();
+      render(<CopyableText text={LONG_TEXT} variant="field" size="sm" />);
+      const spy = vi
+        .spyOn(navigator.clipboard, "writeText")
+        .mockResolvedValue(undefined);
+      await user.click(
+        screen.getByRole("button", { name: "Copy to clipboard" }),
+      );
+      expect(spy).toHaveBeenCalledWith(LONG_TEXT);
+    });
+
+    it("keeps size=md working in field variant", () => {
+      const { container } = render(
+        <CopyableText text={LONG_TEXT} variant="field" size="md" />,
+      );
+      const cls = container.firstElementChild?.className ?? "";
+      expect(cls).toContain("text-sm");
+      expect(cls).toContain("border-edge");
+    });
+  });
 });

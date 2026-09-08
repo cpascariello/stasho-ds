@@ -93,6 +93,7 @@ Ideas and scope creep captured for later consideration.
 <details>
 <summary>Archived items</summary>
 
+- [x] 2026-09-08 — Detail-card primitives: Field, DetailField, CopyableText field variant (Decision #111)
 - [x] 2026-02-26 — Typekit font integration (kit ID: `acb7qvn`)
 - [x] 2026-02-26 — Global CLAUDE.md: bundler moduleResolution for Next.js
 - [x] 2026-02-26 — Button component (CVA variants, OKLCH color scales, TDD)

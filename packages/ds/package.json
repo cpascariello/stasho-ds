@@ -32,6 +32,8 @@
     "./select": "./src/components/select/select.tsx",
     "./switch": "./src/components/switch/switch.tsx",
     "./form-field": "./src/components/form-field/form-field.tsx",
+    "./detail-field": "./src/components/detail-field/detail-field.tsx",
+    "./field": "./src/components/field/field.tsx",
     "./badge": "./src/components/badge/badge.tsx",
     "./breadcrumb": "./src/components/breadcrumb/breadcrumb.tsx",
     "./card": "./src/components/card/card.tsx",

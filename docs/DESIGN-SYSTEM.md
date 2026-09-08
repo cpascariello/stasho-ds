@@ -17,9 +17,11 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Checkbox](#checkbox) | Boolean toggle with 3 sizes, clip-path animation | `@stasho/ds/checkbox` |
 | [Combobox](#combobox) | Searchable dropdown selector | `@stasho/ds/combobox` |
 | [CopyableText](#copyabletext) | Truncated text with copy-to-clipboard | `@stasho/ds/copyable-text` |
+| [DetailField](#detailfield) | Read-only label + value + helper stack for detail cards | `@stasho/ds/detail-field` |
 | [Dialog](#dialog) | Modal with composable 8-part API, lock mode | `@stasho/ds/dialog` |
 | [DropdownMenu](#dropdownmenu) | Trigger-anchored action menu, non-modal by default | `@stasho/ds/dropdown-menu` |
 | [EmptyState](#emptystate) | Centered zero-item placeholder with action slot | `@stasho/ds/empty-state` |
+| [Field](#field) | Read-only bordered box for non-editable content | `@stasho/ds/field` |
 | [FormField](#formfield) | Label + helper + error wrapper with auto-wired a11y | `@stasho/ds/form-field` |
 | [Header](#header) | App-shell top bar: skip-link, breadcrumb slot, right slot | `@stasho/ds/header` |
 | [Input](#input) | Text input with 2 sizes, borderless flat styling | `@stasho/ds/input` |
@@ -743,6 +745,38 @@ import { Button } from "@stasho/ds/button";
 
 `FormField` only accepts a single child — don't pass `error` to both `FormField` and the child input, `FormField` injects `error`/`aria-invalid` into it via `cloneElement`.
 
+### Detail Card
+
+A read-only card of label + value pairs (a key card, a DNS record panel). `DetailField` is the read-only sibling of `FormField` and shares its label, gap, and helper classes; `CopyableText variant="field"` is the single-value box; `Field` is the box for anything else (a block of rows, a multi-line value). Siblings sit 16px apart via `gap-4` on the stack; there is no wrapper component for that rhythm.
+
+```tsx
+import { Card } from "@stasho/ds/card";
+import { CopyableText } from "@stasho/ds/copyable-text";
+import { DetailField } from "@stasho/ds/detail-field";
+import { Field } from "@stasho/ds/field";
+
+<Card title="Publishing key">
+  <div className="flex flex-col gap-4">
+    <DetailField label="Current key" hint="keeps publishing until the transfer is confirmed">
+      <CopyableText text={currentKey} variant="field" size="sm" />
+    </DetailField>
+
+    <DetailField label="Pending key" helperText="Waiting on an operator" tone="warning">
+      <CopyableText text={pendingKey} variant="field" size="sm" />
+    </DetailField>
+
+    <DetailField label="Baseline" hint="captured 6d ago">
+      <Field>
+        <dl className="grid grid-cols-[4rem_1fr] gap-y-1">
+          <dt className="text-muted-foreground">NS</dt><dd>ns1.example.com.</dd>
+          <dt className="text-muted-foreground">A</dt><dd>203.0.113.10</dd>
+        </dl>
+      </Field>
+    </DetailField>
+  </div>
+</Card>
+```
+
 ### Data Table Page
 
 Group related tables under `Tabs`, and drive `Table` in controlled-sort mode when it's rendering one page of a larger, externally paginated dataset — `data` gets the current page slice, `sortColumn`/`sortDirection`/`onSortChange` own the sort, and the parent re-sorts the full dataset before slicing.
@@ -1181,6 +1215,46 @@ import { Input } from "@stasho/ds/input";
 
 **Visual style:** Required asterisk (`*`) and error helper text use the semantic `--error` token (`text-error`). Previously referenced `text-error-600` — now decoupled from scale steps so future palette changes don't affect the error signal.
 
+### DetailField
+
+Read-only sibling of `FormField` for label + value + helper stacks in detail cards. Composes the same `fieldStack` / `fieldLabel` / `fieldHelper` classes (`packages/ds/src/lib/field-layout.ts`) that FormField uses, so a form and a detail card built side by side keep one rhythm. Nothing inside is focusable, so the label is a `<span>`, not a `<label>`.
+
+```tsx
+import { DetailField } from "@stasho/ds/detail-field";
+import { CopyableText } from "@stasho/ds/copyable-text";
+
+<DetailField label="Current key" hint="keeps publishing until the transfer is confirmed">
+  <CopyableText text={currentKey} variant="field" size="sm" />
+</DetailField>
+
+<DetailField label="Pending key" helperText="Waiting on an operator" tone="warning">
+  <CopyableText text={pendingKey} variant="field" size="sm" />
+</DetailField>
+```
+
+**Props:** `label` (required), `hint` (inline after the label as ` · hint`, muted, normal weight), `helperText` (line under the value, `text-xs`), `tone` (`"muted"` default → `text-muted-foreground`; `"warning"` → `text-warning-500 dark:text-warning`), `children` (the value), `className`
+
+**Sibling rhythm:** two `DetailField`s in one card sit 16px apart. Stack them in a `flex flex-col gap-4` container; there is no wrapper component for it. See § Patterns → Detail Card.
+
+### Field
+
+Read-only bordered box for non-editable content: a block of DNS rows, a multi-line value, anything that is displayed but not edited and does not need a copy control. Sunk `bg-muted` fill in light mode, the raised `base-700` step in dark, inside the same hairline `border-edge` and `rounded-sm` control-floor radius the input chassis uses. Padding `px-3 py-2.5`, `font-mono text-xs`, `w-full min-w-0`. Standard div attributes and `className` pass through; the ref lands on the div.
+
+```tsx
+import { Field } from "@stasho/ds/field";
+
+<Field>
+  <dl className="grid grid-cols-[4rem_1fr] gap-y-1">
+    <dt className="text-muted-foreground">NS</dt><dd>ns1.example.com.</dd>
+    <dt className="text-muted-foreground">A</dt><dd>203.0.113.10</dd>
+  </dl>
+</Field>
+
+<Field className="whitespace-pre-wrap">{multiLineValue}</Field>
+```
+
+For a single copyable value use `CopyableText variant="field"`, which renders inside this same chassis (it imports the `fieldBox` class string from `@stasho/ds/field`) with the copy control seated at the right edge.
+
 ### Checkbox
 
 Toggle control for boolean values. Wraps Radix UI Checkbox with CVA styling.
@@ -1476,6 +1550,17 @@ By default the component does static, character-count truncation and shrink-wrap
 - **Reveal:** the full value is exposed via the native `title` attribute (hover tooltip). Copy still copies the complete string.
 - **Layout requirement:** give the component a constrained-width parent. In a flex parent, that parent needs `min-w-0` for the component to narrow below its content width. Cap the width with `className` (e.g. `max-w-[320px]`) if you don't want it to take the full row.
 - Pure CSS — no measurement, no resize listeners.
+
+#### Field variant
+
+`variant="field"` renders the value inside the read-only `Field` chassis (same `fieldBox` classes, composed not copied) with the copy control seated at the right edge as a 22px square: `rounded-sm border border-edge bg-surface`, muted icon, `hover:bg-foreground/10 hover:text-foreground`, same copied-check animation. `fluid` is implied (the text flexes with `min-w-0`, the `endChars` tail stays pinned, `title` carries the full value). When `href` is set the external-link control sits next to the copy square with the same 22px chassis. `size="sm"` is the intended size; `md` also works. The default `variant="inline"` is unchanged.
+
+```tsx
+<CopyableText text={publicKey} variant="field" size="sm" />
+<CopyableText text={address} variant="field" size="sm" href={explorerUrl} />
+```
+
+Use it as the value of a `DetailField`; see § Patterns → Detail Card.
 
 #### With External Link
 

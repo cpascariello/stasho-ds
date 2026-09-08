@@ -72,6 +72,12 @@ aleph-cloud-ds/
 │       │   │   ├── form-field/
 │       │   │   │   ├── form-field.tsx
 │       │   │   │   └── form-field.test.tsx
+│       │   │   ├── detail-field/
+│       │   │   │   ├── detail-field.tsx
+│       │   │   │   └── detail-field.test.tsx
+│       │   │   ├── field/
+│       │   │   │   ├── field.tsx
+│       │   │   │   └── field.test.tsx
 │       │   │   ├── progress-bar/
 │       │   │   │   ├── progress-bar.tsx
 │       │   │   │   └── progress-bar.test.tsx
@@ -128,6 +134,8 @@ aleph-cloud-ds/
 │       │   │       ├── switch/page.tsx
 │       │   │       ├── textarea/page.tsx
 │       │   │       ├── form-field/page.tsx
+│       │   │       ├── detail-field/page.tsx
+│       │   │       ├── field/page.tsx
 │       │   │       ├── skeleton/page.tsx
 │       │   │       ├── table/page.tsx
 │       │   │       ├── status-dot/page.tsx
@@ -297,6 +305,17 @@ When a widely-used convention (shadcn, Bootstrap) uses a different name for a co
 **Key files:** `packages/ds/src/lib/field-chassis.ts`, consumed by `input.tsx`, `textarea.tsx`, `select.tsx`, `combobox.tsx`, `multi-select.tsx`, `number-input.tsx`.
 
 **When to use:** When a class string is genuinely byte-identical across 3+ components (not merely similar) and represents one visual concern (a chassis, a focus treatment). Don't reach for this pattern for one-off or near-identical strings — verify sameness before extracting.
+
+### Detail-card primitives (`Field`, `DetailField`, `CopyableText variant="field"`)
+
+**Context:** Consumers building read-only detail cards (a key card, a DNS record panel) were wrapping a `fluid` CopyableText in an ad-hoc bordered div and restyling its copy button through `[&_button]` descendant overrides. That fakes a chassis the DS should own and breaks the moment the button markup changes.
+
+**Approach:** Three small primitives, composed rather than duplicated (Decision #111).
+- `packages/ds/src/lib/field-layout.ts` exports `fieldStack` / `fieldLabel` / `fieldHelper`, the label-value-helper rhythm extracted from FormField. FormField now composes them (output unchanged, tests untouched) and `DetailField` composes the same three, so editable and read-only fields share one rhythm by construction.
+- `field.tsx` exports both the `Field` component and the `fieldBox` class string (chassis + padding + `font-mono`, no text size). `CopyableText` imports `fieldBox` as the class body of its `variant: "field"` cva variant; the size variant still sets the text size, so `sm`/`md` keep working. The `field` variant also forces `fluid` on (computed before the cva call so exactly one display class is emitted).
+- The copy and external-link controls share one `controlClasses(variant, size)` helper: inline keeps the borderless `size-4`/`size-5` hit area, field seats a `size-5.5` (22px) square on `bg-surface` with a hairline edge. The icon color moved from the icons to the control so `hover:text-foreground` can flip it; the inline rendering is visually unchanged.
+
+**Key files:** `packages/ds/src/lib/field-layout.ts`, `components/field/field.tsx`, `components/detail-field/detail-field.tsx`, `components/copyable-text/copyable-text.tsx`, `components/form-field/form-field.tsx`.
 
 ### Data-Attribute Variant Propagation
 

@@ -267,7 +267,8 @@ Feature implementation details are **not inlined here** — they change every re
 - Table — generic typing, sortable + controlled-sort, activeKey highlight (#93)
 - Tabs — underline/pill variants, sliding indicator, overflow collapse + maxVisible (#86)
 - Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101)
-- CopyableText — middle-ellipsis + fluid width-aware mode, copy animation (#98)
+- CopyableText — middle-ellipsis + fluid width-aware mode, copy animation (#98); `variant="field"` seats it in the read-only box with a 22px control (#111)
+- Field + DetailField — read-only box and read-only FormField sibling for detail cards; shared `field-layout` rhythm constants (#111)
 
 **Overlays & shell**
 - Tooltip, Popover, DropdownMenu (non-modal default), Dialog (`locked` prop), Drawer (#87, #100, #102, #104)
