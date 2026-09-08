@@ -183,6 +183,8 @@ const QUICK_LINKS: QuickLinkGroup[] = [
       { label: "Badge", href: "/components/badge", description: "5 variants, 2 sizes" },
       { label: "Card", href: "/components/card", description: "3 variants with grain texture" },
       { label: "CopyableText", href: "/components/copyable-text", description: "Truncated text with copy" },
+      { label: "DetailField", href: "/components/detail-field", description: "Read-only label + value" },
+      { label: "Field", href: "/components/field", description: "Read-only bordered box" },
       { label: "StatusDot", href: "/components/status-dot", description: "5 health status indicators" },
       { label: "Table", href: "/components/table", description: "Sortable, clickable, generic" },
     ],
