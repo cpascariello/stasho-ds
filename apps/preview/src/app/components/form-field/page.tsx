@@ -16,7 +16,7 @@ export default function FormFieldPage() {
       <DemoSection title="With Helper Text">
         <div className="grid gap-6 max-w-md">
           <FormField label="Username" helperText="Choose a unique username">
-            <Input placeholder="aleph_user" />
+            <Input placeholder="stasho_user" />
           </FormField>
         </div>
       </DemoSection>

@@ -86,7 +86,7 @@ export default function CopyableTextPage() {
       <DemoSection title="With External Link">
         <CopyableText
           text={HASH}
-          href="https://explorer.aleph.cloud"
+          href="https://explorer.solana.com"
         />
       </DemoSection>
 
@@ -113,7 +113,7 @@ export default function CopyableTextPage() {
               text="bafy2bzacedxyz123abc456def789ghi012jkl345mno678pqr"
               startChars={8}
               endChars={8}
-              href="https://explorer.aleph.cloud"
+              href="https://explorer.solana.com"
               size="sm"
             />
           </div>

@@ -69,7 +69,7 @@ export default function TypographyPage() {
                 Code -- Departure Mono 400
               </p>
               <p className="font-mono text-base leading-relaxed">
-                const node = await aleph.create({"{"} channel: &quot;test&quot;{" "}
+                const site = await stasho.publish({"{"} domain: &quot;app.example.com&quot;{" "}
                 {"}"});
               </p>
             </div>
