@@ -4,6 +4,7 @@
   "description": "stasho design system",
   "type": "module",
   "license": "MIT",
+  "author": "Claudio Pascariello",
   "homepage": "https://github.com/cpascariello/stasho-ds#readme",
   "bugs": {
     "url": "https://github.com/cpascariello/stasho-ds/issues"
