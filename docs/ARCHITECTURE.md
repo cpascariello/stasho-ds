@@ -184,9 +184,7 @@ Components are imported individually: `@aleph-front/ds/button`, not `@aleph-fron
 |-------|-------|-------------|---------------|
 | `@preview/*` | Preview app internal | `apps/preview/src/*` | `apps/preview/tsconfig.json` |
 
-**The DS package has no internal alias.** Every cross-file import in `packages/ds/src/` (including tests) is relative and extensionless: `../../lib/cn`, `../../lib/field-chassis`, `../../lib/field-layout`, `../field/field`, `../logo/logo`. The package ships raw source, so a consumer that resolved an alias for us could point it at a different copy of the package than the subpath export resolved to (observed 2026-09-08: a hoisted 0.18 copy at the consumer's root beside a nested 0.19 copy, so an aliased `lib/field-layout` import resolved into the copy that did not have it). Relative imports stay inside the copy that was actually imported and need no consumer-side configuration. The former `@ac/*` alias (inherited from the Aleph Cloud DS fork) was removed in v0.19.2; consumers can delete their `@ac` alias entries. Extensionless because Turbopack rejects a `.js` suffix on a `.tsx` source file.
-
-The preview app needs `@ac/*` in its tsconfig because TypeScript follows imports inside transpiled DS source files.
+**The DS package defines no internal path alias.** Components import `lib/cn`, sibling components and lib modules relatively and extensionless (`../../lib/cn`, `../../lib/field-chassis`, `../../lib/field-layout`, `../field/field`, `../logo/logo`), tests included. The package ships raw source, so a consumer-side alias mapping could resolve to a different copy of the package than the subpath export did (a hoisted copy at the consumer's root beside a nested newer one); relative imports stay inside the copy that was actually imported, so consumers need no alias mapping for the package. Extensionless because Turbopack rejects a `.js` suffix on a `.tsx` source file.
 
 **CSS imports are the exception** — PostCSS does not resolve tsconfig aliases, so `@import` paths in `.css` files must be relative (see Decision #5).
 
@@ -437,7 +435,7 @@ The overlay technique layers a semi-transparent `linear-gradient(solid, solid)` 
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const variants = cva(/* base + variants */);
 
