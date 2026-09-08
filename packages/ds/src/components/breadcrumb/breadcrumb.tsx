@@ -1,6 +1,6 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
 import { Slot } from "radix-ui";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Breadcrumb (nav wrapper) ────────────────── */
 

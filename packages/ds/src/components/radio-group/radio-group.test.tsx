@@ -5,7 +5,7 @@ import { createRef } from "react";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@ac/components/radio-group/radio-group";
+} from "./radio-group";
 
 describe("RadioGroup", () => {
   const renderGroup = (props = {}) =>

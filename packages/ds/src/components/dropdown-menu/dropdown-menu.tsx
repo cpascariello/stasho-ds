@@ -2,7 +2,7 @@
 
 import { DropdownMenu as RadixMenu } from "radix-ui";
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /** Non-modal by default: Radix's modal scroll-lock pads the body for the
     missing scrollbar, visibly shifting the whole page when a menu opens. */

@@ -1,6 +1,6 @@
 import { forwardRef, type HTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const statusDotVariants = cva("inline-block rounded-full shrink-0", {
   variants: {

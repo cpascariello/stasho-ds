@@ -61,7 +61,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { createRef } from "react";
-import { Combobox } from "@ac/components/combobox/combobox";
+import { Combobox } from "./combobox";
 
 const OPTIONS = [
   { value: "btc", label: "Bitcoin" },

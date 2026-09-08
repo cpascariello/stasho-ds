@@ -1,6 +1,6 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Tooltip as TooltipPrimitive } from "radix-ui";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 const Tooltip = TooltipPrimitive.Root;

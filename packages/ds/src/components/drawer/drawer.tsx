@@ -6,7 +6,7 @@ import {
 } from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { X } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Direct re-exports ─────────────────────────── */
 

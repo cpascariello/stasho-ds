@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { createRef } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ac/components/tabs/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 /* ── Polyfills for jsdom ─────────────────────── */
 

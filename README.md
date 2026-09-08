@@ -47,7 +47,7 @@ import { cn } from "@stasho/ds/lib/cn";
 import "@stasho/ds/styles/tokens.css";
 ```
 
-Within each workspace, internal imports use the `@ac/*` alias which resolves to `./src/*`.
+The DS package has no internal alias: components import `lib/cn`, `lib/field-chassis`, `lib/field-layout` and sibling components relatively (`../../lib/cn`, `../field/field`), so the imports resolve inside whichever copy of the package a consumer loaded. The preview app uses `@preview/*` for its own `src/`.
 
 ## Using with Another Local Project
 

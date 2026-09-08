@@ -8,7 +8,7 @@ import {
   Plus,
   SquaresFour,
 } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 type ProjectSwitcherItem = {
   id: string;

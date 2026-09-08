@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@ac/components/accordion/accordion";
+} from "./accordion";
 
 function renderAccordion() {
   return render(

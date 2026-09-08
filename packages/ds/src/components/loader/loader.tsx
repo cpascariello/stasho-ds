@@ -1,6 +1,6 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const loaderVariants = cva(
   "inline-flex items-center text-foreground",

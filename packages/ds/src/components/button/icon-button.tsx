@@ -1,6 +1,6 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 import { buttonVariants } from "./button";
 
 // Square inset per size. The glyph dimensions are consumer-controlled (e.g. <Bell size={18} />);

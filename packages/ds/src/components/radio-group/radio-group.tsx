@@ -1,7 +1,7 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const radioItemVariants = cva(
   [

@@ -2,7 +2,7 @@
 
 import { Children, Fragment, type ReactNode } from "react";
 import { Slot } from "radix-ui";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Header ────────────────────────────────────── */
 

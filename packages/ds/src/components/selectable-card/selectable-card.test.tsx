@@ -6,7 +6,7 @@ import {
   ActionCard,
   SelectableCard,
   SelectableCardGroup,
-} from "@ac/components/selectable-card/selectable-card";
+} from "./selectable-card";
 
 describe("ActionCard", () => {
   it("renders a button with type=button", () => {

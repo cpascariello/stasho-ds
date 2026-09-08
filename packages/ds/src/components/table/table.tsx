@@ -2,7 +2,7 @@
 
 import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { CaretUp } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 type SortDirection = "asc" | "desc";
 
