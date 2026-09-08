@@ -61,7 +61,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { createRef } from "react";
-import { MultiSelect } from "@ac/components/multi-select/multi-select";
+import { MultiSelect } from "./multi-select";
 
 const OPTIONS = [
   { value: "btc", label: "Bitcoin" },

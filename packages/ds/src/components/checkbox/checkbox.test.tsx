@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { createRef } from "react";
-import { Checkbox } from "@ac/components/checkbox/checkbox";
+import { Checkbox } from "./checkbox";
 
 describe("Checkbox", () => {
   it("renders as unchecked by default", () => {

@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { Check } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const checkboxVariants = cva(
   [

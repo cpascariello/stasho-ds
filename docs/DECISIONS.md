@@ -30,6 +30,8 @@ Each entry includes:
 
 **Addendum (2026-09-08, v0.19.1):** the new cross-file imports (`@ac/components/field/field`, `@ac/lib/field-layout`) failed to resolve in the app: consumers alias `@ac/*` themselves, and the app's alias pointed at a hoisted older copy of the package while the subpath export resolved to a nested 0.19.0 copy. Components now import siblings and lib modules other than `cn` relatively (extensionless), and the same rule was applied to the pre-existing `@ac/lib/field-chassis` and sidebar `@ac/components/*` imports so it holds across the package. See ARCHITECTURE § Import Aliases.
 
+**Addendum (2026-09-08, v0.19.2):** the `@ac/lib/cn` exception is gone too. Operator ruling: nothing in `@stasho/ds` references the old Aleph Cloud DS alias `@ac` any more; all 52 remaining sites (including tests) import `lib/cn` relatively and the alias was deleted from the DS and preview tsconfigs and the DS vitest config. Consumers no longer need an `@ac` alias.
+
 ---
 
 ## Decision #110 — 2026-08-31

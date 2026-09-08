@@ -5,7 +5,7 @@ import {
   CaretLeft,
   CaretRight,
 } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 type PageItem = number | "ellipsis";
 

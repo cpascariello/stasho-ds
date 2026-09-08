@@ -3,7 +3,7 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Accordion as AccordionPrimitive } from "radix-ui";
 import { CaretDown } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 const Accordion = AccordionPrimitive.Root;
 

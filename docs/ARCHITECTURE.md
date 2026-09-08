@@ -182,11 +182,9 @@ Components are imported individually: `@aleph-front/ds/button`, not `@aleph-fron
 
 | Alias | Scope | Resolved to | Configured in |
 |-------|-------|-------------|---------------|
-| `@ac/*` | DS package internal | `packages/ds/src/*` | `packages/ds/tsconfig.json`, `packages/ds/vitest.config.ts` |
 | `@preview/*` | Preview app internal | `apps/preview/src/*` | `apps/preview/tsconfig.json` |
 
-**Inside components, only `@ac/lib/cn` uses the alias.** Every other cross-file import in `packages/ds/src/components/` (sibling components, `lib/field-chassis`, `lib/field-layout`) is relative and extensionless (`../field/field`, `../../lib/field-layout`). The package ships raw source, so consumers resolve `@ac/*` through their own alias, and that alias may point at a different copy of the package than the subpath export resolved to (observed 2026-09-08: a hoisted 0.18 copy at the consumer's root beside a nested 0.19 copy, so `@ac/lib/field-layout` resolved into the copy that did not have it). Relative imports stay inside the copy that was actually imported. `@ac/lib/cn` is the one exception because every consumer already maps that exact key. Extensionless because Turbopack rejects a `.js` suffix on a `.tsx` source file.
-| `@ac/*` | Preview app (cross-workspace) | `packages/ds/src/*` | `apps/preview/tsconfig.json` |
+**The DS package has no internal alias.** Every cross-file import in `packages/ds/src/` (including tests) is relative and extensionless: `../../lib/cn`, `../../lib/field-chassis`, `../../lib/field-layout`, `../field/field`, `../logo/logo`. The package ships raw source, so a consumer that resolved an alias for us could point it at a different copy of the package than the subpath export resolved to (observed 2026-09-08: a hoisted 0.18 copy at the consumer's root beside a nested 0.19 copy, so an aliased `lib/field-layout` import resolved into the copy that did not have it). Relative imports stay inside the copy that was actually imported and need no consumer-side configuration. The former `@ac/*` alias (inherited from the Aleph Cloud DS fork) was removed in v0.19.2; consumers can delete their `@ac` alias entries. Extensionless because Turbopack rejects a `.js` suffix on a `.tsx` source file.
 
 The preview app needs `@ac/*` in its tsconfig because TypeScript follows imports inside transpiled DS source files.
 

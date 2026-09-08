@@ -62,7 +62,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { createRef } from "react";
-import { Slider } from "@ac/components/slider/slider";
+import { Slider } from "./slider";
 
 describe("Slider", () => {
   it("renders a slider role element", () => {

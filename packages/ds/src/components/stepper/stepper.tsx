@@ -7,7 +7,7 @@ import {
   type HTMLAttributes,
 } from "react";
 import { Check } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Stepper context (orientation) ─────────────── */
 

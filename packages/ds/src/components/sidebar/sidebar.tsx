@@ -20,7 +20,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../tooltip/tooltip";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Sidebar (root + context) ──────────────────── */
 

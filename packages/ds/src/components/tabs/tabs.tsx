@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Tabs as TabsPrimitive, DropdownMenu } from "radix-ui";
 import { DotsThree } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 /* ── Root (direct re-export) ─────────────────── */
 

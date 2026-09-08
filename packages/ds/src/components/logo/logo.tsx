@@ -1,6 +1,6 @@
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
 
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 import { MARK_PATH } from "./logo-mark";
 

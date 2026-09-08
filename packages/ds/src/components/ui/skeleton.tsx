@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLAttributes } from "react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 
 type SkeletonProps = HTMLAttributes<HTMLDivElement>;
 

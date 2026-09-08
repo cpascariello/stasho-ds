@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Select as SelectPrimitive } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown, Check } from "@phosphor-icons/react";
-import { cn } from "@ac/lib/cn";
+import { cn } from "../../lib/cn";
 import {
   fieldChassis,
   fieldDisabled,
