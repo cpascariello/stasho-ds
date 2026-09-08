@@ -51,6 +51,10 @@ type NavRowProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   mono?: boolean;
   /** Lend the row's chassis to the child element (a router Link). */
   asChild?: boolean;
+  /** Before the label: a StatusDot, an icon. */
+  leading?: ReactNode;
+  /** After the arrow, pushed to the row's end in muted text: a status word, a count. */
+  trailing?: ReactNode;
   children?: ReactNode;
 };
 
@@ -60,7 +64,10 @@ type NavRowProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
  * inline right after the label, never at the far edge of the row.
  */
 const NavRow = forwardRef<HTMLAnchorElement, NavRowProps>(
-  ({ external = false, mono = false, asChild = false, className, children, ...rest }, ref) => {
+  (
+    { external = false, mono = false, asChild = false, leading, trailing, className, children, ...rest },
+    ref,
+  ) => {
     const classes = cn(
       "flex w-full items-center gap-1.5 px-3 py-2 text-sm font-medium text-foreground",
       "transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
@@ -68,16 +75,25 @@ const NavRow = forwardRef<HTMLAnchorElement, NavRowProps>(
       className,
     );
     const arrow = external ? <ArrowUpRight /> : <ArrowRight />;
+    const content = (label: ReactNode) => (
+      <>
+        {leading ? <span className="inline-flex shrink-0 items-center">{leading}</span> : null}
+        <span className="min-w-0 truncate">{label}</span>
+        {arrow}
+        {trailing ? (
+          <span className="ml-auto shrink-0 pl-2 text-xs font-normal text-muted-foreground">
+            {trailing}
+          </span>
+        ) : null}
+      </>
+    );
 
     if (asChild && isValidElement(children)) {
       const label = (children.props as { children?: ReactNode }).children;
       return cloneElement(
         children as ReactElement<Record<string, unknown>>,
         { className: classes, ref, ...rest },
-        <>
-          {label}
-          {arrow}
-        </>,
+        content(label),
       );
     }
 
@@ -88,8 +104,7 @@ const NavRow = forwardRef<HTMLAnchorElement, NavRowProps>(
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...rest}
       >
-        {children}
-        {arrow}
+        {content(children)}
       </a>
     );
   },

@@ -28,6 +28,8 @@ Each entry includes:
 
 **Alternatives considered:** Underlined accent links at rest (a DS link-variant change; rejected, still text among text). Hairline rows without a box (rejected by the operator: less scannable). Card-wide hover as the click signal (rejected: `edge-hover` is a one-step lift, not a selection signal; and the card is a container, not a target).
 
+**Addendum (same day):** `leading` and `trailing` slots, so a domain list can be a NavList — a `StatusDot` before the host, the status word after the arrow at the row's end — with live rows opening the site and pending rows opening the panel that fixes them. The alternative was a read-only domain list on the Overview card (the operator chose the click).
+
 ---
 
 ## Decision #112 — 2026-09-08

@@ -3,7 +3,8 @@ import { cn } from "../../lib/cn";
 import { fieldHelper, fieldLabel, fieldStack } from "../../lib/field-layout";
 
 type DetailFieldProps = {
-  label: string;
+  /** Label text, or a node when a control rides beside it (an info popover). */
+  label: ReactNode;
   /** Short qualifier rendered inline after the label, separated by a middot. */
   hint?: string;
   /** Line under the value. */
