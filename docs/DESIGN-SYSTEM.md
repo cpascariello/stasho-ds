@@ -1,4 +1,4 @@
-# Aleph Cloud Design System
+# Stasho Design System
 
 A design system built with Tailwind CSS 4 + CSS custom properties + OKLCH colors. Includes design tokens, fonts, reusable components, and a preview app.
 
@@ -574,7 +574,7 @@ DS components use Phosphor icons internally for UI chrome:
 
 ## Logo
 
-Two SVG components for the Aleph Cloud brand mark. Both use `fill="currentColor"` to inherit color from the parent, adapting to any theme or background automatically.
+Two SVG components for the Stasho brand mark. Both use `fill="currentColor"` to inherit color from the parent, adapting to any theme or background automatically.
 
 ### Usage
 
@@ -584,7 +584,7 @@ import { Logo, LogoWordmark } from "@stasho/ds/logo";
 {/* Icon mark only */}
 <Logo className="size-10" aria-label="stasho" />
 
-{/* Icon + "Aleph Cloud" wordmark */}
+{/* "stasho" wordmark */}
 <LogoWordmark className="h-8 w-auto" aria-label="stasho" />
 ```
 

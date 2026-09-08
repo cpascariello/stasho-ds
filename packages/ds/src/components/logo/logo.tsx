@@ -24,8 +24,8 @@ import { MARK_PATH } from "./logo-mark";
  * with zero pixels flipping between ink and ground (max channel delta 79/255,
  * confined to antialiased edges).
  *
- * The icon paths before this were inherited from the @aleph-front/ds fork —
- * Aleph Cloud's mark, not ours, despite a doc comment that claimed otherwise.
+ * The icon is the Stasho mark: the wordmark's own "s" glyph, sharing the
+ * {@link MARK_PATH} outline with {@link LogoMark}.
  *
  * There is deliberately no combined "icon + wordmark" lockup. With the icon
  * being the letter "s", any lockup repeats the word's own first letter, and a

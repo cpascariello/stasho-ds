@@ -21,13 +21,13 @@ Technical patterns and decisions.
 ## Project Structure
 
 ```
-aleph-cloud-ds/
+stasho-ds/
 ├── package-lock.json             # Lockfile
 ├── tsconfig.base.json            # Shared TS compiler options
 ├── package.json                  # Root scripts (delegates to workspaces)
 │
 ├── packages/
-│   └── ds/                       # @aleph-front/ds
+│   └── ds/                       # @stasho/ds
 │       ├── src/
 │       │   ├── components/
 │       │   │   ├── badge/
@@ -108,7 +108,7 @@ aleph-cloud-ds/
 │       └── vitest.config.ts
 │
 ├── apps/
-│   └── preview/                  # @aleph-front/preview
+│   └── preview/                  # @stasho/preview
 │       ├── src/
 │       │   ├── app/
 │       │   │   ├── layout.tsx    # Shell: header + sidebar + content
@@ -165,16 +165,16 @@ aleph-cloud-ds/
 
 | Workspace | Package name | Purpose |
 |-----------|-------------|---------|
-| `packages/ds` | `@aleph-front/ds` | Publishable design system (tokens, components, utilities) |
-| `apps/preview` | `@aleph-front/preview` | Next.js preview app for visual documentation |
+| `packages/ds` | `@stasho/ds` | Publishable design system (tokens, components, utilities) |
+| `apps/preview` | `@stasho/preview` | Next.js preview app for visual documentation |
 
 ### Source exports (no build step)
 
-The DS package exports raw `.tsx` source files via `"exports"` in `package.json`. Consumers compile it themselves via their bundler. This eliminates a build step entirely. Consumer apps must add `transpilePackages: ["@aleph-front/ds"]` to their Next.js config.
+The DS package exports raw `.tsx` source files via `"exports"` in `package.json`. Consumers compile it themselves via their bundler. This eliminates a build step entirely. Consumer apps must add `transpilePackages: ["@stasho/ds"]` to their Next.js config.
 
 ### Deep imports (no barrel files)
 
-Components are imported individually: `@aleph-front/ds/button`, not `@aleph-front/ds`. This is explicit, tree-shakeable, and requires no barrel file maintenance.
+Components are imported individually: `@stasho/ds/button`, not `@stasho/ds`. This is explicit, tree-shakeable, and requires no barrel file maintenance.
 
 ---
 
@@ -737,14 +737,14 @@ Runs on every push to `main` and every PR targeting `main`. Steps: lint, typeche
 
 Triggered by GitHub Release creation (tag pattern `v*`). Extracts the version from the git tag, patches `packages/ds/package.json`, runs full checks, then publishes to npm.
 
-**Version source of truth:** The git tag. `package.json` stays at `0.0.0` in the repo — the workflow patches it at publish time. This avoids version bump commits and merge conflicts.
+**Version source of truth:** The git tag. `packages/ds/package.json` keeps a placeholder version in the repo — the workflow patches it at publish time and fails if the placeholder already equals the tag. This avoids version bump commits and merge conflicts. Never bump the placeholder by hand.
 
 **Release process:**
 1. Merge PRs to `main`
 2. Create a GitHub Release with tag `v<semver>` (e.g., `v0.1.0`)
-3. The workflow validates semver, runs checks, publishes `@aleph-front/ds@<version>` to npm
+3. `.github/workflows/publish.yml` validates semver, patches the version, runs checks, and publishes `@stasho/ds@<version>` to npm
 
-**Required secrets:** `NPM_TOKEN` — a granular npm automation token with publish-only scope for the `@aleph-front` org.
+**Auth:** npm trusted publishing via GitHub OIDC (`permissions: id-token: write` on the job). No npm token is stored in the repo or its secrets; the published tarball carries a signed provenance statement.
 
 ### Package Contents
 

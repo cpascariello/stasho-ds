@@ -115,7 +115,7 @@ type Project = {
 };
 
 const PROJECTS: Project[] = [
-  { id: "1", name: "aleph-api", status: "Active", statusVariant: "success", created: "2026-02-14" },
+  { id: "1", name: "stasho-api", status: "Active", statusVariant: "success", created: "2026-02-14" },
   { id: "2", name: "cloud-worker", status: "Active", statusVariant: "success", created: "2026-01-28" },
   { id: "3", name: "data-pipeline", status: "Inactive", statusVariant: "default", created: "2025-12-05" },
   { id: "4", name: "auth-service", status: "Active", statusVariant: "success", created: "2026-03-01" },
@@ -332,7 +332,7 @@ export default function OverviewPage() {
             </h3>
             <div className="w-full space-y-4">
               <FormField label="Email">
-                <Input type="email" placeholder="you@aleph.cloud" />
+                <Input type="email" placeholder="you@stasho.xyz" />
               </FormField>
               <FormField label="Password">
                 <Input type="password" placeholder="••••••••" />

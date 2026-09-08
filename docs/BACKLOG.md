@@ -49,23 +49,16 @@ Ideas and scope creep captured for later consideration.
 - ~~Breadcrumb~~ — done (see completed)
 **Priority:** High
 
-### 2026-03-17 — Scheduler API endpoint reference
-
-**Source:** External reference from aleph-vm-scheduler repo
-**Description:** Track the scheduler API endpoints for building dashboard UI that consumes them. Check periodically for new or changed routes.
-**Link:** https://github.com/aleph-im/aleph-vm-scheduler/blob/260302ee7ac4a81f972a7b44b04e4f537091080d/scheduler-api/src/routes/mod.rs#L882
-**Priority:** Low
-
 ### 2026-04-10 — Restyle app progress bars to use DS ProgressBar
 
 **Source:** Identified during ProgressBar implementation
-**Description:** The cloud app has hand-rolled progress bars (likely inline divs with width %). Replace with `@aleph-front/ds/progress-bar` ProgressBar component for consistency and accessibility.
+**Description:** The cloud app has hand-rolled progress bars (likely inline divs with width %). Replace with `@stasho/ds/progress-bar` ProgressBar component for consistency and accessibility.
 **Priority:** Medium
 
 ### 2026-04-10 — Restyle app stepper/pipeline to use DS Stepper
 
 **Source:** Identified during Stepper implementation
-**Description:** The cloud app has a StepIndicator and pipeline component for multi-step flows. Replace with `@aleph-front/ds/stepper` compound Stepper for consistency, accessibility, and orientation support.
+**Description:** The cloud app has a StepIndicator and pipeline component for multi-step flows. Replace with `@stasho/ds/stepper` compound Stepper for consistency, accessibility, and orientation support.
 **Priority:** Medium
 
 ### 2026-02-26 — Button icon animations
@@ -93,6 +86,7 @@ Ideas and scope creep captured for later consideration.
 <details>
 <summary>Archived items</summary>
 
+- [~] 2026-03-17 — Scheduler API endpoint reference (obsolete: a vendor scheduler API watch has no consumer in this design-system repo)
 - [x] 2026-09-08 — Detail-card primitives: Field, DetailField, CopyableText field variant (Decision #111)
 - [x] 2026-02-26 — Typekit font integration (kit ID: `acb7qvn`)
 - [x] 2026-02-26 — Global CLAUDE.md: bundler moduleResolution for Next.js
