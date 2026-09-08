@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #112 — 2026-09-08
+
+**Context:** The app's card titles had drifted to three scales: 14px on the project Overview cards, 16px on Settings cards, and 18px on the DS `Card` `title` prop (which the app did not use) and on Dialog/Drawer titles. Each consumer composed its own `<h3>` with `font-heading font-extrabold italic` classes that the app's global heading rule already applied. The operator picked 16px from three rendered options.
+
+**Decision:** `Card`'s `title` renders at `text-base font-heading font-bold` (was `text-lg`), and `Card` gains an `action?: ReactNode` prop rendered on the title row: `flex items-start justify-between gap-2`, the `<h3>` carries `min-w-0`, the action wrapper `shrink-0`. `CardProps` omits the native `title` attribute so a `ReactNode` title type-checks (it had collapsed to `string` through `HTMLAttributes`).
+
+**Rationale:** 16px gives a clean ladder under a 24px page title: card title 16, `DetailField` label 14, helper 12. At 14px the card title and the field label share a size and differ only by face; at 18px three-column card rows wrap two of three titles at 1280px. The action slot exists because every Overview card was rebuilding the same title row to hold a "Manage" or "View all" button, and each rebuild picked its own alignment; with the row owned here, a title wraps before the action does.
+
+**Alternatives considered:** Keeping `text-lg` to match Dialog/Drawer titles — rejected, a modal title is the only heading in its surface, a card title competes with a page title above it. A separate `CardHeader` subcomponent — rejected as a second way to do what a prop does.
+
+---
+
 ## Decision #111 — 2026-09-08
 
 **Context:** The app's Verified Frontends detail cards (publishing key card, DNS tripwire card) needed a read-only label + boxed value + helper stack. The app faked it with a wrapper div carrying the box classes and `[&_button]` descendant overrides that resized and re-skinned CopyableText's copy button. The DS had no read-only field primitive, and FormField's label/helper classes were inline strings that could not be reused without copying.

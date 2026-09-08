@@ -1499,9 +1499,17 @@ import { Card } from "@stasho/ds/card";
 <Card title="Node Health">
   <p>Card content below the heading.</p>
 </Card>
+
+<Card title="Domains" action={<Button variant="ghost" size="sm">Manage</Button>}>
+  <p>Title left, action right.</p>
+</Card>
 ```
 
-Renders an `<h3>` heading with `font-heading` and `mb-4` spacing.
+Renders an `<h3>` at `text-base font-heading font-bold` with `mb-4` spacing — the one
+card-title scale (Decision #112): a page title sits above it, `DetailField` labels
+(`text-sm`) below. `action` is a trailing control on the title row; it never shrinks or
+wraps, the title does. Pass every card title through this prop rather than composing
+a heading in the consumer.
 
 **Visual style:** `rounded-lg` (6px under the Abyssal scale, Decision #100), `bg-surface` (default) or transparent (ghost), 1px `border-edge` hairline on default. No drop shadow at rest — pair with `shadow-sm` / `shadow` when elevation is required (e.g., hover affordance on a clickable card).
 
