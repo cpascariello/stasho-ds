@@ -34,6 +34,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | [Popover](#popover) | Trigger-anchored floating panel | `@stasho/ds/popover` |
 | [ProjectSwitcher](#projectswitcher) | Grouped, searchable sidebar project switcher | `@stasho/ds/project-switcher` |
 | [RadioGroup](#radiogroup) | Mutually exclusive option set with 3 sizes | `@stasho/ds/radio-group` |
+| [SectionNav / SectionNavItem](#sectionnav--sectionnavitem) | In-page section list for settings-style pages: one link per section URL, the active one in accent | `@stasho/ds/section-nav` |
 | [SelectableCard](#selectablecard) | Card-shaped picker (single/multi group + standalone action card) | `@stasho/ds/selectable-card` |
 | [Select](#select) | Dropdown selector with flat options prop | `@stasho/ds/select` |
 | [Sidebar](#sidebar) | Collapsible app-shell navigation rail | `@stasho/ds/sidebar` |
@@ -87,6 +88,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Switching between content panels | **Tabs** — underline or pill variant, keyboard navigation | Buttons + conditional rendering — Tabs manages state, a11y, and indicators |
 | Paginated data navigation | **Pagination** — fixed-slot layout, no layout shift | Custom prev/next buttons — Pagination handles ellipsis, boundaries, and aria |
 | Multi-step workflow indicator | **Stepper** — composable 7-part compound, horizontal/vertical, unstyled | Breadcrumb — Stepper tracks progress state, Breadcrumb tracks location |
+| In-page section navigation (settings page) | **SectionNav** — one link per section URL, active in accent, no context or layout | Tabs — Tabs switch panels under one URL; Sidebar — the app shell, context-bound |
 | App-shell navigation rail | **Sidebar** — collapsible, localStorage-persisted, icon tooltips when collapsed | Tabs — Sidebar is top-level app nav; Tabs switch panels within a view |
 | App-shell top bar | **Header** — sticky, skip-link, breadcrumb slot + right utility slot | Breadcrumb alone — Header frames the whole bar |
 | Trigger-anchored floating panel | **Popover** — interactive content, outside-click/Escape dismiss | Tooltip — Popover holds interactive content; Tooltip is passive text |
@@ -1560,6 +1562,26 @@ import { NavList, NavRow } from "@stasho/ds/nav-list";
 ```
 
 A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); it never mixes rows with non-clickable lines — a fact that is not a destination belongs in the card body above the list.
+
+### SectionNav / SectionNavItem
+
+An in-page section list for a settings-style page (the GitHub / Vercel settings shape): a vertical column of text links, one per section URL, the active one in accent. It owns the list only — the consumer puts it in a column and decides any breakpoint fallback (the app renders pill `Tabs` below `md`). No context, no provider: unlike `SidebarItem` it renders anywhere (Decision #115).
+
+```tsx
+import { SectionNav, SectionNavItem } from "@stasho/ds/section-nav";
+
+<div className="w-48">
+  <SectionNav label="Settings sections">
+    <SectionNavItem href="/projects/p1/settings">General</SectionNavItem>
+    <SectionNavItem asChild active>
+      <Link href="/projects/p1/settings/domains">Domains</Link>
+    </SectionNavItem>
+    <SectionNavItem href="/projects/p1/settings/environment" icon={<Key />}>Environment</SectionNavItem>
+  </SectionNav>
+</div>
+```
+
+`SectionNav` renders `<nav aria-label={label}>` (default `"Sections"`) around a `<ul>` (`flex flex-col gap-0.5`); it is `w-full` of its column. `SectionNavItem` is an `<li>` wrapping the anchor: `href` for the URL (required unless `asChild` lends the classes and `aria-current` to a router link), `active` for the current section (`aria-current="page"`, `bg-accent/10 text-accent`; inactive rows are `text-foreground/80 hover:bg-muted hover:text-foreground`), `icon` for an optional 16px leading slot, `onClick` and the other anchor attributes pass through. The label truncates. Same chassis as `SidebarItem` (`rounded-md px-3 py-1.5 text-sm font-medium`, accent focus ring), so the app shell and a page's section list read as one family.
 
 ### CopyableText
 

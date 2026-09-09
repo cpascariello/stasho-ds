@@ -69,6 +69,7 @@ const NAV: NavEntry[] = [
         items: [
           { label: "Breadcrumb", href: "/components/breadcrumb" },
           { label: "Pagination", href: "/components/pagination" },
+          { label: "SectionNav", href: "/components/section-nav" },
           { label: "Stepper", href: "/components/stepper" },
           { label: "Tabs", href: "/components/tabs" },
         ],

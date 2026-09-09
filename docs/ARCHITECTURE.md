@@ -57,6 +57,9 @@ stasho-ds/
 │       │   │   ├── radio-group/
 │       │   │   │   ├── radio-group.tsx
 │       │   │   │   └── radio-group.test.tsx
+│       │   │   ├── section-nav/
+│       │   │   │   ├── section-nav.tsx
+│       │   │   │   └── section-nav.test.tsx
 │       │   │   ├── select/
 │       │   │   │   ├── select.tsx
 │       │   │   │   └── select.test.tsx
@@ -137,6 +140,7 @@ stasho-ds/
 │       │   │       ├── detail-field/page.tsx
 │       │   │       ├── field/page.tsx
 │       │   │       ├── skeleton/page.tsx
+│       │   │       ├── section-nav/page.tsx
 │       │   │       ├── table/page.tsx
 │       │   │       ├── status-dot/page.tsx
 │       │   │       ├── tabs/page.tsx

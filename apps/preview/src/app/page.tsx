@@ -202,6 +202,7 @@ const QUICK_LINKS: QuickLinkGroup[] = [
     items: [
       { label: "Breadcrumb", href: "/components/breadcrumb", description: "Composable breadcrumb trail" },
       { label: "Pagination", href: "/components/pagination", description: "Fixed-slot page navigation" },
+      { label: "SectionNav", href: "/components/section-nav", description: "In-page section list, accent active" },
       { label: "Tabs", href: "/components/tabs", description: "Underline and pill variants" },
     ],
   },
