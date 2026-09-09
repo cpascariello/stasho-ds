@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #115 — 2026-09-10
+
+**Context:** The Stasho app is moving its Settings page from `Tabs` to a left section list, the GitHub / Vercel settings shape (app Decision #433 named that convention: one URL per section, a scroll per URL). The DS had no in-page section nav, only the app-shell `Sidebar` (context-bound, icon-required, collapse-aware) and the card-foot `NavList` (boxed rows with arrows).
+
+**Decision:** Add `SectionNav` + `SectionNavItem` (`@stasho/ds/section-nav`). `SectionNav` is `<nav aria-label>` (default `"Sections"`) around a `<ul>` at `flex flex-col gap-0.5`, `w-full` of its column. `SectionNavItem` is an `<li>` wrapping an anchor: `href`, `active` (renders `aria-current="page"`), an optional `icon` slot at 16px, `onClick`, `asChild` (the `NavRow` `cloneElement` recipe, lending the classes and `aria-current` to a router link), a truncating label. Its chassis is `SidebarItem`'s — `rounded-md px-3 py-1.5 text-sm font-medium`, active `bg-accent/10 text-accent`, inactive `text-foreground/80 hover:bg-muted hover:text-foreground`, accent focus ring — per Decision #154's color roles (accent is the active/interactive signal, never `primary`). It carries no context and no layout: the consumer owns the column, the two-column page, and any breakpoint fallback (the app falls back to pill `Tabs` below `md`).
+
+**Rationale:** Style parity with `SidebarItem` makes the app shell and a page's section list read as one family without sharing code that would drag the shell's collapse state into a page. No provider because a section list has no shared state to provide; a component that throws outside a wrapper is a trap for a list that should render anywhere. No layout because the breakpoint at which a column becomes tabs is the page's decision, and a DS component that hard-codes `md` would be wrong for the next page that needs `lg`.
+
+**Alternatives considered:** Reusing `SidebarItem` outside `<Sidebar>` (rejected: `useSidebarContext` throws without the provider, `icon` is required, and it drags collapse and tooltip behavior into a page). A `NavList` variant (rejected: boxed rows with arrows are a card foot that says "these rows are clickable", not a page nav). Keeping `Tabs` (rejected by the app decision: one scroll per URL, links not panels).
+
+---
+
 ## Decision #114 — 2026-09-09
 
 **Context:** Prototyping the app's Verified Frontends status page against `@stasho/ds@0.20.0` surfaced six gaps: a `Badge` in `NavRow`'s `trailing` slot inherited the muted-text wrapper; a done task-list row had no muted tone; a copy action could not be a row (anchor-only, raw `<button>` banned in consumers); an accordion of check sections had to be wrapped in a `Card` with the last border stripped; sticky sidebars hard-coded `top-20` against the Header's `h-16`; and a deep link into one accordion section had no way to open it.
