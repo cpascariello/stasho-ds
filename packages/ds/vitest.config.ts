@@ -6,5 +6,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    // Vitest stubs CSS imports to "" unless included; the Header test reads
+    // tokens.css as raw text to pin the --ds-header-height token.
+    css: { include: [/tokens\.css/] },
   },
 });

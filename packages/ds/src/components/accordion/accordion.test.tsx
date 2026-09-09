@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   Accordion,
   AccordionContent,
@@ -151,5 +151,140 @@ describe("Accordion", () => {
     await user.click(screen.getByRole("button", { name: "Question B" }));
     expect(screen.getByText("Answer A")).toBeDefined();
     expect(screen.getByText("Answer B")).toBeDefined();
+  });
+
+  it("cards variant: each item is its own surface, content sits in an inset panel", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a" variant="cards">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    const trigger = screen.getByRole("button", { name: "Question A" });
+    const item = trigger.parentElement?.parentElement as HTMLElement;
+    expect(item.className).toContain("rounded-lg");
+    expect(item.className).toContain("bg-surface");
+    expect(item.className).not.toContain("border-b");
+    expect(item.parentElement?.className).toContain("gap-3");
+    expect(item.parentElement?.getAttribute("data-variant")).toBe("cards");
+    expect(trigger.className).toContain("px-4");
+    const inner = screen.getByText("Answer A");
+    expect(inner.className).toContain("bg-background");
+    expect(inner.className).toContain("border-edge");
+  });
+
+  it("default variant keeps the hairline item and the plain content", () => {
+    render(
+      <Accordion type="single" collapsible defaultValue="a">
+        <AccordionItem value="a">
+          <AccordionTrigger>Question A</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    const trigger = screen.getByRole("button", { name: "Question A" });
+    const item = trigger.parentElement?.parentElement as HTMLElement;
+    expect(item.className).toContain("border-b");
+    expect(item.className).not.toContain("bg-surface");
+    expect(trigger.className).not.toContain("px-4");
+    expect(screen.getByText("Answer A").className).toContain("pb-4");
+  });
+
+  it("trigger renders leading before the title and a muted summary under it", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger leading={<i data-testid="dot" />} summary="Two records missing">
+            DNS
+          </AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    const trigger = screen.getByRole("button", { name: /DNS/ });
+    const kids = Array.from(trigger.children);
+    expect(kids[0]?.querySelector("[data-testid=dot]")).toBeTruthy();
+    expect(kids[1]?.children[0]?.textContent).toBe("DNS");
+    const summary = screen.getByText("Two records missing");
+    expect(summary.parentElement).toBe(kids[1]);
+    expect(summary.className).toContain("text-muted-foreground");
+    expect(summary.className).toContain("truncate");
+    expect(trigger.lastElementChild?.tagName.toLowerCase()).toBe("svg");
+  });
+
+  describe("openOnHash", () => {
+    afterEach(() => {
+      window.location.hash = "";
+      vi.unstubAllGlobals();
+    });
+
+    function renderHashAccordion(type: "single" | "multiple" = "single") {
+      const scrollIntoView = vi.fn();
+      Element.prototype.scrollIntoView = scrollIntoView;
+      render(
+        type === "single" ? (
+          <Accordion type="single" collapsible openOnHash>
+            <AccordionItem value="a" id="dns">
+              <AccordionTrigger>Question A</AccordionTrigger>
+              <AccordionContent>Answer A</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="b" id="records">
+              <AccordionTrigger>Question B</AccordionTrigger>
+              <AccordionContent>Answer B</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        ) : (
+          <Accordion type="multiple" defaultValue={["a"]} openOnHash>
+            <AccordionItem value="a" id="dns">
+              <AccordionTrigger>Question A</AccordionTrigger>
+              <AccordionContent>Answer A</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="b" id="records">
+              <AccordionTrigger>Question B</AccordionTrigger>
+              <AccordionContent>Answer B</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        ),
+      );
+      return scrollIntoView;
+    }
+
+    it("opens the item whose id matches the hash on mount and scrolls it into view", () => {
+      window.location.hash = "#records";
+      const scrollIntoView = renderHashAccordion();
+      expect(screen.getByText("Answer B")).toBeDefined();
+      expect(screen.queryByText("Answer A")).toBeNull();
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      expect(scrollIntoView.mock.instances[0]).toBe(document.getElementById("records"));
+      expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+    });
+
+    it("scrolls without smoothing under prefers-reduced-motion", () => {
+      vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: true }));
+      window.location.hash = "#dns";
+      const scrollIntoView = renderHashAccordion();
+      expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "auto", block: "start" });
+    });
+
+    it("follows hashchange and adds to the open set under type=multiple", () => {
+      window.location.hash = "";
+      renderHashAccordion("multiple");
+      expect(screen.queryByText("Answer B")).toBeNull();
+      act(() => {
+        window.location.hash = "#records";
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      });
+      expect(screen.getByText("Answer A")).toBeDefined();
+      expect(screen.getByText("Answer B")).toBeDefined();
+    });
+
+    it("ignores a hash that is not one of its items", () => {
+      window.location.hash = "#elsewhere";
+      const scrollIntoView = renderHashAccordion();
+      expect(screen.queryByText("Answer A")).toBeNull();
+      expect(scrollIntoView).not.toHaveBeenCalled();
+    });
   });
 });

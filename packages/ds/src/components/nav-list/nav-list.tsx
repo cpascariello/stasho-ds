@@ -3,6 +3,7 @@ import {
   forwardRef,
   isValidElement,
   type AnchorHTMLAttributes,
+  type ForwardedRef,
   type HTMLAttributes,
   type ReactElement,
   type ReactNode,
@@ -44,44 +45,71 @@ function ArrowRight() {
   );
 }
 
-type NavRowProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  /** Outbound: opens in a new tab and carries the ↗ arrow; in-app rows carry →. */
-  external?: boolean;
-  /** Monospace label, for hosts and paths. */
-  mono?: boolean;
-  /** Lend the row's chassis to the child element (a router Link). */
-  asChild?: boolean;
-  /** Before the label: a StatusDot, an icon. */
-  leading?: ReactNode;
-  /** After the arrow, pushed to the row's end in muted text: a status word, a count. */
-  trailing?: ReactNode;
-  children?: ReactNode;
-};
+type NavRowProps = HTMLAttributes<HTMLElement> &
+  Pick<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "target" | "rel" | "download"> & {
+    /** Outbound: opens in a new tab and carries the ↗ arrow; in-app rows carry →. */
+    external?: boolean;
+    /** Monospace label, for hosts and paths. */
+    mono?: boolean;
+    /** Lend the row's chassis to the child element (a router Link). */
+    asChild?: boolean;
+    /** `muted` for a row whose step is done: label and arrow in muted text. */
+    tone?: "default" | "muted";
+    /** Before the label: a StatusDot, an icon. */
+    leading?: ReactNode;
+    /**
+     * After the arrow, pushed to the row's end. A string or number renders in
+     * muted small text (a status word, a count); any other node (a Badge)
+     * renders as-is.
+     */
+    trailing?: ReactNode;
+    children?: ReactNode;
+  };
 
 /**
- * One row of a `NavList`. Renders an anchor, or with `asChild` lends its
- * classes and arrow to the child (a Next `Link`, say). The arrow rides
- * inline right after the label, never at the far edge of the row.
+ * One row of a `NavList`. Renders an anchor when given `href`, a
+ * `<button type="button">` without one (a copy, an in-page action), or with
+ * `asChild` lends its classes and arrow to the child (a Next `Link`, say).
+ * The arrow rides inline right after the label, never at the far edge of the
+ * row.
  */
-const NavRow = forwardRef<HTMLAnchorElement, NavRowProps>(
+const NavRow = forwardRef<HTMLElement, NavRowProps>(
   (
-    { external = false, mono = false, asChild = false, leading, trailing, className, children, ...rest },
+    {
+      external = false,
+      mono = false,
+      asChild = false,
+      tone = "default",
+      leading,
+      trailing,
+      href,
+      className,
+      children,
+      ...rest
+    },
     ref,
   ) => {
     const classes = cn(
-      "flex w-full items-center gap-1.5 px-3 py-2 text-sm font-medium text-foreground",
+      "flex w-full items-center gap-1.5 px-3 py-2 text-left text-sm font-medium",
+      tone === "muted" ? "text-muted-foreground" : "text-foreground",
       "transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
       mono && "font-mono",
       className,
     );
     const arrow = external ? <ArrowUpRight /> : <ArrowRight />;
+    const trailingIsText = typeof trailing === "string" || typeof trailing === "number";
     const content = (label: ReactNode) => (
       <>
         {leading ? <span className="inline-flex shrink-0 items-center">{leading}</span> : null}
         <span className="min-w-0 truncate">{label}</span>
         {arrow}
         {trailing ? (
-          <span className="ml-auto shrink-0 pl-2 text-xs font-normal text-muted-foreground">
+          <span
+            className={cn(
+              "ml-auto shrink-0 pl-2",
+              trailingIsText && "text-xs font-normal text-muted-foreground",
+            )}
+          >
             {trailing}
           </span>
         ) : null}
@@ -92,15 +120,29 @@ const NavRow = forwardRef<HTMLAnchorElement, NavRowProps>(
       const label = (children.props as { children?: ReactNode }).children;
       return cloneElement(
         children as ReactElement<Record<string, unknown>>,
-        { className: classes, ref, ...rest },
+        { className: classes, ref, ...(href === undefined ? {} : { href }), ...rest },
         content(label),
+      );
+    }
+
+    if (href === undefined) {
+      return (
+        <button
+          ref={ref as ForwardedRef<HTMLButtonElement>}
+          type="button"
+          className={classes}
+          {...rest}
+        >
+          {content(children)}
+        </button>
       );
     }
 
     return (
       <a
-        ref={ref}
+        ref={ref as ForwardedRef<HTMLAnchorElement>}
         className={classes}
+        href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...rest}
       >

@@ -264,16 +264,16 @@ Feature implementation details are **not inlined here** — they change every re
 
 **Data display & navigation**
 - Card — default (hairline) + ghost variants; one 16px title scale + trailing `action` slot (#90, #100, #112)
-- NavList / NavRow — boxed list of destinations at the foot of a card, inline arrows (#113)
+- NavList / NavRow — boxed list of destinations at the foot of a card, inline arrows; trailing node as-is, `tone="muted"`, href-less row is a button (#113, #114)
 - Table — generic typing, sortable + controlled-sort, activeKey highlight (#93)
 - Tabs — underline/pill variants, sliding indicator, overflow collapse + maxVisible (#86)
-- Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101)
+- Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101; `variant="cards"`, trigger `leading`/`summary`, `openOnHash`, #114)
 - CopyableText — middle-ellipsis + fluid width-aware mode, copy animation (#98); `variant="field"` seats it in the read-only box with a 22px control (#111)
 - Field + DetailField — read-only box and read-only FormField sibling for detail cards; shared `field-layout` rhythm constants (#111)
 
 **Overlays & shell**
 - Tooltip, Popover, DropdownMenu (non-modal default), Dialog (`locked` prop), Drawer (#87, #100, #102, #104)
-- Sidebar + Header primitive families (#104), ProjectSwitcher — grouped searchable cmdk switcher (#105)
+- Sidebar + Header primitive families (#104; Header height as `--ds-header-height` for sticky offsets, #114), ProjectSwitcher — grouped searchable cmdk switcher (#105)
 
 **Brand**
 - Logo family — `Logo`, `LogoWordmark`, `LogoLetter`, `LogoMark` badge; all real outlines, no font dependency; downloadable brand assets + favicons (#106–#108)
