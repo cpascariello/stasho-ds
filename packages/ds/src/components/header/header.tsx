@@ -17,7 +17,7 @@ export function Header({ children, rightSlot, className }: HeaderProps) {
     <header
       className={cn(
         "sticky top-0 z-30",
-        "flex h-16 shrink-0 items-center gap-4",
+        "flex h-(--ds-header-height) shrink-0 items-center gap-4",
         "border-b border-edge bg-background px-4",
         className,
       )}

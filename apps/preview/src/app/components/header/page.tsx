@@ -44,6 +44,18 @@ export default function HeaderPage() {
           </div>
         </div>
       </DemoSection>
+
+      <DemoSection title="Sticking below the bar">
+        <p className="mb-3 text-sm text-muted-foreground">
+          The bar reads its height from <code>--ds-header-height</code> (4rem, set in tokens.css). Offset
+          anything that sticks under it, or a hash target that scrolls under it, from the same variable
+          instead of a hard-coded <code>top-20</code>:
+        </p>
+        <pre className="overflow-x-auto rounded-sm border border-edge bg-surface p-4 font-mono text-xs">
+{`<aside className="sticky top-[calc(var(--ds-header-height)+1rem)]">…</aside>
+<section id="dns" className="scroll-mt-[calc(var(--ds-header-height)+1rem)]">…</section>`}
+        </pre>
+      </DemoSection>
     </>
   );
 }

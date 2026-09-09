@@ -5,6 +5,7 @@ import {
   HeaderBreadcrumb,
   HeaderBreadcrumbSegment,
 } from "./header";
+import tokens from "../../styles/tokens.css?raw";
 
 describe("Header", () => {
   it("renders children, rightSlot, and the skip link", () => {
@@ -19,6 +20,16 @@ describe("Header", () => {
     ).toBeTruthy();
     const skip = screen.getByText("Skip to content");
     expect(skip.getAttribute("href")).toBe("#main");
+  });
+});
+
+describe("Header height token", () => {
+  it("the bar reads its height from --ds-header-height, which tokens.css defines", () => {
+    const { container } = render(<Header>bar</Header>);
+    const header = container.querySelector("header") as HTMLElement;
+    expect(header.className).toContain("h-(--ds-header-height)");
+    expect(header.className).not.toContain("h-16");
+    expect(tokens).toMatch(/--ds-header-height:\s*4rem;/);
   });
 });
 

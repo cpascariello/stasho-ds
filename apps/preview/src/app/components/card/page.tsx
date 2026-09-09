@@ -3,6 +3,7 @@
 import { Card } from "@stasho/ds/card";
 import { Button } from "@stasho/ds/button";
 import { NavList, NavRow } from "@stasho/ds/nav-list";
+import { Badge } from "@stasho/ds/badge";
 import { PageHeader } from "@preview/components/page-header";
 import { DemoSection } from "@preview/components/demo-section";
 
@@ -43,6 +44,25 @@ export default function CardPage() {
               myapp.example.com
             </NavRow>
             <NavRow href="#">View deployments</NavRow>
+          </NavList>
+        </Card>
+      </DemoSection>
+      <DemoSection title="NavList: trailing node, muted tone, action row">
+        <Card title="Set up verification" className="max-w-md">
+          <p className="mb-3 text-sm">
+            A Badge in the trailing slot renders as-is; a done step drops to muted; a row without
+            href is a button.
+          </p>
+          <NavList>
+            <NavRow href="#" tone="muted" trailing="done">
+              Publish the key
+            </NavRow>
+            <NavRow href="#" trailing={<Badge variant="warning" size="sm">1 missing</Badge>}>
+              Add DNS records
+            </NavRow>
+            <NavRow onClick={() => navigator.clipboard?.writeText("0x8966…9354")}>
+              Copy binder address
+            </NavRow>
           </NavList>
         </Card>
       </DemoSection>

@@ -933,16 +933,34 @@ import {
 <Accordion type="multiple">
   ...
 </Accordion>
+
+// Cards — each item its own card surface, content in an inset panel; a
+// leading StatusDot and a one-line summary on the trigger. Items carry an
+// id so `openOnHash` can open the one named in the URL hash.
+<Accordion type="single" collapsible variant="cards" openOnHash>
+  <AccordionItem value="dns" id="dns" className="scroll-mt-[calc(var(--ds-header-height)+1rem)]">
+    <AccordionTrigger leading={<StatusDot status="degraded" size="sm" />} summary="1 of 2 records missing">
+      DNS
+    </AccordionTrigger>
+    <AccordionContent>Add the TXT record…</AccordionContent>
+  </AccordionItem>
+</Accordion>
 ```
 
 **Parts:**
 
 | Part | Element | Purpose |
 |------|---------|---------|
-| `Accordion` | Radix `Root` | Carries `type` (`"single"` \| `"multiple"`), `collapsible`, `defaultValue`/`value` |
-| `AccordionItem` | `<div>` | One section, `border-b border-edge`, requires `value` |
-| `AccordionTrigger` | `<button>` in `<h3>` header | Question row; Inter Semibold, cyan on hover, caret on the right |
-| `AccordionContent` | Radix `Content` | Answer panel; height-animated wrapper around the inner text |
+| `Accordion` | Radix `Root` | Carries `type` (`"single"` \| `"multiple"`), `collapsible`, `defaultValue`/`value`; `variant` (`"default"` \| `"cards"`), `openOnHash` |
+| `AccordionItem` | `<div>` | One section, `border-b border-edge` (default) or a card surface (`cards`), requires `value`; takes `id` for hash targeting |
+| `AccordionTrigger` | `<button>` in `<h3>` header | Question row; Inter Semibold, cyan on hover, caret on the right; `leading` slot before the title, `summary` line under it |
+| `AccordionContent` | Radix `Content` | Answer panel; height-animated wrapper around the inner text (an inset `bg-background` panel under `cards`) |
+
+**Variant:** `variant="cards"` gives every item the Card surface (`rounded-lg border border-edge bg-surface`) with `gap-3` between items, pads the trigger `px-4`, and seats the open item's content in an inset panel (`mx-4 mb-4 rounded-sm border border-edge bg-background p-4`), so consecutive open items separate visually without a consumer wrapping the list in a `Card`. The default variant is unchanged.
+
+**Trigger slots:** `leading` (a `StatusDot`, an icon) sits before the title; `summary` renders as one muted, truncated line (`text-sm font-normal text-muted-foreground`) under the title. Both are structure on the trigger, not spans the consumer nests in `children`.
+
+**Hash:** `openOnHash` opens the item whose `id` matches `location.hash` — on mount and on `hashchange` — by clicking its trigger when closed (so it works uncontrolled and controlled, single and multiple; an open item stays open), then `scrollIntoView`s the item (`smooth`, or `auto` under `prefers-reduced-motion`). Give the items `scroll-mt-[calc(var(--ds-header-height)+1rem)]` so they land below a sticky Header. A hash that names nothing inside the accordion is ignored.
 
 **Type:** `type="single"` (with optional `collapsible` so the open item can re-close) keeps one panel open; `type="multiple"` lets several stay open. Controlled (`value`/`onValueChange`) and uncontrolled (`defaultValue`) both supported via Radix.
 
@@ -1531,7 +1549,15 @@ import { NavList, NavRow } from "@stasho/ds/nav-list";
 </NavList>
 ```
 
-`external` sets `target="_blank"` + `rel="noopener noreferrer"` and the ↗ arrow; `mono` for hosts and paths; `asChild` lends the chassis and the arrow to a router link; `leading` (a `StatusDot`, an icon) sits before the label and `trailing` (a status word, a count) after the arrow at the row's end in muted text. Rows are `px-3 py-2 text-sm font-medium`, `hover:bg-muted`, accent focus ring.
+`external` sets `target="_blank"` + `rel="noopener noreferrer"` and the ↗ arrow; `mono` for hosts and paths; `asChild` lends the chassis and the arrow to a router link; `leading` (a `StatusDot`, an icon) sits before the label and `trailing` after the arrow at the row's end — a string or number (a status word, a count) renders in muted small text, any other node (a `Badge`) renders as-is. `tone="muted"` drops the label and arrow to `text-muted-foreground`, for a task-list row whose step is done. A row **without `href`** renders a `<button type="button">` with the same layout, arrow and focus ring — a copy or an in-page action can be a row without a raw button in the consumer. Rows are `px-3 py-2 text-sm font-medium`, `hover:bg-muted`, accent focus ring.
+
+```tsx
+<NavList>
+  <NavRow href="/verified/new" tone="muted" trailing="done">Publish the key</NavRow>
+  <NavRow href="/verified/dns" trailing={<Badge variant="warning" size="sm">1 missing</Badge>}>Add DNS records</NavRow>
+  <NavRow onClick={() => copy(address)}>Copy binder address</NavRow>
+</NavList>
+```
 
 A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); it never mixes rows with non-clickable lines — a fact that is not a destination belongs in the card body above the list.
 
@@ -2338,7 +2364,14 @@ import {
 </Header>
 ```
 
-**Structure:** sticky, `h-16`, keyboard skip-link (`#main`), a `min-w-0 flex-1` content slot for breadcrumbs, and a `shrink-0` `rightSlot`. `HeaderBreadcrumbSegment` takes `asChild` (Radix `Slot.Root`) for framework links and `current` for `aria-current="page"`.
+**Structure:** sticky, `h-(--ds-header-height)`, keyboard skip-link (`#main`), a `min-w-0 flex-1` content slot for breadcrumbs, and a `shrink-0` `rightSlot`. `HeaderBreadcrumbSegment` takes `asChild` (Radix `Slot.Root`) for framework links and `current` for `aria-current="page"`.
+
+**Sticky offset:** `tokens.css` defines `--ds-header-height: 4rem` on `:root` and the bar reads its height from it, so anything that sticks below the bar — or a hash target that must scroll into view under it — offsets from the same variable instead of a hard-coded `top-20`:
+
+```tsx
+<aside className="sticky top-[calc(var(--ds-header-height)+1rem)]">…</aside>
+<section id="dns" className="scroll-mt-[calc(var(--ds-header-height)+1rem)]">…</section>
+```
 
 ### ProjectSwitcher
 

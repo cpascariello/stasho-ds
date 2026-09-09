@@ -161,6 +161,11 @@
   --duration-normal: 500ms;
   --duration-slow: 700ms;
   --timing: ease-in-out;
+
+  /* Header height: the Header reads it for its own height, so anything that
+     sticks below the bar offsets from the same value:
+     top-[calc(var(--ds-header-height)+1rem)] / scroll-mt-[calc(...)]. */
+  --ds-header-height: 4rem;
 }
 
 .theme-dark {
