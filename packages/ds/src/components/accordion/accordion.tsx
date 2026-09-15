@@ -117,11 +117,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
           )}
           {...rest}
         >
-          {leading ? (
-            <span aria-hidden="true" className="inline-flex shrink-0 items-center">
-              {leading}
-            </span>
-          ) : null}
+          {leading ? <span className="inline-flex shrink-0 items-center">{leading}</span> : null}
           <span className="min-w-0 flex-1">
             <span className="block">{children}</span>
             {summary ? (

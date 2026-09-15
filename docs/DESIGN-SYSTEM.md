@@ -960,7 +960,7 @@ import {
 
 **Variant:** `variant="cards"` gives every item the Card surface (`rounded-lg border border-edge bg-surface`) with `gap-3` between items, pads the trigger `px-4`, and seats the open item's content in an inset panel (`mx-4 mb-4 rounded-sm border border-edge bg-background p-4`), so consecutive open items separate visually without a consumer wrapping the list in a `Card`. The default variant is unchanged.
 
-**Trigger slots:** `leading` (a `StatusDot`, an icon) sits before the title; `summary` renders as one muted, truncated line (`text-sm font-normal text-muted-foreground`) under the title. Both are structure on the trigger, not spans the consumer nests in `children`.
+**Trigger slots:** `leading` (a `StatusDot`, an icon) sits before the title; `summary` renders as one muted, truncated line (`text-sm font-normal text-muted-foreground`) under the title. Both are structure on the trigger, not spans the consumer nests in `children`. Whatever sits in `leading` is read into the trigger's accessible name (a `StatusDot` announces its label, "Degraded DNS"); when the title or `summary` already states the status, pass `<StatusDot decorative>` so it is not announced twice.
 
 **Hash:** `openOnHash` opens the item whose `id` matches `location.hash` — on mount and on `hashchange` — by clicking its trigger when closed (so it works uncontrolled and controlled, single and multiple; an open item stays open), then `scrollIntoView`s the item (`smooth`, or `auto` under `prefers-reduced-motion`). Give the items `scroll-mt-[calc(var(--ds-header-height)+1rem)]` so they land below a sticky Header. A hash that names nothing inside the accordion is ignored.
 
@@ -1790,10 +1790,11 @@ import { StatusDot } from "@stasho/ds/status-dot";
 <StatusDot status="healthy" size="md" />  {/* 12px (size-3, default) */}
 ```
 
-**Accessibility:** Built-in `role="status"` and auto-derived `aria-label` (e.g., `status="healthy"` → `aria-label="Healthy"`). Override with a custom label when more context is needed:
+**Accessibility:** Built-in `role="status"` and auto-derived `aria-label` (e.g., `status="healthy"` → `aria-label="Healthy"`). Override with a custom label when more context is needed, or pass `decorative` when the text next to the dot already states the status — the dot then renders `aria-hidden` with no `role` or `aria-label`, so it stops being announced twice (an `AccordionTrigger` or `NavRow` `leading` slot whose title or summary carries the status). A dot that is the only carrier of the status stays on the default:
 
 ```tsx
 <StatusDot status="healthy" aria-label="Node is healthy" />
+<StatusDot status="degraded" decorative />   {/* "1 of 2 records missing" is next to it */}
 ```
 
 ### Table
