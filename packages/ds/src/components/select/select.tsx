@@ -52,6 +52,8 @@ type SelectProps = Omit<
     error?: boolean;
     className?: string;
     id?: string;
+    "aria-label"?: string;
+    "aria-labelledby"?: string;
     "aria-describedby"?: string;
   };
 
@@ -64,6 +66,8 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
       error = false,
       className,
       id,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
       ...rest
     },
@@ -74,6 +78,8 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
         <SelectPrimitive.Trigger
           ref={ref}
           id={id}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
           aria-invalid={error || undefined}
           className={cn(

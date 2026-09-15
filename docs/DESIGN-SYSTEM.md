@@ -960,7 +960,7 @@ import {
 
 **Variant:** `variant="cards"` gives every item the Card surface (`rounded-lg border border-edge bg-surface`) with `gap-3` between items, pads the trigger `px-4`, and seats the open item's content in an inset panel (`mx-4 mb-4 rounded-sm border border-edge bg-background p-4`), so consecutive open items separate visually without a consumer wrapping the list in a `Card`. The default variant is unchanged.
 
-**Trigger slots:** `leading` (a `StatusDot`, an icon) sits before the title; `summary` renders as one muted, truncated line (`text-sm font-normal text-muted-foreground`) under the title. Both are structure on the trigger, not spans the consumer nests in `children`.
+**Trigger slots:** `leading` (a `StatusDot`, an icon) sits before the title; `summary` renders as one muted, truncated line (`text-sm font-normal text-muted-foreground`) under the title. Both are structure on the trigger, not spans the consumer nests in `children`. Whatever sits in `leading` is read into the trigger's accessible name (a `StatusDot` announces its label, "Degraded DNS"); when the title or `summary` already states the status, pass `<StatusDot decorative>` so it is not announced twice.
 
 **Hash:** `openOnHash` opens the item whose `id` matches `location.hash` — on mount and on `hashchange` — by clicking its trigger when closed (so it works uncontrolled and controlled, single and multiple; an open item stays open), then `scrollIntoView`s the item (`smooth`, or `auto` under `prefers-reduced-motion`). Give the items `scroll-mt-[calc(var(--ds-header-height)+1rem)]` so they land below a sticky Header. A hash that names nothing inside the accordion is ignored.
 
@@ -1427,7 +1427,7 @@ import { Select } from "@stasho/ds/select";
 </FormField>
 ```
 
-**Props:** `value`, `defaultValue`, `onValueChange`, `placeholder`, `options` (array of `{ value, label, disabled? }`), `disabled`, `error`, `size` (sm/md), `className`, `id`, `aria-describedby`. Forwards ref to trigger `<button>`.
+**Props:** `value`, `defaultValue`, `onValueChange`, `placeholder`, `options` (array of `{ value, label, disabled? }`), `disabled`, `error`, `size` (sm/md), `className`, `id`, `aria-label`, `aria-labelledby`, `aria-describedby` (the three `aria-*` land on the trigger, so the combobox gets its accessible name from them). Forwards ref to trigger `<button>`.
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
@@ -1558,10 +1558,11 @@ import { NavList, NavRow } from "@stasho/ds/nav-list";
   <NavRow href="/verified/new" tone="muted" trailing="done">Publish the key</NavRow>
   <NavRow href="/verified/dns" trailing={<Badge variant="warning" size="sm">1 missing</Badge>}>Add DNS records</NavRow>
   <NavRow onClick={() => copy(address)}>Copy binder address</NavRow>
+  <NavRow static tone="muted" leading={<StatusDot status="healthy" />} trailing="39h left">Cool-down</NavRow>
 </NavList>
 ```
 
-A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); it never mixes rows with non-clickable lines — a fact that is not a destination belongs in the card body above the list.
+`static` renders a statement row (a done step, a countdown): a plain `<div>` with the same layout and `leading` / `trailing` slots but no arrow, hover, focus ring or role — the arrow is the one click affordance, so a row without it reads as a fact. A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); a fact that is not part of the same step list belongs in the card body above the list, not in a `static` row.
 
 ### SectionNav / SectionNavItem
 
@@ -1789,10 +1790,11 @@ import { StatusDot } from "@stasho/ds/status-dot";
 <StatusDot status="healthy" size="md" />  {/* 12px (size-3, default) */}
 ```
 
-**Accessibility:** Built-in `role="status"` and auto-derived `aria-label` (e.g., `status="healthy"` → `aria-label="Healthy"`). Override with a custom label when more context is needed:
+**Accessibility:** Built-in `role="status"` and auto-derived `aria-label` (e.g., `status="healthy"` → `aria-label="Healthy"`). Override with a custom label when more context is needed, or pass `decorative` when the text next to the dot already states the status — the dot then renders `aria-hidden` with no `role` or `aria-label`, so it stops being announced twice (an `AccordionTrigger` or `NavRow` `leading` slot whose title or summary carries the status). A dot that is the only carrier of the status stays on the default:
 
 ```tsx
 <StatusDot status="healthy" aria-label="Node is healthy" />
+<StatusDot status="degraded" decorative />   {/* "1 of 2 records missing" is next to it */}
 ```
 
 ### Table
@@ -1982,7 +1984,7 @@ Pass `size="sm"` to `TabsList` for a compact variant. Works with both underline 
 
 #### Overflow Collapse
 
-When many tabs exceed the available width, `overflow="collapse"` on `TabsList` auto-hides trailing tabs into a "..." dropdown menu. Works with both underline and pill variants. The sliding indicator moves behind the "..." trigger when a hidden tab is active.
+When many tabs exceed the available width, `overflow="collapse"` on `TabsList` auto-hides trailing tabs into a "..." dropdown menu. Works with both underline and pill variants. The active tab is never collapsed: past the break it takes the last visible slot and the tab it displaces goes into the menu, so the sliding indicator always sits on a visible tab.
 
 ```tsx
 <Tabs defaultValue="compute">

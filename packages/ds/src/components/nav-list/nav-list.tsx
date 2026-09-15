@@ -11,10 +11,11 @@ import {
 import { cn } from "../../lib/cn";
 
 /**
- * A boxed list of destinations for the foot of a card: one hairline-divided
- * row per link, the whole row is the target. The list exists so the reader
- * can tell at a glance which parts of a card are clickable (the rows) and
- * which are not (everything above them).
+ * A boxed list of rows for the foot of a card: one hairline-divided row per
+ * entry, the whole row is the target when it has an arrow. The arrow is the
+ * one click affordance, so the reader can tell at a glance which rows are
+ * clickable (arrow) and which are statements (`static`, no arrow); a fact
+ * that is not part of the same step list belongs in the card body above.
  */
 const NavList = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...rest }, ref) => (
@@ -53,6 +54,13 @@ type NavRowProps = HTMLAttributes<HTMLElement> &
     mono?: boolean;
     /** Lend the row's chassis to the child element (a router Link). */
     asChild?: boolean;
+    /**
+     * A statement, not a destination (a done step, "Cool-down · 39h left"):
+     * a `<div>` with the row's layout and slots but no arrow, hover, focus
+     * ring or role. Takes precedence over `href` and `asChild`: a static row
+     * never renders a link or button, whatever else is passed.
+     */
+    static?: boolean;
     /** `muted` for a row whose step is done: label and arrow in muted text. */
     tone?: "default" | "muted";
     /** Before the label: a StatusDot, an icon. */
@@ -68,10 +76,11 @@ type NavRowProps = HTMLAttributes<HTMLElement> &
 
 /**
  * One row of a `NavList`. Renders an anchor when given `href`, a
- * `<button type="button">` without one (a copy, an in-page action), or with
- * `asChild` lends its classes and arrow to the child (a Next `Link`, say).
- * The arrow rides inline right after the label, never at the far edge of the
- * row.
+ * `<button type="button">` without one (a copy, an in-page action), a plain
+ * `<div>` with `static` (a statement row), or with `asChild` lends its
+ * classes and arrow to the child (a Next `Link`, say). The arrow rides inline
+ * right after the label, never at the far edge of the row, and only on rows
+ * that can be clicked.
  */
 const NavRow = forwardRef<HTMLElement, NavRowProps>(
   (
@@ -79,6 +88,7 @@ const NavRow = forwardRef<HTMLElement, NavRowProps>(
       external = false,
       mono = false,
       asChild = false,
+      static: isStatic = false,
       tone = "default",
       leading,
       trailing,
@@ -92,7 +102,8 @@ const NavRow = forwardRef<HTMLElement, NavRowProps>(
     const classes = cn(
       "flex w-full items-center gap-1.5 px-3 py-2 text-left text-sm font-medium",
       tone === "muted" ? "text-muted-foreground" : "text-foreground",
-      "transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+      !isStatic &&
+        "transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
       mono && "font-mono",
       className,
     );
@@ -102,7 +113,7 @@ const NavRow = forwardRef<HTMLElement, NavRowProps>(
       <>
         {leading ? <span className="inline-flex shrink-0 items-center">{leading}</span> : null}
         <span className="min-w-0 truncate">{label}</span>
-        {arrow}
+        {isStatic ? null : arrow}
         {trailing ? (
           <span
             className={cn(
@@ -115,6 +126,14 @@ const NavRow = forwardRef<HTMLElement, NavRowProps>(
         ) : null}
       </>
     );
+
+    if (isStatic) {
+      return (
+        <div ref={ref as ForwardedRef<HTMLDivElement>} className={classes} {...rest}>
+          {content(children)}
+        </div>
+      );
+    }
 
     if (asChild && isValidElement(children)) {
       const label = (children.props as { children?: ReactNode }).children;

@@ -40,6 +40,16 @@ describe("StatusDot", () => {
     );
   });
 
+  it("decorative hides the dot from assistive tech: no status role, no label, aria-hidden", () => {
+    const { container } = render(<StatusDot decorative status="healthy" />);
+    expect(screen.queryByRole("status")).toBeNull();
+    const dot = container.firstElementChild;
+    expect(dot?.getAttribute("aria-hidden")).toBe("true");
+    expect(dot?.hasAttribute("aria-label")).toBe(false);
+    expect(dot?.hasAttribute("role")).toBe(false);
+    expect(dot?.className).toContain("bg-success-500");
+  });
+
   it("allows consumer to override aria-label", () => {
     render(<StatusDot status="healthy" aria-label="Node is healthy" />);
     expect(screen.getByLabelText("Node is healthy")).toBeTruthy();

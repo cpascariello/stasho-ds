@@ -595,6 +595,76 @@ describe("Tabs maxVisible", () => {
     });
   });
 
+  it("keeps the active tab in the visible row: it takes the last slot and the displaced tab goes to the menu", async () => {
+    // Container=250, trigger=30, each tab=80 → width break at index 2, so
+    // two tabs fit. Active is tab-5 (index 4): it takes the second slot,
+    // tab-2 (displaced) and tab-3 (past the break) collapse.
+    const user = userEvent.setup();
+    renderManyTabs({ overflow: "collapse", count: 10, defaultValue: "tab-5" });
+
+    const list = screen.getByRole("tablist");
+    Object.defineProperty(list, "clientWidth", { value: 250, configurable: true });
+    Object.defineProperty(list, "offsetHeight", { value: 30, configurable: true });
+    list.getBoundingClientRect = () => makeRect(0, 250);
+
+    const trigger = screen.getByRole("button", { name: "More tabs" });
+    Object.defineProperty(trigger, "offsetWidth", { value: 30, configurable: true });
+
+    const tabs = screen.getAllByRole("tab", { hidden: true });
+    tabs.forEach((tab, i) => {
+      tab.getBoundingClientRect = () => makeRect(i * 80, (i + 1) * 80);
+    });
+
+    const activeTab = tabs[4];
+    if (!activeTab) throw new Error("missing tab");
+    activeTab.setAttribute("data-state", "inactive");
+    activeTab.setAttribute("data-state", "active");
+
+    await waitFor(() => {
+      expect(tabs[0]?.style.visibility).not.toBe("hidden");
+      expect(tabs[4]?.style.visibility).not.toBe("hidden");
+      expect(tabs[1]?.style.visibility).toBe("hidden");
+      expect(tabs[2]?.style.visibility).toBe("hidden");
+    });
+
+    await user.click(trigger);
+    const menu = await screen.findByRole("menu");
+    expect(menu).toHaveTextContent("Tab 2");
+    expect(menu).not.toHaveTextContent("Tab 5");
+  });
+
+  it("gives up more slots when the active tab is wider than the one it displaces", async () => {
+    // Container=250, trigger=30, tabs=80 except the active tab-5 at 200.
+    // Break at index 2 → one leading slot; 80 + 200 + 30 > 250, so tab-1
+    // collapses too and tab-5 stands alone.
+    renderManyTabs({ overflow: "collapse", count: 10, defaultValue: "tab-5" });
+
+    const list = screen.getByRole("tablist");
+    Object.defineProperty(list, "clientWidth", { value: 250, configurable: true });
+    Object.defineProperty(list, "offsetHeight", { value: 30, configurable: true });
+    list.getBoundingClientRect = () => makeRect(0, 250);
+
+    const trigger = screen.getByRole("button", { name: "More tabs" });
+    Object.defineProperty(trigger, "offsetWidth", { value: 30, configurable: true });
+
+    const tabs = screen.getAllByRole("tab", { hidden: true });
+    tabs.forEach((tab, i) => {
+      tab.getBoundingClientRect = () => makeRect(i * 80, (i + 1) * 80);
+    });
+    const activeTab = tabs[4];
+    if (!activeTab) throw new Error("missing tab");
+    activeTab.getBoundingClientRect = () => makeRect(320, 520);
+
+    activeTab.setAttribute("data-state", "inactive");
+    activeTab.setAttribute("data-state", "active");
+
+    await waitFor(() => {
+      expect(tabs[4]?.style.visibility).not.toBe("hidden");
+      expect(tabs[0]?.style.visibility).toBe("hidden");
+      expect(tabs[1]?.style.visibility).toBe("hidden");
+    });
+  });
+
   it("activates an overflowed tab when selected via dropdown's focus path", async () => {
     renderManyTabs({ maxVisible: 2, count: 4 });
 

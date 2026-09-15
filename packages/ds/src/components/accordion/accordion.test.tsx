@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./accordion";
+import { StatusDot } from "../status-dot/status-dot";
 
 function renderAccordion() {
   return render(
@@ -190,6 +191,32 @@ describe("Accordion", () => {
     expect(item.className).not.toContain("bg-surface");
     expect(trigger.className).not.toContain("px-4");
     expect(screen.getByText("Answer A").className).toContain("pb-4");
+  });
+
+  it("a leading StatusDot contributes its label to the trigger's accessible name by default", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger leading={<StatusDot status="degraded" />}>DNS</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    expect(screen.getByRole("button", { name: /Degraded/ })).toBeTruthy();
+    expect(screen.getByRole("status", { name: "Degraded" })).toBeTruthy();
+  });
+
+  it("a decorative leading StatusDot stays out of the trigger's accessible name", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger leading={<StatusDot decorative status="degraded" />}>DNS</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    expect(screen.getByRole("button", { name: "DNS" })).toBeTruthy();
+    expect(screen.queryByRole("status")).toBeNull();
   });
 
   it("trigger renders leading before the title and a muted summary under it", () => {

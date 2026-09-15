@@ -24,7 +24,15 @@ const statusDotVariants = cva("inline-block rounded-full shrink-0", {
 });
 
 type StatusDotProps = HTMLAttributes<HTMLSpanElement> &
-  VariantProps<typeof statusDotVariants>;
+  VariantProps<typeof statusDotVariants> & {
+    /**
+     * Hide the dot from assistive tech (`aria-hidden`, no `role` or
+     * `aria-label`) when the text next to it already states the status —
+     * an `AccordionTrigger` or `NavRow` `leading` slot whose title or
+     * summary carries it. Default: announced as `role="status"`.
+     */
+    decorative?: boolean;
+  };
 
 const statusLabels: Record<NonNullable<StatusDotProps["status"]>, string> = {
   healthy: "Healthy",
@@ -36,13 +44,15 @@ const statusLabels: Record<NonNullable<StatusDotProps["status"]>, string> = {
 };
 
 const StatusDot = forwardRef<HTMLSpanElement, StatusDotProps>(
-  ({ status, size, className, ...rest }, ref) => {
+  ({ status, size, decorative = false, className, ...rest }, ref) => {
     const resolvedStatus = status ?? "unknown";
+    const a11y = decorative
+      ? { "aria-hidden": true }
+      : { role: "status", "aria-label": statusLabels[resolvedStatus] };
     return (
       <span
         ref={ref}
-        role="status"
-        aria-label={statusLabels[resolvedStatus]}
+        {...a11y}
         className={cn(statusDotVariants({ status, size }), className)}
         {...rest}
       />
