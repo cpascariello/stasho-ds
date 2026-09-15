@@ -1558,10 +1558,11 @@ import { NavList, NavRow } from "@stasho/ds/nav-list";
   <NavRow href="/verified/new" tone="muted" trailing="done">Publish the key</NavRow>
   <NavRow href="/verified/dns" trailing={<Badge variant="warning" size="sm">1 missing</Badge>}>Add DNS records</NavRow>
   <NavRow onClick={() => copy(address)}>Copy binder address</NavRow>
+  <NavRow static tone="muted" leading={<StatusDot status="healthy" />} trailing="39h left">Cool-down</NavRow>
 </NavList>
 ```
 
-A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); it never mixes rows with non-clickable lines — a fact that is not a destination belongs in the card body above the list.
+`static` renders a statement row (a done step, a countdown): a plain `<div>` with the same layout and `leading` / `trailing` slots but no arrow, hover, focus ring or role — the arrow is the one click affordance, so a row without it reads as a fact. A list may mix outbound and in-app rows (a live domain opens the site, a pending one opens the panel that fixes it); a fact that is not part of the same step list belongs in the card body above the list, not in a `static` row.
 
 ### SectionNav / SectionNavItem
 

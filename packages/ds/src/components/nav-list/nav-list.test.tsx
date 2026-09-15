@@ -99,6 +99,27 @@ describe("NavList / NavRow", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
+  it("static renders a plain div: no button or link role, no arrow, leading and trailing kept", () => {
+    render(
+      <NavList>
+        <NavRow static leading={<i data-testid="dot" />} trailing="39h left">
+          Cool-down
+        </NavRow>
+      </NavList>,
+    );
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(screen.queryByRole("link")).toBeNull();
+    const row = screen.getByText("Cool-down").parentElement;
+    if (!row) throw new Error("missing row");
+    expect(row.tagName).toBe("DIV");
+    expect(row.querySelector("svg")).toBeNull();
+    expect(row.querySelector("[data-testid=dot]")).toBeTruthy();
+    expect(screen.getByText("39h left").className).toContain("ml-auto");
+    expect(row.className).toContain("px-3");
+    expect(row.className).not.toContain("hover:bg-muted");
+    expect(row.className).not.toContain("focus-visible:ring-accent");
+  });
+
   it("the list divides rows with hairlines inside one bordered box", () => {
     const { container } = render(
       <NavList>

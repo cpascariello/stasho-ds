@@ -192,6 +192,19 @@ describe("Accordion", () => {
     expect(screen.getByText("Answer A").className).toContain("pb-4");
   });
 
+  it("leading is decorative: it stays out of the trigger's accessible name", () => {
+    render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger leading={<span>Healthy</span>}>DNS</AccordionTrigger>
+          <AccordionContent>Answer A</AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    );
+    expect(screen.getByRole("button", { name: "DNS" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /Healthy/ })).toBeNull();
+  });
+
   it("trigger renders leading before the title and a muted summary under it", () => {
     render(
       <Accordion type="single" collapsible>
