@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #116 — 2026-09-15
+
+**Context:** Four gaps filed by the Stasho app against `@stasho/ds@0.22.0`, shipped as one a11y batch: at 390 px the active `Tabs` pill sat inside the ⋯ overflow menu (only the trigger read accent); `CopyableText endChars={0}` sliced the whole string (`text.slice(-0)`); `Select`'s `aria-label` landed on the DOM-less Radix `Select.Root`, so two filter selects had no accessible name; and a statement row inside a `NavList` (a done step, "Cool-down · 39h left") had no non-interactive form, so the app copied `NavRow`'s layout into a div. A `StatusDot` in an `AccordionTrigger`'s `leading` slot was also being read into the trigger's accessible name.
+
+**Decision:** (1) `Tabs overflow="collapse"` keeps the active tab in the visible row: when the active index falls past the break, it takes the last visible slot and the row gives up further slots while the active tab's width would overflow the container; the count cap from Decision #76 still holds. `hasActiveHidden` and the "indicator slides behind the ⋯ trigger" branch are removed, since the active tab is never hidden. This supersedes that one clause of Decision #70; the rejected alternative there (hiding the indicator) is still not what happens — the indicator now sits on the real active tab. (2) `truncateMiddle` and the fluid path slice at `text.length - endChars`, so `endChars={0}` yields `head…` with nothing after the ellipsis. (3) `Select` accepts `aria-label` and `aria-labelledby` and threads both onto `SelectPrimitive.Trigger`, alongside the existing `aria-describedby`. (4) `NavRow` gains `static?: boolean`: same layout, `leading`/`trailing`/`tone`/`mono`, no arrow, no hover or focus ring, no role; it takes precedence over `href` and `asChild`. This amends the `NavList` rule from Decision #113 — the arrow, not the row shape, is the click affordance, and a static row carries none. (5) `StatusDot` gains `decorative?: boolean` (renders `aria-hidden`, no `role`/`aria-label`) so a consumer whose title or summary already states the status opts the dot out per instance. The accordion `leading` wrapper itself stays announced: blanket-hiding it would have deleted a `StatusDot`'s `role="status"` from assistive tech on the slot's canonical use (Decision #114).
+
+**Rationale:** An active tab the user cannot see is a broken affordance at exactly the width where space is scarce; sparing it costs one more collapsed tab, which the ⋯ menu already handles. The `Select` fix is the only way a consumer can name the trigger at all — the props were not in `SelectProps`. `static` exists because the app was already rendering the shape; owning it here keeps the row family consistent. `decorative` on the dot rather than `aria-hidden` on the slot keeps the decision with the consumer who knows whether the status is repeated in text.
+
+**Alternatives considered:** Two-line swap (hide `breakIndex-1`, spare active) without the width re-check (rejected: a wide active tab replacing a narrow one overflows a row with no `flex-wrap`). `aria-hidden` on the accordion `leading` wrapper (rejected in review: an a11y regression inside an a11y batch). A separate `StatementRow` component (rejected: a second way to do what a prop does).
+
+---
+
 ## Decision #115 — 2026-09-10
 
 **Context:** The Stasho app is moving its Settings page from `Tabs` to a left section list, the GitHub / Vercel settings shape (app Decision #433 named that convention: one URL per section, a scroll per URL). The DS had no in-page section nav, only the app-shell `Sidebar` (context-bound, icon-required, collapse-aware) and the card-foot `NavList` (boxed rows with arrows).
