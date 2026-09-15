@@ -1427,7 +1427,7 @@ import { Select } from "@stasho/ds/select";
 </FormField>
 ```
 
-**Props:** `value`, `defaultValue`, `onValueChange`, `placeholder`, `options` (array of `{ value, label, disabled? }`), `disabled`, `error`, `size` (sm/md), `className`, `id`, `aria-describedby`. Forwards ref to trigger `<button>`.
+**Props:** `value`, `defaultValue`, `onValueChange`, `placeholder`, `options` (array of `{ value, label, disabled? }`), `disabled`, `error`, `size` (sm/md), `className`, `id`, `aria-label`, `aria-labelledby`, `aria-describedby` (the three `aria-*` land on the trigger, so the combobox gets its accessible name from them). Forwards ref to trigger `<button>`.
 
 **Sizes:** `sm` (Input sm padding) · `md` (Input md padding, default)
 
