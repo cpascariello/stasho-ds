@@ -120,6 +120,18 @@ describe("NavList / NavRow", () => {
     expect(row.className).not.toContain("focus-visible:ring-accent");
   });
 
+  it("static takes precedence over href: a div, no link", () => {
+    render(
+      <NavRow static href="/x">
+        Done
+      </NavRow>,
+    );
+    expect(screen.queryByRole("link")).toBeNull();
+    const row = screen.getByText("Done").parentElement;
+    expect(row?.tagName).toBe("DIV");
+    expect(row?.hasAttribute("href")).toBe(false);
+  });
+
   it("the list divides rows with hairlines inside one bordered box", () => {
     const { container } = render(
       <NavList>

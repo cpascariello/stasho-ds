@@ -11,10 +11,11 @@ import {
 import { cn } from "../../lib/cn";
 
 /**
- * A boxed list of destinations for the foot of a card: one hairline-divided
- * row per link, the whole row is the target. The list exists so the reader
- * can tell at a glance which parts of a card are clickable (the rows) and
- * which are not (everything above them).
+ * A boxed list of rows for the foot of a card: one hairline-divided row per
+ * entry, the whole row is the target when it has an arrow. The arrow is the
+ * one click affordance, so the reader can tell at a glance which rows are
+ * clickable (arrow) and which are statements (`static`, no arrow); a fact
+ * that is not part of the same step list belongs in the card body above.
  */
 const NavList = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...rest }, ref) => (
@@ -56,7 +57,8 @@ type NavRowProps = HTMLAttributes<HTMLElement> &
     /**
      * A statement, not a destination (a done step, "Cool-down · 39h left"):
      * a `<div>` with the row's layout and slots but no arrow, hover, focus
-     * ring or role.
+     * ring or role. Takes precedence over `href` and `asChild`: a static row
+     * never renders a link or button, whatever else is passed.
      */
     static?: boolean;
     /** `muted` for a row whose step is done: label and arrow in muted text. */
