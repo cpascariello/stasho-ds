@@ -75,7 +75,9 @@ function truncateMiddle(
   endChars: number,
 ): string {
   if (text.length <= startChars + endChars) return text;
-  return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;
+  // text.length - endChars, not -endChars: slice(-0) is the whole string.
+  const tailStart = text.length - endChars;
+  return `${text.slice(0, startChars)}...${text.slice(tailStart)}`;
 }
 
 function renderTextContent(
@@ -86,13 +88,14 @@ function renderTextContent(
 ): ReactNode {
   if (!fluid) return truncateMiddle(text, startChars, endChars);
   if (text.length <= endChars) return text;
+  const tailStart = text.length - endChars;
   return (
     <>
       <span className="min-w-0 flex-initial overflow-hidden text-ellipsis whitespace-nowrap">
-        {text.slice(0, -endChars)}
+        {text.slice(0, tailStart)}
       </span>
       <span className="flex-none whitespace-nowrap">
-        {text.slice(-endChars)}
+        {text.slice(tailStart)}
       </span>
     </>
   );

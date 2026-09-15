@@ -30,6 +30,16 @@ describe("CopyableText", () => {
       );
       expect(screen.getByText("0x12...345678")).toBeTruthy();
     });
+
+    it("endChars=0 keeps only the head (slice(-0) is not the empty tail)", () => {
+      render(<CopyableText text={LONG_TEXT} startChars={6} endChars={0} />);
+      expect(screen.getByText("0x1234...")).toBeTruthy();
+    });
+
+    it("startChars=0 keeps only the tail", () => {
+      render(<CopyableText text={LONG_TEXT} startChars={0} endChars={4} />);
+      expect(screen.getByText("...5678")).toBeTruthy();
+    });
   });
 
   describe("copy", () => {
@@ -191,6 +201,13 @@ describe("CopyableText", () => {
     it("does not set a title in fixed mode", () => {
       render(<CopyableText text={LONG_TEXT} />);
       expect(screen.queryByTitle(LONG_TEXT)).toBeNull();
+    });
+
+    it("endChars=0 puts the whole text in the flexing head and pins nothing", () => {
+      render(<CopyableText text={LONG_TEXT} fluid endChars={0} />);
+      const head = screen.getByText(LONG_TEXT);
+      expect(head).toHaveClass("text-ellipsis");
+      expect(head.nextElementSibling?.textContent).toBe("");
     });
 
     it("renders full text without splitting when text.length <= endChars", () => {
