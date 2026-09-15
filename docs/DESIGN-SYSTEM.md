@@ -1982,7 +1982,7 @@ Pass `size="sm"` to `TabsList` for a compact variant. Works with both underline 
 
 #### Overflow Collapse
 
-When many tabs exceed the available width, `overflow="collapse"` on `TabsList` auto-hides trailing tabs into a "..." dropdown menu. Works with both underline and pill variants. The sliding indicator moves behind the "..." trigger when a hidden tab is active.
+When many tabs exceed the available width, `overflow="collapse"` on `TabsList` auto-hides trailing tabs into a "..." dropdown menu. Works with both underline and pill variants. The active tab is never collapsed: past the break it takes the last visible slot and the tab it displaces goes into the menu, so the sliding indicator always sits on a visible tab.
 
 ```tsx
 <Tabs defaultValue="compute">

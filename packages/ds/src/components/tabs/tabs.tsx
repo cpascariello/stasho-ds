@@ -37,14 +37,12 @@ function useOverflow(
   maxVisible: number | undefined,
 ) {
   const [hiddenTabs, setHiddenTabs] = useState<HiddenTab[]>([]);
-  const [hasActiveHidden, setHasActiveHidden] = useState(false);
 
   const measure = useCallback(() => {
     const list = listRef.current;
     const trigger = overflowTriggerRef.current;
     if (!list || !trigger || !enabled) {
       setHiddenTabs([]);
-      setHasActiveHidden(false);
       return;
     }
 
@@ -67,49 +65,54 @@ function useOverflow(
     const containerLeft = list.getBoundingClientRect().left;
     const containerWidth = list.clientWidth;
     const triggerWidth = trigger.offsetWidth;
+    const rights = tabs.map(
+      (tab) => tab.getBoundingClientRect().right - containerLeft,
+    );
 
-    let widthBreakIndex: number | null = null;
-
-    for (let i = 0; i < tabs.length; i++) {
-      const tab = tabs[i] as HTMLElement;
-      const tabRight = tab.getBoundingClientRect().right - containerLeft;
-      if (tabRight + triggerWidth > containerWidth) {
-        widthBreakIndex = i;
-        break;
-      }
-    }
+    const widthBreakIndex = rights.findIndex(
+      (right) => right + triggerWidth > containerWidth,
+    );
 
     // Final break index — stricter of width-based and count-based limits.
     // null means no overflow.
     let newBreakIndex: number | null = null;
-    if (widthBreakIndex !== null && maxVisible !== undefined) {
+    if (widthBreakIndex !== -1 && maxVisible !== undefined) {
       newBreakIndex = Math.min(widthBreakIndex, maxVisible);
-    } else if (widthBreakIndex !== null) {
+    } else if (widthBreakIndex !== -1) {
       newBreakIndex = widthBreakIndex;
     } else if (maxVisible !== undefined && maxVisible < tabs.length) {
       newBreakIndex = maxVisible;
     }
 
-    // All tabs fit by width — verify last tab actually fits before bailing
     if (newBreakIndex === null) {
-      const lastTab = tabs[tabs.length - 1];
-      if (lastTab) {
-        const lastRight =
-          lastTab.getBoundingClientRect().right - containerLeft;
-        if (lastRight <= containerWidth) {
-          setHiddenTabs([]);
-          setHasActiveHidden(false);
-          return;
-        }
-      }
       setHiddenTabs([]);
-      setHasActiveHidden(false);
       return;
     }
 
-    // Hide overflowed tabs
-    for (let i = newBreakIndex; i < tabs.length; i++) {
-      const tab = tabs[i] as HTMLElement;
+    // The active tab always keeps a slot in the row: past the break it takes
+    // the last visible slot, and the row gives up more slots if it is wider
+    // than the tab it displaces.
+    const activeIndex = tabs.findIndex(
+      (tab) => tab.dataset["state"] === "active",
+    );
+    let visibleCount = newBreakIndex;
+    if (activeIndex >= visibleCount) {
+      visibleCount = Math.max(0, visibleCount - 1);
+      const activeWidth =
+        tabs[activeIndex]?.getBoundingClientRect().width ?? 0;
+      while (
+        visibleCount > 0 &&
+        (rights[visibleCount - 1] ?? 0) + activeWidth + triggerWidth >
+          containerWidth
+      ) {
+        visibleCount--;
+      }
+    }
+    const hidden = tabs.filter(
+      (_, i) => i >= visibleCount && i !== activeIndex,
+    );
+
+    for (const tab of hidden) {
       tab.style.visibility = "hidden";
       tab.style.position = "absolute";
       tab.style.pointerEvents = "none";
@@ -121,32 +124,21 @@ function useOverflow(
 
     // Focus management: move focus to trigger if focused tab overflowed
     const focused = document.activeElement;
-    if (focused instanceof HTMLElement) {
-      for (let i = newBreakIndex; i < tabs.length; i++) {
-        const tab = tabs[i] as HTMLElement;
-        if (tab === focused || tab.contains(focused)) {
-          trigger.focus();
-          break;
-        }
-      }
+    if (
+      focused instanceof HTMLElement &&
+      hidden.some((tab) => tab === focused || tab.contains(focused))
+    ) {
+      trigger.focus();
     }
 
-    // Build hiddenTabs array
-    const newHidden: HiddenTab[] = [];
-    let activeHidden = false;
-    for (let i = newBreakIndex; i < tabs.length; i++) {
-      const tab = tabs[i] as HTMLElement;
-      newHidden.push({
-        value: tab.getAttribute("data-value") ?? tab.id ?? "",
+    setHiddenTabs(
+      hidden.map((tab) => ({
+        value: tab.getAttribute("data-value") ?? tab.id,
         label: tab.textContent ?? "",
         disabled: tab.hasAttribute("disabled"),
         triggerEl: tab,
-      });
-      if (tab.dataset["state"] === "active") activeHidden = true;
-    }
-
-    setHiddenTabs(newHidden);
-    setHasActiveHidden(activeHidden);
+      })),
+    );
   }, [listRef, overflowTriggerRef, enabled, maxVisible]);
 
   useEffect(() => {
@@ -171,7 +163,7 @@ function useOverflow(
     };
   }, [enabled, measure]);
 
-  return { hiddenTabs, hasActiveHidden };
+  return hiddenTabs;
 }
 
 /* ── Overflow types & trigger ────────────────── */
@@ -187,12 +179,11 @@ type OverflowTriggerProps = {
   isPill: boolean;
   isSmall: boolean;
   hiddenTabs: HiddenTab[];
-  hasActiveHidden: boolean;
   visible: boolean;
 };
 
 const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
-  ({ isPill, isSmall, hiddenTabs, hasActiveHidden, visible }, ref) => (
+  ({ isPill, isSmall, hiddenTabs, visible }, ref) => (
     // Non-modal: Radix's modal scroll-lock pads <body> for the missing
     // scrollbar, visibly shifting/squeezing the page on mobile viewports.
     <DropdownMenu.Root modal={false}>
@@ -203,10 +194,7 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
           aria-label="More tabs"
           className={cn(
             "inline-flex items-center justify-center shrink-0",
-            "font-sans font-semibold",
-            hasActiveHidden
-              ? "text-accent-500 dark:text-accent"
-              : "text-muted-foreground",
+            "font-sans font-semibold text-muted-foreground",
             "transition-colors duration-200",
             "hover:text-accent-500 dark:hover:text-accent",
             "focus-visible:outline-2 focus-visible:outline-accent-500 dark:focus-visible:outline-accent focus-visible:outline-offset-2",
@@ -259,8 +247,6 @@ const OverflowTrigger = forwardRef<HTMLButtonElement, OverflowTriggerProps>(
                 "outline-none",
                 "hover:bg-muted focus-visible:bg-muted",
                 "data-[disabled]:text-foreground/30 data-[disabled]:cursor-not-allowed",
-                tab.triggerEl.dataset["state"] === "active" &&
-                  "text-accent-500 dark:text-accent font-semibold",
               )}
             >
               {tab.label}
@@ -294,13 +280,15 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
       else if (ref) ref.current = node;
     };
 
-    const { hiddenTabs, hasActiveHidden } = useOverflow(
+    const hiddenTabs = useOverflow(
       innerRef,
       overflowTriggerRef,
       showOverflow,
       maxVisible,
     );
 
+    // hiddenTabs is a dep so the indicator re-measures after every collapse
+    // pass: measure() only touches inline styles, which no observer sees.
     useEffect(() => {
       const list = innerRef.current;
       const indicator = indicatorRef.current;
@@ -311,22 +299,9 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
           '[data-state="active"]',
         );
         if (!activeTab || !indicator) return;
-
-        // When the active tab is overflowed, slide the indicator
-        // behind the "..." trigger instead of hiding it
-        if (activeTab.style.visibility === "hidden") {
-          const trigger = overflowTriggerRef.current;
-          if (trigger) {
-            indicator.style.opacity = "";
-            indicator.style.transform = `translateX(${String(trigger.offsetLeft)}px)`;
-            indicator.style.width = `${String(trigger.offsetWidth)}px`;
-            if (!ready) setReady(true);
-          } else {
-            indicator.style.opacity = "0";
-          }
-          return;
-        }
-        indicator.style.opacity = "";
+        // A newly activated tab can still be collapsed until measure()
+        // runs; the hiddenTabs dep re-runs this once it is back in the row.
+        if (activeTab.style.visibility === "hidden") return;
 
         const left = activeTab.offsetLeft;
         const width = activeTab.offsetWidth;
@@ -351,7 +326,7 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
         observer.disconnect();
         resizeObserver.disconnect();
       };
-    }, [ready]);
+    }, [ready, hiddenTabs]);
 
     return (
       <TabsPrimitive.List
@@ -378,7 +353,6 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
             isPill={isPill}
             isSmall={isSmall}
             hiddenTabs={hiddenTabs}
-            hasActiveHidden={hasActiveHidden}
             visible={hiddenTabs.length > 0}
           />
         )}
