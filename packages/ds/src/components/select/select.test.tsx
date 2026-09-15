@@ -116,4 +116,21 @@ describe("Select", () => {
     render(<Select ref={ref} options={OPTIONS} />);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
+
+  it("aria-label lands on the trigger, so the combobox has an accessible name", () => {
+    render(<Select options={OPTIONS} aria-label="Filter by status" />);
+    expect(
+      screen.getByRole("combobox", { name: "Filter by status" }),
+    ).toBeDefined();
+  });
+
+  it("aria-labelledby lands on the trigger", () => {
+    render(
+      <>
+        <span id="status-label">Status</span>
+        <Select options={OPTIONS} aria-labelledby="status-label" />
+      </>,
+    );
+    expect(screen.getByRole("combobox", { name: "Status" })).toBeDefined();
+  });
 });
