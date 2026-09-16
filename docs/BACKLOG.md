@@ -15,6 +15,12 @@ Ideas and scope creep captured for later consideration.
 
 ## Open Items
 
+### 2026-09-16 — form-field test emits a React non-boolean-attribute warning
+
+**Source:** Seen in `npm run check` output while shipping v0.23.0 (PR #62): `form-field.test.tsx > FormField > renders error message replacing helper text` logs `Received \`true\` for a non-boolean attribute \`error\`` on stderr. Pre-existing, not from that batch; the suite still passes.
+**Description:** `FormField` (or the input it wraps) spreads an `error` boolean onto a DOM element. Either consume the prop before the spread or pass `data-error` / `aria-invalid`. One test run should be pristine (zero-warnings policy); add the assertion that no console error fires in that case.
+**Priority:** Low
+
 ### 2026-06-05 — Interactive Card variant (Card ↔ ActionCard convergence)
 
 **Source:** Deferred while unifying the card family (Decision #100). The radius-floor + unification work scoped out card *anatomy*.
