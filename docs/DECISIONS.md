@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #117 — 2026-10-02
+
+**Context:** `@stasho/ds` is a fork of Aleph Cloud's `@aleph-front/ds` (`aleph-im/aleph-cloud-ds`), published under MIT. Commit `9844296` (#57) replaced `Copyright (c) 2026 Aleph Cloud` with `Copyright (c) 2026 Claudio Pascariello` in `LICENSE`, and `packages/ds/LICENSE` was copied from it.
+
+**Decision:** Both `LICENSE` files keep the upstream notice and add the fork's: `Copyright (c) 2026 Aleph Cloud` followed by `Copyright (c) 2026 Claudio Pascariello`. The rest of the MIT text is unchanged. Stasho additions are copyright Claudio Pascariello. `package.json` `author` stays `Claudio Pascariello`; it is package metadata, not a copyright notice.
+
+**Rationale:** MIT requires the original copyright notice to be included in all copies or substantial portions of the software. Removing Aleph's line broke that condition; listing both holders is the standard form for a fork.
+
+**Alternatives considered:** A separate `NOTICE` file for the upstream attribution (rejected: MIT has no NOTICE convention, and the requirement is satisfied by the notice in `LICENSE` itself).
+
+---
+
 ## Decision #116 — 2026-09-15
 
 **Context:** Four gaps filed by the Stasho app against `@stasho/ds@0.22.0`, shipped as one a11y batch: at 390 px the active `Tabs` pill sat inside the ⋯ overflow menu (only the trigger read accent); `CopyableText endChars={0}` sliced the whole string (`text.slice(-0)`); `Select`'s `aria-label` landed on the DOM-less Radix `Select.Root`, so two filter selects had no accessible name; and a statement row inside a `NavList` (a done step, "Cool-down · 39h left") had no non-interactive form, so the app copied `NavRow`'s layout into a div. A `StatusDot` in an `AccordionTrigger`'s `leading` slot was also being read into the trigger's accessible name.
