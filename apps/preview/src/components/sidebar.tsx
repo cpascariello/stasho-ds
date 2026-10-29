@@ -36,7 +36,10 @@ const NAV: NavEntry[] = [
     items: [
       {
         group: "Actions",
-        items: [{ label: "Button", href: "/components/button" }],
+        items: [
+          { label: "AgentPromptButton", href: "/components/agent-prompt" },
+          { label: "Button", href: "/components/button" },
+        ],
       },
       {
         group: "Data Display",

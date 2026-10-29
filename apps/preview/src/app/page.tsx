@@ -174,6 +174,7 @@ const QUICK_LINKS: QuickLinkGroup[] = [
   {
     group: "Actions",
     items: [
+      { label: "AgentPromptButton", href: "/components/agent-prompt", description: "Copy a prompt for a coding agent" },
       { label: "Button", href: "/components/button", description: "6 variants, 4 sizes, loading" },
     ],
   },

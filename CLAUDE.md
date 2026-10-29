@@ -269,6 +269,7 @@ Feature implementation details are **not inlined here** — they change every re
 - Tabs — underline/pill variants, sliding indicator, overflow collapse + maxVisible (#86)
 - Pagination (#88), Breadcrumb (#86), Accordion (slide+settle motion, #101; `variant="cards"`, trigger `leading`/`summary`, `openOnHash`, #114)
 - CopyableText — middle-ellipsis + fluid width-aware mode, copy animation (#98); `variant="field"` seats it in the read-only box with a 22px control (#111)
+- AgentPromptButton — primary Button that copies an agent prompt, Copied/Copy failed for 2 s, polite announce; `useCopyFeedback` hook exported for other copy affordances (#118)
 - Field + DetailField — read-only box and read-only FormField sibling for detail cards; shared `field-layout` rhythm constants (#111)
 
 **Overlays & shell**

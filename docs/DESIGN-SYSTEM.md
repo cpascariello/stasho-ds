@@ -9,6 +9,7 @@ Quick reference for all DS exports. Click component name to jump to its full doc
 | Component | Purpose | Import |
 |-----------|---------|--------|
 | [Accordion](#accordion) | Collapsible disclosure sections (FAQ), single/multiple | `@stasho/ds/accordion` |
+| [AgentPromptButton](#agentpromptbutton) | Primary button that copies a prompt for a coding agent; `useCopyFeedback` hook | `@stasho/ds/agent-prompt` |
 | [Alert](#alert) | Dismissible status banner with auto-dismiss timer | `@stasho/ds/alert` |
 | [Badge](#badge) | Semantic label for status, counts, categories | `@stasho/ds/badge` |
 | [Breadcrumb](#breadcrumb) | Navigation trail with composable 6-part API | `@stasho/ds/breadcrumb` |
@@ -971,6 +972,47 @@ import {
 - **Caret** — rotates 180° when open; on hover of a closed row it dips 3px (`group-data-[state=closed]:group-hover:translate-y-[3px]`) to preview the open direction.
 - **Trigger text** — shifts to cyan (`hover:text-accent`) on hover; focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`).
 - **Reduced motion** — all motion is disabled under `prefers-reduced-motion`: the height animation is gated *into* `motion-safe:` (so under `reduce` no animation rule exists), and the fade/settle + caret use `motion-reduce:transition-none`. Content still opens and closes, just instantly.
+
+### AgentPromptButton
+
+A primary `Button` that copies a prompt written for a coding agent (Claude, Cursor, any agent that runs shell commands). The prompt is never rendered: it is written for an agent, not a reader, so the surface shows the raw command or snippet beside the button for anyone who wants to see what will run.
+
+```tsx
+import { AgentPromptButton, useCopyFeedback } from "@stasho/ds/agent-prompt";
+
+<AgentPromptButton prompt={AGENT_PROMPT} />
+
+{/* Two on one surface: give each a distinct accessible name */}
+<AgentPromptButton prompt={publishPrompt} label="Copy the publish prompt" />
+<AgentPromptButton prompt={dnsPrompt} label="Copy the DNS prompt" />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `prompt` | `string` | required | Text written to the clipboard |
+| `label` | `string` | none | Accessible name (`aria-label`). The visible text never changes |
+
+- **Labels:** "Copy prompt for your agent", then "Copied" or "Copy failed" for 2000 ms, then back. A second click restarts the window.
+- **Announcement:** `aria-live="polite"` on the button, so the label change is read out.
+- **Failure:** `navigator.clipboard` is absent in insecure contexts and `writeText` rejects on a denied permission; both show "Copy failed". Nothing throws.
+
+#### `useCopyFeedback`
+
+The hook behind the button, exported for other copy affordances (an `IconButton` beside a multi-line snippet). It returns `{ state, copy }`: `state` is `"idle" | "copied" | "failed"` (type `CopyState`), and `copy(text)` writes to the clipboard and flashes `copied` or `failed` for 2000 ms. Each call owns its own state, so two affordances on one surface never light each other up.
+
+```tsx
+const { state, copy } = useCopyFeedback();
+
+<IconButton
+  size="xs"
+  aria-label={state === "idle" ? "Copy to clipboard" : state === "copied" ? "Copied" : "Copy failed"}
+  onClick={() => copy(snippet)}
+>
+  {state === "copied" ? <Check size={14} weight="bold" /> : <Copy size={14} />}
+</IconButton>
+```
+
+For a single-line value in a read-only box, use `CopyableText variant="field"` instead.
 
 ### Alert
 

@@ -18,6 +18,18 @@ Each entry includes:
 
 ---
 
+## Decision #118 — 2026-10-29
+
+**Context:** The Stasho app (Verified Frontends publish panels) and the apex site (Drop page) each carried a local copy of the same "Copy prompt for your agent" button and its copy-feedback hook. The app's rule is that every UI component lives in this package.
+
+**Decision:** Promote both into `@stasho/ds/agent-prompt`: `AgentPromptButton({ prompt, label? })` on the DS `Button`, and the `useCopyFeedback` hook (with its `CopyState` type). Behavior is ported unchanged: labels "Copy prompt for your agent" / "Copied" / "Copy failed", 2000 ms revert, `aria-live="polite"`, optional `label` as `aria-label`. The hook is exported because the app's multi-line snippet field drives an `IconButton` with it.
+
+**Rationale:** Two copies of the same affordance had already drifted in their surrounding comments and would drift in behavior next. Exporting the hook lets icon-only copy controls share the same timing and failure handling without a second component.
+
+**Alternatives considered:** Folding the behavior into `CopyableText` (rejected: that component renders its text and collapses newlines, while an agent prompt is multi-line and deliberately not rendered). Keeping the hook private (rejected: the app's snippet field would need its own copy of it).
+
+---
+
 ## Decision #117 — 2026-10-02
 
 **Context:** `@stasho/ds` is a fork of Aleph Cloud's `@aleph-front/ds` (`aleph-im/aleph-cloud-ds`), published under MIT. Commit `9844296` (#57) replaced `Copyright (c) 2026 Aleph Cloud` with `Copyright (c) 2026 Claudio Pascariello` in `LICENSE`, and `packages/ds/LICENSE` was copied from it.
