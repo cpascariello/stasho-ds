@@ -53,6 +53,7 @@
     "./number-input": "./src/components/number-input/number-input.tsx",
     "./pagination": "./src/components/pagination/pagination.tsx",
     "./copyable-text": "./src/components/copyable-text/copyable-text.tsx",
+    "./agent-prompt": "./src/components/agent-prompt/agent-prompt.tsx",
     "./dialog": "./src/components/dialog/dialog.tsx",
     "./drawer": "./src/components/drawer/drawer.tsx",
     "./empty-state": "./src/components/empty-state/empty-state.tsx",
