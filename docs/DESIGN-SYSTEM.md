@@ -1750,7 +1750,7 @@ import {
 
 **Visual style:** `bg-surface` content with `rounded-xl` (8px under the Abyssal scale, Decision #100) and a 1px `border-edge` hairline — Dialog joins the unified card surface language; the hairline crisps the boundary against the frosted overlay (no longer border-less, Decision #100 supersedes #87). No drop shadow at rest. Close-button focus uses the Button outline pattern (`outline-2 outline-accent outline-offset-2`). Overlay is `bg-black/60 backdrop-blur-sm` — neutral, frosted.
 
-**Overflow:** the content panel is `max-h-full overflow-y-auto`, so it never grows past the viewport (minus the wrapper's 16px `p-4` gutter) and a tall form scrolls inside the panel instead of pushing its footer off-screen. The close button is `absolute` inside the scrolling panel, so it scrolls away with the top of the content; Escape and overlay click still dismiss an unlocked dialog.
+**Overflow:** the content panel is `max-h-full overflow-y-auto`, so it never grows past the viewport (minus the wrapper's 16px `p-4` gutter) and a tall form scrolls inside the panel instead of pushing its footer off-screen. The close button is `absolute` inside the scrolling panel, so it scrolls away with the top of the content; Escape and overlay click still dismiss an unlocked dialog. A consumer `className` with its own `max-h-*` replaces the cap (`cn` merges Tailwind classes), so `max-h-[85vh] overflow-y-auto` keeps working.
 
 **Props (DialogContent):**
 
