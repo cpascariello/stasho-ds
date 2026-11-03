@@ -38,6 +38,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           ref={ref}
           className={cn(
             "relative w-full max-w-md rounded-xl border border-edge bg-surface p-6",
+            "max-h-full overflow-y-auto",
             "motion-safe:data-[state=open]:animate-pop-in",
             "motion-safe:data-[state=closed]:animate-pop-out",
             className,

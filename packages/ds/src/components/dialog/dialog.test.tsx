@@ -102,6 +102,13 @@ describe("Dialog", () => {
     expect(dialog.className).toContain("border-edge");
   });
 
+  it("content panel is bounded by the viewport and scrolls its overflow", () => {
+    render(<TestDialog />);
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.className).toContain("max-h-full");
+    expect(dialog.className).toContain("overflow-y-auto");
+  });
+
   it("merges className on content panel", () => {
     render(
       <Dialog defaultOpen>
